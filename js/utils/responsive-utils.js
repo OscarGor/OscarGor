@@ -1,219 +1,265 @@
 /**
  * 響應式工具函數
- * 提供響應式相關功能
  */
 
 const ResponsiveUtils = {
-    // 檢查當前設備類型
-    getDeviceType: function() {
-        const width = window.innerWidth;
-        
-        if (width < SystemConfig.BREAKPOINTS.MOBILE) {
-            return 'mobile';
-        } else if (width < SystemConfig.BREAKPOINTS.TABLET) {
-            return 'tablet';
-        } else if (width < SystemConfig.BREAKPOINTS.DESKTOP) {
-            return 'small-desktop';
-        } else if (width < SystemConfig.BREAKPOINTS.LARGE_DESKTOP) {
-            return 'desktop';
-        } else {
-            return 'large-desktop';
-        }
-    },
-    
-    // 檢查是否是移動設備
+    // 檢查是否為移動設備
     isMobile: function() {
-        return window.innerWidth <= SystemConfig.BREAKPOINTS.TABLET;
+        return window.innerWidth <= SystemConfig.BREAKPOINTS.MOBILE;
     },
     
-    // 檢查是否是平板設備
+    // 檢查是否為平板
     isTablet: function() {
         return window.innerWidth > SystemConfig.BREAKPOINTS.MOBILE && 
-               window.innerWidth <= SystemConfig.BREAKPOINTS.DESKTOP;
+               window.innerWidth <= SystemConfig.BREAKPOINTS.TABLET;
     },
     
-    // 檢查是否是桌面設備
+    // 檢查是否為桌面
     isDesktop: function() {
-        return window.innerWidth > SystemConfig.BREAKPOINTS.DESKTOP;
+        return window.innerWidth > SystemConfig.BREAKPOINTS.TABLET;
+    },
+    
+    // 獲取當前設備類型
+    getDeviceType: function() {
+        if (this.isMobile()) return 'mobile';
+        if (this.isTablet()) return 'tablet';
+        return 'desktop';
     },
     
     // 初始化響應式導航
     initResponsiveNavigation: function() {
+        this.updateNavigation();
+        
+        window.addEventListener('resize', () => {
+            this.updateNavigation();
+        });
+    },
+    
+    // 更新導航顯示
+    updateNavigation: function() {
         const mobileNav = document.querySelector('.mobile-nav');
         const desktopTabs = document.querySelector('.desktop-tabs');
         
-        const updateNavigation = () => {
+        if (this.isMobile()) {
+            if (mobileNav) mobileNav.style.display = 'block';
+            if (desktopTabs) desktopTabs.style.display = 'none';
+        } else {
+            if (mobileNav) mobileNav.style.display = 'none';
+            if (desktopTabs) desktopTabs.style.display = 'flex';
+        }
+    },
+    
+    // 初始化方向變化監聽
+    initOrientationChange: function(callback) {
+        if (window.screen && window.screen.orientation) {
+            window.screen.orientation.addEventListener('change', callback);
+        } else if (window.orientation !== undefined) {
+            window.addEventListener('orientationchange', callback);
+        }
+    },
+    
+    // 獲取方向
+    getOrientation: function() {
+        if (window.screen && window.screen.orientation) {
+            return window.screen.orientation.type;
+        } else if (window.orientation !== undefined) {
+            return Math.abs(window.orientation) === 90 ? 'landscape' : 'portrait';
+        }
+        return 'unknown';
+    },
+    
+    // 優化觸摸滾動
+    initTouchScroll: function() {
+        // 防止移動設備上的彈跳滾動
+        document.addEventListener('touchmove', (e) => {
+            if (e.target.tagName === 'TEXTAREA' || 
+                e.target.tagName === 'INPUT' || 
+                e.target.isContentEditable) {
+                return;
+            }
+            e.preventDefault();
+        }, { passive: false });
+    },
+    
+    // 優化滾動性能
+    initSmoothScroll: function() {
+        // 添加平滑滾動
+        document.documentElement.style.scrollBehavior = 'smooth';
+        
+        // 修復移動設備上的平滑滾動
+        if ('scrollBehavior' in document.documentElement.style) {
+            return;
+        }
+        
+        // 為不支持scrollBehavior的瀏覽器添加polyfill
+        this.addSmoothScrollPolyfill();
+    },
+    
+    // 添加平滑滾動polyfill
+    addSmoothScrollPolyfill: function() {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const offsetTop = targetElement.getBoundingClientRect().top + window.pageYOffset;
+                    
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    },
+    
+    // 初始化響應式表格
+    initResponsiveTables: function() {
+        document.querySelectorAll('table').forEach(table => {
             if (this.isMobile()) {
-                if (mobileNav) mobileNav.style.display = 'block';
-                if (desktopTabs) desktopTabs.style.display = 'none';
-            } else {
-                if (mobileNav) mobileNav.style.display = 'none';
-                if (desktopTabs) desktopTabs.style.display = 'flex';
-            }
-        };
-        
-        // 初始更新
-        updateNavigation();
-        
-        // 監聽窗口大小變化
-        window.addEventListener('resize', updateNavigation);
-        
-        return updateNavigation;
-    },
-    
-    // 根據設備類型調整網格列數
-    getGridColumns: function(defaultColumns, options = {}) {
-        const deviceType = this.getDeviceType();
-        
-        switch(deviceType) {
-            case 'mobile':
-                return options.mobile || 1;
-            case 'tablet':
-                return options.tablet || Math.min(2, defaultColumns);
-            case 'small-desktop':
-                return options.smallDesktop || Math.min(3, defaultColumns);
-            case 'desktop':
-                return options.desktop || defaultColumns;
-            case 'large-desktop':
-                return options.largeDesktop || Math.min(defaultColumns + 1, 4);
-            default:
-                return defaultColumns;
-        }
-    },
-    
-    // 創建響應式網格
-    createResponsiveGrid: function(items, itemRenderer, options = {}) {
-        const container = document.createElement('div');
-        container.className = 'responsive-grid';
-        
-        // 根據設備類型設置網格模板
-        const updateGrid = () => {
-            const columns = this.getGridColumns(options.defaultColumns || 3, options);
-            container.style.gridTemplateColumns = `repeat(${columns}, 1fr)`;
-        };
-        
-        // 初始設置
-        updateGrid();
-        
-        // 添加項目
-        items.forEach(item => {
-            const gridItem = itemRenderer(item);
-            container.appendChild(gridItem);
-        });
-        
-        // 監聽窗口大小變化
-        window.addEventListener('resize', updateGrid);
-        
-        return container;
-    },
-    
-    // 調整字體大小
-    adjustFontSize: function(baseSize, options = {}) {
-        const deviceType = this.getDeviceType();
-        
-        switch(deviceType) {
-            case 'mobile':
-                return baseSize * (options.mobile || 0.8);
-            case 'tablet':
-                return baseSize * (options.tablet || 0.9);
-            case 'small-desktop':
-                return baseSize * (options.smallDesktop || 0.95);
-            default:
-                return baseSize;
-        }
-    },
-    
-    // 創建響應式圖片
-    createResponsiveImage: function(src, alt = "", options = {}) {
-        const img = document.createElement('img');
-        img.src = src;
-        img.alt = alt;
-        img.className = 'responsive-image';
-        
-        // 設置響應式樣式
-        img.style.maxWidth = '100%';
-        img.style.height = 'auto';
-        
-        if (options.className) {
-            img.className += ` ${options.className}`;
-        }
-        
-        return img;
-    },
-    
-    // 調整卡片佈局
-    adjustCardLayout: function(cards, options = {}) {
-        const deviceType = this.getDeviceType();
-        
-        cards.forEach(card => {
-            if (deviceType === 'mobile') {
-                card.style.marginBottom = options.mobileMargin || '15px';
-                card.style.padding = options.mobilePadding || '15px';
-            } else if (deviceType === 'tablet') {
-                card.style.marginBottom = options.tabletMargin || '20px';
-                card.style.padding = options.tabletPadding || '20px';
-            } else {
-                card.style.marginBottom = options.desktopMargin || '25px';
-                card.style.padding = options.desktopPadding || '25px';
+                this.makeTableResponsive(table);
             }
         });
+    },
+    
+    // 使表格響應式
+    makeTableResponsive: function(table) {
+        // 為小屏幕創建卡片視圖
+        if (this.isMobile()) {
+            const headers = [];
+            const rows = [];
+            
+            // 獲取表頭
+            table.querySelectorAll('th').forEach(th => {
+                headers.push(th.textContent);
+            });
+            
+            // 獲取行數據
+            table.querySelectorAll('tbody tr').forEach(tr => {
+                const row = {};
+                tr.querySelectorAll('td').forEach((td, index) => {
+                    row[headers[index]] = td.textContent;
+                });
+                rows.push(row);
+            });
+            
+            // 創建卡片容器
+            const container = DOMUtils.createElement('div', {
+                className: 'table-cards'
+            });
+            
+            // 創建卡片
+            rows.forEach(row => {
+                const card = DOMUtils.createElement('div', {
+                    className: 'table-card'
+                });
+                
+                headers.forEach(header => {
+                    const rowItem = DOMUtils.createElement('div', {
+                        className: 'table-card-item'
+                    });
+                    
+                    const label = DOMUtils.createElement('strong', {
+                        textContent: `${header}: `
+                    });
+                    
+                    const value = DOMUtils.createElement('span', {
+                        textContent: row[header]
+                    });
+                    
+                    rowItem.appendChild(label);
+                    rowItem.appendChild(value);
+                    card.appendChild(rowItem);
+                });
+                
+                container.appendChild(card);
+            });
+            
+            // 用卡片容器替換表格
+            table.parentNode.replaceChild(container, table);
+        }
     },
     
     // 初始化打印樣式
     initPrintStyles: function() {
-        const printStyle = document.createElement('style');
-        printStyle.media = 'print';
-        printStyle.textContent = `
-            body {
-                background: white !important;
-                color: black !important;
-                max-width: 100% !important;
-                padding: 0 !important;
-            }
-            
-            .system-header {
-                background: white !important;
-                color: black !important;
-                border-bottom: 2px solid black !important;
-            }
-            
-            .nav-container,
-            .copy-btn,
-            .mobile-nav {
-                display: none !important;
-            }
-            
-            .content-section {
-                display: block !important;
-                box-shadow: none !important;
-                border: 1px solid #ddd !important;
-                page-break-inside: avoid !important;
-                margin-top: 20px !important;
-            }
-            
-            .card, .verification-item, .tech-comparison-card {
-                border: 1px solid #ddd !important;
-                box-shadow: none !important;
-            }
-            
-            .progress-bar, .confidence-bar, .probability-bar {
-                border: 1px solid #ddd !important;
-            }
-            
-            .progress-fill, .confidence-fill, .probability-fill {
-                background: #666 !important;
+        const style = document.createElement('style');
+        style.textContent = `
+            @media print {
+                body {
+                    background: white !important;
+                    color: black !important;
+                    padding: 0 !important;
+                    margin: 0 !important;
+                }
+                
+                .nav-container,
+                .mobile-nav,
+                .mobile-select,
+                .desktop-tabs,
+                .copy-btn,
+                button,
+                [onclick] {
+                    display: none !important;
+                }
+                
+                .content-section {
+                    display: block !important;
+                    page-break-inside: avoid;
+                    break-inside: avoid;
+                    margin: 0 !important;
+                    padding: 20px !important;
+                    box-shadow: none !important;
+                    border: 1px solid #ddd !important;
+                }
+                
+                .system-header {
+                    background: white !important;
+                    color: black !important;
+                    border-bottom: 2px solid black !important;
+                }
+                
+                .prediction-badge {
+                    border: 1px solid black !important;
+                    background: white !important;
+                    color: black !important;
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+                
+                .tech-comparison-card,
+                .ai-validation-card,
+                .palace-card,
+                .accuracy-card {
+                    border: 1px solid #ddd !important;
+                    box-shadow: none !important;
+                }
+                
+                .progress-bar,
+                .confidence-bar {
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                }
+                
+                a {
+                    color: black !important;
+                    text-decoration: underline !important;
+                }
+                
+                h1, h2, h3, h4 {
+                    page-break-after: avoid;
+                    break-after: avoid;
+                }
+                
+                table {
+                    page-break-inside: avoid;
+                    break-inside: avoid;
+                }
             }
         `;
-        
-        document.head.appendChild(printStyle);
-    },
-    
-    // 監聽方向變化
-    initOrientationChange: function(callback) {
-        window.addEventListener('orientationchange', () => {
-            // 延遲執行以確保方向已改變
-            setTimeout(callback, 100);
-        });
+        document.head.appendChild(style);
     }
 };
 

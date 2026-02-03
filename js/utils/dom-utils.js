@@ -1,162 +1,138 @@
 /**
  * DOM操作工具函數
- * 提供DOM操作相關的通用函數
  */
 
 const DOMUtils = {
     // 創建元素
-    createElement: function(tag, attributes = {}, text = "") {
+    createElement: function(tag, attributes = {}) {
         const element = document.createElement(tag);
         
-        // 設置屬性
         for (const [key, value] of Object.entries(attributes)) {
-            if (key === "className") {
+            if (key === 'className') {
                 element.className = value;
-            } else if (key === "innerHTML") {
+            } else if (key === 'textContent') {
+                element.textContent = value;
+            } else if (key === 'innerHTML') {
                 element.innerHTML = value;
+            } else if (key === 'style' && typeof value === 'object') {
+                Object.assign(element.style, value);
+            } else if (key.startsWith('on')) {
+                element.addEventListener(key.substring(2).toLowerCase(), value);
             } else {
                 element.setAttribute(key, value);
             }
         }
         
-        // 設置文本內容
-        if (text) {
-            element.textContent = text;
-        }
-        
         return element;
     },
     
-    // 創建帶有圖示的元素
-    createIconElement: function(iconClass, size = "1rem") {
-        const icon = this.createElement("i", {
-            className: `fas ${iconClass}`,
-            style: `font-size: ${size};`
-        });
-        return icon;
-    },
-    
-    // 創進度條
-    createProgressBar: function(value, max = 100, color = null) {
-        const container = this.createElement("div", { className: "progress-bar" });
-        const fill = this.createElement("div", { 
-            className: "progress-fill",
-            style: `width: ${value}%; ${color ? `background-color: ${color}` : ''}`
-        });
-        container.appendChild(fill);
-        return container;
-    },
-    
-    // 創建狀態標籤
-    createStatusTag: function(text, status = "default") {
-        const tag = this.createElement("span", {
-            className: `verification-tag tag-${status}`
-        }, text);
-        return tag;
-    },
-    
-    // 清空元素內容
+    // 清空元素
     clearElement: function(element) {
         while (element.firstChild) {
             element.removeChild(element.firstChild);
         }
     },
     
-    // 顯示/隱藏元素
-    toggleElement: function(element, show) {
-        if (show) {
-            element.style.display = "block";
-        } else {
-            element.style.display = "none";
-        }
-    },
-    
     // 添加類名
     addClass: function(element, className) {
-        element.classList.add(className);
+        if (element.classList) {
+            element.classList.add(className);
+        } else {
+            const classes = element.className.split(' ');
+            if (classes.indexOf(className) === -1) {
+                classes.push(className);
+                element.className = classes.join(' ');
+            }
+        }
     },
     
     // 移除類名
     removeClass: function(element, className) {
-        element.classList.remove(className);
-    },
-    
-    // 檢查元素是否包含類名
-    hasClass: function(element, className) {
-        return element.classList.contains(className);
-    },
-    
-    // 設置元素樣式
-    setStyle: function(element, styles) {
-        for (const [property, value] of Object.entries(styles)) {
-            element.style[property] = value;
-        }
-    },
-    
-    // 獲取元素的位置和尺寸
-    getElementRect: function(element) {
-        return element.getBoundingClientRect();
-    },
-    
-    // 滾動到元素
-    scrollToElement: function(element, offset = 0) {
-        const rect = this.getElementRect(element);
-        window.scrollTo({
-            top: rect.top + window.scrollY - offset,
-            behavior: 'smooth'
-        });
-    },
-    
-    // 創建卡片元素
-    createCard: function(content, options = {}) {
-        const card = this.createElement("div", {
-            className: `card ${options.className || ""}`
-        });
-        
-        if (options.header) {
-            const header = this.createElement("div", { className: "card-header" });
-            if (typeof options.header === "string") {
-                header.innerHTML = options.header;
-            } else {
-                header.appendChild(options.header);
-            }
-            card.appendChild(header);
-        }
-        
-        const body = this.createElement("div", { className: "card-body" });
-        if (typeof content === "string") {
-            body.innerHTML = content;
+        if (element.classList) {
+            element.classList.remove(className);
         } else {
-            body.appendChild(content);
-        }
-        card.appendChild(body);
-        
-        if (options.footer) {
-            const footer = this.createElement("div", { className: "card-footer" });
-            if (typeof options.footer === "string") {
-                footer.innerHTML = options.footer;
-            } else {
-                footer.appendChild(options.footer);
+            const classes = element.className.split(' ');
+            const index = classes.indexOf(className);
+            if (index > -1) {
+                classes.splice(index, 1);
+                element.className = classes.join(' ');
             }
-            card.appendChild(footer);
         }
-        
-        return card;
+    },
+    
+    // 切換類名
+    toggleClass: function(element, className) {
+        if (element.classList) {
+            element.classList.toggle(className);
+        } else {
+            const classes = element.className.split(' ');
+            const index = classes.indexOf(className);
+            if (index > -1) {
+                classes.splice(index, 1);
+            } else {
+                classes.push(className);
+            }
+            element.className = classes.join(' ');
+        }
+    },
+    
+    // 檢查是否有類名
+    hasClass: function(element, className) {
+        if (element.classList) {
+            return element.classList.contains(className);
+        } else {
+            return element.className.split(' ').indexOf(className) > -1;
+        }
+    },
+    
+    // 設置屬性
+    setAttributes: function(element, attributes) {
+        for (const [key, value] of Object.entries(attributes)) {
+            element.setAttribute(key, value);
+        }
+    },
+    
+    // 移除屬性
+    removeAttributes: function(element, attributeNames) {
+        attributeNames.forEach(name => {
+            element.removeAttribute(name);
+        });
+    },
+    
+    // 設置文本
+    setText: function(element, text) {
+        element.textContent = text;
+    },
+    
+    // 設置HTML
+    setHTML: function(element, html) {
+        element.innerHTML = html;
+    },
+    
+    // 設置樣式
+    setStyle: function(element, styles) {
+        Object.assign(element.style, styles);
+    },
+    
+    // 獲取計算樣式
+    getComputedStyle: function(element, property) {
+        return window.getComputedStyle(element).getPropertyValue(property);
     },
     
     // 創建表格
-    createTable: function(headers, rows, options = {}) {
-        const table = this.createElement("table", {
-            className: `table ${options.className || ""}`
-        });
+    createTable: function(data, options = {}) {
+        const table = this.createElement('table', options.tableAttrs);
         
-        // 創建表頭
-        if (headers && headers.length > 0) {
-            const thead = this.createElement("thead");
-            const headerRow = this.createElement("tr");
+        // 添加表頭
+        if (options.headers) {
+            const thead = this.createElement('thead');
+            const headerRow = this.createElement('tr');
             
-            headers.forEach(header => {
-                const th = this.createElement("th", {}, header);
+            options.headers.forEach(header => {
+                const th = this.createElement('th', {
+                    textContent: header,
+                    ...(options.headerCellAttrs || {})
+                });
                 headerRow.appendChild(th);
             });
             
@@ -164,80 +140,90 @@ const DOMUtils = {
             table.appendChild(thead);
         }
         
-        // 創建表格主體
-        if (rows && rows.length > 0) {
-            const tbody = this.createElement("tbody");
+        // 添加表格內容
+        const tbody = this.createElement('tbody');
+        
+        data.forEach(rowData => {
+            const row = this.createElement('tr');
             
-            rows.forEach(rowData => {
-                const row = this.createElement("tr");
-                
-                rowData.forEach(cellData => {
-                    const td = this.createElement("td");
-                    
-                    if (typeof cellData === "string") {
-                        td.textContent = cellData;
-                    } else {
-                        td.appendChild(cellData);
-                    }
-                    
-                    row.appendChild(td);
+            rowData.forEach(cellData => {
+                const td = this.createElement('td', {
+                    textContent: cellData,
+                    ...(options.cellAttrs || {})
                 });
-                
-                tbody.appendChild(row);
+                row.appendChild(td);
             });
             
-            table.appendChild(tbody);
-        }
+            tbody.appendChild(row);
+        });
         
+        table.appendChild(tbody);
         return table;
     },
     
     // 創建列表
     createList: function(items, options = {}) {
-        const listType = options.ordered ? "ol" : "ul";
-        const list = this.createElement(listType, {
-            className: options.className || ""
-        });
+        const list = this.createElement(options.ordered ? 'ol' : 'ul', options.listAttrs);
         
         items.forEach(item => {
-            const li = this.createElement("li");
-            
-            if (typeof item === "string") {
-                li.textContent = item;
-            } else {
-                li.appendChild(item);
-            }
-            
+            const li = this.createElement('li', {
+                textContent: item,
+                ...(options.itemAttrs || {})
+            });
             list.appendChild(li);
         });
         
         return list;
     },
     
-    // 創建點列式項目
-    createBulletPoint: function(title, content, icon = null) {
-        const container = this.createElement("div", { className: "bullet-point" });
+    // 創建卡片
+    createCard: function(content, options = {}) {
+        const card = this.createElement('div', {
+            className: 'card',
+            ...options.cardAttrs
+        });
         
-        if (icon) {
-            const iconElement = this.createElement("div", { className: "bullet-icon" });
-            iconElement.appendChild(icon);
-            container.appendChild(iconElement);
+        if (options.header) {
+            const header = this.createElement('div', {
+                className: 'card-header',
+                textContent: options.header,
+                ...(options.headerAttrs || {})
+            });
+            card.appendChild(header);
         }
         
-        const contentElement = this.createElement("div", { className: "bullet-content" });
+        const body = this.createElement('div', {
+            className: 'card-body',
+            ...(options.bodyAttrs || {})
+        });
         
-        if (title) {
-            const titleElement = this.createElement("h4", {}, title);
-            contentElement.appendChild(titleElement);
+        if (typeof content === 'string') {
+            body.innerHTML = content;
+        } else {
+            body.appendChild(content);
         }
         
-        if (content) {
-            const textElement = this.createElement("p", {}, content);
-            contentElement.appendChild(textElement);
+        card.appendChild(body);
+        
+        if (options.footer) {
+            const footer = this.createElement('div', {
+                className: 'card-footer',
+                textContent: options.footer,
+                ...(options.footerAttrs || {})
+            });
+            card.appendChild(footer);
         }
         
-        container.appendChild(contentElement);
-        return container;
+        return card;
+    },
+    
+    // 加載HTML模板
+    loadTemplate: function(templateId) {
+        const template = document.getElementById(templateId);
+        if (template && template.content) {
+            return document.importNode(template.content, true);
+        }
+        return null;
     }
 };
 
