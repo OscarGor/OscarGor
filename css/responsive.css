@@ -1,0 +1,106 @@
+/* 響應式設計 */
+@media (max-width: 1200px) {
+    .tech-comparison-grid, .ai-params-validation-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .desktop-tabs {
+        display: none;
+    }
+    
+    .mobile-nav {
+        display: block;
+    }
+    
+    .nav-container {
+        border-radius: 0 0 15px 15px;
+    }
+    
+    .content-section {
+        padding: 25px;
+    }
+    
+    .tech-comparison-grid, .ai-params-validation-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .jiugong-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .verification-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .accuracy-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .system-header {
+        padding: 20px 15px;
+    }
+    
+    .content-section {
+        padding: 20px;
+    }
+    
+    .stats-table, .ai-params-table {
+        font-size: 0.9rem;
+    }
+    
+    .stats-table th, .stats-table td,
+    .ai-params-table th, .ai-params-table td {
+        padding: 12px 10px;
+    }
+    
+    .confidence-meter {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .confidence-bar {
+        width: 100%;
+        margin: 10px 0;
+    }
+    
+    .verification-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .accuracy-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    body {
+        padding: 10px;
+    }
+    
+    .system-title {
+        font-size: 1.8rem;
+    }
+    
+    .content-section {
+        padding: 15px;
+    }
+    
+    .tech-comparison-value {
+        font-size: 2rem;
+    }
+    
+    .copy-btn {
+        width: 100%;
+        padding: 12px 20px;
+    }
+    
+    .nav-tab {
+        min-width: 120px;
+        padding: 15px 10px;
+        font-size: 0.9rem;
+    }
+}
