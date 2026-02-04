@@ -1,0 +1,387 @@
+{
+  "patterns": {
+    "吉格": {
+      "青龍返首": {
+        "description": "天盤戊加地盤丙，青龍返首，凡事順利，百事皆吉",
+        "impact": {
+          "attack": 0.35,
+          "scoring": 0.30,
+          "momentum": 0.40
+        },
+        "timing": "上半場作用強"
+      },
+      "飛鳥跌穴": {
+        "description": "天盤丙加地盤戊，飛鳥跌穴，百事洞徹，不勞而獲",
+        "impact": {
+          "efficiency": 0.30,
+          "opportunities": 0.35,
+          "surprise": 0.25
+        },
+        "timing": "全場有效"
+      },
+      "玉女守門": {
+        "description": "天盤丁奇加地盤值使門，玉女守門，利於婚嫁、約會",
+        "impact": {
+          "defense": 0.25,
+          "stability": 0.30,
+          "coordination": 0.20
+        },
+        "timing": "下半場作用強"
+      },
+      "三奇得使": {
+        "description": "天盤乙、丙、丁加地盤值使門，三奇得使，百事皆宜",
+        "impact": {
+          "overall": 0.40,
+          "balance": 0.35,
+          "coordination": 0.30
+        },
+        "timing": "全場有效"
+      },
+      "天遁": {
+        "description": "天盤丙奇加地盤丁奇，天遁，利於進攻、發展",
+        "impact": {
+          "attack": 0.45,
+          "creativity": 0.35,
+          "breakthrough": 0.40
+        },
+        "timing": "上半場作用強"
+      },
+      "地遁": {
+        "description": "天盤乙奇加地盤己，地遁，利於防守、穩定",
+        "impact": {
+          "defense": 0.45,
+          "stability": 0.40,
+          "grounding": 0.35
+        },
+        "timing": "全場有效"
+      },
+      "人遁": {
+        "description": "天盤丁奇加地盤休門，人遁，利於團隊、配合",
+        "impact": {
+          "teamwork": 0.40,
+          "coordination": 0.35,
+          "communication": 0.30
+        },
+        "timing": "全場有效"
+      },
+      "小蛇化龍": {
+        "description": "天盤壬加地盤戊，小蛇化龍，利於轉變、突破",
+        "impact": {
+          "turningPoint": 0.65,
+          "comeback": 0.50,
+          "transformation": 0.45
+        },
+        "timing": "比賽60-75分鐘"
+      },
+      "青龍轉光": {
+        "description": "天盤戊加地盤丁，青龍轉光，利於發展、進步",
+        "impact": {
+          "progress": 0.35,
+          "improvement": 0.30,
+          "momentum": 0.25
+        },
+        "timing": "下半場作用強"
+      },
+      "太白逢星": {
+        "description": "天盤庚加地盤丙，太白逢星，利於攻擊、突破",
+        "impact": {
+          "attack": 0.30,
+          "breakthrough": 0.25,
+          "aggression": 0.20
+        },
+        "timing": "上半場作用強"
+      }
+    },
+    
+    "凶格": {
+      "青龍逃走": {
+        "description": "天盤乙加地盤辛，青龍逃走，人亡財破，奴僕拐帶",
+        "impact": {
+          "missedChances": 0.30,
+          "inefficiency": -0.25,
+          "instability": -0.20
+        },
+        "timing": "全場有效"
+      },
+      "白虎猖狂": {
+        "description": "天盤辛加地盤乙，白虎猖狂，家敗人亡，遠行多殃",
+        "impact": {
+          "aggression": 0.35,
+          "injuries": 0.25,
+          "conflict": 0.30
+        },
+        "timing": "上半場作用強"
+      },
+      "朱雀投江": {
+        "description": "天盤丁加地盤癸，朱雀投江，文書口舌，音信沉溺",
+        "impact": {
+          "miscommunication": -0.25,
+          "mistakes": 0.20,
+          "confusion": -0.20
+        },
+        "timing": "全場有效"
+      },
+      "螣蛇夭矯": {
+        "description": "天盤癸加地盤丁，螣蛇夭矯，文書官司，火焚也逃不掉",
+        "impact": {
+          "complications": -0.30,
+          "obstacles": -0.25,
+          "frustration": -0.20
+        },
+        "timing": "全場有效"
+      },
+      "星奇入墓": {
+        "description": "天盤丁加地盤艮宮（丑），星奇入墓，文書阻隔，百事不順",
+        "impact": {
+          "attackEfficiency": -0.25,
+          "creativity": -0.20,
+          "effectiveness": -0.18
+        },
+        "timing": "上半場影響大"
+      },
+      "月奇入墓": {
+        "description": "天盤丙加地盤乾宮（戌），月奇入墓，文書不行，百事難成",
+        "impact": {
+          "opportunities": -0.20,
+          "luck": -0.15,
+          "success": -0.18
+        },
+        "timing": "全場有效"
+      },
+      "大格": {
+        "description": "天盤庚加地盤癸，大格，行人不至，官事不止",
+        "impact": {
+          "obstruction": -0.20,
+          "delay": -0.15,
+          "frustration": -0.18
+        },
+        "timing": "全場有效"
+      },
+      "小格": {
+        "description": "天盤庚加地盤壬，小格，行人即至，官事有理",
+        "impact": {
+          "minorIssues": -0.15,
+          "smallObstacles": -0.10,
+          "annoyances": -0.12
+        },
+        "timing": "上半場影響大"
+      },
+      "歲格": {
+        "description": "天盤庚加地盤太歲，歲格，凶災立至",
+        "impact": {
+          "majorIssues": -0.40,
+          "crisis": -0.35,
+          "disaster": -0.30
+        },
+        "timing": "全場有效"
+      },
+      "刑格": {
+        "description": "天盤庚加地盤己，刑格，官司受刑，敗訴後刑罰",
+        "impact": {
+          "penalties": 0.25,
+          "yellowCards": 0.20,
+          "fouls": 0.30
+        },
+        "timing": "全場有效"
+      },
+      "悖格": {
+        "description": "天盤丙加地盤值符，悖格，以下犯上，臣欺君",
+        "impact": {
+          "rebellion": 0.30,
+          "upsets": 0.25,
+          "surprises": 0.20
+        },
+        "timing": "下半場作用強"
+      },
+      "天網四張": {
+        "description": "天盤癸加地盤癸，天網四張，行人失伴，病訟皆傷",
+        "impact": {
+          "trapping": -0.35,
+          "limitation": -0.30,
+          "restriction": -0.25
+        },
+        "timing": "全場有效"
+      },
+      "伏宮格": {
+        "description": "天盤庚加地盤值符，伏宮格，大凶，主客皆傷",
+        "impact": {
+          "majorConflict": -0.45,
+          "injuries": 0.35,
+          "chaos": -0.40
+        },
+        "timing": "全場有效"
+      },
+      "飛宮格": {
+        "description": "天盤值符加地盤庚，飛宮格，大凶，換地方可免",
+        "impact": {
+          "instability": -0.30,
+          "changes": 0.25,
+          "unpredictability": 0.20
+        },
+        "timing": "全場有效"
+      },
+      "凶蛇入獄": {
+        "description": "天盤辛加地盤壬，凶蛇入獄，兩男爭女，訟獄不息",
+        "impact": {
+          "conflict": 0.25,
+          "yellowCards": 0.20,
+          "disputes": 0.30
+        },
+        "timing": "全場有效"
+      },
+      "朱雀入墓": {
+        "description": "天盤丙加地盤乾宮，朱雀入墓，文書阻隔，百事不順",
+        "impact": {
+          "communication": -0.20,
+          "coordination": -0.15,
+          "strategy": -0.18
+        },
+        "timing": "上半場影響大"
+      },
+      "困龍被傷": {
+        "description": "天盤辛加地盤戊，困龍被傷，官司破財，屈抑守分",
+        "impact": {
+          "restriction": -0.35,
+          "limitation": -0.30,
+          "frustration": -0.25
+        },
+        "timing": "全場有效"
+      },
+      "青龍華蓋": {
+        "description": "天盤戊加地盤癸，青龍華蓋，吉事不吉，凶事不凶",
+        "impact": {
+          "neutralization": 0.15,
+          "balance": 0.10,
+          "uncertainty": 0.12
+        },
+        "timing": "全場有效"
+      },
+      "華蓋悖師": {
+        "description": "天盤癸加地盤丙，華蓋悖師，貴賤逢之皆不利",
+        "impact": {
+          "complications": -0.25,
+          "confusion": -0.20,
+          "inefficiency": -0.18
+        },
+        "timing": "全場有效"
+      },
+      "太白入熒": {
+        "description": "天盤庚加地盤丙，太白入熒，賊必來，進擊必勝",
+        "impact": {
+          "attack": 0.25,
+          "aggression": 0.20,
+          "pressure": 0.22
+        },
+        "timing": "上半場作用強"
+      },
+      "火入金鄉": {
+        "description": "天盤丙加地盤庚，火入金鄉，門戶破敗，盜賊耗失",
+        "impact": {
+          "defense": -0.30,
+          "vulnerability": -0.25,
+          "weakness": -0.22
+        },
+        "timing": "下半場影響大"
+      }
+    },
+    
+    "特殊格局": {
+      "天乙飛宮": {
+        "description": "天盤戊加地盤庚，天乙飛宮，吉事不吉，凶事更凶",
+        "impact": {
+          "awayTeam": 0.40,
+          "scoring": 0.35,
+          "advantage": 0.30
+        },
+        "timing": "上半場作用強"
+      },
+      "三奇入墓": {
+        "description": "乙奇入墓（未）、丙奇入墓（戌）、丁奇入墓（丑）",
+        "impact": {
+          "efficiency": -0.20,
+          "effectiveness": -0.18,
+          "productivity": -0.15
+        },
+        "timing": "上半場影響大"
+      },
+      "三奇受制": {
+        "description": "乙奇受制（庚）、丙奇受制（壬）、丁奇受制（癸）",
+        "impact": {
+          "limitation": -0.25,
+          "restriction": -0.20,
+          "hindrance": -0.18
+        },
+        "timing": "全場有效"
+      },
+      "門迫": {
+        "description": "八門五行克宮位五行",
+        "impact": {
+          "disruption": -0.15,
+          "inefficiency": -0.12,
+          "complications": -0.10
+        },
+        "timing": "上半場影響大"
+      },
+      "擊刑": {
+        "description": "天干在特定宮位受刑",
+        "impact": {
+          "injuries": 0.20,
+          "penalties": 0.15,
+          "conflict": 0.18
+        },
+        "timing": "全場有效"
+      },
+      "入墓": {
+        "description": "天干在特定宮位入墓",
+        "impact": {
+          "limitation": -0.18,
+          "restriction": -0.15,
+          "ineffectiveness": -0.12
+        },
+        "timing": "上半場影響大"
+      },
+      "空亡": {
+        "description": "時辰旬空，填實後作用",
+        "impact": {
+          "uncertainty": -0.10,
+          "instability": -0.08,
+          "unpredictability": 0.12
+        },
+        "timing": "上半場影響大，填實後減弱"
+      }
+    }
+  },
+  
+  "categories": {
+    "attackEnhancers": ["青龍返首", "飛鳥跌穴", "天遁", "太白逢星", "太白入熒", "天乙飛宮"],
+    "defenseEnhancers": ["地遁", "玉女守門", "青龍華蓋"],
+    "turningPoint": ["小蛇化龍", "青龍轉光", "悖格"],
+    "negativeImpact": ["青龍逃走", "白虎猖狂", "星奇入墓", "大格", "困龍被傷", "火入金鄉"],
+    "conflictIndicators": ["凶蛇入獄", "刑格", "擊刑", "朱雀投江"],
+    "efficiencyReducers": ["三奇入墓", "門迫", "入墓", "空亡"]
+  },
+  
+  "timingEffects": {
+    "firstHalfDominant": ["青龍返首", "天遁", "太白逢星", "白虎猖狂", "星奇入墓"],
+    "secondHalfDominant": ["玉女守門", "青龍轉光", "悖格", "火入金鄉"],
+    "specificTimeWindow": {
+      "小蛇化龍": [60, 75],
+      "青龍轉光": [70, 85],
+      "天乙飛宮": [15, 45]
+    },
+    "fullMatch": ["三奇得使", "地遁", "人遁", "青龍逃走", "大格", "凶蛇入獄"]
+  },
+  
+  "footballMapping": {
+    "scoring": ["青龍返首", "飛鳥跌穴", "天乙飛宮", "小蛇化龍"],
+    "defense": ["地遁", "玉女守門", "天網四張"],
+    "yellowCards": ["刑格", "凶蛇入獄", "擊刑", "白虎猖狂"],
+    "injuries": ["白虎猖狂", "擊刑", "伏宮格"],
+    "possession": ["三奇得使", "地遁", "門迫", "入墓"],
+    "corners": ["天遁", "飛鳥跌穴", "休門影響"],
+    "attacks": ["青龍返首", "太白入熒", "天乙飛宮", "九天吉神"],
+    "counterAttacks": ["青龍逃走", "飛宮格", "悖格"],
+    "setPieces": ["天乙飛宮", "小蛇化龍", "青龍轉光"],
+    "goalkeeping": ["玉女守門", "地遁", "天網四張"]
+  }
+}

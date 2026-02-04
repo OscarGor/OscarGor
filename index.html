@@ -3,75 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>甲方己土 × AI陰盤奇門足球分析系統 - V5.2I模組化升級版</title>
+    <title>甲方己土 × AI陰盤奇門足球分析系統</title>
     
-    <!-- CSS 連結 -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <!-- 核心樣式 -->
+    <link rel="stylesheet" href="assets/css/base.css">
+    <!-- 動態載入模式樣式 -->
+    <link id="mode-style" rel="stylesheet" href="">
     
-    <!-- 使用Google Fonts提供更豐富的字體 -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome 圖示 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 字體 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <!-- 系統標題 - V5.2I模組化升級版 -->
-    <header class="system-header" id="systemHeader"></header>
+    <!-- 系統模式選擇器 -->
+    <div class="mode-selector">
+        <button id="pre-match-btn" class="mode-btn active">
+            <i class="fas fa-crystal-ball"></i> 賽前預測模式
+        </button>
+        <button id="post-match-btn" class="mode-btn">
+            <i class="fas fa-chart-line"></i> 賽後驗證模式
+        </button>
+        <div class="version-badge">V5.1I</div>
+    </div>
     
-    <!-- V5.2I導航系統 - 7個分頁 -->
-    <div class="nav-container">
-        <!-- 手機版下拉選單 -->
-        <div class="mobile-nav">
-            <select class="mobile-select" id="mobileNav">
-                <option value="preMatch">🔮 賽前技術分析(V5.2I)</option>
-                <option value="postMatch">📊 賽後技術分析</option>
-                <option value="halfAnalysis">⏱️ 上下半場分析</option>
-                <option value="aiParams">🤖 AI參數應用</option>
-                <option value="palaceInfo">☯ 九宮資訊</option>
+    <!-- 系統標題區 -->
+    <header class="system-header">
+        <div class="header-content">
+            <h1>甲方己土 × AI陰盤奇門足球分析系統</h1>
+            <p class="subtitle">可驗證、可量化的陰盤奇門足球賽事預測AI模型</p>
+            <div class="status-indicators" id="status-indicators"></div>
+        </div>
+    </header>
+    
+    <!-- 主導航系統 -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <select id="mobile-nav" class="mobile-nav-select">
+                <option value="prediction">🔮 賽事分析</option>
+                <option value="half-analysis">⏱️ 上下半場分析</option>
+                <option value="ai-params">🤖 AI參數應用</option>
+                <option value="palace-info">☯ 九宮資訊</option>
                 <option value="history">📈 歷史驗證</option>
                 <option value="summary">📋 總結報告</option>
             </select>
+            
+            <div class="desktop-nav">
+                <button class="nav-tab active" data-tab="prediction">
+                    <i class="fas fa-crystal-ball"></i>
+                    <span>賽事分析</span>
+                </button>
+                <button class="nav-tab" data-tab="half-analysis">
+                    <i class="fas fa-clock"></i>
+                    <span>上下半場分析</span>
+                </button>
+                <button class="nav-tab" data-tab="ai-params">
+                    <i class="fas fa-robot"></i>
+                    <span>AI參數應用</span>
+                </button>
+                <button class="nav-tab" data-tab="palace-info">
+                    <i class="fas fa-yin-yang"></i>
+                    <span>九宮資訊</span>
+                </button>
+                <button class="nav-tab" data-tab="history">
+                    <i class="fas fa-chart-line"></i>
+                    <span>歷史驗證</span>
+                </button>
+                <button class="nav-tab" data-tab="summary">
+                    <i class="fas fa-file-alt"></i>
+                    <span>總結報告</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- 主內容區域 -->
+    <main class="main-content">
+        <!-- 賽事信息卡片 -->
+        <section class="match-info-card" id="match-info">
+            <!-- 動態載入賽事信息 -->
+        </section>
+        
+        <!-- 分頁內容區域 -->
+        <div class="tab-content">
+            <section id="prediction" class="tab-pane active">
+                <!-- 動態載入賽事分析內容 -->
+            </section>
+            
+            <section id="half-analysis" class="tab-pane">
+                <!-- 動態載入上下半場分析 -->
+            </section>
+            
+            <section id="ai-params" class="tab-pane">
+                <!-- 動態載入AI參數內容 -->
+            </section>
+            
+            <section id="palace-info" class="tab-pane">
+                <!-- 動態載入九宮資訊 -->
+            </section>
+            
+            <section id="history" class="tab-pane">
+                <!-- 動態載入歷史驗證 -->
+            </section>
+            
+            <section id="summary" class="tab-pane">
+                <!-- 動態載入總結報告 -->
+            </section>
+        </div>
+    </main>
+    
+    <!-- 控制面板 -->
+    <aside class="control-panel">
+        <div class="panel-section">
+            <h4><i class="fas fa-cog"></i> 系統控制</h4>
+            <button id="new-match-btn" class="control-btn">
+                <i class="fas fa-plus"></i> 新增比賽分析
+            </button>
+            <button id="load-match-btn" class="control-btn">
+                <i class="fas fa-folder-open"></i> 載入歷史比賽
+            </button>
+            <button id="update-result-btn" class="control-btn">
+                <i class="fas fa-edit"></i> 更新賽果
+            </button>
         </div>
         
-        <!-- 桌面版標籤 -->
-        <div class="desktop-tabs" id="desktopTabs"></div>
+        <div class="panel-section">
+            <h4><i class="fas fa-download"></i> 數據導出</h4>
+            <button id="export-params-btn" class="control-btn">
+                <i class="fas fa-file-export"></i> 導出AI參數
+            </button>
+            <button id="export-report-btn" class="control-btn">
+                <i class="fas fa-file-pdf"></i> 導出總結報告
+            </button>
+            <button id="copy-all-btn" class="control-btn">
+                <i class="fas fa-copy"></i> 複製全部數據
+            </button>
+        </div>
+        
+        <div class="panel-section">
+            <h4><i class="fas fa-history"></i> 版本信息</h4>
+            <div class="version-info">
+                <div>當前版本: <span id="current-version">V5.1I</span></div>
+                <div>總場次: <span id="total-matches">12</span></div>
+                <div>準確度: <span id="avg-accuracy">65.2%</span></div>
+            </div>
+        </div>
+    </aside>
+    
+    <!-- 模態對話框 (新增比賽/更新賽果) -->
+    <div id="modal-overlay" class="modal-overlay">
+        <div class="modal" id="match-modal">
+            <div class="modal-header">
+                <h3 id="modal-title">新增比賽分析</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <!-- 動態載入表單內容 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel">取消</button>
+                <button class="btn-submit">提交</button>
+            </div>
+        </div>
     </div>
     
-    <!-- 內容容器 -->
-    <div id="contentContainer">
-        <!-- 內容將由JavaScript動態生成 -->
-    </div>
+    <!-- 底部信息 -->
+    <footer class="system-footer">
+        <p>甲方己土玄學顧問公司 · AI陰盤奇門足球分析系統</p>
+        <p class="footer-sub">學術研究用途 · 三維參數體系驗證 · 版權所有 © 2026</p>
+    </footer>
     
-    <!-- 全局腳本 -->
-    <!-- 配置檔案 -->
-    <script src="js/config/system-config.js"></script>
-    <script src="js/config/color-config.js"></script>
-    
-    <!-- 數據檔案 -->
-    <script src="js/data/match-data.js"></script>
-    <script src="js/data/prediction-data.js"></script>
-    <script src="js/data/history-data.js"></script>
-    <script src="js/data/qimen-data.js"></script>
-    <script src="js/data/ai-params-data.js"></script>
-    
-    <!-- 工具函數 -->
-    <script src="js/utils/dom-utils.js"></script>
-    <script src="js/utils/copy-utils.js"></script>
-    <script src="js/utils/progress-utils.js"></script>
-    <script src="js/utils/responsive-utils.js"></script>
-    
-    <!-- 功能模組 -->
-    <script src="js/modules/navigation.js"></script>
-    <script src="js/modules/pre-match.js"></script>
-    <script src="js/modules/post-match.js"></script>
-    <script src="js/modules/half-analysis.js"></script>
-    <script src="js/modules/ai-params.js"></script>
-    <script src="js/modules/palace-info.js"></script>
-    <script src="js/modules/history.js"></script>
-    <script src="js/modules/summary.js"></script>
-    
-    <!-- 主入口檔案 -->
-    <script src="js/main.js"></script>
+    <!-- JavaScript 文件 -->
+    <script src="assets/js/qimen-parser.js"></script>
+    <script src="assets/js/ai-params.js"></script>
+    <script src="assets/js/history-manager.js"></script>
+    <script src="assets/js/pre-match.js"></script>
+    <script src="assets/js/post-match.js"></script>
+    <script src="assets/js/app.js"></script>
 </body>
 </html>

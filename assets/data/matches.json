@@ -1,0 +1,195 @@
+{
+  "matches": [
+    {
+      "id": "match_FB3079",
+      "matchNumber": "FB3079",
+      "homeTeam": "巴拉卡斯中央",
+      "awayTeam": "萊斯查",
+      "league": "阿根廷甲組聯賽",
+      "matchTime": "2026-02-02 03:58",
+      "status": "verified",
+      "accuracy": 67.5,
+      "createdAt": "2026-02-03T10:00:00.000Z",
+      "updatedAt": "2026-02-03T10:00:00.000Z",
+      
+      "preMatch": {
+        "prediction": {
+          "mostLikely": ["0-1", "1-2"],
+          "probability": {
+            "homeWin": 25,
+            "draw": 35,
+            "awayWin": 40
+          },
+          "halfTime": ["0-0", "0-1"],
+          "totalGoals": [1, 2],
+          "corners": [3, 6],
+          "yellowCards": [2, 4],
+          "possession": [45, 55],
+          "shotsOnTarget": [2, 4],
+          "dangerousAttacks": [25, 35],
+          "totalAttacks": [80, 100]
+        },
+        "qimenInfo": {
+          "pattern": "陽遁九局",
+          "valueStar": "天沖星",
+          "valueDoor": "傷門",
+          "fuyinType": "非全局伏吟局",
+          "specialPatterns": ["星奇入墓", "凶蛇入獄", "天乙飛宮", "小蛇化龍", "青龍逃走", "太白入熒", "大格", "青龍華蓋", "華蓋悖師"],
+          "fourHarms": 7,
+          "palaces": [
+            {
+              "palace": "坎宮",
+              "direction": "北方",
+              "relation": "問測者落宮 · 主隊巴拉卡斯中央",
+              "pattern": "丁+己（星奇入墓）",
+              "doors": ["死門"],
+              "stars": ["天心星"],
+              "gods": ["玄武"],
+              "harms": ["死門門迫", "丁入墓"]
+            },
+            {
+              "palace": "巽宮",
+              "direction": "東南方",
+              "relation": "值符天沖星 · 客隊萊斯查",
+              "pattern": "辛+壬（凶蛇入獄）",
+              "doors": ["休門"],
+              "stars": ["天沖星"],
+              "gods": ["值符"],
+              "harms": ["空亡", "辛入墓", "壬入墓", "壬擊刑"]
+            },
+            {
+              "palace": "坤宮",
+              "direction": "西南方",
+              "relation": "天乙飛宮 · 客隊機會",
+              "pattern": "戊+庚（天乙飛宮）",
+              "doors": ["傷門"],
+              "stars": ["天英星"],
+              "gods": ["太陰"],
+              "harms": ["傷門門迫", "癸入墓"]
+            },
+            {
+              "palace": "离宮",
+              "direction": "南方",
+              "relation": "小蛇化龍 · 比賽轉折關鍵",
+              "pattern": "壬+戊（小蛇化龍）",
+              "doors": ["生門"],
+              "stars": ["天輔星"],
+              "gods": ["騰蛇"],
+              "harms": []
+            },
+            {
+              "palace": "震宮",
+              "direction": "東方",
+              "relation": "青龍逃走 · 主隊錯失機會",
+              "pattern": "乙+辛（青龍逃走）",
+              "doors": ["開門"],
+              "stars": ["天任星"],
+              "gods": ["九天"],
+              "harms": ["開門門迫"]
+            }
+          ]
+        },
+        "aiParams": {
+          "version": "V5.1I",
+          "timeLimitation": {
+            "valueStar": { "firstHalf": 0.25, "secondHalf": 0.08 },
+            "flyingPalace": { "firstHalf": 0.35, "secondHalf": 0.08 },
+            "greenDragonEscape": { "firstHalf": -0.15, "secondHalf": -0.08 }
+          },
+          "timeEffectiveness": {
+            "fourHarms": { "firstHalf": -0.25, "secondHalf": -0.08 },
+            "deathDoor": { "firstHalf": -0.15, "secondHalf": -0.06 },
+            "nineHeaven": { "firstHalf": 0.05, "secondHalf": 0.40 }
+          },
+          "energyConversion": {
+            "coefficient": 0.70,
+            "model": "非全局伏吟局能量守恆轉換"
+          }
+        }
+      },
+      
+      "postMatch": {
+        "actualResult": {
+          "halfTime": "0-1",
+          "fullTime": "1-1",
+          "totalGoals": 2,
+          "corners": 2,
+          "yellowCards": 11,
+          "redCards": 0,
+          "possession": { "home": 64, "away": 36 },
+          "shotsOnTarget": 6,
+          "dangerousAttacks": 136,
+          "totalAttacks": 204,
+          "shotsOffTarget": 8,
+          "penalties": 1,
+          "blockedShots": 6
+        },
+        "verification": {
+          "accuracy": 67.5,
+          "correct": 5,
+          "partial": 2,
+          "wrong": 1,
+          "details": [
+            {
+              "item": "賽果方向",
+              "prediction": "主勝25%，和35%，客勝40%",
+              "actual": "和局",
+              "status": "correct"
+            },
+            {
+              "item": "全場比分",
+              "prediction": "0-1 / 1-2",
+              "actual": "1-1",
+              "status": "partial"
+            },
+            {
+              "item": "半場比分",
+              "prediction": "0-0 / 0-1",
+              "actual": "0-1",
+              "status": "correct"
+            },
+            {
+              "item": "總進球",
+              "prediction": "1-2球",
+              "actual": "2球",
+              "status": "correct"
+            },
+            {
+              "item": "角球",
+              "prediction": "3-6個",
+              "actual": "2個",
+              "status": "partial"
+            },
+            {
+              "item": "黃牌",
+              "prediction": "2-4張",
+              "actual": "11張",
+              "status": "wrong"
+            },
+            {
+              "item": "控球率",
+              "prediction": "45%-55%",
+              "actual": "64%:36%",
+              "status": "wrong"
+            },
+            {
+              "item": "射正",
+              "prediction": "2-4次",
+              "actual": "6次",
+              "status": "partial"
+            }
+          ]
+        },
+        "learnings": [
+          "三維參數體系整體有效",
+          "黃牌算法需徹底重建",
+          "九天進攻增強被低估",
+          "死門控球影響被嚴重低估",
+          "星奇入墓影響被高估",
+          "小蛇化龍轉折準確",
+          "能量轉換模型驗證成功"
+        ]
+      }
+    }
+  ]
+}
