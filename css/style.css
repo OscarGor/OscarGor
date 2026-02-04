@@ -2,9 +2,9 @@
 
 /* 全局顏色變量 */
 :root {
-    --first-color: #222831;     /* 主要文字/深色 */
-    --second-color: #393e46;    /* 次要文字/中深色 */
-    --third-color: #f96d00;     /* 強調色/橙色 */
+    --first-color: #42b883;     /* 主要文字/深色 */
+    --second-color: #347474;    /* 次要文字/中深色 */
+    --third-color: #35495e;     /* 強調色/橙色 */
     --fourth-color: #f2f2f2;    /* 背景色/淺灰色 */
     
     /* 重新映射原有變量 */
