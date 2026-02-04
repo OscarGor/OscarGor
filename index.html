@@ -1,262 +1,342 @@
 <!DOCTYPE html>
-<html lang="zh-HK">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>甲方己土 × AI陰盤奇門足球分析系統</title>
-    <link rel="stylesheet" href="assets/css/base.css">
-    <link rel="stylesheet" href="assets/css/pre-match.css">
-    <link rel="stylesheet" href="assets/css/post-match.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>己土奇門足球預測系統 v1.0</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <!-- 頁頭 -->
-        <header class="header">
-            <h1>甲方己土 × AI陰盤奇門足球分析系統</h1>
-            <p class="subtitle">可驗證、可量化的陰盤奇門足球賽事預測AI模型</p>
+        <header class="main-header">
+            <div class="logo-section">
+                <h1><i class="fas fa-futbol"></i> 己土奇門足球預測系統</h1>
+                <p class="version">版本 1.0 | 陽遁三局專用</p>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html" class="active"><i class="fas fa-home"></i> 輸入介面</a>
+                <a href="prediction.html"><i class="fas fa-chart-line"></i> 當前預測</a>
+                <a href="history.html"><i class="fas fa-history"></i> 歷史驗證</a>
+                <a href="ai-params.html"><i class="fas fa-brain"></i> AI參數</a>
+                <a href="lazy-commands.html"><i class="fas fa-terminal"></i> 指令包</a>
+            </nav>
         </header>
 
-        <!-- 導航分頁 -->
-        <nav class="tabs">
-            <button class="tab-btn active" data-tab="pre-match">賽前預測模式</button>
-            <button class="tab-btn" data-tab="post-match">賽後驗證模式</button>
-            <button class="tab-btn" data-tab="history">歷史統計</button>
-            <button class="tab-btn" data-tab="settings">系統設定</button>
-        </nav>
-
-        <!-- 賽前預測模式 -->
-        <section id="pre-match" class="tab-content active">
-            <div class="section-header">
-                <h2><i class="icon-predict"></i> 賽前預測模式</h2>
-                <p>輸入比賽資訊和奇門盤進行賽前預測分析</p>
-            </div>
-
-            <div class="input-section">
-                <div class="card">
-                    <h3>比賽基本資訊</h3>
-                    <div class="form-group">
-                        <label class="form-label">球賽編號</label>
-                        <input type="text" id="match-id" class="form-control" placeholder="例: FB3079">
+        <main class="content">
+            <div class="grid-container">
+                <!-- 左側：比賽資訊輸入 -->
+                <section class="card input-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-futbol"></i> 比賽基本資料</h2>
+                        <span class="badge" id="match-status">待輸入</span>
                     </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">對陣隊伍</label>
-                        <input type="text" id="match-teams" class="form-control" 
-                               placeholder="例: 巴拉卡斯中央 對 萊斯查">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">聯賽名稱</label>
-                        <input type="text" id="match-league" class="form-control" 
-                               placeholder="例: 阿根廷甲組聯賽">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">比賽時間</label>
-                        <input type="datetime-local" id="match-time" class="form-control">
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>奇門盤資訊</h3>
-                    <div class="form-group">
-                        <label class="form-label">奇門盤數據</label>
-                        <textarea id="qimen-data" class="form-control" rows="10" 
-                                  placeholder="請輸入完整的奇門盤數據..."></textarea>
-                    </div>
-                    
-                    <div class="button-group">
-                        <button id="parse-qimen-btn" class="btn btn-primary">
-                            <i class="icon-parse"></i> 解析奇門盤
-                        </button>
-                        <button id="clear-qimen-btn" class="btn">
-                            <i class="icon-clear"></i> 清空數據
-                        </button>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <h3>AI分析參數</h3>
-                    <div class="ai-params">
-                        <div class="param-group">
-                            <label class="form-label">時間權重</label>
-                            <input type="range" id="time-weight" min="0" max="10" value="5" step="0.5">
-                            <span id="time-value">5.0</span>
+                    <form id="match-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="match-id"><i class="fas fa-hashtag"></i> 球賽編號</label>
+                                <input type="text" id="match-id" value="FB3200" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="match-time"><i class="far fa-clock"></i> 比賽時間</label>
+                                <input type="datetime-local" id="match-time" value="2026-02-05T02:00" required>
+                            </div>
                         </div>
-                        
-                        <div class="param-group">
-                            <label class="form-label">空間權重</label>
-                            <input type="range" id="space-weight" min="0" max="10" value="5" step="0.5">
-                            <span id="space-value">5.0</span>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="home-team"><i class="fas fa-home"></i> 主隊</label>
+                                <input type="text" id="home-team" value="馬德里CFF女足" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="away-team"><i class="fas fa-plane"></i> 客隊</label>
+                                <input type="text" id="away-team" value="特內里費女足" required>
+                            </div>
                         </div>
-                        
-                        <div class="param-group">
-                            <label class="form-label">神煞影響係數</label>
-                            <input type="range" id="shensha-coeff" min="0" max="10" value="6" step="0.5">
-                            <span id="shensha-value">6.0</span>
+
+                        <div class="form-group">
+                            <label for="competition"><i class="fas fa-trophy"></i> 賽事類別</label>
+                            <select id="competition" required>
+                                <option value="女子西班牙盃" selected>女子西班牙盃</option>
+                                <option value="聯賽">聯賽</option>
+                                <option value="友誼賽">友誼賽</option>
+                                <option value="國際賽">國際賽</option>
+                            </select>
                         </div>
-                    </div>
-                    
-                    <button id="start-analysis-btn" class="btn btn-success">
-                        <i class="icon-analyze"></i> 開始AI分析
-                    </button>
-                </div>
-            </div>
 
-            <div class="analysis-section" id="pre-analysis-result" style="display: none;">
-                <!-- AI分析結果將在這裡顯示 -->
-            </div>
-        </section>
+                        <!-- 奇門局數自動顯示 -->
+                        <div class="qimen-info">
+                            <h3><i class="fas fa-yin-yang"></i> 奇門遁甲信息</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">農曆：</span>
+                                    <span class="info-value">2025年12月18日</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">陽遁局數：</span>
+                                    <span class="info-value">3局</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">四柱：</span>
+                                    <span class="info-value">丙午 庚寅 庚戌 丁丑</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">值符：</span>
+                                    <span class="info-value">天輔星</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">值使：</span>
+                                    <span class="info-value">杜門</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">空亡：</span>
+                                    <span class="info-value">申酉</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </section>
 
-        <!-- 賽後驗證模式 -->
-        <section id="post-match" class="tab-content">
-            <div class="section-header">
-                <h2><i class="icon-verify"></i> 賽後驗證模式</h2>
-                <p>輸入比賽結果驗證預測準確度</p>
-            </div>
-
-            <div class="input-section">
-                <div class="card">
-                    <h3>比賽結果資訊</h3>
-                    <div class="form-group">
-                        <label class="form-label">球賽編號</label>
-                        <input type="text" id="result-match-id" class="form-control" 
-                               placeholder="輸入比賽編號自動載入預測數據">
-                        <button id="load-prediction-btn" class="btn btn-primary">
-                            載入預測數據
+                <!-- 右側：奇門盤面輸入 -->
+                <section class="card qimen-card">
+                    <div class="card-header">
+                        <h2><i class="fas fa-chess-board"></i> 奇門盤面輸入</h2>
+                        <button type="button" class="btn-small" id="auto-fill" onclick="autoFillCurrentMatch()">
+                            <i class="fas fa-magic"></i> 自動填寫今晚盤面
                         </button>
                     </div>
                     
-                    <div class="score-inputs">
-                        <h4>半場比數</h4>
-                        <div class="score-row">
-                            <input type="number" id="half-home-score" class="score-input" min="0" value="0">
-                            <span class="score-separator">:</span>
-                            <input type="number" id="half-away-score" class="score-input" min="0" value="0">
+                    <div class="qimen-input-section">
+                        <h3>用神設定</h3>
+                        <div class="god-settings">
+                            <div class="god-setting">
+                                <label>主隊用神</label>
+                                <select id="home-god">
+                                    <option value="值符">值符（離宮）</option>
+                                    <option value="天乙">天乙</option>
+                                    <option value="太陰">太陰</option>
+                                </select>
+                            </div>
+                            <div class="god-setting">
+                                <label>客隊用神</label>
+                                <select id="away-god">
+                                    <option value="值使">值使（兌宮）</option>
+                                    <option value="白虎">白虎</option>
+                                    <option value="玄武">玄武</option>
+                                </select>
+                            </div>
                         </div>
-                        
-                        <h4>全場比數</h4>
-                        <div class="score-row">
-                            <input type="number" id="full-home-score" class="score-input" min="0" value="0">
-                            <span class="score-separator">:</span>
-                            <input type="number" id="full-away-score" class="score-input" min="0" value="0">
+
+                        <h3>九宮格局輸入</h3>
+                        <div class="palace-grid">
+                            <!-- 離宮 -->
+                            <div class="palace-item" data-palace="離">
+                                <div class="palace-header">離宮（南）</div>
+                                <div class="palace-content">
+                                    <input type="text" placeholder="天盤" value="己" class="palace-input">
+                                    <input type="text" placeholder="地盤" value="丁" class="palace-input">
+                                    <select class="palace-input">
+                                        <option value="生門" selected>生門</option>
+                                        <option value="休門">休門</option>
+                                        <option value="開門">開門</option>
+                                    </select>
+                                    <select class="palace-input">
+                                        <option value="天輔" selected>天輔</option>
+                                        <option value="天芮">天芮</option>
+                                        <option value="天沖">天沖</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 坤宮（暫缺） -->
+                            <div class="palace-item" data-palace="坤">
+                                <div class="palace-header">坤宮（西南）</div>
+                                <div class="palace-content">
+                                    <input type="text" placeholder="天盤" class="palace-input">
+                                    <input type="text" placeholder="地盤" class="palace-input">
+                                    <select class="palace-input">
+                                        <option value="" selected disabled>選擇門</option>
+                                    </select>
+                                    <select class="palace-input">
+                                        <option value="" selected disabled>選擇星</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 兌宮 -->
+                            <div class="palace-item" data-palace="兌">
+                                <div class="palace-header">兌宮（西）<span class="badge warning">空亡</span></div>
+                                <div class="palace-content">
+                                    <input type="text" placeholder="天盤" value="乙" class="palace-input">
+                                    <input type="text" placeholder="地盤" value="壬" class="palace-input">
+                                    <select class="palace-input">
+                                        <option value="杜門" selected>杜門</option>
+                                        <option value="景門">景門</option>
+                                        <option value="死門">死門</option>
+                                    </select>
+                                    <select class="palace-input">
+                                        <option value="天芮" selected>天芮</option>
+                                        <option value="天輔">天輔</option>
+                                        <option value="天心">天心</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 乾宮 -->
+                            <div class="palace-item" data-palace="乾">
+                                <div class="palace-header">乾宮（西北）<span class="badge danger">門迫</span></div>
+                                <div class="palace-content">
+                                    <input type="text" placeholder="天盤" value="壬" class="palace-input">
+                                    <input type="text" placeholder="地盤" value="辛" class="palace-input">
+                                    <select class="palace-input">
+                                        <option value="景門" selected>景門</option>
+                                    </select>
+                                    <select class="palace-input">
+                                        <option value="天柱" selected>天柱</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 中宮（暫缺） -->
+                            <div class="palace-item" data-palace="中">
+                                <div class="palace-header">中宮</div>
+                                <div class="palace-content">
+                                    <input type="text" placeholder="天盤" class="palace-input">
+                                    <input type="text" placeholder="地盤" class="palace-input">
+                                    <select class="palace-input">
+                                        <option value="" selected disabled>選擇門</option>
+                                    </select>
+                                    <select class="palace-input">
+                                        <option value="" selected disabled>選擇星</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 巽宮 -->
+                            <div class="palace-item" data-palace="巽">
+                                <div class="palace-header">巽宮（東南）</div>
+                                <div class="palace-content">
+                                    <input type="text" placeholder="天盤" value="戊" class="palace-input">
+                                    <input type="text" placeholder="地盤" value="己" class="palace-input">
+                                    <select class="palace-input">
+                                        <option value="休門" selected>休門</option>
+                                    </select>
+                                    <select class="palace-input">
+                                        <option value="天沖" selected>天沖</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 震宮 -->
+                            <div class="palace-item" data-palace="震">
+                                <div class="palace-header">震宮（東）<span class="badge danger">門迫+擊刑</span></div>
+                                <div class="palace-content">
+                                    <input type="text" placeholder="天盤" value="癸" class="palace-input">
+                                    <input type="text" placeholder="地盤" value="戊" class="palace-input">
+                                    <select class="palace-input">
+                                        <option value="開門" selected>開門</option>
+                                    </select>
+                                    <select class="palace-input">
+                                        <option value="天任" selected>天任</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 艮宮 -->
+                            <div class="palace-item" data-palace="艮">
+                                <div class="palace-header">艮宮（東北）</div>
+                                <div class="palace-content">
+                                    <input type="text" placeholder="天盤" value="丙" class="palace-input">
+                                    <input type="text" placeholder="地盤" value="癸" class="palace-input">
+                                    <select class="palace-input">
+                                        <option value="驚門" selected>驚門</option>
+                                    </select>
+                                    <select class="palace-input">
+                                        <option value="天蓬" selected>天蓬</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 坎宮 -->
+                            <div class="palace-item" data-palace="坎">
+                                <div class="palace-header">坎宮（北）<span class="badge danger">門迫</span></div>
+                                <div class="palace-content">
+                                    <input type="text" placeholder="天盤" value="辛" class="palace-input">
+                                    <input type="text" placeholder="地盤" value="丙" class="palace-input">
+                                    <select class="palace-input">
+                                        <option value="死門" selected>死門</option>
+                                    </select>
+                                    <select class="palace-input">
+                                        <option value="天心" selected>天心</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </section>
+            </div>
 
-                <div class="card">
-                    <h3>技術統計</h3>
-                    <div class="tech-stats">
-                        <div class="stat-row">
-                            <label>角球</label>
-                            <input type="number" id="corners" class="form-control" value="0">
-                        </div>
-                        <div class="stat-row">
-                            <label>射門次數</label>
-                            <input type="number" id="shots" class="form-control" value="0">
-                        </div>
-                        <div class="stat-row">
-                            <label>控球率(%)</label>
-                            <input type="number" id="possession" class="form-control" min="0" max="100" value="50">
-                        </div>
-                        <div class="stat-row">
-                            <label>黃牌</label>
-                            <input type="number" id="yellow-cards" class="form-control" value="0">
-                        </div>
-                        <div class="stat-row">
-                            <label>紅牌</label>
-                            <input type="number" id="red-cards" class="form-control" value="0">
-                        </div>
+            <!-- 底部分析按鈕 -->
+            <div class="action-section">
+                <button type="button" class="btn-primary btn-large" onclick="analyzeMatch()">
+                    <i class="fas fa-brain"></i> 進行奇門AI分析
+                </button>
+                <button type="button" class="btn-secondary" onclick="saveMatchData()">
+                    <i class="fas fa-save"></i> 保存數據
+                </button>
+            </div>
+
+            <!-- AI分析結果預覽 -->
+            <section class="card preview-card" id="analysis-preview" style="display: none;">
+                <div class="card-header">
+                    <h2><i class="fas fa-eye"></i> 分析預覽</h2>
+                </div>
+                <div id="preview-content"></div>
+            </section>
+
+            <!-- AI指令記錄區 -->
+            <section class="card instruction-card">
+                <div class="card-header">
+                    <h2><i class="fas fa-terminal"></i> AI指令記錄</h2>
+                    <button type="button" class="btn-small" onclick="copyInstructions()">
+                        <i class="fas fa-copy"></i> 複製指令
+                    </button>
+                </div>
+                <div class="instruction-log" id="instruction-log">
+                    <div class="instruction-item">
+                        <span class="timestamp">今天 10:30</span>
+                        <code>AI.initMatch('FB3200', '2026-02-05T02:00', '馬德里CFF女足', '特內里費女足')</code>
                     </div>
-                    
-                    <button id="verify-match-btn" class="btn btn-success">
-                        <i class="icon-verify"></i> 驗證比賽結果
-                    </button>
-                </div>
-            </div>
-
-            <div class="verification-section" id="post-match-result" style="display: none;">
-                <!-- 驗證結果將在這裡顯示 -->
-            </div>
-        </section>
-
-        <!-- 歷史統計 -->
-        <section id="history" class="tab-content">
-            <div class="section-header">
-                <h2><i class="icon-history"></i> 歷史統計</h2>
-            </div>
-            
-            <div class="stats-summary">
-                <div class="stat-card">
-                    <div class="stat-value">12</div>
-                    <div class="stat-label">總場次</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">65.2%</div>
-                    <div class="stat-label">準確度</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">V5.1.1</div>
-                    <div class="stat-label">當前版本</div>
-                </div>
-            </div>
-            
-            <div class="history-list">
-                <!-- 歷史記錄將動態載入 -->
-            </div>
-        </section>
-
-        <!-- 系統設定 -->
-        <section id="settings" class="tab-content">
-            <div class="section-header">
-                <h2><i class="icon-settings"></i> 系統設定</h2>
-            </div>
-            
-            <div class="settings-grid">
-                <div class="card">
-                    <h3>AI參數設定</h3>
-                    <div class="form-group">
-                        <label class="form-label">模型版本</label>
-                        <select id="ai-model-version" class="form-control">
-                            <option value="v5.1.1" selected>V5.1.1 (當前)</option>
-                            <option value="v5.0.0">V5.0.0</option>
-                            <option value="v4.2.0">V4.2.0</option>
-                        </select>
+                    <div class="instruction-item">
+                        <span class="timestamp">今天 10:31</span>
+                        <code>AI.setQimenParams({遁局: '陽3', 值符: '天輔', 值使: '杜門', 空亡: '申酉'})</code>
                     </div>
-                    
-                    <button id="export-params-btn" class="btn btn-primary">
-                        <i class="icon-export"></i> 導出AI參數
-                    </button>
                 </div>
-                
-                <div class="card">
-                    <h3>數據管理</h3>
-                    <button id="export-data-btn" class="btn">
-                        <i class="icon-export"></i> 導出所有數據
-                    </button>
-                    <button id="import-data-btn" class="btn">
-                        <i class="icon-import"></i> 導入數據
-                    </button>
-                    <button id="reset-data-btn" class="btn btn-warning">
-                        <i class="icon-reset"></i> 重置數據
-                    </button>
-                </div>
-            </div>
-        </section>
+            </section>
+        </main>
+
+        <footer class="main-footer">
+            <p>己土玄學顧問公司 © 2026 | 奇門遁甲足球預測系統 v1.0</p>
+            <p class="disclaimer">本系統僅供學術研究使用，不構成投注建議</p>
+        </footer>
     </div>
 
-    <!-- 彈出表單 -->
-    <div id="resultModal" class="modal">
+    <!-- 成功提示模態框 -->
+    <div id="success-modal" class="modal">
         <div class="modal-content">
-            <button class="modal-close">&times;</button>
-            <div id="modal-content"></div>
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <div class="modal-icon">
+                <i class="fas fa-check-circle success"></i>
+            </div>
+            <h3>分析完成！</h3>
+            <p>奇門AI分析已完成，正在生成預測結果...</p>
+            <button class="btn-primary" onclick="redirectToPrediction()">
+                查看完整預測 <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
     </div>
 
-    <!-- JavaScript -->
-    <script src="assets/js/app.js"></script>
-    <script src="assets/js/pre-match.js"></script>
-    <script src="assets/js/post-match.js"></script>
-    <script src="assets/js/qimen-parser.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/qimen-core.js"></script>
 </body>
 </html>

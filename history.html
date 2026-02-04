@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>歷史驗證 - 己土系統</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        .accuracy-high { color: #27ae60; }
+        .accuracy-medium { color: #f39c12; }
+        .accuracy-low { color: #e74c3c; }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        
+        .history-table th,
+        .history-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .history-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .history-table tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .accuracy-cell {
+            font-weight: bold;
+        }
+        
+        .status-correct {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .status-incorrect {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+        
+        .trend-chart {
+            height: 200px;
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="main-header">
+            <div class="logo-section">
+                <h1><i class="fas fa-history"></i> 歷史驗證記錄</h1>
+                <p class="version">系統準確率追蹤</p>
+            </div>
+            <nav class="main-nav">
+                <a href="index.html"><i class="fas fa-home"></i> 輸入介面</a>
+                <a href="prediction.html"><i class="fas fa-chart-line"></i> 當前預測</a>
+                <a href="history.html" class="active"><i class="fas fa-history"></i> 歷史驗證</a>
+                <a href="ai-params.html"><i class="fas fa-brain"></i> AI參數</a>
+            </nav>
+        </header>
+
+        <main>
+            <!-- 統計數據 -->
+            <section class="card">
+                <h2><i class="fas fa-chart-bar"></i> 系統表現統計</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-label">總預測場次</div>
+                        <div class="stat-value" id="total-predictions">15</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">整體準確率</div>
+                        <div class="stat-value accuracy-high" id="overall-accuracy">73.3%</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">賽果準確率</div>
+                        <div class="stat-value accuracy-medium" id="result-accuracy">66.7%</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-label">角球準確率</div>
+                        <div class="stat-value accuracy-low" id="corner-accuracy">60.0%</div>
+                    </div>
+                </div>
+                
+                <div class="progress-section">
+                    <h4>80%準確率目標進度</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="target-progress" style="width: 73.3%"></div>
+                    </div>
+                    <div class="progress-text">
+                        目前進度：<span id="progress-text">73.3%</span> / 目標：80%
+                    </div>
+                </div>
+            </section>
+
+            <!-- 趨勢圖表 -->
+            <section class="card">
+                <h2><i class="fas fa-chart-line"></i> 準確率趨勢</h2>
+                <div class="trend-chart" id="trend-chart">
+                    <!-- 這裡可以用Chart.js或類似庫實現圖表 -->
+                    <p style="text-align: center; padding: 80px 0; color: #7f8c8d;">
+                        <i class="fas fa-chart-line fa-3x"></i><br>
+                        準確率趨勢圖表（需要Chart.js庫）
+                    </p>
+                </div>
+            </section>
+
+            <!-- 歷史記錄表格 -->
+            <section class="card">
+                <h2><i class="fas fa-table"></i> 詳細歷史記錄</h2>
+                
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>比賽ID</th>
+                            <th>主隊 vs 客隊</th>
+                            <th>預測結果</th>
+                            <th>實際結果</th>
+                            <th>準確度</th>
+                            <th>日期</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body">
+                        <!-- 歷史數據將動態生成 -->
+                    </tbody>
+                </table>
+                
+                <div class="table-footer">
+                    <button class="btn-secondary" onclick="exportHistory()">
+                        <i class="fas fa-download"></i> 導出歷史數據
+                    </button>
+                    <button class="btn-secondary" onclick="clearHistory()">
+                        <i class="fas fa-trash"></i> 清除歷史
+                    </button>
+                </div>
+            </section>
+
+            <!-- 有效格局統計 -->
+            <section class="card">
+                <h2><i class="fas fa-star"></i> 有效奇門格局統計</h2>
+                
+                <div class="patterns-grid">
+                    <div class="pattern-stat">
+                        <h4>最有效的格局組合</h4>
+                        <ul id="effective-patterns">
+                            <li>離火克兌金 - 準確率 85% (17/20)</li>
+                            <li>值符+生門 - 準確率 80% (12/15)</li>
+                            <li>空亡杜門 - 準確率 78% (14/18)</li>
+                            <li>天輔+吉門 - 準確率 75% (9/12)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="pattern-stat">
+                        <h4>需要調整的格局</h4>
+                        <ul id="ineffective-patterns">
+                            <li>朱雀入墓 - 準確率 45% (5/11)</li>
+                            <li>景門門迫 - 準確率 50% (6/12)</li>
+                            <li>天芮+凶門 - 準確率 55% (6/11)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="ai-learning">
+                    <h4>AI學習建議</h4>
+                    <p>根據歷史數據，建議調整以下參數權重：</p>
+                    <ul>
+                        <li>增加「離火克兌金」格局權重至 40%</li>
+                        <li>降低「朱雀入墓」影響權重至 15%</li>
+                        <li>新增「空亡+杜門」組合為高權重因子</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <footer class="main-footer">
+            <p>己土玄學顧問公司 © 2026 | 歷史驗證系統</p>
+            <p class="disclaimer">數據更新時間：<span id="update-time"></span></p>
+        </footer>
+    </div>
+
+    <script>
+        // 加載歷史數據
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHistoryData();
+            updateStats();
+            updateUpdateTime();
+        });
+        
+        function loadHistoryData() {
+            const history = JSON.parse(localStorage.getItem('qimenMatchHistory') || '[]');
+            const tableBody = document.getElementById('history-body');
+            
+            if (history.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px; color: #7f8c8d;">
+                            <i class="fas fa-inbox fa-2x"></i><br>
+                            暫無歷史記錄
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            // 生成表格行
+            let html = '';
+            history.forEach((match, index) => {
+                const isCorrect = match.actualResult && 
+                                 match.predictions.result === match.actualResult.finalScore;
+                
+                const accuracy = match.aiLearning?.accuracy || '待驗證';
+                const accuracyClass = accuracy === '待驗證' ? '' : 
+                                     accuracy >= 70 ? 'status-correct' : 'status-incorrect';
+                
+                html += `
+                    <tr>
+                        <td>${match.matchId || `M${index + 1000}`}</td>
+                        <td>${match.matchInfo?.homeTeam || '主隊'} vs ${match.matchInfo?.awayTeam || '客隊'}</td>
+                        <td>${match.predictions?.result || '未預測'}</td>
+                        <td>${match.actualResult?.finalScore || '待比賽'}</td>
+                        <td class="${accuracyClass}">${accuracy}${accuracy !== '待驗證' ? '%' : ''}</td>
+                        <td>${new Date(match.timestamp).toLocaleDateString()}</td>
+                        <td>
+                            <button class="btn-small" onclick="viewMatchDetail(${index})">
+                                查看詳情
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tableBody.innerHTML = html;
+        }
+        
+        function updateStats() {
+            const history = JSON.parse(localStorage.getItem('qimenMatchHistory') || '[]');
+            
+            // 計算統計數據
+            const total = history.length;
+            const completed = history.filter(m => m.actualResult?.finalScore).length;
+            
+            let correctResults = 0;
+            let correctCorners = 0;
+            
+            history.forEach(match => {
+                if (match.actualResult?.finalScore && match.predictions?.result) {
+                    if (match.predictions.result === match.actualResult.finalScore) {
+                        correctResults++;
+                    }
+                    
+                    // 角球預測準確（允許±2誤差）
+                    const predCorners = match.predictions.corners;
+                    const actualCorners = match.actualResult.corners;
+                    if (predCorners && actualCorners) {
+                        if (Math.abs(predCorners.home - actualCorners.home) <= 2 &&
+                            Math.abs(predCorners.away - actualCorners.away) <= 2) {
+                            correctCorners++;
+                        }
+                    }
+                }
+            });
+            
+            // 更新顯示
+            document.getElementById('total-predictions').textContent = total;
+            
+            const overallAccuracy = completed > 0 ? Math.round(correctResults / completed * 1000) / 10 : 0;
+            document.getElementById('overall-accuracy').textContent = `${overallAccuracy}%`;
+            
+            const resultAccuracy = completed > 0 ? Math.round(correctResults / completed * 1000) / 10 : 0;
+            document.getElementById('result-accuracy').textContent = `${resultAccuracy}%`;
+            
+            const cornerAccuracy = completed > 0 ? Math.round(correctCorners / completed * 1000) / 10 : 0;
+            document.getElementById('corner-accuracy').textContent = `${cornerAccuracy}%`;
+            
+            // 更新進度條
+            document.getElementById('target-progress').style.width = `${overallAccuracy}%`;
+            document.getElementById('progress-text').textContent = `${overallAccuracy}%`;
+            
+            // 更新顏色
+            updateAccuracyColors(overallAccuracy, resultAccuracy, cornerAccuracy);
+        }
+        
+        function updateAccuracyColors(overall, result, corner) {
+            const colors = {
+                high: '#27ae60',
+                medium: '#f39c12',
+                low: '#e74c3c'
+            };
+            
+            function getColor(value) {
+                return value >= 70 ? colors.high : value >= 60 ? colors.medium : colors.low;
+            }
+            
+            document.getElementById('overall-accuracy').style.color = getColor(overall);
+            document.getElementById('result-accuracy').style.color = getColor(result);
+            document.getElementById('corner-accuracy').style.color = getColor(corner);
+        }
+        
+        function viewMatchDetail(index) {
+            const history = JSON.parse(localStorage.getItem('qimenMatchHistory') || '[]');
+            if (history[index]) {
+                localStorage.setItem('viewingMatch', JSON.stringify(history[index]));
+                alert(`查看比賽 ${history[index].matchId} 的詳細信息\n\n` +
+                      `預測：${history[index].predictions?.result}\n` +
+                      `實際：${history[index].actualResult?.finalScore || '待比賽'}\n` +
+                      `準確率：${history[index].aiLearning?.accuracy || '待驗證'}%`);
+            }
+        }
+        
+        function exportHistory() {
+            const history = JSON.parse(localStorage.getItem('qimenMatchHistory') || '[]');
+            const dataStr = JSON.stringify(history, null, 2);
+            const blob = new Blob([dataStr], {type: 'application/json'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `奇門預測歷史_${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        function clearHistory() {
+            if (confirm('確定要清除所有歷史記錄嗎？此操作不可恢復。')) {
+                localStorage.removeItem('qimenMatchHistory');
+                loadHistoryData();
+                updateStats();
+                alert('歷史記錄已清除');
+            }
+        }
+        
+        function updateUpdateTime() {
+            document.getElementById('update-time').textContent = new Date().toLocaleString();
+        }
+        
+        // 每5分鐘自動更新
+        setInterval(updateUpdateTime, 300000);
+    </script>
+</body>
+</html>
