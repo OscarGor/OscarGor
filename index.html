@@ -7,13 +7,58 @@
     
     <!-- 核心樣式 -->
     <link rel="stylesheet" href="assets/css/base.css">
-    <!-- 動態載入模式樣式 -->
-    <link id="mode-style" rel="stylesheet" href="">
+    <link rel="stylesheet" href="assets/css/pre-match.css">
+    <link rel="stylesheet" href="assets/css/post-match.css">
     
     <!-- 字體 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* 模式切換樣式 */
+        .mode-specific {
+            display: none;
+        }
+        
+        .mode-specific.active {
+            display: block;
+        }
+        
+        /* 預設隱藏賽後內容 */
+        .post-match-content {
+            display: none;
+        }
+        
+        .pre-match-content {
+            display: block;
+        }
+        
+        body.post-match-mode .pre-match-content {
+            display: none;
+        }
+        
+        body.post-match-mode .post-match-content {
+            display: block;
+        }
+        
+        /* 模式切換動畫 */
+        .tab-content {
+            transition: opacity 0.3s ease;
+        }
+        
+        /* 響應式調整 */
+        @media (max-width: 768px) {
+            .mode-selector {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .mode-btn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
-<body>
+<body class="pre-match-mode">
     <!-- 系統模式選擇器 -->
     <div class="mode-selector">
         <button id="pre-match-btn" class="mode-btn active">
@@ -29,7 +74,7 @@
     <header class="system-header">
         <div class="header-content">
             <h1>甲方己土 × AI陰盤奇門足球分析系統</h1>
-            <p class="subtitle">可驗證、可量化的陰盤奇門足球賽事預測AI模型</p>
+            <p class="subtitle" id="mode-subtitle">可驗證、可量化的陰盤奇門足球賽事預測AI模型 - 賽前預測模式</p>
             <div class="status-indicators" id="status-indicators"></div>
         </div>
     </header>
@@ -82,30 +127,454 @@
             <!-- 動態載入賽事信息 -->
         </section>
         
-        <!-- 分頁內容區域 -->
-        <div class="tab-content">
+        <!-- 分頁內容區域 - 賽前預測模式 -->
+        <div class="tab-content pre-match-content">
+            <!-- 預測分析 -->
             <section id="prediction" class="tab-pane active">
-                <!-- 動態載入賽事分析內容 -->
+                <div class="content-header">
+                    <h2><i class="fas fa-crystal-ball"></i> FB3079賽前預測分析</h2>
+                    <div class="prediction-status">
+                        <span class="status-badge">V5.1I預測</span>
+                        <span class="status-badge">非全局伏吟局</span>
+                    </div>
+                </div>
+                
+                <div class="prediction-card">
+                    <h3><i class="fas fa-chart-pie"></i> 賽果概率分析</h3>
+                    <div class="probability-display">
+                        <div class="probability-item home">
+                            <h4>主勝</h4>
+                            <div class="percentage">25%</div>
+                        </div>
+                        <div class="probability-item draw">
+                            <h4>和局</h4>
+                            <div class="percentage">35%</div>
+                        </div>
+                        <div class="probability-item away">
+                            <h4>客勝</h4>
+                            <div class="percentage">40%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="confidence-meter">
+                        <div class="confidence-header">
+                            <span>預測置信度</span>
+                            <span>68%</span>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: 68%"></div>
+                        </div>
+                        <div class="confidence-markers">
+                            <span>低</span>
+                            <span>中</span>
+                            <span>高</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="prediction-card">
+                    <h3><i class="fas fa-futbol"></i> 比分預測</h3>
+                    <div class="score-prediction">
+                        <div class="score-section">
+                            <h4>最可能比分</h4>
+                            <div class="score-grid">
+                                <div class="score-item high-confidence">
+                                    <div class="score">0-1</div>
+                                    <div class="confidence">高置信度</div>
+                                </div>
+                                <div class="score-item high-confidence">
+                                    <div class="score">1-2</div>
+                                    <div class="confidence">高置信度</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="score-section">
+                            <h4>半場比分預測</h4>
+                            <div class="score-grid">
+                                <div class="score-item">
+                                    <div class="score">0-0</div>
+                                    <div class="confidence">可能比分</div>
+                                </div>
+                                <div class="score-item">
+                                    <div class="score">0-1</div>
+                                    <div class="confidence">可能比分</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="prediction-card">
+                    <h3><i class="fas fa-chart-bar"></i> 技術數據預測</h3>
+                    <div class="tech-prediction-grid">
+                        <div class="tech-card">
+                            <h4><i class="fas fa-futbol"></i> 總進球</h4>
+                            <div class="prediction-value">1-2球</div>
+                            <div class="prediction-range">預測範圍</div>
+                        </div>
+                        <div class="tech-card">
+                            <h4><i class="fas fa-location-arrow"></i> 角球</h4>
+                            <div class="prediction-value">3-6個</div>
+                            <div class="prediction-range">預測範圍</div>
+                        </div>
+                        <div class="tech-card">
+                            <h4><i class="fas fa-square"></i> 黃牌</h4>
+                            <div class="prediction-value">2-4張</div>
+                            <div class="prediction-range">預測範圍</div>
+                        </div>
+                        <div class="tech-card">
+                            <h4><i class="fas fa-balance-scale"></i> 控球率</h4>
+                            <div class="prediction-value">45%-55%</div>
+                            <div class="prediction-range">預測範圍</div>
+                        </div>
+                        <div class="tech-card">
+                            <h4><i class="fas fa-bullseye"></i> 射正</h4>
+                            <div class="prediction-value">2-4次</div>
+                            <div class="prediction-range">預測範圍</div>
+                        </div>
+                    </div>
+                </div>
             </section>
             
+            <!-- 上下半場分析 -->
             <section id="half-analysis" class="tab-pane">
-                <!-- 動態載入上下半場分析 -->
+                <div class="content-header">
+                    <h2><i class="fas fa-clock"></i> 上下半場分析</h2>
+                </div>
+                
+                <div class="half-analysis-grid">
+                    <div class="half-analysis-card first-half">
+                        <div class="half-header">
+                            <h3><i class="fas fa-sun"></i> 上半場分析</h3>
+                            <div class="half-badge">上半場</div>
+                        </div>
+                        <div class="half-content">
+                            <div class="half-score">
+                                <div class="score-prediction">最可能比分: <strong>0-1</strong></div>
+                                <div class="confidence-level">置信度: 75%</div>
+                            </div>
+                            
+                            <div class="half-factors">
+                                <h4>關鍵影響因素:</h4>
+                                <ul class="factor-list">
+                                    <li>
+                                        <i class="fas fa-star positive"></i>
+                                        <span>值符天沖星上半場威力強大</span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-arrows-alt negative"></i>
+                                        <span>天乙飛宮利客隊</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="half-analysis-card second-half">
+                        <div class="half-header">
+                            <h3><i class="fas fa-moon"></i> 下半場分析</h3>
+                            <div class="half-badge">下半場</div>
+                        </div>
+                        <div class="half-content">
+                            <div class="half-score">
+                                <div class="score-prediction">最可能比分: <strong>1-1</strong></div>
+                                <div class="confidence-level">置信度: 60%</div>
+                            </div>
+                            
+                            <div class="half-factors">
+                                <h4>關鍵影響因素:</h4>
+                                <ul class="factor-list">
+                                    <li>
+                                        <i class="fas fa-star-half-alt positive"></i>
+                                        <span>值符威力減弱</span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-arrows-alt positive"></i>
+                                        <span>小蛇化龍格局轉折</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
             
+            <!-- AI參數應用 -->
             <section id="ai-params" class="tab-pane">
-                <!-- 動態載入AI參數內容 -->
+                <div class="content-header">
+                    <h2><i class="fas fa-robot"></i> V5.1I AI參數應用</h2>
+                </div>
+                
+                <div class="ai-params-card">
+                    <h3><i class="fas fa-cogs"></i> 三維參數體系</h3>
+                    <div class="three-dimensional-params">
+                        <div class="params-grid">
+                            <div class="param-category">
+                                <h4><i class="fas fa-clock"></i> 時限性參數</h4>
+                                <ul class="param-list">
+                                    <li>
+                                        <span class="param-name">值符天沖星</span>
+                                        <span class="param-value">0.25 / 0.08</span>
+                                    </li>
+                                    <li>
+                                        <span class="param-name">天乙飛宮</span>
+                                        <span class="param-value">0.35 / 0.08</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="param-category">
+                                <h4><i class="fas fa-hourglass-half"></i> 時效性參數</h4>
+                                <ul class="param-list">
+                                    <li>
+                                        <span class="param-name">四害總影響</span>
+                                        <span class="param-value">-0.25 / -0.08</span>
+                                    </li>
+                                    <li>
+                                        <span class="param-name">九天吉神</span>
+                                        <span class="param-value">0.05 / 0.40</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            <div class="param-category">
+                                <h4><i class="fas fa-bolt"></i> 能量轉換模型</h4>
+                                <ul class="param-list">
+                                    <li>
+                                        <span class="param-name">轉換係數</span>
+                                        <span class="param-value">0.70</span>
+                                    </li>
+                                    <li>
+                                        <span class="param-name">模型類型</span>
+                                        <span class="param-value">非全局伏吟局能量守恆轉換</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
             
+            <!-- 九宮資訊 -->
             <section id="palace-info" class="tab-pane">
-                <!-- 動態載入九宮資訊 -->
+                <div class="content-header">
+                    <h2><i class="fas fa-yin-yang"></i> 九宮資訊</h2>
+                </div>
+                <div class="palace-info-loading">
+                    <p><i class="fas fa-spinner fa-spin"></i> 宮位信息載入中...</p>
+                </div>
             </section>
             
+            <!-- 歷史驗證 -->
             <section id="history" class="tab-pane">
-                <!-- 動態載入歷史驗證 -->
+                <div class="content-header">
+                    <h2><i class="fas fa-chart-line"></i> 歷史驗證統計</h2>
+                </div>
+                <div class="history-loading">
+                    <p><i class="fas fa-spinner fa-spin"></i> 歷史記錄載入中...</p>
+                </div>
             </section>
             
+            <!-- 總結報告 -->
             <section id="summary" class="tab-pane">
-                <!-- 動態載入總結報告 -->
+                <div class="content-header">
+                    <h2><i class="fas fa-file-alt"></i> 總結報告</h2>
+                </div>
+                <div class="summary-loading">
+                    <p><i class="fas fa-spinner fa-spin"></i> 總結報告載入中...</p>
+                </div>
+            </section>
+        </div>
+        
+        <!-- 分頁內容區域 - 賽後驗證模式 -->
+        <div class="tab-content post-match-content">
+            <!-- 驗證分析 -->
+            <section id="prediction" class="tab-pane active">
+                <div class="content-header">
+                    <h2><i class="fas fa-chart-bar"></i> FB3079賽後技術驗證</h2>
+                    <div class="accuracy-badge large">
+                        <div class="accuracy-score">67.5%</div>
+                        <div class="accuracy-label">綜合準確度</div>
+                    </div>
+                </div>
+                
+                <div class="verification-results">
+                    <div class="results-header">
+                        <h2>預測與實際對比驗證</h2>
+                        <div class="overall-accuracy">67.5%</div>
+                        <div class="accuracy-breakdown">
+                            <div class="breakdown-item correct">
+                                <div class="count">5</div>
+                                <div class="label">完全準確</div>
+                            </div>
+                            <div class="breakdown-item partial">
+                                <div class="count">2</div>
+                                <div class="label">部分準確</div>
+                            </div>
+                            <div class="breakdown-item wrong">
+                                <div class="count">1</div>
+                                <div class="label">預測錯誤</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="verification-details">
+                        <div class="verification-category">
+                            <div class="category-header">
+                                <h3><i class="fas fa-futbol"></i> 賽果驗證</h3>
+                                <div class="category-accuracy">83%</div>
+                            </div>
+                            <div class="comparison-cards">
+                                <div class="comparison-card correct">
+                                    <div class="comparison-title">
+                                        <i class="fas fa-check-circle success"></i>
+                                        賽果方向
+                                    </div>
+                                    <div class="comparison-values">
+                                        <div class="prediction-value">主勝25%，和35%，客勝40%</div>
+                                        <i class="fas fa-arrow-right"></i>
+                                        <div class="actual-value">和局</div>
+                                    </div>
+                                    <div class="comparison-status">
+                                        <span class="status correct">完全準確</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="comparison-card partial">
+                                    <div class="comparison-title">
+                                        <i class="fas fa-exclamation-triangle warning"></i>
+                                        全場比分
+                                    </div>
+                                    <div class="comparison-values">
+                                        <div class="prediction-value">0-1 / 1-2</div>
+                                        <i class="fas fa-arrow-right"></i>
+                                        <div class="actual-value">1-1</div>
+                                    </div>
+                                    <div class="comparison-status">
+                                        <span class="status partial">部分準確</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 上下半場驗證 -->
+            <section id="half-analysis" class="tab-pane">
+                <div class="content-header">
+                    <h2><i class="fas fa-clock"></i> 上下半場驗證分析</h2>
+                </div>
+                
+                <div class="half-verification-grid">
+                    <div class="half-verification-card first-half">
+                        <div class="half-header">
+                            <h3><i class="fas fa-sun"></i> 上半場驗證</h3>
+                            <div class="half-score">0-1</div>
+                        </div>
+                        <div class="half-verification-content">
+                            <div class="score-comparison">
+                                <div class="prediction">
+                                    <span class="label">預測比分:</span>
+                                    <span class="value">0-1</span>
+                                </div>
+                                <div class="actual">
+                                    <span class="label">實際比分:</span>
+                                    <span class="value">0-1</span>
+                                </div>
+                                <div class="verification-status correct">
+                                    ✅ 完全準確
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="half-verification-card second-half">
+                        <div class="half-header">
+                            <h3><i class="fas fa-moon"></i> 下半場驗證</h3>
+                            <div class="half-score">1-0</div>
+                        </div>
+                        <div class="half-verification-content">
+                            <div class="score-comparison">
+                                <div class="prediction">
+                                    <span class="label">預測比分:</span>
+                                    <span class="value">1-1</span>
+                                </div>
+                                <div class="actual">
+                                    <span class="label">實際比分:</span>
+                                    <span class="value">1-0</span>
+                                </div>
+                                <div class="verification-status partial">
+                                    ⚠️ 部分準確
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- AI參數驗證 -->
+            <section id="ai-params" class="tab-pane">
+                <div class="content-header">
+                    <h2><i class="fas fa-robot"></i> V5.1I AI參數驗證與調整</h2>
+                </div>
+                
+                <div class="ai-params-validation">
+                    <h3><i class="fas fa-chart-line"></i> 參數調整對比</h3>
+                    <div class="adjustment-table-container">
+                        <table class="adjustment-table">
+                            <thead>
+                                <tr>
+                                    <th>參數項目</th>
+                                    <th>V5.0I參數</th>
+                                    <th>V5.1I調整</th>
+                                    <th>調整依據</th>
+                                    <th>驗證結果</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="param-name">死門門迫控球影響</td>
+                                    <td><span class="old-value">-0.10</span></td>
+                                    <td><span class="new-value">-0.25</span></td>
+                                    <td class="adjustment-reason">實際主隊控球64%，影響被嚴重低估</td>
+                                    <td class="verification-result">❌ 預測錯誤</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 九宮驗證 -->
+            <section id="palace-info" class="tab-pane">
+                <div class="content-header">
+                    <h2><i class="fas fa-yin-yang"></i> 九宮驗證</h2>
+                </div>
+                <div class="palace-verification-loading">
+                    <p><i class="fas fa-spinner fa-spin"></i> 宮位驗證載入中...</p>
+                </div>
+            </section>
+            
+            <!-- 歷史統計 -->
+            <section id="history" class="tab-pane">
+                <div class="content-header">
+                    <h2><i class="fas fa-chart-line"></i> 歷史統計</h2>
+                </div>
+                <div class="history-stats-loading">
+                    <p><i class="fas fa-spinner fa-spin"></i> 歷史統計載入中...</p>
+                </div>
+            </section>
+            
+            <!-- 總結報告 -->
+            <section id="summary" class="tab-pane">
+                <div class="content-header">
+                    <h2><i class="fas fa-file-alt"></i> 總結報告</h2>
+                </div>
+                <div class="summary-report-loading">
+                    <p><i class="fas fa-spinner fa-spin"></i> 總結報告載入中...</p>
+                </div>
             </section>
         </div>
     </main>
@@ -178,5 +647,86 @@
     <script src="assets/js/pre-match.js"></script>
     <script src="assets/js/post-match.js"></script>
     <script src="assets/js/app.js"></script>
+    
+    <script>
+        // 簡化的模式切換邏輯
+        document.addEventListener('DOMContentLoaded', function() {
+            const preMatchBtn = document.getElementById('pre-match-btn');
+            const postMatchBtn = document.getElementById('post-match-btn');
+            const modeSubtitle = document.getElementById('mode-subtitle');
+            const body = document.body;
+            
+            // 模式切換功能
+            function switchToPreMatchMode() {
+                body.classList.remove('post-match-mode');
+                body.classList.add('pre-match-mode');
+                preMatchBtn.classList.add('active');
+                postMatchBtn.classList.remove('active');
+                modeSubtitle.textContent = '可驗證、可量化的陰盤奇門足球賽事預測AI模型 - 賽前預測模式';
+            }
+            
+            function switchToPostMatchMode() {
+                body.classList.remove('pre-match-mode');
+                body.classList.add('post-match-mode');
+                postMatchBtn.classList.add('active');
+                preMatchBtn.classList.remove('active');
+                modeSubtitle.textContent = '可驗證、可量化的陰盤奇門足球賽事預測AI模型 - 賽後驗證模式';
+            }
+            
+            // 綁定按鈕事件
+            preMatchBtn.addEventListener('click', switchToPreMatchMode);
+            postMatchBtn.addEventListener('click', switchToPostMatchMode);
+            
+            // 導航標籤事件
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    
+                    // 移除所有active類
+                    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                    
+                    // 添加active類
+                    this.classList.add('active');
+                    
+                    // 根據當前模式顯示對應的內容
+                    const isPostMatch = body.classList.contains('post-match-mode');
+                    const contentPrefix = isPostMatch ? '.post-match-content ' : '.pre-match-content ';
+                    document.querySelector(contentPrefix + '#' + tabId).classList.add('active');
+                    
+                    // 更新移動端導航
+                    document.getElementById('mobile-nav').value = tabId;
+                });
+            });
+            
+            // 移動端導航事件
+            document.getElementById('mobile-nav').addEventListener('change', function() {
+                const tabId = this.value;
+                const isPostMatch = body.classList.contains('post-match-mode');
+                const contentPrefix = isPostMatch ? '.post-match-content ' : '.pre-match-content ';
+                
+                // 更新桌面版標籤
+                document.querySelectorAll('.nav-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                    if (tab.dataset.tab === tabId) {
+                        tab.classList.add('active');
+                    }
+                });
+                
+                // 更新內容
+                document.querySelectorAll('.tab-pane').forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === tabId) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+            
+            // 初始化
+            switchToPreMatchMode();
+            
+            // 其他初始化代碼...
+        });
+    </script>
 </body>
 </html>
