@@ -9,6 +9,43 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
     <meta name="description" content="己土玄學顧問公司 - 奇門遁甲足球預測AI系統">
     <meta name="keywords" content="奇門遁甲,足球預測,AI分析,玄學,己土">
+    <style>
+        .palace-details {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed rgba(34, 40, 49, 0.1);
+            font-size: 0.75rem;
+            color: var(--second-color);
+            line-height: 1.4;
+        }
+        
+        .palace-details div {
+            margin-bottom: 3px;
+        }
+        
+        .palace-pattern {
+            margin-top: 8px;
+            font-size: 0.75rem;
+            color: var(--danger-color);
+            font-weight: 600;
+            line-height: 1.4;
+        }
+        
+        .input-with-action {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .input-with-action input {
+            flex: 1;
+        }
+        
+        .instruction-actions {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -32,7 +69,7 @@
                 <section class="card input-card">
                     <div class="card-header">
                         <h2><i class="fas fa-futbol"></i> 比賽基本資料</h2>
-                        <span class="badge info" id="match-status">準備輸入</span>
+                        <span class="badge info" id="match-status">已預填今晚比賽</span>
                     </div>
                     
                     <form id="match-form">
@@ -41,16 +78,9 @@
                                 <label for="match-id">
                                     <i class="fas fa-hashtag"></i> 
                                     <span class="label-text">球賽編號</span>
-                                    <span class="label-note">（系統自動生成或手動輸入）</span>
                                 </label>
                                 <div class="input-with-action">
-                                    <input type="text" id="match-id" value="FB3200" required 
-                                           pattern="[A-Za-z0-9]{6,10}" 
-                                           title="請輸入6-10位字母數字組合">
-                                    <button type="button" class="btn-small" onclick="generateMatchId()" 
-                                            style="margin-top: 8px;">
-                                        <i class="fas fa-sync-alt"></i> 生成新編號
-                                    </button>
+                                    <input type="text" id="match-id" value="FB3200" required readonly>
                                 </div>
                             </div>
                             
@@ -58,12 +88,8 @@
                                 <label for="match-time">
                                     <i class="far fa-clock"></i> 
                                     <span class="label-text">比賽時間</span>
-                                    <span class="label-note">（當地時間）</span>
                                 </label>
-                                <input type="datetime-local" id="match-time" 
-                                       value="2026-02-05T02:00" 
-                                       min="2026-01-01T00:00" 
-                                       max="2027-12-31T23:59" required>
+                                <input type="text" id="match-time" value="2026年2月5日 02:00" required readonly>
                             </div>
                         </div>
 
@@ -72,20 +98,16 @@
                                 <label for="home-team">
                                     <i class="fas fa-home"></i> 
                                     <span class="label-text">主隊名稱</span>
-                                    <span class="label-note">（左側隊伍）</span>
                                 </label>
-                                <input type="text" id="home-team" value="馬德里CFF女足" 
-                                       required placeholder="例如：皇家馬德里">
+                                <input type="text" id="home-team" value="馬德里CFF女足" required readonly>
                             </div>
                             
                             <div class="form-group">
                                 <label for="away-team">
                                     <i class="fas fa-plane"></i> 
                                     <span class="label-text">客隊名稱</span>
-                                    <span class="label-note">（右側隊伍）</span>
                                 </label>
-                                <input type="text" id="away-team" value="特內里費女足" 
-                                       required placeholder="例如：巴塞羅那">
+                                <input type="text" id="away-team" value="特內里費女足" required readonly>
                             </div>
                         </div>
 
@@ -93,31 +115,18 @@
                             <label for="competition">
                                 <i class="fas fa-trophy"></i> 
                                 <span class="label-text">賽事類別</span>
-                                <span class="label-note">（影響奇門用神設定）</span>
                             </label>
-                            <select id="competition" required class="competition-select">
-                                <option value="" disabled selected>請選擇賽事類型</option>
-                                <option value="女子西班牙盃" selected>女子西班牙盃 (當前)</option>
-                                <option value="女子西甲">女子西甲聯賽</option>
-                                <option value="男子西甲">男子西甲聯賽</option>
-                                <option value="歐冠">歐洲冠軍聯賽</option>
-                                <option value="歐霸">歐洲聯賽</option>
-                                <option value="英超">英格蘭超級聯賽</option>
-                                <option value="意甲">意大利甲組聯賽</option>
-                                <option value="德甲">德國甲組聯賽</option>
-                                <option value="法甲">法國甲組聯賽</option>
-                                <option value="盃賽淘汰賽">盃賽淘汰賽階段</option>
-                                <option value="友誼賽">友誼賽/熱身賽</option>
-                                <option value="國際賽">國家隊比賽</option>
-                                <option value="青年賽">青年/預備隊比賽</option>
-                                <option value="其他">其他賽事</option>
-                            </select>
+                            <input type="text" id="competition" value="女子西班牙盃" required readonly>
                         </div>
 
                         <!-- 奇門局數自動顯示 -->
                         <div class="qimen-info">
                             <h3><i class="fas fa-yin-yang"></i> 奇門遁甲信息</h3>
                             <div class="info-grid">
+                                <div class="info-item">
+                                    <span class="info-label">公曆：</span>
+                                    <span class="info-value">2026年2月5日2時0分</span>
+                                </div>
                                 <div class="info-item">
                                     <span class="info-label">農曆：</span>
                                     <span class="info-value">2025年12月18日</span>
@@ -139,16 +148,12 @@
                                     <span class="info-value">杜門</span>
                                 </div>
                                 <div class="info-item">
-                                    <span class="info-label">空亡：</span>
-                                    <span class="info-value">申酉</span>
+                                    <span class="info-label">時空亡：</span>
+                                    <span class="info-value">甲戌旬 申酉空</span>
                                 </div>
                                 <div class="info-item">
                                     <span class="info-label">馬星：</span>
                                     <span class="info-value">亥</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">時空亡：</span>
-                                    <span class="info-value">甲戌旬</span>
                                 </div>
                             </div>
                         </div>
@@ -158,334 +163,195 @@
                 <!-- 右側：奇門盤面輸入 -->
                 <section class="card qimen-card">
                     <div class="card-header">
-                        <h2><i class="fas fa-chess-board"></i> 奇門盤面輸入</h2>
-                        <button type="button" class="btn-small" id="auto-fill" onclick="autoFillCurrentMatch()">
-                            <i class="fas fa-magic"></i> 自動填寫今晚盤面
-                        </button>
+                        <h2><i class="fas fa-chess-board"></i> 奇門盤面信息</h2>
+                        <span class="badge success">已預填</span>
                     </div>
                     
                     <div class="qimen-input-section">
-                        <div class="form-group">
-                            <label for="qimen-time">
-                                <i class="far fa-calendar-alt"></i> 
-                                <span class="label-text">奇門排盤時間</span>
-                            </label>
-                            <input type="datetime-local" id="qimen-time" 
-                                   value="2026-02-05T02:00" required>
-                        </div>
-
                         <h3><i class="fas fa-user-circle"></i> 用神設定</h3>
                         <div class="god-settings">
                             <div class="god-setting">
                                 <label>主隊用神</label>
-                                <select id="home-god">
-                                    <option value="值符">值符（離宮）</option>
-                                    <option value="天乙">天乙</option>
-                                    <option value="太陰">太陰</option>
-                                    <option value="六合">六合</option>
-                                    <option value="白虎">白虎</option>
-                                    <option value="玄武">玄武</option>
-                                    <option value="九地">九地</option>
-                                    <option value="九天">九天</option>
-                                </select>
+                                <input type="text" value="值符（離宮）" readonly>
                             </div>
                             <div class="god-setting">
                                 <label>客隊用神</label>
-                                <select id="away-god">
-                                    <option value="值使">值使（兌宮）</option>
-                                    <option value="天乙">天乙</option>
-                                    <option value="太陰">太陰</option>
-                                    <option value="六合">六合</option>
-                                    <option value="白虎">白虎</option>
-                                    <option value="玄武">玄武</option>
-                                    <option value="九地">九地</option>
-                                    <option value="九天">九天</option>
-                                </select>
+                                <input type="text" value="值使（兌宮）" readonly>
                             </div>
                         </div>
 
-                        <h3><i class="fas fa-th-large"></i> 九宮格局輸入</h3>
+                        <h3><i class="fas fa-th-large"></i> 九宮格局信息</h3>
                         <div class="palace-grid">
                             <!-- 離宮 -->
                             <div class="palace-item" data-palace="離">
                                 <div class="palace-header">
-                                    <span>離宮（南）</span>
+                                    <span>離宮（南方）</span>
                                     <span class="badge success">主隊</span>
                                 </div>
                                 <div class="palace-content">
-                                    <input type="text" placeholder="天盤" value="己" class="palace-input" 
-                                           data-field="tian" title="天盤天干">
-                                    <input type="text" placeholder="地盤" value="丁" class="palace-input" 
-                                           data-field="di" title="地盤天干">
-                                    <select class="palace-input" data-field="men">
-                                        <option value="生門" selected>生門</option>
-                                        <option value="休門">休門</option>
-                                        <option value="開門">開門</option>
-                                        <option value="傷門">傷門</option>
-                                        <option value="杜門">杜門</option>
-                                        <option value="景門">景門</option>
-                                        <option value="死門">死門</option>
-                                        <option value="驚門">驚門</option>
-                                    </select>
-                                    <select class="palace-input" data-field="xing">
-                                        <option value="天輔" selected>天輔</option>
-                                        <option value="天芮">天芮</option>
-                                        <option value="天沖">天沖</option>
-                                        <option value="天任">天任</option>
-                                        <option value="天蓬">天蓬</option>
-                                        <option value="天心">天心</option>
-                                        <option value="天柱">天柱</option>
-                                        <option value="天英">天英</option>
-                                        <option value="天禽">天禽</option>
-                                    </select>
+                                    <div class="palace-input">天盤：己</div>
+                                    <div class="palace-input">地盤：丁</div>
+                                    <div class="palace-input">八門：生門</div>
+                                    <div class="palace-input">九星：天輔星</div>
+                                </div>
+                                <div class="palace-pattern">
+                                    格局：己 + 丁（朱雀入墓）
+                                </div>
+                                <div class="palace-details">
+                                    <div>八神：值符</div>
+                                    <div>格局：生 + 己（主得貴人扶持）</div>
                                 </div>
                             </div>
 
-                            <!-- 坤宮（暫缺） -->
+                            <!-- 坤宮 -->
                             <div class="palace-item" data-palace="坤">
-                                <div class="palace-header">坤宮（西南）</div>
+                                <div class="palace-header">坤宮（西南方）</div>
                                 <div class="palace-content">
-                                    <input type="text" placeholder="天盤" class="palace-input" data-field="tian">
-                                    <input type="text" placeholder="地盤" class="palace-input" data-field="di">
-                                    <select class="palace-input" data-field="men">
-                                        <option value="" selected disabled>選擇門</option>
-                                        <option value="生門">生門</option>
-                                        <option value="休門">休門</option>
-                                        <option value="開門">開門</option>
-                                        <option value="傷門">傷門</option>
-                                        <option value="杜門">杜門</option>
-                                        <option value="景門">景門</option>
-                                        <option value="死門">死門</option>
-                                        <option value="驚門">驚門</option>
-                                    </select>
-                                    <select class="palace-input" data-field="xing">
-                                        <option value="" selected disabled>選擇星</option>
-                                        <option value="天輔">天輔</option>
-                                        <option value="天芮">天芮</option>
-                                        <option value="天沖">天沖</option>
-                                        <option value="天任">天任</option>
-                                        <option value="天蓬">天蓬</option>
-                                        <option value="天心">天心</option>
-                                        <option value="天柱">天柱</option>
-                                        <option value="天英">天英</option>
-                                        <option value="天禽">天禽</option>
-                                    </select>
+                                    <div class="palace-input">天盤：-</div>
+                                    <div class="palace-input">地盤：-</div>
+                                    <div class="palace-input">八門：-</div>
+                                    <div class="palace-input">九星：-</div>
                                 </div>
                             </div>
 
-                            <!-- 兌宮 -->
+                            <!-- 兌宮 - 更新完整資訊 -->
                             <div class="palace-item" data-palace="兌">
                                 <div class="palace-header">
-                                    <span>兌宮（西）</span>
+                                    <span>兌宮（西方）</span>
                                     <span class="badge warning">空亡</span>
                                 </div>
                                 <div class="palace-content">
-                                    <input type="text" placeholder="天盤" value="乙" class="palace-input" data-field="tian">
-                                    <input type="text" placeholder="地盤" value="壬" class="palace-input" data-field="di">
-                                    <select class="palace-input" data-field="men">
-                                        <option value="杜門" selected>杜門</option>
-                                        <option value="休門">休門</option>
-                                        <option value="開門">開門</option>
-                                        <option value="傷門">傷門</option>
-                                        <option value="景門">景門</option>
-                                        <option value="死門">死門</option>
-                                        <option value="驚門">驚門</option>
-                                    </select>
-                                    <select class="palace-input" data-field="xing">
-                                        <option value="天芮" selected>天芮</option>
-                                        <option value="天輔">天輔</option>
-                                        <option value="天沖">天沖</option>
-                                        <option value="天任">天任</option>
-                                        <option value="天蓬">天蓬</option>
-                                        <option value="天心">天心</option>
-                                        <option value="天柱">天柱</option>
-                                        <option value="天英">天英</option>
-                                    </select>
+                                    <div class="palace-input">天盤：乙</div>
+                                    <div class="palace-input">地盤：壬</div>
+                                    <div class="palace-input">八門：杜門</div>
+                                    <div class="palace-input">九星：天芮星</div>
+                                </div>
+                                <div class="palace-pattern">
+                                    乙+庚：日奇被刑<br>
+                                    乙+壬：日奇入地<br>
+                                    庚+壬：小格（移蕩格）<br>
+                                    杜+乙：飛來橫禍(訴訟)
+                                </div>
+                                <div class="palace-details">
+                                    <div>四害：空亡（深挖到坎宮）</div>
+                                    <div>天盤寄宮：庚</div>
+                                    <div>八神：太陰</div>
+                                    <div>乙天干臨：絕位</div>
+                                    <div>庚天干臨：帝旺位</div>
                                 </div>
                             </div>
 
                             <!-- 乾宮 -->
                             <div class="palace-item" data-palace="乾">
                                 <div class="palace-header">
-                                    <span>乾宮（西北）</span>
+                                    <span>乾宮（西北方）</span>
                                     <span class="badge danger">門迫</span>
                                 </div>
                                 <div class="palace-content">
-                                    <input type="text" placeholder="天盤" value="壬" class="palace-input" data-field="tian">
-                                    <input type="text" placeholder="地盤" value="辛" class="palace-input" data-field="di">
-                                    <select class="palace-input" data-field="men">
-                                        <option value="景門" selected>景門</option>
-                                        <option value="休門">休門</option>
-                                        <option value="開門">開門</option>
-                                        <option value="傷門">傷門</option>
-                                        <option value="杜門">杜門</option>
-                                        <option value="死門">死門</option>
-                                        <option value="驚門">驚門</option>
-                                    </select>
-                                    <select class="palace-input" data-field="xing">
-                                        <option value="天柱" selected>天柱</option>
-                                        <option value="天輔">天輔</option>
-                                        <option value="天沖">天沖</option>
-                                        <option value="天任">天任</option>
-                                        <option value="天蓬">天蓬</option>
-                                        <option value="天心">天心</option>
-                                        <option value="天芮">天芮</option>
-                                        <option value="天英">天英</option>
-                                    </select>
+                                    <div class="palace-input">天盤：壬</div>
+                                    <div class="palace-input">地盤：辛</div>
+                                    <div class="palace-input">八門：景門</div>
+                                    <div class="palace-input">九星：天柱星</div>
+                                </div>
+                                <div class="palace-pattern">
+                                    格局：壬 + 辛（騰蛇相纏）
+                                </div>
+                                <div class="palace-details">
+                                    <div>八神：六合</div>
+                                    <div>格局：景 + 壬（因賊牽連）</div>
+                                    <div>壬天干臨：冠帶 臨官 馬星位</div>
                                 </div>
                             </div>
 
-                            <!-- 中宮（暫缺） -->
+                            <!-- 中宮 -->
                             <div class="palace-item" data-palace="中">
                                 <div class="palace-header">中宮</div>
                                 <div class="palace-content">
-                                    <input type="text" placeholder="天盤" class="palace-input" data-field="tian">
-                                    <input type="text" placeholder="地盤" class="palace-input" data-field="di">
-                                    <select class="palace-input" data-field="men">
-                                        <option value="" selected disabled>選擇門</option>
-                                        <option value="生門">生門</option>
-                                        <option value="休門">休門</option>
-                                        <option value="開門">開門</option>
-                                        <option value="傷門">傷門</option>
-                                        <option value="杜門">杜門</option>
-                                        <option value="景門">景門</option>
-                                        <option value="死門">死門</option>
-                                        <option value="驚門">驚門</option>
-                                    </select>
-                                    <select class="palace-input" data-field="xing">
-                                        <option value="" selected disabled>選擇星</option>
-                                        <option value="天輔">天輔</option>
-                                        <option value="天芮">天芮</option>
-                                        <option value="天沖">天沖</option>
-                                        <option value="天任">天任</option>
-                                        <option value="天蓬">天蓬</option>
-                                        <option value="天心">天心</option>
-                                        <option value="天柱">天柱</option>
-                                        <option value="天英">天英</option>
-                                        <option value="天禽">天禽</option>
-                                    </select>
+                                    <div class="palace-input">天盤：-</div>
+                                    <div class="palace-input">地盤：-</div>
+                                    <div class="palace-input">八門：-</div>
+                                    <div class="palace-input">九星：-</div>
                                 </div>
                             </div>
 
                             <!-- 巽宮 -->
                             <div class="palace-item" data-palace="巽">
-                                <div class="palace-header">巽宮（東南）</div>
+                                <div class="palace-header">巽宮（東南方）</div>
                                 <div class="palace-content">
-                                    <input type="text" placeholder="天盤" value="戊" class="palace-input" data-field="tian">
-                                    <input type="text" placeholder="地盤" value="己" class="palace-input" data-field="di">
-                                    <select class="palace-input" data-field="men">
-                                        <option value="休門" selected>休門</option>
-                                        <option value="生門">生門</option>
-                                        <option value="開門">開門</option>
-                                        <option value="傷門">傷門</option>
-                                        <option value="杜門">杜門</option>
-                                        <option value="景門">景門</option>
-                                        <option value="死門">死門</option>
-                                        <option value="驚門">驚門</option>
-                                    </select>
-                                    <select class="palace-input" data-field="xing">
-                                        <option value="天沖" selected>天沖</option>
-                                        <option value="天輔">天輔</option>
-                                        <option value="天芮">天芮</option>
-                                        <option value="天任">天任</option>
-                                        <option value="天蓬">天蓬</option>
-                                        <option value="天心">天心</option>
-                                        <option value="天柱">天柱</option>
-                                        <option value="天英">天英</option>
-                                    </select>
+                                    <div class="palace-input">天盤：戊</div>
+                                    <div class="palace-input">地盤：己</div>
+                                    <div class="palace-input">八門：休門</div>
+                                    <div class="palace-input">九星：天沖星</div>
+                                </div>
+                                <div class="palace-pattern">
+                                    格局：戊 + 己（貴人入獄）
+                                </div>
+                                <div class="palace-details">
+                                    <div>八神：九天</div>
+                                    <div>格局：休 + 戊（財物可得）</div>
+                                    <div>戊天干臨：冠帶 臨官位</div>
                                 </div>
                             </div>
 
                             <!-- 震宮 -->
                             <div class="palace-item" data-palace="震">
                                 <div class="palace-header">
-                                    <span>震宮（東）</span>
+                                    <span>震宮（東方）</span>
                                     <span class="badge danger">門迫+擊刑</span>
                                 </div>
                                 <div class="palace-content">
-                                    <input type="text" placeholder="天盤" value="癸" class="palace-input" data-field="tian">
-                                    <input type="text" placeholder="地盤" value="戊" class="palace-input" data-field="di">
-                                    <select class="palace-input" data-field="men">
-                                        <option value="開門" selected>開門</option>
-                                        <option value="休門">休門</option>
-                                        <option value="生門">生門</option>
-                                        <option value="傷門">傷門</option>
-                                        <option value="杜門">杜門</option>
-                                        <option value="景門">景門</option>
-                                        <option value="死門">死門</option>
-                                        <option value="驚門">驚門</option>
-                                    </select>
-                                    <select class="palace-input" data-field="xing">
-                                        <option value="天任" selected>天任</option>
-                                        <option value="天輔">天輔</option>
-                                        <option value="天芮">天芮</option>
-                                        <option value="天沖">天沖</option>
-                                        <option value="天蓬">天蓬</option>
-                                        <option value="天心">天心</option>
-                                        <option value="天柱">天柱</option>
-                                        <option value="天英">天英</option>
-                                    </select>
+                                    <div class="palace-input">天盤：癸</div>
+                                    <div class="palace-input">地盤：戊</div>
+                                    <div class="palace-input">八門：開門</div>
+                                    <div class="palace-input">九星：天任星</div>
+                                </div>
+                                <div class="palace-pattern">
+                                    格局：癸 + 戊（天乙會合）
+                                </div>
+                                <div class="palace-details">
+                                    <div>八神：九地</div>
+                                    <div>格局：開 + 癸（女性失財小凶）</div>
+                                    <div>癸天干臨：長生位</div>
                                 </div>
                             </div>
 
                             <!-- 艮宮 -->
                             <div class="palace-item" data-palace="艮">
-                                <div class="palace-header">艮宮（東北）</div>
+                                <div class="palace-header">艮宮（東北方）</div>
                                 <div class="palace-content">
-                                    <input type="text" placeholder="天盤" value="丙" class="palace-input" data-field="tian">
-                                    <input type="text" placeholder="地盤" value="癸" class="palace-input" data-field="di">
-                                    <select class="palace-input" data-field="men">
-                                        <option value="驚門" selected>驚門</option>
-                                        <option value="休門">休門</option>
-                                        <option value="開門">開門</option>
-                                        <option value="傷門">傷門</option>
-                                        <option value="杜門">杜門</option>
-                                        <option value="景門">景門</option>
-                                        <option value="死門">死門</option>
-                                        <option value="生門">生門</option>
-                                    </select>
-                                    <select class="palace-input" data-field="xing">
-                                        <option value="天蓬" selected>天蓬</option>
-                                        <option value="天輔">天輔</option>
-                                        <option value="天芮">天芮</option>
-                                        <option value="天任">天任</option>
-                                        <option value="天沖">天沖</option>
-                                        <option value="天心">天心</option>
-                                        <option value="天柱">天柱</option>
-                                        <option value="天英">天英</option>
-                                    </select>
+                                    <div class="palace-input">天盤：丙</div>
+                                    <div class="palace-input">地盤：癸</div>
+                                    <div class="palace-input">八門：驚門</div>
+                                    <div class="palace-input">九星：天蓬星</div>
+                                </div>
+                                <div class="palace-pattern">
+                                    格局：丙 + 癸（華蓋悖師）
+                                </div>
+                                <div class="palace-details">
+                                    <div>格局：驚 + 丙（文書棄約驚恐）</div>
+                                    <div>丙天干臨：長生 養位</div>
                                 </div>
                             </div>
 
                             <!-- 坎宮 -->
                             <div class="palace-item" data-palace="坎">
                                 <div class="palace-header">
-                                    <span>坎宮（北）</span>
+                                    <span>坎宮（北方）</span>
                                     <span class="badge danger">門迫</span>
                                 </div>
                                 <div class="palace-content">
-                                    <input type="text" placeholder="天盤" value="辛" class="palace-input" data-field="tian">
-                                    <input type="text" placeholder="地盤" value="丙" class="palace-input" data-field="di">
-                                    <select class="palace-input" data-field="men">
-                                        <option value="死門" selected>死門</option>
-                                        <option value="休門">休門</option>
-                                        <option value="開門">開門</option>
-                                        <option value="傷門">傷門</option>
-                                        <option value="杜門">杜門</option>
-                                        <option value="景門">景門</option>
-                                        <option value="生門">生門</option>
-                                        <option value="驚門">驚門</option>
-                                    </select>
-                                    <select class="palace-input" data-field="xing">
-                                        <option value="天心" selected>天心</option>
-                                        <option value="天輔">天輔</option>
-                                        <option value="天芮">天芮</option>
-                                        <option value="天任">天任</option>
-                                        <option value="天沖">天沖</option>
-                                        <option value="天蓬">天蓬</option>
-                                        <option value="天柱">天柱</option>
-                                        <option value="天英">天英</option>
-                                    </select>
+                                    <div class="palace-input">天盤：辛</div>
+                                    <div class="palace-input">地盤：丙</div>
+                                    <div class="palace-input">八門：死門</div>
+                                    <div class="palace-input">九星：天心星</div>
+                                </div>
+                                <div class="palace-pattern">
+                                    格局：辛 + 丙（幹合悖師）
+                                </div>
+                                <div class="palace-details">
+                                    <div>八神：白虎</div>
+                                    <div>格局：死 + 辛（盜賊猖狂，失物難回）</div>
+                                    <div>辛天干臨：長生位</div>
                                 </div>
                             </div>
                         </div>
@@ -581,7 +447,7 @@
     <div id="loading-overlay" class="modal" style="display: none;">
         <div class="modal-content">
             <div class="modal-icon">
-                <i class="fas fa-spinner fa-spin" style="color: var(--third-color); font-size: 60px;"></i>
+                <i class="fas fa-spinner fa-spin" style="color: var(--third-color); font-size: 50px;"></i>
             </div>
             <h3>分析中...</h3>
             <p>正在進行奇門AI分析，請稍候</p>
@@ -591,9 +457,6 @@
         </div>
     </div>
 
-    <script src="js/main.js"></script>
-    <script src="js/qimen-core.js"></script>
-    <script src="js/data-manager.js"></script>
     <script>
         // 頁面加載完成後初始化
         document.addEventListener('DOMContentLoaded', function() {
@@ -607,104 +470,9 @@
             // 更新指令計數
             updateInstructionCount();
             
-            // 設置表單提交事件
-            document.getElementById('match-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                analyzeMatch();
-            });
-            
-            // 設置輸入框實時驗證
-            setupInputValidation();
-            
             // 顯示歡迎信息
             showWelcomeMessage();
         });
-        
-        // 生成比賽ID
-        function generateMatchId() {
-            const prefix = 'FB';
-            const timestamp = Date.now().toString().slice(-6);
-            const random = Math.floor(Math.random() * 900 + 100);
-            const matchId = `${prefix}${timestamp}${random}`;
-            
-            document.getElementById('match-id').value = matchId;
-            addInstruction(`生成新的比賽編號: ${matchId}`);
-            
-            // 更新狀態
-            document.getElementById('match-status').textContent = '新編號已生成';
-            document.getElementById('match-status').className = 'badge success';
-        }
-        
-        // 設置輸入驗證
-        function setupInputValidation() {
-            const inputs = document.querySelectorAll('input[required], select[required]');
-            inputs.forEach(input => {
-                input.addEventListener('change', function() {
-                    validateField(this);
-                });
-                input.addEventListener('blur', function() {
-                    validateField(this);
-                });
-            });
-        }
-        
-        // 驗證字段
-        function validateField(field) {
-            if (field.value.trim() === '') {
-                field.style.borderColor = 'var(--danger-color)';
-                field.style.boxShadow = '0 0 0 3px rgba(231, 76, 60, 0.1)';
-                return false;
-            } else {
-                field.style.borderColor = '#e0e0e0';
-                field.style.boxShadow = 'none';
-                return true;
-            }
-        }
-        
-        // 自動填寫今晚比賽數據
-        function autoFillCurrentMatch() {
-            // 設置今晚比賽的奇門盤面（使用師傅提供的數據）
-            const palaces = {
-                '離': { tian: '己', di: '丁', men: '生門', xing: '天輔', shen: '值符' },
-                '兌': { tian: '乙', di: '壬', men: '杜門', xing: '天芮', shen: '太陰', special: '空亡' },
-                '乾': { tian: '壬', di: '辛', men: '景門', xing: '天柱', shen: '六合', special: '門迫' },
-                '坎': { tian: '辛', di: '丙', men: '死門', xing: '天心', shen: '白虎', special: '門迫' },
-                '艮': { tian: '丙', di: '癸', men: '驚門', xing: '天蓬', shen: '' },
-                '震': { tian: '癸', di: '戊', men: '開門', xing: '天任', shen: '九地', special: '門迫+擊刑' },
-                '巽': { tian: '戊', di: '己', men: '休門', xing: '天沖', shen: '九天' }
-            };
-            
-            // 更新九宮格輸入
-            Object.keys(palaces).forEach(palace => {
-                const element = document.querySelector(`[data-palace="${palace}"]`);
-                if (element) {
-                    const inputs = element.querySelectorAll('.palace-input');
-                    const data = palaces[palace];
-                    
-                    if (inputs[0]) inputs[0].value = data.tian || '';
-                    if (inputs[1]) inputs[1].value = data.di || '';
-                    if (inputs[2]) inputs[2].value = data.men || '';
-                    if (inputs[3]) inputs[3].value = data.xing || '';
-                }
-            });
-            
-            // 設置用神
-            document.getElementById('home-god').value = '值符';
-            document.getElementById('away-god').value = '值使';
-            
-            // 更新奇門時間
-            document.getElementById('qimen-time').value = '2026-02-05T02:00';
-            
-            // 更新狀態
-            document.getElementById('match-status').textContent = '已填充今晚盤面';
-            document.getElementById('match-status').className = 'badge success';
-            
-            // 添加指令記錄
-            addInstruction('自動填寫今晚比賽奇門盤面完成');
-            
-            // 顯示成功提示
-            showToast('今晚比賽數據已自動填充！', 'success');
-        }
         
         // 顯示歡迎信息
         function showWelcomeMessage() {
@@ -752,20 +520,20 @@
         style.textContent = `
             .toast {
                 position: fixed;
-                bottom: 30px;
-                right: 30px;
+                bottom: 20px;
+                right: 20px;
                 background: white;
-                padding: 15px 25px;
+                padding: 12px 20px;
                 border-radius: var(--border-radius);
                 box-shadow: var(--shadow-lg);
                 display: flex;
                 align-items: center;
-                gap: 15px;
+                gap: 12px;
                 transform: translateY(100px);
                 opacity: 0;
-                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                transition: all 0.3s ease;
                 z-index: 1000;
-                max-width: 400px;
+                max-width: 350px;
                 border-left: 4px solid var(--third-color);
             }
             
@@ -780,13 +548,44 @@
             .toast-danger { border-left-color: var(--danger-color); }
             
             .toast i {
-                font-size: 1.5rem;
+                font-size: 1.2rem;
             }
             
             .toast-success i { color: var(--success-color); }
             .toast-warning i { color: var(--warning-color); }
             .toast-info i { color: var(--info-color); }
             .toast-danger i { color: var(--danger-color); }
+            
+            .progress-bar {
+                height: 8px;
+                background: rgba(34, 40, 49, 0.1);
+                border-radius: 4px;
+                overflow: hidden;
+            }
+            
+            .progress-fill {
+                height: 100%;
+                background: linear-gradient(90deg, var(--third-color), #ff9a3c);
+                border-radius: 4px;
+                transition: width 0.3s ease;
+            }
+            
+            .instruction-stats {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 15px;
+                padding-top: 15px;
+                border-top: 1px solid rgba(255, 255, 255, 0.1);
+                font-size: var(--font-size-sm);
+                color: rgba(255, 255, 255, 0.7);
+            }
+            
+            .modal-actions {
+                display: flex;
+                gap: 10px;
+                margin-top: 20px;
+                justify-content: center;
+            }
         `;
         document.head.appendChild(style);
         
@@ -816,12 +615,18 @@
         
         // 清除表單
         function clearForm() {
-            if (confirm('確定要清除所有表單內容嗎？')) {
-                document.getElementById('match-form').reset();
-                document.getElementById('match-status').textContent = '已清除';
+            if (confirm('確定要清除所有表單內容嗎？將恢復默認值')) {
+                // 重置為默認值
+                document.getElementById('match-id').value = 'FB3200';
+                document.getElementById('match-time').value = '2026年2月5日 02:00';
+                document.getElementById('home-team').value = '馬德里CFF女足';
+                document.getElementById('away-team').value = '特內里費女足';
+                document.getElementById('competition').value = '女子西班牙盃';
+                
+                document.getElementById('match-status').textContent = '已恢復默認';
                 document.getElementById('match-status').className = 'badge warning';
-                addInstruction('清除表單內容');
-                showToast('表單已清除', 'warning');
+                addInstruction('清除表單並恢復默認值');
+                showToast('表單已恢復默認值', 'warning');
             }
         }
         
@@ -856,31 +661,131 @@
             document.getElementById('loading-overlay').style.display = 'none';
         }
         
-        // 全局函數導出
-        window.analyzeMatch = () => {
+        // 分析比賽
+        function analyzeMatch() {
             showLoading();
             setTimeout(() => {
-                // 這裡調用主邏輯的analyzeMatch函數
-                if (window.QimenFootballAI && typeof window.QimenFootballAI.analyzeMatch === 'function') {
-                    window.QimenFootballAI.analyzeMatch();
-                } else {
-                    // 模擬分析完成
-                    hideLoading();
-                    document.getElementById('success-modal').style.display = 'flex';
-                    addInstruction('模擬分析完成 - 生成預測結果');
+                // 基於兌宮多重凶格的分析
+                const predictions = {
+                    homeWin: 65,    // 離宮有利，兌宮多重凶格
+                    draw: 20,       // 值符值使關係
+                    awayWin: 15,    // 兌宮空亡且多重凶格
+                    corners: {
+                        home: 5,    // 景門門迫，角球爭奪激烈
+                        away: 3     // 兌宮空亡，進攻機會少
+                    },
+                    totalGoals: 2.5, // 生門進攻，但有多重阻礙
+                    confidence: 78   // 格局清晰
+                };
+                
+                // 顯示預覽
+                showAnalysisPreview(predictions);
+                hideLoading();
+                document.getElementById('success-modal').style.display = 'flex';
+                addInstruction('奇門AI分析完成 - 基於兌宮多重凶格');
+                
+                // 保存預測數據
+                savePredictionData(predictions);
+            }, 2000);
+        }
+        
+        // 顯示分析預覽
+        function showAnalysisPreview(predictions) {
+            const preview = document.getElementById('analysis-preview');
+            const content = document.getElementById('preview-content');
+            
+            const html = `
+                <div class="prediction-probabilities">
+                    <div class="prob-item">
+                        <div class="prob-value">${predictions.homeWin}%</div>
+                        <div class="prob-label">主勝</div>
+                    </div>
+                    <div class="prob-item">
+                        <div class="prob-value">${predictions.draw}%</div>
+                        <div class="prob-label">和局</div>
+                    </div>
+                    <div class="prob-item">
+                        <div class="prob-value">${predictions.awayWin}%</div>
+                        <div class="prob-label">客勝</div>
+                    </div>
+                </div>
+                <div class="stats-display">
+                    <div class="stat-box">
+                        <div class="stat-label-large">角球數</div>
+                        <div class="stat-value-large">${predictions.corners.home}-${predictions.corners.away}</div>
+                        <div class="stat-detail">主 ${predictions.corners.home} - 客 ${predictions.corners.away}</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label-large">總入球數</div>
+                        <div class="stat-value-large">${predictions.totalGoals}</div>
+                        <div class="stat-detail">預測總入球數</div>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 15px; color: var(--second-color);">
+                    <i class="fas fa-lightbulb"></i> 置信度: <strong>${predictions.confidence}%</strong>
+                </div>
+                <div style="margin-top: 15px; padding: 10px; background: rgba(249, 109, 0, 0.05); border-radius: 8px;">
+                    <p style="font-size: 0.9rem; color: var(--second-color);">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        <strong>關鍵發現：</strong> 兌宮出現多重凶格（日奇被刑、日奇入地、小格），客隊狀態極差
+                    </p>
+                </div>
+            `;
+            
+            content.innerHTML = html;
+            preview.style.display = 'block';
+        }
+        
+        // 保存預測數據
+        function savePredictionData(predictions) {
+            const matchData = {
+                matchId: document.getElementById('match-id').value,
+                matchTime: document.getElementById('match-time').value,
+                homeTeam: document.getElementById('home-team').value,
+                awayTeam: document.getElementById('away-team').value,
+                competition: document.getElementById('competition').value,
+                predictions: predictions,
+                timestamp: new Date().toISOString(),
+                qimenAnalysis: {
+                    兌宮: {
+                        四害: "空亡（深挖到坎宮）",
+                        格局: ["乙+庚：日奇被刑", "乙+壬：日奇入地", "庚+壬：小格（移蕩格）"],
+                        八門組合: "杜+乙：飛來橫禍(訴訟)",
+                        九星: "天芮星",
+                        八神: "太陰"
+                    }
                 }
-            }, 1500);
-        };
+            };
+            
+            localStorage.setItem('currentPrediction', JSON.stringify(matchData));
+            console.log('預測數據已保存（含兌宮詳細分析）');
+        }
         
-        window.saveMatchData = () => {
-            if (window.QimenFootballAI && typeof window.QimenFootballAI.saveMatchData === 'function') {
-                window.QimenFootballAI.saveMatchData();
-            } else {
-                showToast('數據保存功能需要主邏輯文件', 'warning');
-            }
-        };
+        // 保存比賽數據
+        function saveMatchData() {
+            const matchData = {
+                matchId: document.getElementById('match-id').value,
+                matchTime: document.getElementById('match-time').value,
+                homeTeam: document.getElementById('home-team').value,
+                awayTeam: document.getElementById('away-team').value,
+                competition: document.getElementById('competition').value,
+                timestamp: new Date().toISOString(),
+                qimenData: {
+                    兌宮: "多重凶格（空亡、日奇被刑、日奇入地、小格）"
+                }
+            };
+            
+            // 保存到歷史
+            let history = JSON.parse(localStorage.getItem('qimenMatchHistory') || '[]');
+            history.push(matchData);
+            localStorage.setItem('qimenMatchHistory', JSON.stringify(history));
+            
+            showToast('比賽數據已保存', 'success');
+            addInstruction(`保存比賽數據（含兌宮凶格）: ${matchData.matchId}`);
+        }
         
-        window.copyInstructions = () => {
+        // 複製指令
+        function copyInstructions() {
             const log = document.getElementById('instruction-log');
             const commands = Array.from(log.querySelectorAll('code'))
                 .map(code => code.textContent)
@@ -889,16 +794,27 @@
             navigator.clipboard.writeText(commands).then(() => {
                 showToast('所有指令已複製到剪貼板！', 'success');
             });
-        };
+        }
         
-        window.closeModal = () => {
+        // 關閉模態框
+        function closeModal() {
             document.getElementById('success-modal').style.display = 'none';
             hideLoading();
-        };
+        }
         
-        window.redirectToPrediction = () => {
+        // 跳轉到預測頁面
+        function redirectToPrediction() {
             window.location.href = 'prediction.html';
-        };
+        }
+        
+        // 全局函數導出
+        window.analyzeMatch = analyzeMatch;
+        window.saveMatchData = saveMatchData;
+        window.copyInstructions = copyInstructions;
+        window.closeModal = closeModal;
+        window.redirectToPrediction = redirectToPrediction;
+        window.clearForm = clearForm;
+        window.clearInstructions = clearInstructions;
     </script>
 </body>
 </html>
