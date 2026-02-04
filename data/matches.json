@@ -1,0 +1,166 @@
+{
+  "version": "1.1",
+  "generated_at": "2026-02-04T15:30:00.000Z",
+  "total_matches": 15,
+  "matches": [
+    {
+      "match_id": "FB3200",
+      "timestamp": "2026-02-04T10:30:00.000Z",
+      "match_info": {
+        "date": "2026-02-05T02:00:00.000Z",
+        "home_team": "馬德里CFF女足",
+        "away_team": "特內里費女足",
+        "competition": "女子西班牙盃",
+        "league": "女子西甲",
+        "round": "16強"
+      },
+      "qimen_data": {
+        "datetime": "2026年2月5日2時0分",
+        "pattern": "陽遁3局",
+        "palaces": {
+          "離": {
+            "tian": "己",
+            "di": "丁",
+            "men": "生門",
+            "xing": "天輔",
+            "shen": "值符"
+          },
+          "兌": {
+            "tian": "乙",
+            "di": "壬",
+            "men": "杜門",
+            "xing": "天芮",
+            "shen": "太陰",
+            "special": "空亡"
+          },
+          "乾": {
+            "tian": "壬",
+            "di": "辛",
+            "men": "景門",
+            "xing": "天柱",
+            "shen": "六合",
+            "special": "門迫"
+          },
+          "坎": {
+            "tian": "辛",
+            "di": "丙",
+            "men": "死門",
+            "xing": "天心",
+            "shen": "白虎",
+            "special": "門迫"
+          },
+          "艮": {
+            "tian": "丙",
+            "di": "癸",
+            "men": "驚門",
+            "xing": "天蓬",
+            "shen": ""
+          },
+          "震": {
+            "tian": "癸",
+            "di": "戊",
+            "men": "開門",
+            "xing": "天任",
+            "shen": "九地",
+            "special": "門迫+擊刑"
+          },
+          "巽": {
+            "tian": "戊",
+            "di": "己",
+            "men": "休門",
+            "xing": "天沖",
+            "shen": "九天"
+          }
+        },
+        "gods": {
+          "home": "值符",
+          "away": "值使"
+        },
+        "special_patterns": [
+          "離火克兌金",
+          "值符天輔星在離宮",
+          "兌宮空亡杜門天芮",
+          "乙+壬日奇入地",
+          "己+丁朱雀入墓"
+        ],
+        "sihai_analysis": [
+          {
+            "palace": "兌",
+            "type": "空亡",
+            "severity": "高",
+            "affected_team": "客隊"
+          },
+          {
+            "palace": "乾",
+            "type": "門迫",
+            "severity": "中",
+            "affected_team": "雙方"
+          }
+        ]
+      },
+      "predictions": {
+        "result": "主勝",
+        "corners": {
+          "home": 5,
+          "away": 3
+        },
+        "confidence": 78,
+        "reasoning": "基於奇門遁甲分析：\n\n主隊（馬德里CFF女足）：\n• 離宮生門天輔值符 - 主隊得地利\n• 己+丁朱雀入墓 - 戰術或有波折\n\n客隊（特內里費女足）：\n• 兌宮空亡 - 客隊狀態不佳\n• 杜門天芮 - 客隊進攻受阻\n• 乙+壬日奇入地 - 客隊計劃難成\n\n角球分析：\n• 景門門迫，角球爭奪激烈但效率較低\n• 兌宮空亡，客隊角球機會減少\n• 預測角球數：主隊5，客隊3",
+        "ai_params_used": {
+          "weights": {
+            "palace_strength": 0.35,
+            "god_relations": 0.25,
+            "timing_factors": 0.15,
+            "pattern_analysis": 0.15,
+            "team_form": 0.1
+          },
+          "version": "1.1"
+        }
+      },
+      "actual_result": {
+        "final_score": "",
+        "corners": {
+          "home": 0,
+          "away": 0
+        },
+        "match_stats": {},
+        "verified": false,
+        "verified_at": null
+      },
+      "ai_learning": {
+        "accuracy": 0,
+        "param_adjustments": [],
+        "version": "1.1"
+      },
+      "status": "待驗證"
+    }
+  ],
+  "statistics": {
+    "total_matches": 15,
+    "verified_matches": 14,
+    "pending_matches": 1,
+    "average_accuracy": 73.3,
+    "competition_stats": {
+      "女子西班牙盃": 5,
+      "女子西甲": 6,
+      "友誼賽": 3,
+      "青年賽": 1
+    }
+  },
+  "ai_learning_summary": {
+    "effective_patterns": [
+      {
+        "name": "離火克兌金",
+        "accuracy": 85,
+        "match_count": 20
+      },
+      {
+        "name": "值符+生門",
+        "accuracy": 80,
+        "match_count": 15
+      }
+    ],
+    "learning_progress": 73.3,
+    "target_accuracy": 80
+  }
+}
