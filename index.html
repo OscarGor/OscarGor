@@ -3,818 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>己土奇門足球預測系統 v1.1</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>甲方己土玄學-AI足球預測系統</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
-    <meta name="description" content="己土玄學顧問公司 - 奇門遁甲足球預測AI系統">
-    <meta name="keywords" content="奇門遁甲,足球預測,AI分析,玄學,己土">
-    <style>
-        .palace-details {
-            margin-top: 8px;
-            padding-top: 8px;
-            border-top: 1px dashed rgba(34, 40, 49, 0.1);
-            font-size: 0.75rem;
-            color: var(--second-color);
-            line-height: 1.4;
-        }
-        
-        .palace-details div {
-            margin-bottom: 3px;
-        }
-        
-        .palace-pattern {
-            margin-top: 8px;
-            font-size: 0.75rem;
-            color: var(--danger-color);
-            font-weight: 600;
-            line-height: 1.4;
-        }
-        
-        .input-with-action {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        
-        .input-with-action input {
-            flex: 1;
-        }
-        
-        .instruction-actions {
-            display: flex;
-            gap: 8px;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
-        <header class="main-header">
-            <div class="logo-section">
-                <h1><i class="fas fa-yin-yang"></i> 己土奇門足球預測系統</h1>
-                <p class="version">版本 1.1 | 全遁局兼容</p>
-            </div>
-            <nav class="main-nav">
-                <a href="index.html" class="active"><i class="fas fa-home"></i> 輸入介面</a>
-                <a href="prediction.html"><i class="fas fa-chart-line"></i> 當前預測</a>
-                <a href="history.html"><i class="fas fa-history"></i> 歷史驗證</a>
-                <a href="ai-params.html"><i class="fas fa-brain"></i> AI參數</a>
-                <a href="lazy-commands.html"><i class="fas fa-terminal"></i> 指令包</a>
-            </nav>
+        <!-- 系統標題 -->
+        <header class="header">
+            <h1><i class="fas fa-futbol"></i> 甲方己土玄學-AI足球預測系統</h1>
+            <p class="subtitle">V5.1I 賽後驗證優化版 · 實證驅動迭代</p>
+            <div class="version-badge">版本: V5.1I</div>
         </header>
 
-        <main class="content">
-            <div class="grid-container">
-                <!-- 左側：比賽資訊輸入 -->
-                <section class="card input-card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-futbol"></i> 比賽基本資料</h2>
-                        <span class="badge info" id="match-status">已預填今晚比賽</span>
-                    </div>
-                    
-                    <form id="match-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="match-id">
-                                    <i class="fas fa-hashtag"></i> 
-                                    <span class="label-text">球賽編號</span>
-                                </label>
-                                <div class="input-with-action">
-                                    <input type="text" id="match-id" value="FB3200" required readonly>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="match-time">
-                                    <i class="far fa-clock"></i> 
-                                    <span class="label-text">比賽時間</span>
-                                </label>
-                                <input type="text" id="match-time" value="2026年2月5日 02:00" required readonly>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="home-team">
-                                    <i class="fas fa-home"></i> 
-                                    <span class="label-text">主隊名稱</span>
-                                </label>
-                                <input type="text" id="home-team" value="馬德里CFF女足" required readonly>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="away-team">
-                                    <i class="fas fa-plane"></i> 
-                                    <span class="label-text">客隊名稱</span>
-                                </label>
-                                <input type="text" id="away-team" value="特內里費女足" required readonly>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="competition">
-                                <i class="fas fa-trophy"></i> 
-                                <span class="label-text">賽事類別</span>
-                            </label>
-                            <input type="text" id="competition" value="女子西班牙盃" required readonly>
-                        </div>
-
-                        <!-- 奇門局數自動顯示 -->
-                        <div class="qimen-info">
-                            <h3><i class="fas fa-yin-yang"></i> 奇門遁甲信息</h3>
-                            <div class="info-grid">
-                                <div class="info-item">
-                                    <span class="info-label">公曆：</span>
-                                    <span class="info-value">2026年2月5日2時0分</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">農曆：</span>
-                                    <span class="info-value">2025年12月18日</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">陽遁局數：</span>
-                                    <span class="info-value">3局</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">四柱：</span>
-                                    <span class="info-value">丙午 庚寅 庚戌 丁丑</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">值符：</span>
-                                    <span class="info-value">天輔星</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">值使：</span>
-                                    <span class="info-value">杜門</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">時空亡：</span>
-                                    <span class="info-value">甲戌旬 申酉空</span>
-                                </div>
-                                <div class="info-item">
-                                    <span class="info-label">馬星：</span>
-                                    <span class="info-value">亥</span>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </section>
-
-                <!-- 右側：奇門盤面輸入 -->
-                <section class="card qimen-card">
-                    <div class="card-header">
-                        <h2><i class="fas fa-chess-board"></i> 奇門盤面信息</h2>
-                        <span class="badge success">已預填</span>
-                    </div>
-                    
-                    <div class="qimen-input-section">
-                        <h3><i class="fas fa-user-circle"></i> 用神設定</h3>
-                        <div class="god-settings">
-                            <div class="god-setting">
-                                <label>主隊用神</label>
-                                <input type="text" value="值符（離宮）" readonly>
-                            </div>
-                            <div class="god-setting">
-                                <label>客隊用神</label>
-                                <input type="text" value="值使（兌宮）" readonly>
-                            </div>
-                        </div>
-
-                        <h3><i class="fas fa-th-large"></i> 九宮格局信息</h3>
-                        <div class="palace-grid">
-                            <!-- 離宮 -->
-                            <div class="palace-item" data-palace="離">
-                                <div class="palace-header">
-                                    <span>離宮（南方）</span>
-                                    <span class="badge success">主隊</span>
-                                </div>
-                                <div class="palace-content">
-                                    <div class="palace-input">天盤：己</div>
-                                    <div class="palace-input">地盤：丁</div>
-                                    <div class="palace-input">八門：生門</div>
-                                    <div class="palace-input">九星：天輔星</div>
-                                </div>
-                                <div class="palace-pattern">
-                                    格局：己 + 丁（朱雀入墓）
-                                </div>
-                                <div class="palace-details">
-                                    <div>八神：值符</div>
-                                    <div>格局：生 + 己（主得貴人扶持）</div>
-                                </div>
-                            </div>
-
-                            <!-- 坤宮 -->
-                            <div class="palace-item" data-palace="坤">
-                                <div class="palace-header">坤宮（西南方）</div>
-                                <div class="palace-content">
-                                    <div class="palace-input">天盤：-</div>
-                                    <div class="palace-input">地盤：-</div>
-                                    <div class="palace-input">八門：-</div>
-                                    <div class="palace-input">九星：-</div>
-                                </div>
-                            </div>
-
-                            <!-- 兌宮 - 更新完整資訊 -->
-                            <div class="palace-item" data-palace="兌">
-                                <div class="palace-header">
-                                    <span>兌宮（西方）</span>
-                                    <span class="badge warning">空亡</span>
-                                </div>
-                                <div class="palace-content">
-                                    <div class="palace-input">天盤：乙</div>
-                                    <div class="palace-input">地盤：壬</div>
-                                    <div class="palace-input">八門：杜門</div>
-                                    <div class="palace-input">九星：天芮星</div>
-                                </div>
-                                <div class="palace-pattern">
-                                    乙+庚：日奇被刑<br>
-                                    乙+壬：日奇入地<br>
-                                    庚+壬：小格（移蕩格）<br>
-                                    杜+乙：飛來橫禍(訴訟)
-                                </div>
-                                <div class="palace-details">
-                                    <div>四害：空亡（深挖到坎宮）</div>
-                                    <div>天盤寄宮：庚</div>
-                                    <div>八神：太陰</div>
-                                    <div>乙天干臨：絕位</div>
-                                    <div>庚天干臨：帝旺位</div>
-                                </div>
-                            </div>
-
-                            <!-- 乾宮 -->
-                            <div class="palace-item" data-palace="乾">
-                                <div class="palace-header">
-                                    <span>乾宮（西北方）</span>
-                                    <span class="badge danger">門迫</span>
-                                </div>
-                                <div class="palace-content">
-                                    <div class="palace-input">天盤：壬</div>
-                                    <div class="palace-input">地盤：辛</div>
-                                    <div class="palace-input">八門：景門</div>
-                                    <div class="palace-input">九星：天柱星</div>
-                                </div>
-                                <div class="palace-pattern">
-                                    格局：壬 + 辛（騰蛇相纏）
-                                </div>
-                                <div class="palace-details">
-                                    <div>八神：六合</div>
-                                    <div>格局：景 + 壬（因賊牽連）</div>
-                                    <div>壬天干臨：冠帶 臨官 馬星位</div>
-                                </div>
-                            </div>
-
-                            <!-- 中宮 -->
-                            <div class="palace-item" data-palace="中">
-                                <div class="palace-header">中宮</div>
-                                <div class="palace-content">
-                                    <div class="palace-input">天盤：-</div>
-                                    <div class="palace-input">地盤：-</div>
-                                    <div class="palace-input">八門：-</div>
-                                    <div class="palace-input">九星：-</div>
-                                </div>
-                            </div>
-
-                            <!-- 巽宮 -->
-                            <div class="palace-item" data-palace="巽">
-                                <div class="palace-header">巽宮（東南方）</div>
-                                <div class="palace-content">
-                                    <div class="palace-input">天盤：戊</div>
-                                    <div class="palace-input">地盤：己</div>
-                                    <div class="palace-input">八門：休門</div>
-                                    <div class="palace-input">九星：天沖星</div>
-                                </div>
-                                <div class="palace-pattern">
-                                    格局：戊 + 己（貴人入獄）
-                                </div>
-                                <div class="palace-details">
-                                    <div>八神：九天</div>
-                                    <div>格局：休 + 戊（財物可得）</div>
-                                    <div>戊天干臨：冠帶 臨官位</div>
-                                </div>
-                            </div>
-
-                            <!-- 震宮 -->
-                            <div class="palace-item" data-palace="震">
-                                <div class="palace-header">
-                                    <span>震宮（東方）</span>
-                                    <span class="badge danger">門迫+擊刑</span>
-                                </div>
-                                <div class="palace-content">
-                                    <div class="palace-input">天盤：癸</div>
-                                    <div class="palace-input">地盤：戊</div>
-                                    <div class="palace-input">八門：開門</div>
-                                    <div class="palace-input">九星：天任星</div>
-                                </div>
-                                <div class="palace-pattern">
-                                    格局：癸 + 戊（天乙會合）
-                                </div>
-                                <div class="palace-details">
-                                    <div>八神：九地</div>
-                                    <div>格局：開 + 癸（女性失財小凶）</div>
-                                    <div>癸天干臨：長生位</div>
-                                </div>
-                            </div>
-
-                            <!-- 艮宮 -->
-                            <div class="palace-item" data-palace="艮">
-                                <div class="palace-header">艮宮（東北方）</div>
-                                <div class="palace-content">
-                                    <div class="palace-input">天盤：丙</div>
-                                    <div class="palace-input">地盤：癸</div>
-                                    <div class="palace-input">八門：驚門</div>
-                                    <div class="palace-input">九星：天蓬星</div>
-                                </div>
-                                <div class="palace-pattern">
-                                    格局：丙 + 癸（華蓋悖師）
-                                </div>
-                                <div class="palace-details">
-                                    <div>格局：驚 + 丙（文書棄約驚恐）</div>
-                                    <div>丙天干臨：長生 養位</div>
-                                </div>
-                            </div>
-
-                            <!-- 坎宮 -->
-                            <div class="palace-item" data-palace="坎">
-                                <div class="palace-header">
-                                    <span>坎宮（北方）</span>
-                                    <span class="badge danger">門迫</span>
-                                </div>
-                                <div class="palace-content">
-                                    <div class="palace-input">天盤：辛</div>
-                                    <div class="palace-input">地盤：丙</div>
-                                    <div class="palace-input">八門：死門</div>
-                                    <div class="palace-input">九星：天心星</div>
-                                </div>
-                                <div class="palace-pattern">
-                                    格局：辛 + 丙（幹合悖師）
-                                </div>
-                                <div class="palace-details">
-                                    <div>八神：白虎</div>
-                                    <div>格局：死 + 辛（盜賊猖狂，失物難回）</div>
-                                    <div>辛天干臨：長生位</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+        <!-- 角色狀態指示器 -->
+        <div class="role-indicator">
+            <div class="role active" data-role="甲方爸爸">
+                <i class="fas fa-user-tie"></i> 甲方爸爸 (數據輸入)
             </div>
-
-            <!-- 底部分析按鈕 -->
-            <div class="action-section">
-                <button type="button" class="btn-primary btn-large" onclick="analyzeMatch()">
-                    <i class="fas fa-brain"></i> 進行奇門AI分析
-                </button>
-                <button type="button" class="btn-secondary" onclick="saveMatchData()">
-                    <i class="fas fa-save"></i> 保存數據
-                </button>
-                <button type="button" class="btn-secondary" onclick="clearForm()">
-                    <i class="fas fa-eraser"></i> 清除表單
-                </button>
+            <div class="role" data-role="AI研究員">
+                <i class="fas fa-robot"></i> AI研究員 (系統升級)
             </div>
+            <div class="role" data-role="小助手">
+                <i class="fas fa-hands-helping"></i> 小助手 (賽後驗證)
+            </div>
+        </div>
 
-            <!-- AI分析結果預覽 -->
-            <section class="card preview-card" id="analysis-preview" style="display: none;">
-                <div class="card-header">
-                    <h2><i class="fas fa-eye"></i> 分析預覽</h2>
-                    <span class="badge info" id="preview-status">新預測</span>
-                </div>
-                <div id="preview-content">
-                    <!-- 預覽內容將由JavaScript動態生成 -->
-                </div>
-            </section>
+        <!-- 快速導航 -->
+        <div class="quick-nav">
+            <h2><i class="fas fa-rocket"></i> 快速開始</h2>
+            <div class="nav-grid">
+                <a href="#/match-input" class="nav-card primary">
+                    <i class="fas fa-futbol"></i>
+                    <h3>賽前分析</h3>
+                    <p>甲方爸爸輸入奇門數據</p>
+                </a>
+                <a href="#/post-match-input" class="nav-card secondary">
+                    <i class="fas fa-clipboard-check"></i>
+                    <h3>賽後驗證</h3>
+                    <p>小助手輸入實際賽果</p>
+                </a>
+                <a href="#/pre-match-report" class="nav-card success">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>預測報告</h3>
+                    <p>查看AI分析結果</p>
+                </a>
+                <a href="#/history-validation" class="nav-card warning">
+                    <i class="fas fa-history"></i>
+                    <h3>歷史驗證</h3>
+                    <p>準確率統計</p>
+                </a>
+            </div>
+        </div>
 
-            <!-- AI指令記錄區 -->
-            <section class="card instruction-card">
-                <div class="card-header">
-                    <h2><i class="fas fa-terminal"></i> AI指令記錄</h2>
-                    <div class="instruction-actions">
-                        <button type="button" class="btn-small" onclick="copyInstructions()">
-                            <i class="fas fa-copy"></i> 複製指令
-                        </button>
-                        <button type="button" class="btn-small" onclick="clearInstructions()">
-                            <i class="fas fa-trash"></i> 清除記錄
-                        </button>
+        <!-- 功能模組導航 -->
+        <nav class="main-nav">
+            <h2><i class="fas fa-th"></i> 功能模組</h2>
+            <div class="nav-menu">
+                <a href="#/match-input" class="nav-item">
+                    <i class="fas fa-keyboard"></i> 賽前輸入
+                </a>
+                <a href="#/pre-match-report" class="nav-item">
+                    <i class="fas fa-file-alt"></i> 賽前報告
+                </a>
+                <a href="#/post-match-input" class="nav-item">
+                    <i class="fas fa-edit"></i> 賽後輸入
+                </a>
+                <a href="#/post-match-report" class="nav-item">
+                    <i class="fas fa-chart-bar"></i> 賽後報告
+                </a>
+                <a href="#/qimen-database" class="nav-item">
+                    <i class="fas fa-database"></i> 奇門數據庫
+                </a>
+                <a href="#/ai-parameters" class="nav-item">
+                    <i class="fas fa-cogs"></i> AI參數
+                </a>
+                <a href="#/history-validation" class="nav-item">
+                    <i class="fas fa-chart-pie"></i> 歷史驗證
+                </a>
+                <a href="#/summary-report" class="nav-item">
+                    <i class="fas fa-flag-checkered"></i> 總結報告
+                </a>
+            </div>
+        </nav>
+
+        <!-- 動態內容區域 -->
+        <main id="app-content" class="content-area">
+            <!-- 內容由JavaScript動態載入 -->
+            <div class="welcome-message">
+                <h2><i class="fas fa-handshake"></i> 歡迎使用玄學-AI足球預測系統</h2>
+                <p>選擇上方功能開始分析，或使用快速導航進入指定功能。</p>
+                
+                <div class="stats-overview">
+                    <div class="stat-card">
+                        <h3><i class="fas fa-crosshairs"></i> 當前準確率</h3>
+                        <div class="stat-value" id="current-accuracy">67.5%</div>
+                        <p>基於12場歷史數據</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3><i class="fas fa-futbol"></i> 已分析場次</h3>
+                        <div class="stat-value" id="total-matches">12</div>
+                        <p>持續更新中</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3><i class="fas fa-sync-alt"></i> 參數版本</h3>
+                        <div class="stat-value" id="current-version">V5.1I</div>
+                        <p>賽後驗證優化版</p>
                     </div>
                 </div>
-                <div class="instruction-log" id="instruction-log">
-                    <div class="instruction-item">
-                        <span class="timestamp">系統啟動 - 今天 10:30:15</span>
-                        <code>AI.initSystem({ version: "1.1", mode: "analysis", user: "己土師傅" })</code>
-                    </div>
-                    <div class="instruction-item">
-                        <span class="timestamp">今天 10:31:22</span>
-                        <code>AI.loadMatchData({ id: "FB3200", competition: "女子西班牙盃" })</code>
-                    </div>
-                    <div class="instruction-item">
-                        <span class="timestamp">今天 10:32:05</span>
-                        <code>AI.setQimenParams({ 遁局: "陽3", 值符: "天輔", 值使: "杜門", 空亡: "申酉" })</code>
-                    </div>
-                </div>
-                <div class="instruction-stats">
-                    <span>共 <strong id="instruction-count">3</strong> 條指令</span>
-                    <span>最後更新: <span id="last-update">剛剛</span></span>
-                </div>
-            </section>
+            </div>
         </main>
 
-        <footer class="main-footer">
-            <p>己土玄學顧問公司 © 2026 | 奇門遁甲足球預測系統 v1.1</p>
-            <p class="disclaimer">本系統僅供學術研究使用，不構成投注建議 | 數據自動保存至本地瀏覽器</p>
+        <!-- 系統狀態欄 -->
+        <footer class="footer">
+            <div class="footer-info">
+                <span><i class="fas fa-calendar-alt"></i> 系統時間: <span id="current-time"></span></span>
+                <span><i class="fas fa-database"></i> 數據庫: <span id="db-status">已連接</span></span>
+                <span><i class="fas fa-user"></i> 當前角色: <span id="current-role">甲方爸爸</span></span>
+            </div>
+            <div class="copyright">
+                © 2026 甲方己土玄學顧問公司 · AI陰盤奇門足球分析系統
+            </div>
         </footer>
     </div>
 
-    <!-- 成功提示模態框 -->
-    <div id="success-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <div class="modal-icon">
-                <i class="fas fa-check-circle success"></i>
-            </div>
-            <h3>分析完成！</h3>
-            <p>奇門AI分析已完成，正在生成預測結果...</p>
-            <div class="modal-actions">
-                <button class="btn-primary" onclick="redirectToPrediction()">
-                    查看完整預測 <i class="fas fa-arrow-right"></i>
-                </button>
-                <button class="btn-secondary" onclick="closeModal()">
-                    繼續編輯
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- 加載指示器 -->
-    <div id="loading-overlay" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-icon">
-                <i class="fas fa-spinner fa-spin" style="color: var(--third-color); font-size: 50px;"></i>
-            </div>
-            <h3>分析中...</h3>
-            <p>正在進行奇門AI分析，請稍候</p>
-            <div class="progress-bar" style="width: 80%; margin: 20px auto;">
-                <div class="progress-fill" style="width: 0%;"></div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // 頁面加載完成後初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('己土奇門系統 v1.1 已加載');
-            
-            // 檢查本地存儲
-            if (typeof(Storage) === "undefined") {
-                alert("警告：您的瀏覽器不支持本地存儲，部分功能可能無法使用。");
-            }
-            
-            // 更新指令計數
-            updateInstructionCount();
-            
-            // 顯示歡迎信息
-            showWelcomeMessage();
-        });
-        
-        // 顯示歡迎信息
-        function showWelcomeMessage() {
-            const lastVisit = localStorage.getItem('lastVisit');
-            const now = new Date().toLocaleDateString();
-            
-            if (!lastVisit || lastVisit !== now) {
-                setTimeout(() => {
-                    showToast('歡迎使用己土奇門足球預測系統 v1.1！', 'info');
-                }, 1000);
-                localStorage.setItem('lastVisit', now);
-            }
-        }
-        
-        // 顯示提示信息
-        function showToast(message, type = 'info') {
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
-                <span>${message}</span>
-            `;
-            
-            // 添加到頁面
-            document.body.appendChild(toast);
-            
-            // 顯示動畫
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 10);
-            
-            // 3秒後移除
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    if (toast.parentNode) {
-                        toast.parentNode.removeChild(toast);
-                    }
-                }, 300);
-            }, 3000);
-        }
-        
-        // 添加CSS動畫
-        const style = document.createElement('style');
-        style.textContent = `
-            .toast {
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                background: white;
-                padding: 12px 20px;
-                border-radius: var(--border-radius);
-                box-shadow: var(--shadow-lg);
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                transform: translateY(100px);
-                opacity: 0;
-                transition: all 0.3s ease;
-                z-index: 1000;
-                max-width: 350px;
-                border-left: 4px solid var(--third-color);
-            }
-            
-            .toast.show {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            
-            .toast-success { border-left-color: var(--success-color); }
-            .toast-warning { border-left-color: var(--warning-color); }
-            .toast-info { border-left-color: var(--info-color); }
-            .toast-danger { border-left-color: var(--danger-color); }
-            
-            .toast i {
-                font-size: 1.2rem;
-            }
-            
-            .toast-success i { color: var(--success-color); }
-            .toast-warning i { color: var(--warning-color); }
-            .toast-info i { color: var(--info-color); }
-            .toast-danger i { color: var(--danger-color); }
-            
-            .progress-bar {
-                height: 8px;
-                background: rgba(34, 40, 49, 0.1);
-                border-radius: 4px;
-                overflow: hidden;
-            }
-            
-            .progress-fill {
-                height: 100%;
-                background: linear-gradient(90deg, var(--third-color), #ff9a3c);
-                border-radius: 4px;
-                transition: width 0.3s ease;
-            }
-            
-            .instruction-stats {
-                display: flex;
-                justify-content: space-between;
-                margin-top: 15px;
-                padding-top: 15px;
-                border-top: 1px solid rgba(255, 255, 255, 0.1);
-                font-size: var(--font-size-sm);
-                color: rgba(255, 255, 255, 0.7);
-            }
-            
-            .modal-actions {
-                display: flex;
-                gap: 10px;
-                margin-top: 20px;
-                justify-content: center;
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // 更新指令計數
-        function updateInstructionCount() {
-            const instructions = document.querySelectorAll('.instruction-item').length;
-            document.getElementById('instruction-count').textContent = instructions;
-            document.getElementById('last-update').textContent = '剛剛';
-        }
-        
-        // 添加指令
-        function addInstruction(command) {
-            const log = document.getElementById('instruction-log');
-            const now = new Date();
-            const timestamp = now.toLocaleTimeString();
-            
-            const item = document.createElement('div');
-            item.className = 'instruction-item';
-            item.innerHTML = `
-                <span class="timestamp">${timestamp}</span>
-                <code>${command}</code>
-            `;
-            
-            log.insertBefore(item, log.firstChild);
-            updateInstructionCount();
-        }
-        
-        // 清除表單
-        function clearForm() {
-            if (confirm('確定要清除所有表單內容嗎？將恢復默認值')) {
-                // 重置為默認值
-                document.getElementById('match-id').value = 'FB3200';
-                document.getElementById('match-time').value = '2026年2月5日 02:00';
-                document.getElementById('home-team').value = '馬德里CFF女足';
-                document.getElementById('away-team').value = '特內里費女足';
-                document.getElementById('competition').value = '女子西班牙盃';
-                
-                document.getElementById('match-status').textContent = '已恢復默認';
-                document.getElementById('match-status').className = 'badge warning';
-                addInstruction('清除表單並恢復默認值');
-                showToast('表單已恢復默認值', 'warning');
-            }
-        }
-        
-        // 清除指令記錄
-        function clearInstructions() {
-            if (confirm('確定要清除所有指令記錄嗎？')) {
-                const log = document.getElementById('instruction-log');
-                log.innerHTML = '';
-                updateInstructionCount();
-                addInstruction('清除所有指令記錄');
-                showToast('指令記錄已清除', 'warning');
-            }
-        }
-        
-        // 顯示加載動畫
-        function showLoading() {
-            document.getElementById('loading-overlay').style.display = 'flex';
-            const progress = document.querySelector('#loading-overlay .progress-fill');
-            let width = 0;
-            const interval = setInterval(() => {
-                if (width >= 100) {
-                    clearInterval(interval);
-                } else {
-                    width += 2;
-                    progress.style.width = width + '%';
-                }
-            }, 50);
-        }
-        
-        // 隱藏加載動畫
-        function hideLoading() {
-            document.getElementById('loading-overlay').style.display = 'none';
-        }
-        
-        // 分析比賽
-        function analyzeMatch() {
-            showLoading();
-            setTimeout(() => {
-                // 基於兌宮多重凶格的分析
-                const predictions = {
-                    homeWin: 65,    // 離宮有利，兌宮多重凶格
-                    draw: 20,       // 值符值使關係
-                    awayWin: 15,    // 兌宮空亡且多重凶格
-                    corners: {
-                        home: 5,    // 景門門迫，角球爭奪激烈
-                        away: 3     // 兌宮空亡，進攻機會少
-                    },
-                    totalGoals: 2.5, // 生門進攻，但有多重阻礙
-                    confidence: 78   // 格局清晰
-                };
-                
-                // 顯示預覽
-                showAnalysisPreview(predictions);
-                hideLoading();
-                document.getElementById('success-modal').style.display = 'flex';
-                addInstruction('奇門AI分析完成 - 基於兌宮多重凶格');
-                
-                // 保存預測數據
-                savePredictionData(predictions);
-            }, 2000);
-        }
-        
-        // 顯示分析預覽
-        function showAnalysisPreview(predictions) {
-            const preview = document.getElementById('analysis-preview');
-            const content = document.getElementById('preview-content');
-            
-            const html = `
-                <div class="prediction-probabilities">
-                    <div class="prob-item">
-                        <div class="prob-value">${predictions.homeWin}%</div>
-                        <div class="prob-label">主勝</div>
-                    </div>
-                    <div class="prob-item">
-                        <div class="prob-value">${predictions.draw}%</div>
-                        <div class="prob-label">和局</div>
-                    </div>
-                    <div class="prob-item">
-                        <div class="prob-value">${predictions.awayWin}%</div>
-                        <div class="prob-label">客勝</div>
-                    </div>
-                </div>
-                <div class="stats-display">
-                    <div class="stat-box">
-                        <div class="stat-label-large">角球數</div>
-                        <div class="stat-value-large">${predictions.corners.home}-${predictions.corners.away}</div>
-                        <div class="stat-detail">主 ${predictions.corners.home} - 客 ${predictions.corners.away}</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-label-large">總入球數</div>
-                        <div class="stat-value-large">${predictions.totalGoals}</div>
-                        <div class="stat-detail">預測總入球數</div>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: 15px; color: var(--second-color);">
-                    <i class="fas fa-lightbulb"></i> 置信度: <strong>${predictions.confidence}%</strong>
-                </div>
-                <div style="margin-top: 15px; padding: 10px; background: rgba(249, 109, 0, 0.05); border-radius: 8px;">
-                    <p style="font-size: 0.9rem; color: var(--second-color);">
-                        <i class="fas fa-exclamation-triangle"></i> 
-                        <strong>關鍵發現：</strong> 兌宮出現多重凶格（日奇被刑、日奇入地、小格），客隊狀態極差
-                    </p>
-                </div>
-            `;
-            
-            content.innerHTML = html;
-            preview.style.display = 'block';
-        }
-        
-        // 保存預測數據
-        function savePredictionData(predictions) {
-            const matchData = {
-                matchId: document.getElementById('match-id').value,
-                matchTime: document.getElementById('match-time').value,
-                homeTeam: document.getElementById('home-team').value,
-                awayTeam: document.getElementById('away-team').value,
-                competition: document.getElementById('competition').value,
-                predictions: predictions,
-                timestamp: new Date().toISOString(),
-                qimenAnalysis: {
-                    兌宮: {
-                        四害: "空亡（深挖到坎宮）",
-                        格局: ["乙+庚：日奇被刑", "乙+壬：日奇入地", "庚+壬：小格（移蕩格）"],
-                        八門組合: "杜+乙：飛來橫禍(訴訟)",
-                        九星: "天芮星",
-                        八神: "太陰"
-                    }
-                }
-            };
-            
-            localStorage.setItem('currentPrediction', JSON.stringify(matchData));
-            console.log('預測數據已保存（含兌宮詳細分析）');
-        }
-        
-        // 保存比賽數據
-        function saveMatchData() {
-            const matchData = {
-                matchId: document.getElementById('match-id').value,
-                matchTime: document.getElementById('match-time').value,
-                homeTeam: document.getElementById('home-team').value,
-                awayTeam: document.getElementById('away-team').value,
-                competition: document.getElementById('competition').value,
-                timestamp: new Date().toISOString(),
-                qimenData: {
-                    兌宮: "多重凶格（空亡、日奇被刑、日奇入地、小格）"
-                }
-            };
-            
-            // 保存到歷史
-            let history = JSON.parse(localStorage.getItem('qimenMatchHistory') || '[]');
-            history.push(matchData);
-            localStorage.setItem('qimenMatchHistory', JSON.stringify(history));
-            
-            showToast('比賽數據已保存', 'success');
-            addInstruction(`保存比賽數據（含兌宮凶格）: ${matchData.matchId}`);
-        }
-        
-        // 複製指令
-        function copyInstructions() {
-            const log = document.getElementById('instruction-log');
-            const commands = Array.from(log.querySelectorAll('code'))
-                .map(code => code.textContent)
-                .join('\n');
-            
-            navigator.clipboard.writeText(commands).then(() => {
-                showToast('所有指令已複製到剪貼板！', 'success');
-            });
-        }
-        
-        // 關閉模態框
-        function closeModal() {
-            document.getElementById('success-modal').style.display = 'none';
-            hideLoading();
-        }
-        
-        // 跳轉到預測頁面
-        function redirectToPrediction() {
-            window.location.href = 'prediction.html';
-        }
-        
-        // 全局函數導出
-        window.analyzeMatch = analyzeMatch;
-        window.saveMatchData = saveMatchData;
-        window.copyInstructions = copyInstructions;
-        window.closeModal = closeModal;
-        window.redirectToPrediction = redirectToPrediction;
-        window.clearForm = clearForm;
-        window.clearInstructions = clearInstructions;
-    </script>
+    <!-- JavaScript文件 -->
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="modules/data-manager.js"></script>
+    <script type="module" src="modules/qimen-analyzer.js"></script>
+    <script type="module" src="modules/ai-engine-v5.js"></script>
+    <script type="module" src="utils/helpers.js"></script>
+    <script type="module" src="app.js"></script>
 </body>
 </html>
