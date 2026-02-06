@@ -3,143 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>甲方己土玄學-AI足球預測系統</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <title>己土玄學-AI足球預測系統 V6.0</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <!-- 系統標題 -->
-        <header class="header">
-            <h1><i class="fas fa-futbol"></i> 甲方己土玄學-AI足球預測系統</h1>
-            <p class="subtitle">V5.1I 賽後驗證優化版 · 實證驅動迭代</p>
-            <div class="version-badge">版本: V5.1I</div>
+        <header class="system-header">
+            <div class="logo-container">
+                <i class="fas fa-yin-yang logo-icon"></i>
+                <div class="logo-text">
+                    <h1>己土玄學-AI足球預測系統</h1>
+                    <p class="version">Version 6.0 - 模組化三維參數體系</p>
+                </div>
+            </div>
+            <div class="status-indicator">
+                <span class="status-dot active"></span>
+                <span class="status-text">AI分析引擎在線</span>
+            </div>
         </header>
 
-        <!-- 角色狀態指示器 -->
-        <div class="role-indicator">
-            <div class="role active" data-role="甲方爸爸">
-                <i class="fas fa-user-tie"></i> 甲方爸爸 (數據輸入)
-            </div>
-            <div class="role" data-role="AI研究員">
-                <i class="fas fa-robot"></i> AI研究員 (系統升級)
-            </div>
-            <div class="role" data-role="小助手">
-                <i class="fas fa-hands-helping"></i> 小助手 (賽後驗證)
-            </div>
-        </div>
+        <!-- 主要導航卡片 -->
+        <main class="dashboard">
+            <div class="card-grid">
+                <!-- 賽前預測 -->
+                <a href="pre-match.html" class="nav-card card-primary">
+                    <div class="card-icon">
+                        <i class="fas fa-crystal-ball"></i>
+                    </div>
+                    <h3>賽前預測</h3>
+                    <p>輸入比賽信息與奇門數據，生成AI分析報告</p>
+                    <div class="card-stats">
+                        <span class="stat">
+                            <i class="fas fa-history"></i>
+                            最新分析: FB3200
+                        </span>
+                    </div>
+                </a>
 
-        <!-- 快速導航 -->
-        <div class="quick-nav">
-            <h2><i class="fas fa-rocket"></i> 快速開始</h2>
-            <div class="nav-grid">
-                <a href="#/match-input" class="nav-card primary">
-                    <i class="fas fa-futbol"></i>
-                    <h3>賽前分析</h3>
-                    <p>甲方爸爸輸入奇門數據</p>
+                <!-- 賽後分析 -->
+                <a href="post-match.html" class="nav-card card-secondary">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>賽後技術分析</h3>
+                    <p>輸入實際賽果，生成驗證報告與參數優化指令</p>
+                    <div class="card-stats">
+                        <span class="stat">
+                            <i class="fas fa-check-circle"></i>
+                            待驗證: 1場
+                        </span>
+                    </div>
                 </a>
-                <a href="#/post-match-input" class="nav-card secondary">
-                    <i class="fas fa-clipboard-check"></i>
-                    <h3>賽後驗證</h3>
-                    <p>小助手輸入實際賽果</p>
+
+                <!-- AI參數應用 -->
+                <a href="ai-params.html" class="nav-card card-accent">
+                    <div class="card-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>AI參數應用</h3>
+                    <p>查看當前參數體系，執行懶人指令包升級</p>
+                    <div class="card-stats">
+                        <span class="stat">
+                            <i class="fas fa-code-branch"></i>
+                            版本: V5.1I
+                        </span>
+                    </div>
                 </a>
-                <a href="#/pre-match-report" class="nav-card success">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>預測報告</h3>
-                    <p>查看AI分析結果</p>
+
+                <!-- 奇門數據庫 -->
+                <a href="qimen-db.html" class="nav-card card-info">
+                    <div class="card-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>奇門數據庫</h3>
+                    <p>奇門格局映射與符號系統查詢</p>
+                    <div class="card-stats">
+                        <span class="stat">
+                            <i class="fas fa-layer-group"></i>
+                            格局: 87種
+                        </span>
+                    </div>
                 </a>
-                <a href="#/history-validation" class="nav-card warning">
-                    <i class="fas fa-history"></i>
+
+                <!-- 歷史驗證 -->
+                <a href="history.html" class="nav-card card-warning">
+                    <div class="card-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
                     <h3>歷史驗證</h3>
-                    <p>準確率統計</p>
+                    <p>技術預測準確度統計與模型評估</p>
+                    <div class="card-stats">
+                        <span class="stat">
+                            <i class="fas fa-percentage"></i>
+                            準確率: 65.2%
+                        </span>
+                    </div>
+                </a>
+
+                <!-- 總結報告 -->
+                <a href="summary.html" class="nav-card card-success">
+                    <div class="card-icon">
+                        <i class="fas fa-flag-checkered"></i>
+                    </div>
+                    <h3>總結報告</h3>
+                    <p>項目成果展示與下一階段目標</p>
+                    <div class="card-stats">
+                        <span class="stat">
+                            <i class="fas fa-calendar-alt"></i>
+                            更新: 2026-02-06
+                        </span>
+                    </div>
                 </a>
             </div>
-        </div>
 
-        <!-- 功能模組導航 -->
-        <nav class="main-nav">
-            <h2><i class="fas fa-th"></i> 功能模組</h2>
-            <div class="nav-menu">
-                <a href="#/match-input" class="nav-item">
-                    <i class="fas fa-keyboard"></i> 賽前輸入
-                </a>
-                <a href="#/pre-match-report" class="nav-item">
-                    <i class="fas fa-file-alt"></i> 賽前報告
-                </a>
-                <a href="#/post-match-input" class="nav-item">
-                    <i class="fas fa-edit"></i> 賽後輸入
-                </a>
-                <a href="#/post-match-report" class="nav-item">
-                    <i class="fas fa-chart-bar"></i> 賽後報告
-                </a>
-                <a href="#/qimen-database" class="nav-item">
-                    <i class="fas fa-database"></i> 奇門數據庫
-                </a>
-                <a href="#/ai-parameters" class="nav-item">
-                    <i class="fas fa-cogs"></i> AI參數
-                </a>
-                <a href="#/history-validation" class="nav-item">
-                    <i class="fas fa-chart-pie"></i> 歷史驗證
-                </a>
-                <a href="#/summary-report" class="nav-item">
-                    <i class="fas fa-flag-checkered"></i> 總結報告
-                </a>
+            <!-- 系統狀態 -->
+            <div class="system-status">
+                <div class="status-card">
+                    <h4><i class="fas fa-sync-alt"></i> 實時系統狀態</h4>
+                    <div class="status-items">
+                        <div class="status-item">
+                            <span class="status-label">AI分析引擎</span>
+                            <span class="status-value success">正常運行</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">數據庫連接</span>
+                            <span class="status-value success">CSV就緒</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">參數版本</span>
+                            <span class="status-value info">V5.1I (優化中)</span>
+                        </div>
+                        <div class="status-item">
+                            <span class="status-label">歷史數據</span>
+                            <span class="status-value">12場比賽</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-actions">
+                    <h4><i class="fas fa-bolt"></i> 快速操作</h4>
+                    <div class="action-buttons">
+                        <button id="quick-analysis" class="btn btn-primary">
+                            <i class="fas fa-play-circle"></i> 開始新分析
+                        </button>
+                        <button id="import-data" class="btn btn-secondary">
+                            <i class="fas fa-file-import"></i> 導入CSV數據
+                        </button>
+                        <button id="export-report" class="btn btn-accent">
+                            <i class="fas fa-file-export"></i> 導出報告
+                        </button>
+                    </div>
+                </div>
             </div>
-        </nav>
 
-        <!-- 動態內容區域 -->
-        <main id="app-content" class="content-area">
-            <!-- 內容由JavaScript動態載入 -->
-            <div class="welcome-message">
-                <h2><i class="fas fa-handshake"></i> 歡迎使用玄學-AI足球預測系統</h2>
-                <p>選擇上方功能開始分析，或使用快速導航進入指定功能。</p>
-                
-                <div class="stats-overview">
-                    <div class="stat-card">
-                        <h3><i class="fas fa-crosshairs"></i> 當前準確率</h3>
-                        <div class="stat-value" id="current-accuracy">67.5%</div>
-                        <p>基於12場歷史數據</p>
+            <!-- 最新消息 -->
+            <div class="news-card">
+                <h4><i class="fas fa-bullhorn"></i> 系統公告</h4>
+                <div class="news-content">
+                    <div class="news-item">
+                        <span class="news-date">2026-02-06</span>
+                        <span class="news-tag new">NEW</span>
+                        <p>系統成功升級至V6.0模組化架構，解決對話上限問題</p>
                     </div>
-                    <div class="stat-card">
-                        <h3><i class="fas fa-futbol"></i> 已分析場次</h3>
-                        <div class="stat-value" id="total-matches">12</div>
-                        <p>持續更新中</p>
+                    <div class="news-item">
+                        <span class="news-date">2026-02-05</span>
+                        <span class="news-tag update">UPDATE</span>
+                        <p>FB3200比賽已加入待分析隊列，奇門數據準備就緒</p>
                     </div>
-                    <div class="stat-card">
-                        <h3><i class="fas fa-sync-alt"></i> 參數版本</h3>
-                        <div class="stat-value" id="current-version">V5.1I</div>
-                        <p>賽後驗證優化版</p>
+                    <div class="news-item">
+                        <span class="news-date">2026-02-03</span>
+                        <span class="news-tag optimize">OPTIMIZE</span>
+                        <p>V5.1I參數體系通過FB3079驗證，準確率提升至67.5%</p>
                     </div>
                 </div>
             </div>
         </main>
 
-        <!-- 系統狀態欄 -->
-        <footer class="footer">
-            <div class="footer-info">
-                <span><i class="fas fa-calendar-alt"></i> 系統時間: <span id="current-time"></span></span>
-                <span><i class="fas fa-database"></i> 數據庫: <span id="db-status">已連接</span></span>
-                <span><i class="fas fa-user"></i> 當前角色: <span id="current-role">甲方爸爸</span></span>
+        <!-- 頁腳 -->
+        <footer class="system-footer">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5><i class="fas fa-building"></i> 甲方己土玄學顧問公司</h5>
+                    <p>建立首個經實證有效的玄學-AI預測足球模型</p>
+                </div>
+                <div class="footer-section">
+                    <h5><i class="fas fa-handshake"></i> AI研究夥伴</h5>
+                    <p>DeepSeek AI玄學研究員 · 專業 · 嚴謹 · 創新</p>
+                </div>
+                <div class="footer-section">
+                    <h5><i class="fas fa-shield-alt"></i> 系統安全</h5>
+                    <p>本地CSV儲存 · 模組化設計 · 實時備份</p>
+                </div>
             </div>
             <div class="copyright">
-                © 2026 甲方己土玄學顧問公司 · AI陰盤奇門足球分析系統
+                <p>© 2026 己土玄學-AI足球預測系統 V6.0 · 最後更新: 2026-02-06 10:30</p>
             </div>
         </footer>
     </div>
 
-    <!-- JavaScript文件 -->
-    <script src="firebase-config.js"></script>
-    <script src="modules/data-manager.js"></script>
-    <script src="modules/qimen-analyzer.js"></script>
-    <script src="modules/ai-engine-v5.js"></script>
-    <script src="modules/report-generator.js"></script>
-    <script src="modules/validator.js"></script>
-    <script src="modules/command-generator.js"></script>
-    <script src="utils/helpers.js"></script>
-    <script src="utils/formatter.js"></script>
-    <script src="utils/calculator.js"></script>
-    <script src="app.js"></script>
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+    <script>
+        // 快速操作按鈕功能
+        document.getElementById('quick-analysis').addEventListener('click', function() {
+            window.location.href = 'pre-match.html';
+        });
+
+        document.getElementById('import-data').addEventListener('click', function() {
+            // 創建文件輸入元素
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.csv';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    alert(`已選擇文件: ${file.name}\n數據導入功能將在後續版本實現`);
+                }
+            };
+            input.click();
+        });
+
+        document.getElementById('export-report').addEventListener('click', function() {
+            const exportTime = new Date().toLocaleString('zh-Hant');
+            alert(`報告導出功能準備就緒\n將生成時間戳: ${exportTime}\n導出功能將在後續版本實現`);
+        });
+    </script>
 </body>
 </html>
