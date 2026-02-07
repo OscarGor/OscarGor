@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一鍵升級工作流 - 己土玄學AI系統</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .workflow-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .step-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            border-left: 5px solid var(--secondary-color);
+            position: relative;
+            counter-increment: step-counter;
+        }
+        
+        .step-card::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -25px;
+            top: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .step-icon {
+            font-size: 32px;
+            color: var(--secondary-color);
+        }
+        
+        .step-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin: 0;
+        }
+        
+        .step-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .step-action {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+        }
+        
+        .step-code {
+            background: #2c3e50;
+            color: white;
+            border-radius: 8px;
+            padding: 25px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow-x: auto;
+        }
+        
+        .btn-workflow {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-top: 15px;
+        }
+        
+        .btn-workflow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.3);
+        }
+        
+        .auto-process-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .auto-process-btn {
+            background: linear-gradient(135deg, var(--success-color) 0%, #229954 100%);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: var(--border-radius);
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .auto-process-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(39, 174, 96, 0.3);
+        }
+        
+        .copy-instructions {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 40px;
+            border: 2px solid var(--border-color);
+        }
+        
+        .instructions-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .instructions-text {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 返回導航 -->
+        <div class="back-nav">
+            <a href="index.html" class="back-link">
+                <i class="fas fa-arrow-left"></i>
+                返回主儀表板
+            </a>
+            <span class="nav-title">一鍵升級工作流系統</span>
+        </div>
+
+        <!-- 標題 -->
+        <header class="page-header">
+            <h1><i class="fas fa-sync-alt"></i> 己土系統升級工作流</h1>
+            <p class="subtitle">完全網頁操作 → 自動生成更新包 → DeepSeek升級 → 系統自動更新</p>
+        </header>
+
+        <!-- 工作流步驟 -->
+        <div class="workflow-steps">
+            <!-- 步驟1: 賽前預測 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <i class="fas fa-crystal-ball step-icon"></i>
+                    <h2 class="step-title">步驟1: 賽前預測</h2>
+                </div>
+                <p>在賽前預測頁面輸入比賽信息和奇門數據，系統自動生成預測報告。</p>
+                
+                <div class="step-content">
+                    <div class="step-action">
+                        <h3><i class="fas fa-mouse-pointer"></i> 操作指引</h3>
+                        <ol>
+                            <li>打開「賽前預測」頁面</li>
+                            <li>填寫比賽基本信息</li>
+                            <li>粘貼奇門遁甲數據</li>
+                            <li>點擊「生成AI分析報告」</li>
+                            <li>系統自動保存到LocalStorage</li>
+                        </ol>
+                        <a href="pre-match.html" class="btn-workflow">
+                            <i class="fas fa-external-link-alt"></i> 前往賽前預測
+                        </a>
+                    </div>
+                    
+                    <div class="step-code">
+                        <h4><i class="fas fa-code"></i> 系統自動執行</h4>
+                        <pre>
+// 自動保存預測數據
+const predictionData = {
+    matchId: document.getElementById('matchId').value,
+    homeTeam: document.getElementById('homeTeam').value,
+    // ...其他數據
+};
+
+webDataManager.addMatch(predictionData);
+console.log('預測數據已保存');
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 步驟2: 賽後驗證 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <i class="fas fa-chart-line step-icon"></i>
+                    <h2 class="step-title">步驟2: 賽後驗證</h2>
+                </div>
+                <p>比賽結束後，在賽後分析頁面輸入實際賽果，系統自動生成驗證報告。</p>
+                
+                <div class="step-content">
+                    <div class="step-action">
+                        <h3><i class="fas fa-mouse-pointer"></i> 操作指引</h3>
+                        <ol>
+                            <li>打開「賽後技術分析」頁面</li>
+                            <li>選擇待驗證的比賽</li>
+                            <li>輸入實際賽果和技術數據</li>
+                            <li>點擊「提交賽果」</li>
+                            <li>系統自動生成懶人指令包</li>
+                        </ol>
+                        <a href="post-match.html" class="btn-workflow">
+                            <i class="fas fa-external-link-alt"></i> 前往賽後分析
+                        </a>
+                    </div>
+                    
+                    <div class="step-code">
+                        <h4><i class="fas fa-code"></i> 自動生成指令包</h4>
+                        <pre>
+// 生成懶人指令包
+const lazyPackage = webDataManager.generateLazyPackage(
+    matchId, 
+    prediction, 
+    actualResult, 
+    accuracy
+);
+
+// 導出更新包
+const updatePackage = generateDeepSeekUpdatePackage(lazyPackage);
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 步驟3: 生成更新包 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <i class="fas fa-file-export step-icon"></i>
+                    <h2 class="step-title">步驟3: 生成更新包</h2>
+                </div>
+                <p>系統自動生成包含所有數據和優化建議的JSON更新包。</p>
+                
+                <div class="step-content">
+                    <div class="step-action">
+                        <h3><i class="fas fa-mouse-pointer"></i> 操作指引</h3>
+                        <ol>
+                            <li>系統自動生成JSON更新包</li>
+                            <li>點擊「下載更新包」按鈕</li>
+                            <li>保存JSON文件到本地</li>
+                            <li>文件包含所有系統數據和優化指令</li>
+                            <li>準備交給DeepSeek處理</li>
+                        </ol>
+                        <button id="generateUpdatePackage" class="btn-workflow">
+                            <i class="fas fa-download"></i> 生成更新包
+                        </button>
+                    </div>
+                    
+                    <div class="step-code">
+                        <h4><i class="fas fa-code"></i> 更新包結構</h4>
+                        <pre>
+{
+  "type": "system_update",
+  "version": "V6.1",
+  "matchId": "FB3200",
+  "issues": [...],
+  "recommendations": [...],
+  "codeUpdates": [...],
+  "fullData": {
+    "matches": [...],
+    "results": [...],
+    "aiParams": [...],
+    "stats": [...]
+  }
+}
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 步驟4: DeepSeek升級 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <i class="fas fa-robot step-icon"></i>
+                    <h2 class="step-title">步驟4: DeepSeek升級</h2>
+                </div>
+                <p>將更新包交給DeepSeek，AI自動修改代碼文件並返回升級版本。</p>
+                
+                <div class="step-content">
+                    <div class="step-action">
+                        <h3><i class="fas fa-mouse-pointer"></i> 操作指引</h3>
+                        <ol>
+                            <li>將下載的JSON文件發送給DeepSeek</li>
+                            <li>使用下面的指令模板</li>
+                            <li>DeepSeek分析數據並修改代碼</li>
+                            <li>AI返回所有更新後的文件</li>
+                            <li>下載升級版系統文件</li>
+                        </ol>
+                        <button id="copyInstructions" class="btn-workflow">
+                            <i class="fas fa-copy"></i> 複製DeepSeek指令
+                        </button>
+                    </div>
+                    
+                    <div class="step-code">
+                        <h4><i class="fas fa-code"></i> DeepSeek指令模板</h4>
+                        <pre>
+作為AI玄學研究員，請根據提供的更新包升級系統：
+
+1. 分析更新包中的數據和建議
+2. 修改以下文件：
+   - ai_parameters.csv (更新參數)
+   - qimen-analyser.js (優化分析邏輯)
+   - prediction-engine.js (改進預測算法)
+   - 其他相關文件
+3. 返回所有更新後的文件
+4. 說明具體改動和預期效果
+
+請開始處理更新包。
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 步驟5: 系統更新 -->
+            <div class="step-card">
+                <div class="step-header">
+                    <i class="fas fa-sync step-icon"></i>
+                    <h2 class="step-title">步驟5: 系統更新</h2>
+                </div>
+                <p>將DeepSeek返回的更新文件替換現有文件，完成系統升級。</p>
+                
+                <div class="step-content">
+                    <div class="step-action">
+                        <h3><i class="fas fa-mouse-pointer"></i> 操作指引</h3>
+                        <ol>
+                            <li>下載DeepSeek返回的文件</li>
+                            <li>備份當前系統文件</li>
+                            <li>替換現有文件</li>
+                            <li>刷新網頁查看更新</li>
+                            <li>驗證新參數效果</li>
+                        </ol>
+                        <button id="simulateUpdate" class="btn-workflow">
+                            <i class="fas fa-play-circle"></i> 模擬系統更新
+                        </button>
+                    </div>
+                    
+                    <div class="step-code">
+                        <h4><i class="fas fa-code"></i> 更新後驗證</h4>
+                        <pre>
+// 更新後驗證新參數
+const newAccuracy = testNewParameters();
+console.log(`新參數準確度: ${newAccuracy}%`);
+
+// 更新系統版本
+systemUtils.updateSystemStats({
+    version: 'V6.1',
+    lastUpdate: new Date().toISOString()
+});
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 自動處理FB3200 -->
+        <div class="auto-process-section">
+            <h2><i class="fas fa-bolt"></i> 一鍵處理FB3200賽果</h2>
+            <p>如果您有FB3200的賽果，可以點擊此按鈕自動處理整個流程</p>
+            
+            <button id="autoProcessFB3200" class="auto-process-btn">
+                <i class="fas fa-magic"></i> 自動處理FB3200完整流程
+            </button>
+            
+            <p style="margin-top: 15px; font-size: 14px; color: var(--text-light);">
+                <i class="fas fa-info-circle"></i> 
+                將自動完成：驗證賽果 → 計算準確度 → 生成更新包 → 準備DeepSeek指令
+            </p>
+        </div>
+        
+        <!-- DeepSeek指令複製區 -->
+        <div class="copy-instructions">
+            <h3 class="instructions-title">
+                <i class="fas fa-terminal"></i> 複製給DeepSeek的完整指令
+            </h3>
+            <div class="instructions-text" id="deepseekInstructions">
+作為AI玄學研究員，請執行以下完整升級工作流：
+
+1. 接收更新包JSON文件
+2. 分析FB3200賽果驗證結果：
+   - 比賽：馬德里CFF女足 0:1 特內里費女足
+   - 預測準確度：60%
+   - 主要問題：黃牌預測過高、控球率方向錯誤
+
+3. 根據懶人指令包更新以下文件：
+
+【ai_parameters.csv】
+需要更新的參數：
+- TEC001 (yellowCardBase): 2 → 1.5 (黃牌基礎值下調)
+- TEC005 (siMenPossessionImpact): -0.15 → -0.10 (減弱死門門迫影響)
+- EFF001 (siHaiFirstHalf): -0.20 → -0.18 (微調四害影響)
+- TEC008 (valueStarOffenseCount): 0.25 → 0.23 (微調值符星影響)
+
+【qimen-analyser.js】
+需要優化的函數：
+- calculatePalaceEnergy(): 調整空亡和死門的影響權重
+- analyzeEffectivenessDimension(): 優化四害影響計算邏輯
+- generateTechnicalImplications(): 改進黃牌預測算法
+
+【prediction-engine.js】
+需要改進的算法：
+- predictCards(): 基於新參數調整黃牌預測
+- predictPossession(): 改進控球率預測算法
+- calculateProbability(): 優化概率計算模型
+
+4. 更新系統版本號為V6.1
+5. 返回所有修改後的文件
+6. 說明具體改動和預期改進效果
+
+請開始處理。
+            </div>
+            <button id="copyFullInstructions" class="btn-workflow" style="margin-top: 15px;">
+                <i class="fas fa-copy"></i> 複製完整指令
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+    <script>
+        // 工作流頁面邏輯
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('升級工作流頁面加載完成');
+            
+            // 事件監聽
+            document.getElementById('generateUpdatePackage').addEventListener('click', generateUpdatePackage);
+            document.getElementById('copyInstructions').addEventListener('click', copyDeepSeekInstructions);
+            document.getElementById('autoProcessFB3200').addEventListener('click', autoProcessFB3200Flow);
+            document.getElementById('copyFullInstructions').addEventListener('click', copyFullInstructions);
+            document.getElementById('simulateUpdate').addEventListener('click', simulateSystemUpdate);
+            
+            // 檢查是否有FB3200數據
+            checkFB3200Data();
+        });
+        
+        // 檢查FB3200數據
+        function checkFB3200Data() {
+            const matches = window.webDataManager?.get('matches') || [];
+            const fb3200 = matches.find(m => m.matchId === 'FB3200');
+            
+            if (fb3200) {
+                console.log('FB3200數據已存在:', fb3200.status);
+            }
+        }
+        
+        // 生成更新包
+        function generateUpdatePackage() {
+            try {
+                // 導出所有數據
+                const allData = webDataManager.exportAllData();
+                
+                // 創建更新包
+                const updatePackage = {
+                    type: 'system_update',
+                    version: 'V6.1',
+                    timestamp: new Date().toISOString(),
+                    dataSummary: {
+                        totalMatches: allData.matches?.length || 0,
+                        completedMatches: allData.matches?.filter(m => m.status === 'completed').length || 0,
+                        averageAccuracy: allData.stats?.find(s => s.statId === 'STAT002')?.value || '0%'
+                    },
+                    recommendations: generateRecommendationsFromData(allData),
+                    fullData: allData
+                };
+                
+                // 下載JSON文件
+                const jsonStr = JSON.stringify(updatePackage, null, 2);
+                downloadJSON(jsonStr, `己土系統更新包_${new Date().toISOString().slice(0, 10)}.json`);
+                
+                systemUtils.showAlert('成功', '更新包已生成並下載', 'success');
+                
+            } catch (error) {
+                console.error('生成更新包失敗:', error);
+                systemUtils.showAlert('錯誤', '生成更新包時出錯', 'error');
+            }
+        }
+        
+        // 從數據生成建議
+        function generateRecommendationsFromData(data) {
+            const recommendations = [];
+            
+            // 分析最近比賽
+            const recentMatches = data.matches?.filter(m => m.status === 'completed').slice(-3) || [];
+            
+            recentMatches.forEach(match => {
+                const result = data.results?.find(r => r.matchId === match.matchId);
+                if (result && parseFloat(result.accuracy) < 70) {
+                    recommendations.push({
+                        matchId: match.matchId,
+                        accuracy: result.accuracy,
+                        suggestion: `需要優化 ${match.matchId} 的預測算法`
+                    });
+                }
+            });
+            
+            return recommendations;
+        }
+        
+        // 下載JSON文件
+        function downloadJSON(jsonStr, filename) {
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+        
+        // 複製DeepSeek指令
+        function copyDeepSeekInstructions() {
+            const instructions = document.getElementById('deepseekInstructions').textContent;
+            navigator.clipboard.writeText(instructions)
+                .then(() => {
+                    systemUtils.showAlert('複製成功', 'DeepSeek指令已複製到剪貼板', 'success');
+                })
+                .catch(err => {
+                    console.error('複製失敗:', err);
+                    systemUtils.showAlert('複製失敗', '請手動複製指令', 'error');
+                });
+        }
+        
+        // 自動處理FB3200完整流程
+        function autoProcessFB3200Flow() {
+            // 打開post-match.html並自動處理
+            window.open('post-match.html?auto=fb3200', '_blank');
+            
+            systemUtils.showAlert('開始處理', '已打開FB3200自動處理流程', 'info');
+        }
+        
+        // 複製完整指令
+        function copyFullInstructions() {
+            const fullInstructions = `作為AI玄學研究員，請根據以下工作流升級己土玄學-AI足球預測系統：
+
+【工作流程】
+1. 接收用戶提供的更新包JSON文件
+2. 分析賽果驗證數據和懶人指令包
+3. 修改以下核心文件：
+   
+   A. ai_parameters.csv
+      - 更新黃牌基礎值 (TEC001)
+      - 調整死門門迫影響 (TEC005)
+      - 優化四害影響參數 (EFF001)
+      - 微調值符星影響 (TEC008)
+   
+   B. qimen-analyser.js
+      - 優化calculatePalaceEnergy()函數
+      - 改進analyzeEffectivenessDimension()邏輯
+      - 增強generateTechnicalImplications()算法
+   
+   C. prediction-engine.js
+      - 改進黃牌預測算法 (predictCards())
+      - 優化控球率預測 (predictPossession())
+      - 增強概率計算模型 (calculateProbability())
+   
+   D. 其他相關文件
+      - 更新system.js中的統計函數
+      - 優化各HTML頁面的顯示邏輯
+
+4. 更新系統版本號至V6.1
+5. 測試新參數在歷史數據上的表現
+6. 返回所有修改後的文件
+7. 提供改動說明和預期效果
+
+【預期改進】
+- 黃牌預測準確度提升5-10%
+- 控球率預測方向正確率提升
+- 整體系統準確度達到67-70%
+- 算法穩定性和一致性改善
+
+請開始處理更新包數據並返回升級後的系統文件。`;
+            
+            navigator.clipboard.writeText(fullInstructions)
+                .then(() => {
+                    systemUtils.showAlert('複製成功', '完整升級指令已複製', 'success');
+                })
+                .catch(err => {
+                    console.error('複製失敗:', err);
+                });
+        }
+        
+        // 模擬系統更新
+        function simulateSystemUpdate() {
+            systemUtils.showAlert('模擬更新', '正在模擬系統更新過程...', 'info');
+            
+            // 模擬更新過程
+            setTimeout(() => {
+                const simulatedResult = {
+                    updatedFiles: [
+                        'ai_parameters.csv',
+                        'qimen-analyser.js',
+                        'prediction-engine.js',
+                        'script.js'
+                    ],
+                    newAccuracy: '68.5%',
+                    improvements: [
+                        '黃牌算法優化完成',
+                        '控球率預測改進',
+                        '四害影響重新校準'
+                    ]
+                };
+                
+                systemUtils.showAlert('模擬完成', 
+                    `系統更新模擬完成\n新準確度: ${simulatedResult.newAccuracy}\n更新文件: ${simulatedResult.updatedFiles.length}個`, 
+                    'success');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

@@ -1284,6 +1284,182 @@ ${report.lazyPackage.code}`;
             
             systemUtils.showAlert('範例載入', '已載入FB3200示例數據', 'info');
         }
+
+// 在現有JavaScript末尾添加以下代碼
+
+// 自動處理FB3200賽果
+function autoProcessFB3200() {
+    // 檢查URL參數或自動檢測
+    const urlParams = new URLSearchParams(window.location.search);
+    const autoProcess = urlParams.get('auto') === 'fb3200';
+    
+    if (autoProcess) {
+        // 自動填入FB3200賽果
+        const resultData = {
+            halfHomeScore: 0,
+            halfAwayScore: 1,
+            fullHomeScore: 0,
+            fullAwayScore: 1,
+            halfCorners: '5 (4:1)',
+            fullCorners: '5 (4:1)',
+            techniqueData: `124進攻73
+0黃牌1
+4射正2
+0紅牌0
+53危險進攻25
+5射斜4
+65控球率35
+7角球3
+0點球0
+4被擋掉射門2`
+        };
+        
+        // 自動選擇FB3200比賽
+        const match = webDataManager.get('matches').find(m => m.matchId === 'FB3200');
+        if (match) {
+            window.selectedMatch = match;
+            selectMatch(match);
+            
+            // 自動填入表單
+            document.getElementById('halfHomeScore').value = resultData.halfHomeScore;
+            document.getElementById('halfAwayScore').value = resultData.halfAwayScore;
+            document.getElementById('fullHomeScore').value = resultData.fullHomeScore;
+            document.getElementById('fullAwayScore').value = resultData.fullAwayScore;
+            document.getElementById('cornerData').value = resultData.fullCorners;
+            document.getElementById('techniqueData').value = resultData.techniqueData;
+            
+            // 自動提交
+            setTimeout(() => {
+                document.getElementById('submitResults').click();
+            }, 1000);
+        }
+    }
+}
+
+// 修改submitResults函數以使用webDataManager
+async function submitResults() {
+    if (!window.selectedMatch) {
+        systemUtils.showAlert('錯誤', '請先選擇比賽', 'error');
+        return;
+    }
+    
+    const halfHomeScore = parseInt(document.getElementById('halfHomeScore').value);
+    const halfAwayScore = parseInt(document.getElementById('halfAwayScore').value);
+    const fullHomeScore = parseInt(document.getElementById('fullHomeScore').value);
+    const fullAwayScore = parseInt(document.getElementById('fullAwayScore').value);
+    
+    if (isNaN(halfHomeScore) || isNaN(halfAwayScore) || 
+        isNaN(fullHomeScore) || isNaN(fullAwayScore)) {
+        systemUtils.showAlert('錯誤', '請輸入有效的比分', 'error');
+        return;
+    }
+    
+    // 顯示加載動畫
+    document.getElementById('loadingOverlay').style.display = 'flex';
+    
+    try {
+        // 使用webDataManager處理結果
+        const matchId = window.selectedMatch.matchId;
+        const prediction = parsePrediction(window.selectedMatch.prediction);
+        
+        const actual = {
+            matchId,
+            halfScore: `${halfHomeScore}:${halfAwayScore}`,
+            fullScore: `${fullHomeScore}:${fullAwayScore}`,
+            corners: document.getElementById('cornerData').value,
+            cards: extractCardsFromTechnique(document.getElementById('techniqueData').value),
+            possession: extractPossessionFromTechnique(document.getElementById('techniqueData').value)
+        };
+        
+        // 計算準確度
+        const accuracy = calculateAccuracy(prediction, actual);
+        
+        // 保存結果到LocalStorage
+        webDataManager.updateResult(matchId, {
+            matchId,
+            homeScore: fullHomeScore,
+            awayScore: fullAwayScore,
+            halfHomeScore,
+            halfAwayScore,
+            halfCorners: actual.corners.split(' ')[0],
+            fullCorners: actual.corners.split(' ')[0],
+            techniqueData: document.getElementById('techniqueData').value,
+            verificationTime: new Date().toISOString(),
+            accuracy
+        });
+        
+        // 生成懶人指令包
+        const lazyPackage = webDataManager.generateLazyPackage(matchId, prediction, actual, accuracy);
+        
+        // 顯示結果
+        displayVerificationResults({
+            matchId,
+            prediction,
+            results: actual,
+            verification: { accuracy },
+            lazyPackage
+        });
+        
+        // 導出更新包
+        const updatePackage = generateDeepSeekUpdatePackage(lazyPackage);
+        
+        // 顯示下載按鈕
+        showUpdatePackageDownload(updatePackage);
+        
+        systemUtils.showAlert('處理完成', '已生成懶人指令包和更新包', 'success');
+        
+    } catch (error) {
+        console.error('處理賽果時出錯:', error);
+        systemUtils.showAlert('處理錯誤', '處理賽果時出現錯誤', 'error');
+    } finally {
+        document.getElementById('loadingOverlay').style.display = 'none';
+    }
+}
+
+// 生成DeepSeek更新包
+function generateDeepSeekUpdatePackage(lazyPackage) {
+    const updatePackage = {
+        type: 'system_update',
+        version: 'V6.1',
+        timestamp: new Date().toISOString(),
+        matchId: lazyPackage.matchId,
+        issues: lazyPackage.issues,
+        recommendations: lazyPackage.recommendations,
+        codeUpdates: lazyPackage.codeUpdates,
+        fullData: webDataManager.exportAllData()
+    };
+    
+    return updatePackage;
+}
+
+// 顯示更新包下載
+function showUpdatePackageDownload(updatePackage) {
+    const jsonStr = JSON.stringify(updatePackage, null, 2);
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    
+    const downloadBtn = document.createElement('a');
+    downloadBtn.href = url;
+    downloadBtn.download = `己土系統更新包_${updatePackage.matchId}_${new Date().toISOString().slice(0, 10)}.json`;
+    downloadBtn.className = 'btn btn-success';
+    downloadBtn.innerHTML = '<i class="fas fa-download"></i> 下載更新包給DeepSeek';
+    downloadBtn.style.marginTop = '20px';
+    
+    document.getElementById('verificationResults').appendChild(downloadBtn);
+    
+    // 也顯示JSON內容供複製
+    const jsonDisplay = document.createElement('div');
+    jsonDisplay.className = 'code-block';
+    jsonDisplay.innerHTML = `<pre>${jsonStr}</pre>`;
+    jsonDisplay.style.marginTop = '20px';
+    
+    document.getElementById('verificationResults').appendChild(jsonDisplay);
+}
+
+// 頁面加載時自動處理
+document.addEventListener('DOMContentLoaded', function() {
+    autoProcessFB3200();
+});
     </script>
 </body>
 </html>
