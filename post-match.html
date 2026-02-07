@@ -739,6 +739,9 @@
                 <button id="newVerification" class="btn btn-accent">
                     <i class="fas fa-redo"></i> 新驗證
                 </button>
+                <button id="downloadUpdatePackage" class="btn btn-warning" style="display: none;">
+                    <i class="fas fa-download"></i> 下載更新包給DeepSeek
+                </button>
             </div>
         </div>
 
@@ -765,43 +768,48 @@
             document.getElementById('copyCode').addEventListener('click', copyLazyCode);
             document.getElementById('applyUpdates').addEventListener('click', applyUpdates);
             document.getElementById('newVerification').addEventListener('click', newVerification);
+            document.getElementById('downloadUpdatePackage').addEventListener('click', downloadUpdatePackage);
             
-            // 示例數據（測試用）
-            if (window.location.search.includes('example=1')) {
-                loadExampleData();
-            }
+            // 檢查URL參數
+            checkUrlParameters();
         });
+        
+        // 檢查URL參數
+        function checkUrlParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const autoProcess = urlParams.get('auto');
+            
+            if (autoProcess === 'fb3200') {
+                setTimeout(() => {
+                    autoProcessFB3200();
+                }, 1000);
+            }
+        }
         
         // 載入待驗證比賽
         async function loadPendingMatches() {
             try {
-                // 模擬載入數據
-                const matches = [
-                    {
-                        matchId: 'FB3200',
-                        homeTeam: '馬德里CFF女足',
-                        awayTeam: '特內里費女足',
-                        matchTime: '2026-02-05 02:00:00',
-                        status: 'pending',
-                        prediction: '客隊小勝|62|4-7個|3-5張|48%:52%'
-                    }
-                ];
+                // 從webDataManager獲取數據
+                const matches = webDataManager ? webDataManager.get('matches') : [];
+                
+                // 過濾出待驗證的比賽
+                const pendingMatches = matches.filter(match => match.status === 'pending');
                 
                 const matchGrid = document.getElementById('matchGrid');
                 matchGrid.innerHTML = '';
                 
-                if (matches.length === 0) {
+                if (pendingMatches.length === 0) {
                     document.getElementById('noMatches').style.display = 'block';
                     return;
                 }
                 
-                matches.forEach(match => {
+                pendingMatches.forEach(match => {
                     const matchCard = document.createElement('div');
                     matchCard.className = `match-card ${match.status}`;
                     matchCard.dataset.matchId = match.matchId;
                     matchCard.dataset.matchData = JSON.stringify(match);
                     
-                    const predictionParts = match.prediction.split('|');
+                    const predictionParts = match.prediction ? match.prediction.split('|') : ['', '', '', '', ''];
                     
                     matchCard.innerHTML = `
                         <div class="match-id">
@@ -813,7 +821,7 @@
                         <div class="match-teams">${match.homeTeam} vs ${match.awayTeam}</div>
                         <div class="match-time">${match.matchTime}</div>
                         <div class="match-prediction">
-                            <small>預測: ${predictionParts[0]} (${predictionParts[1]}%)</small>
+                            <small>預測: ${predictionParts[0] || '無預測'} (${predictionParts[1] || '0'}%)</small>
                         </div>
                     `;
                     
@@ -839,7 +847,9 @@
             
             // 添加選中狀態
             const selectedCard = document.querySelector(`[data-match-id="${match.matchId}"]`);
-            selectedCard.classList.add('selected');
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+            }
             
             // 顯示選中比賽信息
             document.getElementById('selectedMatchInfo').style.display = 'block';
@@ -877,165 +887,268 @@
             document.getElementById('loadingOverlay').style.display = 'flex';
             
             try {
-                // 模擬處理時間
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                // 使用webDataManager處理結果
+                const matchId = window.selectedMatch.matchId;
+                const prediction = parsePrediction(window.selectedMatch.prediction);
                 
-                // 生成驗證報告
-                const verificationReport = generateVerificationReport(
-                    window.selectedMatch,
-                    {
-                        halfHomeScore,
-                        halfAwayScore,
-                        fullHomeScore,
-                        fullAwayScore,
-                        cornerData: document.getElementById('cornerData').value,
-                        techniqueData: document.getElementById('techniqueData').value
-                    }
-                );
+                const actual = {
+                    matchId,
+                    outcome: getOutcomeFromScore(fullHomeScore, fullAwayScore),
+                    halfScore: `${halfHomeScore}:${halfAwayScore}`,
+                    fullScore: `${fullHomeScore}:${fullAwayScore}`,
+                    corners: document.getElementById('cornerData').value,
+                    cards: extractCardsFromTechnique(document.getElementById('techniqueData').value),
+                    possession: extractPossessionFromTechnique(document.getElementById('techniqueData').value)
+                };
                 
-                // 顯示驗證結果
-                displayVerificationResults(verificationReport);
-                document.getElementById('verificationResults').style.display = 'block';
+                // 計算準確度
+                const accuracy = calculateAccuracy(prediction, actual);
                 
-                // 滾動到結果區域
-                document.getElementById('verificationResults').scrollIntoView({ behavior: 'smooth' });
+                // 保存結果到LocalStorage
+                webDataManager.updateResult(matchId, {
+                    matchId,
+                    homeScore: fullHomeScore,
+                    awayScore: fullAwayScore,
+                    halfHomeScore,
+                    halfAwayScore,
+                    halfCorners: extractCornerCount(actual.corners),
+                    fullCorners: extractCornerCount(actual.corners),
+                    techniqueData: document.getElementById('techniqueData').value,
+                    verificationTime: new Date().toISOString(),
+                    accuracy
+                });
                 
-                systemUtils.showAlert('驗證完成', '已生成驗證報告與優化指令包', 'success');
+                // 生成懶人指令包
+                const lazyPackage = webDataManager.generateLazyPackage(matchId, prediction, actual, accuracy);
+                
+                // 顯示結果
+                displayVerificationResults({
+                    matchId,
+                    prediction,
+                    results: actual,
+                    verification: { 
+                        accuracy,
+                        isDirectionCorrect: checkDirectionCorrect(prediction.outcome, actual.outcome),
+                        isCornersCorrect: checkCornersCorrect(prediction.corners, actual.corners),
+                        isCardsCorrect: checkCardsCorrect(prediction.cards, actual.cards),
+                        isPossessionCorrect: checkPossessionCorrect(prediction.possession, actual.possession)
+                    },
+                    lazyPackage
+                });
+                
+                // 顯示下載更新包按鈕
+                document.getElementById('downloadUpdatePackage').style.display = 'block';
+                
+                // 保存更新包到全局變量
+                window.currentUpdatePackage = generateDeepSeekUpdatePackage(lazyPackage);
+                
+                systemUtils.showAlert('處理完成', `已生成驗證報告，準確度: ${accuracy}%`, 'success');
                 
             } catch (error) {
-                console.error('生成驗證報告時出錯:', error);
-                systemUtils.showAlert('驗證錯誤', '生成報告時出現錯誤', 'error');
+                console.error('處理賽果時出錯:', error);
+                systemUtils.showAlert('處理錯誤', '處理賽果時出現錯誤', 'error');
             } finally {
-                // 隱藏加載動畫
                 document.getElementById('loadingOverlay').style.display = 'none';
             }
         }
         
-        // 生成驗證報告
-        function generateVerificationReport(match, results) {
-            const predictionParts = match.prediction.split('|');
+        // 解析預測字符串
+        function parsePrediction(predictionStr) {
+            if (!predictionStr) {
+                return {
+                    outcome: '',
+                    probability: 0,
+                    corners: '',
+                    cards: '',
+                    possession: ''
+                };
+            }
             
-            // 解析預測數據
-            const prediction = {
-                result: predictionParts[0],
-                probability: parseInt(predictionParts[1]),
-                corners: predictionParts[2],
-                cards: predictionParts[3],
-                possession: predictionParts[4]
-            };
-            
-            // 解析角球預測
-            const cornerRange = prediction.corners.replace('個', '').split('-').map(n => parseInt(n));
-            const actualCorners = parseInt(results.cornerData.split(' ')[0]) || 5;
-            
-            // 判斷預測準確度
-            const isDirectionCorrect = checkDirectionCorrect(prediction.result, results.fullHomeScore, results.fullAwayScore);
-            const isScoreCorrect = checkScoreCorrect(prediction.result, results.fullHomeScore, results.fullAwayScore);
-            const isCornersCorrect = actualCorners >= cornerRange[0] && actualCorners <= cornerRange[1];
-            
-            // 計算準確度分數
-            let accuracyScore = 0;
-            if (isDirectionCorrect) accuracyScore += 40;
-            if (isScoreCorrect) accuracyScore += 30;
-            if (isCornersCorrect) accuracyScore += 20;
-            
-            // 生成懶人指令包
-            const lazyPackage = generateLazyPackage(match, prediction, results, {
-                isDirectionCorrect,
-                isScoreCorrect,
-                isCornersCorrect,
-                accuracyScore
-            });
-            
+            const parts = predictionStr.split('|');
             return {
-                matchId: match.matchId,
-                prediction,
-                results,
-                verification: {
-                    isDirectionCorrect,
-                    isScoreCorrect,
-                    isCornersCorrect,
-                    accuracyScore,
-                    overallAccuracy: Math.round(accuracyScore)
-                },
-                lazyPackage
+                outcome: parts[0] || '',
+                probability: parseInt(parts[1]) || 0,
+                corners: parts[2] || '',
+                cards: parts[3] || '',
+                possession: parts[4] || ''
             };
+        }
+        
+        // 從技術分析數據提取黃牌數
+        function extractCardsFromTechnique(techniqueData) {
+            if (!techniqueData) return '0';
+            
+            const lines = techniqueData.split('\n');
+            for (const line of lines) {
+                if (line.includes('黃牌')) {
+                    const parts = line.split(':');
+                    if (parts.length === 2) {
+                        const cards = parts[1].split('-');
+                        if (cards.length === 2) {
+                            return String(parseInt(cards[0]) + parseInt(cards[1]));
+                        }
+                    }
+                }
+            }
+            return '0';
+        }
+        
+        // 從技術分析數據提取控球率
+        function extractPossessionFromTechnique(techniqueData) {
+            if (!techniqueData) return '50%:50%';
+            
+            const lines = techniqueData.split('\n');
+            for (const line of lines) {
+                if (line.includes('控球率')) {
+                    const parts = line.split(':');
+                    if (parts.length === 2) {
+                        const possession = parts[1].split('-');
+                        if (possession.length === 2) {
+                            return `${possession[0]}%:${possession[1]}%`;
+                        }
+                    }
+                }
+            }
+            return '50%:50%';
+        }
+        
+        // 從角球字符串提取數量
+        function extractCornerCount(cornerStr) {
+            if (!cornerStr) return '0';
+            
+            const match = cornerStr.match(/\d+/);
+            return match ? match[0] : '0';
+        }
+        
+        // 根據比分判斷賽果
+        function getOutcomeFromScore(homeScore, awayScore) {
+            if (homeScore > awayScore) {
+                return '主隊勝';
+            } else if (homeScore < awayScore) {
+                return '客隊勝';
+            } else {
+                return '平局';
+            }
+        }
+        
+        // 計算準確度
+        function calculateAccuracy(prediction, actual) {
+            let score = 0;
+            
+            // 賽果方向準確度 (40%)
+            const directionCorrect = checkDirectionCorrect(prediction.outcome, actual.outcome);
+            if (directionCorrect) score += 40;
+            
+            // 角球準確度 (20%)
+            const cornersCorrect = checkCornersCorrect(prediction.corners, actual.corners);
+            if (cornersCorrect) score += 20;
+            
+            // 黃牌準確度 (20%)
+            const cardsCorrect = checkCardsCorrect(prediction.cards, actual.cards);
+            if (cardsCorrect) score += 20;
+            
+            // 控球率準確度 (20%)
+            const possessionCorrect = checkPossessionCorrect(prediction.possession, actual.possession);
+            if (possessionCorrect) score += 20;
+            
+            return score;
         }
         
         // 檢查方向準確度
-        function checkDirectionCorrect(prediction, homeScore, awayScore) {
-            const actualResult = homeScore > awayScore ? '主隊勝' : 
-                               homeScore < awayScore ? '客隊勝' : '和局';
+        function checkDirectionCorrect(predictedOutcome, actualOutcome) {
+            if (!predictedOutcome || !actualOutcome) return false;
             
-            return prediction.includes(actualResult);
+            const predicted = predictedOutcome.toLowerCase();
+            const actual = actualOutcome.toLowerCase();
+            
+            if (predicted.includes('主') && actual.includes('主')) return true;
+            if (predicted.includes('客') && actual.includes('客')) return true;
+            if (predicted.includes('平') && actual.includes('平')) return true;
+            if (predicted.includes('和') && actual.includes('和')) return true;
+            
+            return false;
         }
         
-        // 檢查比分準確度
-        function checkScoreCorrect(prediction, homeScore, awayScore) {
-            // 簡單實現：檢查是否包含比分
-            return prediction.includes(`${homeScore}-${awayScore}`);
+        // 檢查角球準確度
+        function checkCornersCorrect(predictedCorners, actualCorners) {
+            if (!predictedCorners || !actualCorners) return false;
+            
+            const predictedRange = predictedCorners.replace('個', '').split('-');
+            if (predictedRange.length !== 2) return false;
+            
+            const predictedMin = parseInt(predictedRange[0]);
+            const predictedMax = parseInt(predictedRange[1]);
+            const actualCount = parseInt(extractCornerCount(actualCorners));
+            
+            return actualCount >= predictedMin && actualCount <= predictedMax;
         }
         
-        // 生成懶人指令包
-        function generateLazyPackage(match, prediction, results, verification) {
-            const instructions = [];
-            const codeUpdates = [];
+        // 檢查黃牌準確度
+        function checkCardsCorrect(predictedCards, actualCards) {
+            if (!predictedCards || !actualCards) return false;
             
-            // 根據驗證結果生成指令
-            if (!verification.isDirectionCorrect) {
-                instructions.push({
-                    type: 'critical',
-                    title: '方向預測錯誤',
-                    content: '比分方向預測不準確，需要調整值符星和天乙飛宮參數',
-                    action: '調整 TIM001-TIM004 參數值'
-                });
-                
-                codeUpdates.push('// 調整值符星參數');
-                codeUpdates.push('valueStarFirstHalf = 0.28; // 從 0.25 調整');
-                codeUpdates.push('feiGongFirstHalf = 0.38; // 從 0.35 調整');
-            }
+            const predictedRange = predictedCards.replace('張', '').split('-');
+            if (predictedRange.length !== 2) return false;
             
-            if (!verification.isCornersCorrect) {
-                instructions.push({
-                    type: 'important',
-                    title: '角球預測偏差',
-                    content: '角球數預測範圍需要調整',
-                    action: '修改 TEC009 休門限制角球係數'
-                });
-                
-                codeUpdates.push('// 調整角球算法係數');
-                codeUpdates.push('restDoorCornerCoefficient = 0.18; // 從 0.15 調整');
-            }
+            const predictedMin = parseInt(predictedRange[0]);
+            const predictedMax = parseInt(predictedRange[1]);
+            const actualCount = parseInt(actualCards);
             
-            if (verification.accuracyScore < 60) {
-                instructions.push({
-                    type: 'suggestion',
-                    title: '整體準確度偏低',
-                    content: '建議全面檢查三維參數體系',
-                    action: '運行全面參數校準'
-                });
-            }
+            return actualCount >= predictedMin && actualCount <= predictedMax;
+        }
+        
+        // 檢查控球率準確度
+        function checkPossessionCorrect(predictedPossession, actualPossession) {
+            if (!predictedPossession || !actualPossession) return false;
             
-            // 默認添加一個優化建議
-            if (instructions.length === 0) {
-                instructions.push({
-                    type: 'suggestion',
-                    title: '預測準確度良好',
-                    content: '當前參數表現良好，建議保持',
-                    action: '無需立即調整'
-                });
-                
-                codeUpdates.push('// 當前參數表現良好，無需調整');
-                codeUpdates.push('// 建議繼續觀察後續比賽');
-            }
+            const predictedParts = predictedPossession.split(':');
+            const actualParts = actualPossession.split(':');
             
-            return {
-                packageId: `LPK-${Date.now().toString().slice(-6)}`,
-                generateTime: new Date().toLocaleString('zh-Hant'),
-                matchId: match.matchId,
-                instructions,
-                code: codeUpdates.join('\n')
+            if (predictedParts.length !== 2 || actualParts.length !== 2) return false;
+            
+            const predictedHome = parseInt(predictedParts[0].replace('%', ''));
+            const actualHome = parseInt(actualParts[0].replace('%', ''));
+            
+            // 允許±5%的誤差
+            return Math.abs(predictedHome - actualHome) <= 5;
+        }
+        
+        // 生成DeepSeek更新包
+        function generateDeepSeekUpdatePackage(lazyPackage) {
+            const updatePackage = {
+                type: 'system_update',
+                version: 'V6.1',
+                timestamp: new Date().toISOString(),
+                matchId: lazyPackage.matchId,
+                accuracy: lazyPackage.accuracy,
+                issues: lazyPackage.issues,
+                recommendations: lazyPackage.recommendations,
+                codeUpdates: lazyPackage.codeUpdates,
+                fullData: webDataManager.exportAllData()
             };
+            
+            return updatePackage;
+        }
+        
+        // 下載更新包
+        function downloadUpdatePackage() {
+            if (!window.currentUpdatePackage) {
+                systemUtils.showAlert('錯誤', '無更新包可下載', 'error');
+                return;
+            }
+            
+            const jsonStr = JSON.stringify(window.currentUpdatePackage, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `己土系統更新包_${window.currentUpdatePackage.matchId}_${new Date().toISOString().slice(0, 10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            systemUtils.showAlert('下載成功', '更新包已下載，可提供給DeepSeek進行系統升級', 'success');
         }
         
         // 顯示驗證結果
@@ -1051,15 +1164,6 @@
                         ${report.verification.isDirectionCorrect ? '正確' : '錯誤'}
                     </div>
                 </div>
-                <div class="metric-card score">
-                    <div class="metric-label">比分準確度</div>
-                    <div class="metric-value ${report.verification.isScoreCorrect ? 'correct' : 'partial'}">
-                        ${report.verification.isScoreCorrect ? '100%' : '30%'}
-                    </div>
-                    <div class="metric-status ${report.verification.isScoreCorrect ? 'status-correct' : 'status-partial'}">
-                        ${report.verification.isScoreCorrect ? '正確' : '部分正確'}
-                    </div>
-                </div>
                 <div class="metric-card corners">
                     <div class="metric-label">角球準確度</div>
                     <div class="metric-value ${report.verification.isCornersCorrect ? 'correct' : 'incorrect'}">
@@ -1069,13 +1173,22 @@
                         ${report.verification.isCornersCorrect ? '正確' : '錯誤'}
                     </div>
                 </div>
-                <div class="metric-card possession">
-                    <div class="metric-label">整體準確度</div>
-                    <div class="metric-value ${report.verification.overallAccuracy > 60 ? 'correct' : 'partial'}">
-                        ${report.verification.overallAccuracy}%
+                <div class="metric-card cards">
+                    <div class="metric-label">黃牌準確度</div>
+                    <div class="metric-value ${report.verification.isCardsCorrect ? 'correct' : 'incorrect'}">
+                        ${report.verification.isCardsCorrect ? '100%' : '0%'}
                     </div>
-                    <div class="metric-status ${report.verification.overallAccuracy > 60 ? 'status-correct' : 'status-partial'}">
-                        ${report.verification.overallAccuracy > 60 ? '良好' : '需改進'}
+                    <div class="metric-status ${report.verification.isCardsCorrect ? 'status-correct' : 'status-incorrect'}">
+                        ${report.verification.isCardsCorrect ? '正確' : '錯誤'}
+                    </div>
+                </div>
+                <div class="metric-card possession">
+                    <div class="metric-label">控球率準確度</div>
+                    <div class="metric-value ${report.verification.isPossessionCorrect ? 'correct' : 'incorrect'}">
+                        ${report.verification.isPossessionCorrect ? '100%' : '0%'}
+                    </div>
+                    <div class="metric-status ${report.verification.isPossessionCorrect ? 'status-correct' : 'status-incorrect'}">
+                        ${report.verification.isPossessionCorrect ? '正確' : '錯誤'}
                     </div>
                 </div>
             `;
@@ -1083,102 +1196,99 @@
             document.getElementById('accuracyMetrics').innerHTML = metricsHtml;
             
             // 比較表格
-            const cornerRange = report.prediction.corners.replace('個', '').split('-');
-            const actualCorners = report.results.cornerData.split(' ')[0] || '5';
-            
             const comparisonHtml = `
                 <tr>
                     <td>比賽結果</td>
-                    <td class="prediction-col">${report.prediction.result}</td>
-                    <td class="actual-col">${report.results.fullHomeScore}:${report.results.fullAwayScore}</td>
+                    <td class="prediction-col">${report.prediction.outcome || '無預測'}</td>
+                    <td class="actual-col">${report.results.outcome}</td>
                     <td>${report.verification.isDirectionCorrect ? '✅' : '❌'}</td>
                 </tr>
                 <tr>
                     <td>角球數</td>
-                    <td class="prediction-col">${report.prediction.corners}</td>
-                    <td class="actual-col">${actualCorners}個</td>
+                    <td class="prediction-col">${report.prediction.corners || '無預測'}</td>
+                    <td class="actual-col">${report.results.corners}</td>
                     <td>${report.verification.isCornersCorrect ? '✅' : '❌'}</td>
                 </tr>
                 <tr>
                     <td>黃牌數</td>
-                    <td class="prediction-col">${report.prediction.cards}</td>
-                    <td class="actual-col">待輸入</td>
-                    <td>⚠️</td>
+                    <td class="prediction-col">${report.prediction.cards || '無預測'}</td>
+                    <td class="actual-col">${report.results.cards}張</td>
+                    <td>${report.verification.isCardsCorrect ? '✅' : '❌'}</td>
                 </tr>
                 <tr>
                     <td>控球率</td>
-                    <td class="prediction-col">${report.prediction.possession}</td>
-                    <td class="actual-col">待輸入</td>
-                    <td>⚠️</td>
+                    <td class="prediction-col">${report.prediction.possession || '無預測'}</td>
+                    <td class="actual-col">${report.results.possession}</td>
+                    <td>${report.verification.isPossessionCorrect ? '✅' : '❌'}</td>
                 </tr>
             `;
             
             document.getElementById('comparisonBody').innerHTML = comparisonHtml;
             
             // 技術分析詳情
-            const techniqueHtml = `
-                <div class="technique-item">
-                    <div class="technique-label">
-                        <i class="fas fa-futbol"></i> 半場比分
-                    </div>
-                    <div class="technique-values">
-                        <span class="technique-value technice-home">${report.results.halfHomeScore}</span>
-                        <span class="technique-diff">vs</span>
-                        <span class="technique-value technice-away">${report.results.halfAwayScore}</span>
-                    </div>
-                </div>
-                <div class="technique-item">
-                    <div class="technique-label">
-                        <i class="fas fa-trophy"></i> 全場比分
-                    </div>
-                    <div class="technique-values">
-                        <span class="technique-value technice-home">${report.results.fullHomeScore}</span>
-                        <span class="technique-diff">vs</span>
-                        <span class="technique-value technice-away">${report.results.fullAwayScore}</span>
-                    </div>
-                </div>
-                <div class="technique-item">
-                    <div class="technique-label">
-                        <i class="fas fa-flag"></i> 角球數
-                    </div>
-                    <div class="technique-values">
-                        <span class="technique-value">${actualCorners}</span>
-                        <span class="technique-diff">預測: ${cornerRange[0]}-${cornerRange[1]}</span>
-                    </div>
-                </div>
-            `;
+            const techniqueData = document.getElementById('techniqueData').value;
+            const techniqueLines = techniqueData.split('\n').filter(line => line.trim());
             
-            document.getElementById('techniqueDetails').innerHTML = techniqueHtml;
+            let techniqueHtml = '';
+            techniqueLines.forEach(line => {
+                const parts = line.split(':');
+                if (parts.length === 2) {
+                    const label = parts[0];
+                    const values = parts[1].split('-');
+                    if (values.length === 2) {
+                        techniqueHtml += `
+                            <div class="technique-item">
+                                <div class="technique-label">
+                                    <i class="fas fa-chart-bar"></i> ${label}
+                                </div>
+                                <div class="technique-values">
+                                    <span class="technique-value technice-home">${values[0]}</span>
+                                    <span class="technique-diff">vs</span>
+                                    <span class="technique-value technice-away">${values[1]}</span>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            });
+            
+            document.getElementById('techniqueDetails').innerHTML = techniqueHtml || '<p>無技術分析數據</p>';
             
             // 懶人指令包
             document.getElementById('packageId').textContent = report.lazyPackage.packageId;
-            document.getElementById('generateTime').textContent = report.lazyPackage.generateTime;
+            document.getElementById('generateTime').textContent = new Date(report.lazyPackage.generateTime).toLocaleString('zh-Hant');
             document.getElementById('lazyMatchId').textContent = report.lazyPackage.matchId;
             
-            const instructionsHtml = report.lazyPackage.instructions.map(inst => `
-                <div class="instruction-item ${inst.type}">
-                    <div class="instruction-icon ${inst.type}">
-                        <i class="fas fa-${inst.type === 'critical' ? 'exclamation-triangle' : 
-                                         inst.type === 'important' ? 'exclamation-circle' : 'lightbulb'}"></i>
+            const instructionsHtml = report.lazyPackage.instructions ? report.lazyPackage.instructions.map(inst => `
+                <div class="instruction-item ${inst.severity || 'suggestion'}">
+                    <div class="instruction-icon ${inst.severity || 'suggestion'}">
+                        <i class="fas fa-${inst.severity === 'high' ? 'exclamation-triangle' : 
+                                         inst.severity === 'medium' ? 'exclamation-circle' : 'lightbulb'}"></i>
                     </div>
                     <div class="instruction-content">
-                        <h4>${inst.title}</h4>
-                        <p>${inst.content}</p>
-                        <small><strong>建議操作:</strong> ${inst.action}</small>
+                        <h4>${inst.title || inst.description || '建議'}</h4>
+                        <p>${inst.description || inst.reason || ''}</p>
+                        <small><strong>建議操作:</strong> ${inst.action || inst.suggestedChange || ''}</small>
                     </div>
                 </div>
-            `).join('');
+            `).join('') : '<p>無優化建議</p>';
             
             document.getElementById('instructionList').innerHTML = instructionsHtml;
             
+            const codeUpdates = report.lazyPackage.codeUpdates || [];
+            const codeText = codeUpdates.map(update => update.change || '').join('\n');
+            
             document.getElementById('lazyCode').innerHTML = `// 懶人指令包 - AI參數優化代碼
-// 生成時間: ${report.lazyPackage.generateTime}
+// 生成時間: ${new Date().toLocaleString('zh-Hant')}
 // 比賽ID: ${report.lazyPackage.matchId}
-// 整體準確度: ${report.verification.overallAccuracy}%
+// 整體準確度: ${report.verification.accuracy}%
 
 // 請複製以下代碼到 ai_parameters.csv 或相應JS文件中執行
 
-${report.lazyPackage.code}`;
+${codeText || '// 當前參數表現良好，無需調整'}`;
+            
+            // 顯示驗證結果區域
+            document.getElementById('verificationResults').style.display = 'block';
             
             // 保存報告到全局變量
             window.currentReport = report;
@@ -1192,8 +1302,10 @@ ${report.lazyPackage.code}`;
             }
             
             try {
-                // 這裡應該實現實際的保存邏輯
-                systemUtils.showAlert('保存成功', '驗證報告已保存到數據庫', 'success');
+                // 更新比賽狀態
+                webDataManager.updateMatchStatus(window.currentReport.matchId, 'completed');
+                
+                systemUtils.showAlert('保存成功', '驗證報告已保存，比賽狀態已更新', 'success');
                 
             } catch (error) {
                 console.error('保存失敗:', error);
@@ -1220,8 +1332,21 @@ ${report.lazyPackage.code}`;
         function applyUpdates() {
             const confirmApply = confirm('確定要應用這些參數更新嗎？\n這將會修改當前的AI參數體系。');
             if (confirmApply) {
-                systemUtils.showAlert('應用成功', '參數更新已應用到系統', 'success');
-                // 這裡應該實現實際的參數更新邏輯
+                try {
+                    // 應用代碼更新
+                    if (window.currentReport && window.currentReport.lazyPackage.codeUpdates) {
+                        window.currentReport.lazyPackage.codeUpdates.forEach(update => {
+                            if (update.parameter && update.file === 'ai_parameters.csv') {
+                                const newValue = parseFloat(update.change.split(',')[3]);
+                                webDataManager.updateAIParameter(update.parameter, newValue, `基於${window.currentReport.matchId}調整`);
+                            }
+                        });
+                        
+                        systemUtils.showAlert('應用成功', '參數更新已應用到系統', 'success');
+                    }
+                } catch (error) {
+                    systemUtils.showAlert('應用錯誤', '應用更新時出現錯誤', 'error');
+                }
             }
         }
         
@@ -1240,6 +1365,7 @@ ${report.lazyPackage.code}`;
                 // 隱藏結果區域
                 document.getElementById('verificationResults').style.display = 'none';
                 document.getElementById('selectedMatchInfo').style.display = 'none';
+                document.getElementById('downloadUpdatePackage').style.display = 'none';
                 
                 // 禁用提交按鈕
                 document.getElementById('submitResults').disabled = true;
@@ -1254,24 +1380,30 @@ ${report.lazyPackage.code}`;
             }
         }
         
-        // 載入示例數據（測試用）
-        function loadExampleData() {
-            const exampleMatch = {
-                matchId: 'FB3200',
-                homeTeam: '馬德里CFF女足',
-                awayTeam: '特內里費女足',
-                matchTime: '2026-02-05 02:00:00',
-                status: 'pending',
-                prediction: '客隊小勝|62|4-7個|3-5張|48%:52%'
-            };
+        // 自動處理FB3200賽果
+        function autoProcessFB3200() {
+            console.log('自動處理FB3200賽果...');
             
-            selectMatch(exampleMatch);
-            document.getElementById('halfHomeScore').value = '0';
-            document.getElementById('halfAwayScore').value = '1';
-            document.getElementById('fullHomeScore').value = '0';
-            document.getElementById('fullAwayScore').value = '1';
-            document.getElementById('cornerData').value = '5 (4:1)';
-            document.getElementById('techniqueData').value = `進攻:124-73
+            // 檢查是否有FB3200比賽
+            const matches = webDataManager ? webDataManager.get('matches') : [];
+            const fb3200Match = matches.find(m => m.matchId === 'FB3200');
+            
+            if (!fb3200Match) {
+                systemUtils.showAlert('錯誤', '找不到FB3200比賽，請先確保已進行賽前預測', 'error');
+                return;
+            }
+            
+            // 自動選擇FB3200比賽
+            selectMatch(fb3200Match);
+            
+            // 設置實際賽果數據（根據您提供的數據）
+            const resultData = {
+                halfHomeScore: 0,
+                halfAwayScore: 1,
+                fullHomeScore: 0,
+                fullAwayScore: 1,
+                cornerData: '5 (4:1)',
+                techniqueData: `進攻:124-73
 黃牌:0-1
 射正:4-2
 紅牌:0-0
@@ -1280,186 +1412,24 @@ ${report.lazyPackage.code}`;
 控球率:65-35
 角球:7-3
 點球:0-0
-被擋射門:4-2`;
-            
-            systemUtils.showAlert('範例載入', '已載入FB3200示例數據', 'info');
-        }
-
-// 在現有JavaScript末尾添加以下代碼
-
-// 自動處理FB3200賽果
-function autoProcessFB3200() {
-    // 檢查URL參數或自動檢測
-    const urlParams = new URLSearchParams(window.location.search);
-    const autoProcess = urlParams.get('auto') === 'fb3200';
-    
-    if (autoProcess) {
-        // 自動填入FB3200賽果
-        const resultData = {
-            halfHomeScore: 0,
-            halfAwayScore: 1,
-            fullHomeScore: 0,
-            fullAwayScore: 1,
-            halfCorners: '5 (4:1)',
-            fullCorners: '5 (4:1)',
-            techniqueData: `124進攻73
-0黃牌1
-4射正2
-0紅牌0
-53危險進攻25
-5射斜4
-65控球率35
-7角球3
-0點球0
-4被擋掉射門2`
-        };
-        
-        // 自動選擇FB3200比賽
-        const match = webDataManager.get('matches').find(m => m.matchId === 'FB3200');
-        if (match) {
-            window.selectedMatch = match;
-            selectMatch(match);
+被擋掉射門:4-2`
+            };
             
             // 自動填入表單
             document.getElementById('halfHomeScore').value = resultData.halfHomeScore;
             document.getElementById('halfAwayScore').value = resultData.halfAwayScore;
             document.getElementById('fullHomeScore').value = resultData.fullHomeScore;
             document.getElementById('fullAwayScore').value = resultData.fullAwayScore;
-            document.getElementById('cornerData').value = resultData.fullCorners;
+            document.getElementById('cornerData').value = resultData.cornerData;
             document.getElementById('techniqueData').value = resultData.techniqueData;
             
-            // 自動提交
+            systemUtils.showAlert('自動填寫', '已自動填入FB3200賽果數據', 'info');
+            
+            // 3秒後自動提交
             setTimeout(() => {
                 document.getElementById('submitResults').click();
-            }, 1000);
+            }, 3000);
         }
-    }
-}
-
-// 修改submitResults函數以使用webDataManager
-async function submitResults() {
-    if (!window.selectedMatch) {
-        systemUtils.showAlert('錯誤', '請先選擇比賽', 'error');
-        return;
-    }
-    
-    const halfHomeScore = parseInt(document.getElementById('halfHomeScore').value);
-    const halfAwayScore = parseInt(document.getElementById('halfAwayScore').value);
-    const fullHomeScore = parseInt(document.getElementById('fullHomeScore').value);
-    const fullAwayScore = parseInt(document.getElementById('fullAwayScore').value);
-    
-    if (isNaN(halfHomeScore) || isNaN(halfAwayScore) || 
-        isNaN(fullHomeScore) || isNaN(fullAwayScore)) {
-        systemUtils.showAlert('錯誤', '請輸入有效的比分', 'error');
-        return;
-    }
-    
-    // 顯示加載動畫
-    document.getElementById('loadingOverlay').style.display = 'flex';
-    
-    try {
-        // 使用webDataManager處理結果
-        const matchId = window.selectedMatch.matchId;
-        const prediction = parsePrediction(window.selectedMatch.prediction);
-        
-        const actual = {
-            matchId,
-            halfScore: `${halfHomeScore}:${halfAwayScore}`,
-            fullScore: `${fullHomeScore}:${fullAwayScore}`,
-            corners: document.getElementById('cornerData').value,
-            cards: extractCardsFromTechnique(document.getElementById('techniqueData').value),
-            possession: extractPossessionFromTechnique(document.getElementById('techniqueData').value)
-        };
-        
-        // 計算準確度
-        const accuracy = calculateAccuracy(prediction, actual);
-        
-        // 保存結果到LocalStorage
-        webDataManager.updateResult(matchId, {
-            matchId,
-            homeScore: fullHomeScore,
-            awayScore: fullAwayScore,
-            halfHomeScore,
-            halfAwayScore,
-            halfCorners: actual.corners.split(' ')[0],
-            fullCorners: actual.corners.split(' ')[0],
-            techniqueData: document.getElementById('techniqueData').value,
-            verificationTime: new Date().toISOString(),
-            accuracy
-        });
-        
-        // 生成懶人指令包
-        const lazyPackage = webDataManager.generateLazyPackage(matchId, prediction, actual, accuracy);
-        
-        // 顯示結果
-        displayVerificationResults({
-            matchId,
-            prediction,
-            results: actual,
-            verification: { accuracy },
-            lazyPackage
-        });
-        
-        // 導出更新包
-        const updatePackage = generateDeepSeekUpdatePackage(lazyPackage);
-        
-        // 顯示下載按鈕
-        showUpdatePackageDownload(updatePackage);
-        
-        systemUtils.showAlert('處理完成', '已生成懶人指令包和更新包', 'success');
-        
-    } catch (error) {
-        console.error('處理賽果時出錯:', error);
-        systemUtils.showAlert('處理錯誤', '處理賽果時出現錯誤', 'error');
-    } finally {
-        document.getElementById('loadingOverlay').style.display = 'none';
-    }
-}
-
-// 生成DeepSeek更新包
-function generateDeepSeekUpdatePackage(lazyPackage) {
-    const updatePackage = {
-        type: 'system_update',
-        version: 'V6.1',
-        timestamp: new Date().toISOString(),
-        matchId: lazyPackage.matchId,
-        issues: lazyPackage.issues,
-        recommendations: lazyPackage.recommendations,
-        codeUpdates: lazyPackage.codeUpdates,
-        fullData: webDataManager.exportAllData()
-    };
-    
-    return updatePackage;
-}
-
-// 顯示更新包下載
-function showUpdatePackageDownload(updatePackage) {
-    const jsonStr = JSON.stringify(updatePackage, null, 2);
-    const blob = new Blob([jsonStr], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    
-    const downloadBtn = document.createElement('a');
-    downloadBtn.href = url;
-    downloadBtn.download = `己土系統更新包_${updatePackage.matchId}_${new Date().toISOString().slice(0, 10)}.json`;
-    downloadBtn.className = 'btn btn-success';
-    downloadBtn.innerHTML = '<i class="fas fa-download"></i> 下載更新包給DeepSeek';
-    downloadBtn.style.marginTop = '20px';
-    
-    document.getElementById('verificationResults').appendChild(downloadBtn);
-    
-    // 也顯示JSON內容供複製
-    const jsonDisplay = document.createElement('div');
-    jsonDisplay.className = 'code-block';
-    jsonDisplay.innerHTML = `<pre>${jsonStr}</pre>`;
-    jsonDisplay.style.marginTop = '20px';
-    
-    document.getElementById('verificationResults').appendChild(jsonDisplay);
-}
-
-// 頁面加載時自動處理
-document.addEventListener('DOMContentLoaded', function() {
-    autoProcessFB3200();
-});
     </script>
 </body>
 </html>
