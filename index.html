@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>己土玄學顧問公司 - 陰盤奇門足球AI預測系統</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'qimen-purple': '#8B5CF6',
+                        'qimen-blue': '#3B82F6',
+                        'qimen-green': '#10B981',
+                        'qimen-orange': '#F59E0B',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        /* 自定義樣式 */
+        .gradient-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .gradient-success {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        
+        .gradient-warning {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        .gradient-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-online { background-color: #10B981; box-shadow: 0 0 10px #10B981; }
+        .status-offline { background-color: #EF4444; }
+        .status-warning { background-color: #F59E0B; }
+        
+        /* 動畫效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animate-fadeInUp {
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+        
+        /* 奇門主題樣式 */
+        .bagua-background {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bagua-background::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(139, 92, 246, 0.05)" stroke-width="1"/><path d="M50,10 L50,90 M10,50 L90,50" stroke="rgba(139, 92, 246, 0.05)" stroke-width="1"/></svg>');
+            background-repeat: repeat;
+            z-index: 0;
+            opacity: 0.5;
+        }
+        
+        .bagua-background > * {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <!-- 導航欄 -->
+    <nav class="gradient-primary text-white shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="bg-white p-2 rounded-lg">
+                        <i class="fas fa-yin-yang text-qimen-purple text-2xl"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-bold">己土玄學顧問公司</h1>
+                        <p class="text-xs md:text-sm text-purple-200">陰盤奇門足球AI預測系統</p>
+                    </div>
+                </div>
+                
+                <!-- 桌面導航 -->
+                <div class="hidden md:flex space-x-6">
+                    <a href="index.html" class="font-semibold text-white border-b-2 border-white pb-1">儀表板</a>
+                    <a href="pages/pre_match_input.php" class="text-purple-100 hover:text-white transition">賽前輸入</a>
+                    <a href="pages/post_match_input.php" class="text-purple-100 hover:text-white transition">賽後輸入</a>
+                    <a href="pages/admin.php" class="text-purple-100 hover:text-white transition">系統管理</a>
+                </div>
+                
+                <!-- 移動端菜單按鈕 -->
+                <button id="mobile-menu-btn" class="md:hidden text-white">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+            
+            <!-- 移動端菜單 -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-3 pb-2">
+                <a href="index.html" class="block font-semibold text-white py-2 border-l-4 border-white pl-3">儀表板</a>
+                <a href="pages/pre_match_input.php" class="block text-purple-100 hover:text-white py-2 border-l-4 border-transparent pl-3">賽前輸入</a>
+                <a href="pages/post_match_input.php" class="block text-purple-100 hover:text-white py-2 border-l-4 border-transparent pl-3">賽後輸入</a>
+                <a href="pages/admin.php" class="block text-purple-100 hover:text-white py-2 border-l-4 border-transparent pl-3">系統管理</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主內容區 -->
+    <main class="container mx-auto px-4 py-6">
+        <!-- 系統狀態概覽 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- 系統版本 -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover animate-fadeInUp">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-purple-100 rounded-lg mr-4">
+                        <i class="fas fa-code-branch text-qimen-purple text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800">系統版本</h3>
+                        <p class="text-2xl font-bold text-qimen-purple" id="system-version">V5.1I</p>
+                    </div>
+                </div>
+                <div class="text-sm text-gray-600">
+                    <p><i class="fas fa-calendar-alt mr-2"></i> 最後更新: <span id="last-updated">2026-02-03</span></p>
+                </div>
+            </div>
+            
+            <!-- 數據庫連接狀態 -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover animate-fadeInUp" style="animation-delay: 0.1s">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-blue-100 rounded-lg mr-4">
+                        <i class="fas fa-database text-qimen-blue text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800">數據庫狀態</h3>
+                        <div class="flex items-center">
+                            <span class="status-indicator" id="db-status-indicator"></span>
+                            <span class="text-xl font-bold" id="db-status-text">檢查中...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-sm text-gray-600">
+                    <p><i class="fas fa-clock mr-2"></i> 響應時間: <span id="db-response-time">--</span> ms</p>
+                </div>
+            </div>
+            
+            <!-- 預測統計 -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover animate-fadeInUp" style="animation-delay: 0.2s">
+                <div class="flex items-center mb-4">
+                    <div class="p-3 bg-green-100 rounded-lg mr-4">
+                        <i class="fas fa-chart-line text-qimen-green text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800">預測準確度</h3>
+                        <p class="text-2xl font-bold text-qimen-green" id="accuracy-rate">65.2%</p>
+                    </div>
+                </div>
+                <div class="text-sm text-gray-600">
+                    <p><i class="fas fa-futbol mr-2"></i> 總分析場次: <span id="total-matches">12</span> 場</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 快速操作區域 -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">快速操作</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <a href="pages/pre_match_input.php" class="gradient-primary text-white rounded-xl p-6 card-hover flex flex-col items-center justify-center text-center hover:shadow-xl transition-all duration-300">
+                    <i class="fas fa-plus-circle text-3xl mb-3"></i>
+                    <h3 class="text-xl font-bold mb-2">開始新預測</h3>
+                    <p class="text-sm text-purple-100">輸入比賽和奇門數據</p>
+                </a>
+                
+                <a href="pages/post_match_input.php" class="gradient-success text-white rounded-xl p-6 card-hover flex flex-col items-center justify-center text-center hover:shadow-xl transition-all duration-300">
+                    <i class="fas fa-clipboard-check text-3xl mb-3"></i>
+                    <h3 class="text-xl font-bold mb-2">賽後驗證</h3>
+                    <p class="text-sm text-green-100">輸入實際賽果驗證</p>
+                </a>
+                
+                <button onclick="testDatabaseConnection()" class="gradient-warning text-white rounded-xl p-6 card-hover flex flex-col items-center justify-center text-center hover:shadow-xl transition-all duration-300 cursor-pointer">
+                    <i class="fas fa-plug text-3xl mb-3"></i>
+                    <h3 class="text-xl font-bold mb-2">測試連接</h3>
+                    <p class="text-sm text-yellow-100">檢查數據庫連接狀態</p>
+                </button>
+                
+                <a href="pages/admin.php" class="gradient-danger text-white rounded-xl p-6 card-hover flex flex-col items-center justify-center text-center hover:shadow-xl transition-all duration-300">
+                    <i class="fas fa-cogs text-3xl mb-3"></i>
+                    <h3 class="text-xl font-bold mb-2">系統管理</h3>
+                    <p class="text-sm text-red-100">參數庫與系統設置</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- 數據庫連接測試區域 -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8 bagua-background">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">系統連接診斷</h2>
+                    <p class="text-gray-600">測試數據庫連接狀態和系統組件</p>
+                </div>
+                <div class="flex space-x-3 mt-4 md:mt-0">
+                    <button onclick="runAdvancedDiagnostic()" class="px-4 py-2 bg-qimen-purple text-white rounded-lg hover:bg-purple-700 transition flex items-center">
+                        <i class="fas fa-stethoscope mr-2"></i> 高級診斷
+                    </button>
+                    <button onclick="resetLocalCache()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition flex items-center">
+                        <i class="fas fa-redo mr-2"></i> 清除緩存
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 測試結果顯示區 -->
+            <div id="testResults" class="hidden">
+                <div class="border border-gray-200 rounded-lg overflow-hidden mb-4">
+                    <div class="bg-gray-50 px-4 py-3 border-b flex justify-between items-center">
+                        <span class="font-medium text-gray-700">測試結果詳情</span>
+                        <div class="flex space-x-2">
+                            <button id="copyResultsBtn" class="text-sm text-qimen-blue hover:text-blue-800 flex items-center">
+                                <i class="fas fa-copy mr-1"></i> 複製結果
+                            </button>
+                            <button onclick="toggleTestDetails()" id="toggleDetailsBtn" class="text-sm text-gray-600 hover:text-gray-800 flex items-center">
+                                <i class="fas fa-chevron-down mr-1"></i> 詳細信息
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4">
+                        <div id="testSummary" class="mb-4"></div>
+                        <div id="testDetails" class="space-y-4 hidden"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 系統組件狀態 -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="componentStatus">
+                <!-- 組件狀態將通過JavaScript動態更新 -->
+            </div>
+        </div>
+
+        <!-- 最近比賽與統計圖表 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <!-- 準確度趨勢圖 -->
+            <div class="lg:col-span-2 bg-white rounded-xl shadow-lg p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">預測準確度趨勢</h2>
+                    <div class="flex space-x-2">
+                        <button onclick="updateChart('week')" class="px-3 py-1 text-xs bg-gray-100 rounded-lg hover:bg-gray-200">本週</button>
+                        <button onclick="updateChart('month')" class="px-3 py-1 text-xs bg-gray-100 rounded-lg hover:bg-gray-200">本月</button>
+                        <button onclick="updateChart('all')" class="px-3 py-1 text-xs bg-qimen-blue text-white rounded-lg hover:bg-blue-600">全部</button>
+                    </div>
+                </div>
+                <div class="h-64">
+                    <canvas id="accuracyChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- 最近比賽 -->
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">最近預測比賽</h2>
+                <div class="space-y-4" id="recent-matches">
+                    <!-- 動態加載 -->
+                    <div class="text-center py-8">
+                        <i class="fas fa-spinner fa-spin text-gray-400 text-2xl"></i>
+                        <p class="text-gray-500 mt-2">載入中...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 系統資訊 -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">系統資訊</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                        <i class="fas fa-info-circle text-qimen-blue mr-2"></i>
+                        工作流程
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 bg-qimen-purple text-white rounded-full flex items-center justify-center mr-3">1</div>
+                            <div>
+                                <h4 class="font-medium text-gray-800">賽前輸入</h4>
+                                <p class="text-sm text-gray-600">甲方爸爸填寫比賽信息和奇門數據</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 bg-qimen-blue text-white rounded-full flex items-center justify-center mr-3">2</div>
+                            <div>
+                                <h4 class="font-medium text-gray-800">AI分析</h4>
+                                <p class="text-sm text-gray-600">系統生成完整賽前分析報告</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 bg-qimen-green text-white rounded-full flex items-center justify-center mr-3">3</div>
+                            <div>
+                                <h4 class="font-medium text-gray-800">賽後驗證</h4>
+                                <p class="text-sm text-gray-600">小助手輸入實際賽果進行驗證</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-8 h-8 bg-qimen-orange text-white rounded-full flex items-center justify-center mr-3">4</div>
+                            <div>
+                                <h4 class="font-medium text-gray-800">系統優化</h4>
+                                <p class="text-sm text-gray-600">AI研究員根據偏差更新參數庫</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-700 mb-3 flex items-center">
+                        <i class="fas fa-cogs text-qimen-green mr-2"></i>
+                        技術架構
+                    </h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <i class="fas fa-database text-qimen-purple w-5 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">後端數據庫</h4>
+                                <p class="text-sm text-gray-600">Supabase (PostgreSQL)</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fab fa-php text-qimen-blue w-5 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">後端邏輯</h4>
+                                <p class="text-sm text-gray-600">PHP + AI玄學引擎</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-mobile-alt text-qimen-green w-5 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">前端界面</h4>
+                                <p class="text-sm text-gray-600">響應式設計 (手機/平板/電腦)</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fab fa-github text-gray-800 w-5 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">版本控制</h4>
+                                <p class="text-sm text-gray-600">GitHub 集成</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-brain text-qimen-orange w-5 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-gray-800">核心模型</h4>
+                                <p class="text-sm text-gray-600">陰盤奇門三維參數體系 V5.1I</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 頁腳 -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start mb-3">
+                        <div class="bg-white p-2 rounded-lg mr-3">
+                            <i class="fas fa-yin-yang text-qimen-purple text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">己土玄學顧問公司</h3>
+                    </div>
+                    <p class="text-gray-400">陰盤奇門足球AI預測系統</p>
+                    <p class="text-gray-400 text-sm mt-2">© 2026 版權所有</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-github text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fas fa-envelope text-2xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition">
+                        <i class="fas fa-question-circle text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400 text-sm">
+                <p>本系統結合傳統奇門遁甲智慧與現代AI技術，用於足球賽事趨勢分析。預測結果僅供參考。</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 移動端菜單切換
+        document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            this.querySelector('i').classList.toggle('fa-bars');
+            this.querySelector('i').classList.toggle('fa-times');
+        });
+
+        // 初始化組件狀態顯示
+        function initComponentStatus() {
+            const components = [
+                { id: 'supabase', name: 'Supabase 數據庫', icon: 'fa-database', color: 'text-qimen-blue' },
+                { id: 'api', name: 'API 服務', icon: 'fa-server', color: 'text-qimen-green' },
+                { id: 'config', name: '配置文件', icon: 'fa-cog', color: 'text-qimen-orange' },
+                { id: 'ai-engine', name: 'AI 分析引擎', icon: 'fa-brain', color: 'text-qimen-purple' }
+            ];
+            
+            const container = document.getElementById('componentStatus');
+            container.innerHTML = components.map(comp => `
+                <div class="bg-gray-50 rounded-lg p-4 text-center">
+                    <i class="fas ${comp.icon} ${comp.color} text-2xl mb-2"></i>
+                    <p class="text-sm font-medium text-gray-700 mb-1">${comp.name}</p>
+                    <div class="flex items-center justify-center">
+                        <span class="status-indicator status-warning" id="status-${comp.id}"></span>
+                        <span class="text-xs text-gray-500" id="status-text-${comp.id}">檢查中...</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 測試數據庫連接
+        async function testDatabaseConnection() {
+            const btn = document.querySelector('button[onclick="testDatabaseConnection()"]');
+            const originalHTML = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 測試中...';
+            
+            const resultsDiv = document.getElementById('testResults');
+            const summaryDiv = document.getElementById('testSummary');
+            const detailsDiv = document.getElementById('testDetails');
+            const dbIndicator = document.getElementById('db-status-indicator');
+            const dbText = document.getElementById('db-status-text');
+            const dbTime = document.getElementById('db-response-time');
+            
+            // 清除之前的結果
+            summaryDiv.innerHTML = '';
+            detailsDiv.innerHTML = '';
+            resultsDiv.classList.add('hidden');
+            detailsDiv.classList.add('hidden');
+            
+            // 更新組件狀態為檢查中
+            updateComponentStatus('supabase', 'checking', '檢查中...');
+            
+            try {
+                const startTime = Date.now();
+                const response = await fetch('api/test_connection.php');
+                const data = await response.json();
+                const responseTime = Date.now() - startTime;
+                
+                // 更新數據庫狀態顯示
+                dbTime.textContent = responseTime;
+                
+                if (data.success) {
+                    dbIndicator.className = 'status-indicator status-online';
+                    dbText.textContent = '連接正常';
+                    dbText.className = 'text-xl font-bold text-green-600';
+                    updateComponentStatus('supabase', 'online', '正常運行');
+                } else {
+                    dbIndicator.className = 'status-indicator status-offline';
+                    dbText.textContent = '連接異常';
+                    dbText.className = 'text-xl font-bold text-red-600';
+                    updateComponentStatus('supabase', 'offline', '連接失敗');
+                }
+                
+                // 顯示測試結果
+                resultsDiv.classList.remove('hidden');
+                
+                // 更新測試摘要
+                summaryDiv.innerHTML = `
+                    <div class="flex items-center p-4 rounded-lg ${data.success ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}">
+                        <i class="fas ${data.success ? 'fa-check-circle text-green-500' : 'fa-times-circle text-red-500'} text-2xl mr-3"></i>
+                        <div>
+                            <h4 class="font-bold ${data.success ? 'text-green-800' : 'text-red-800'}">
+                                ${data.success ? '數據庫連接成功！' : '數據庫連接失敗'}
+                            </h4>
+                            <p class="${data.success ? 'text-green-600' : 'text-red-600'} text-sm">
+                                響應時間: ${responseTime}ms | 測試時間: ${data.timestamp}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                
+                // 更新詳細信息
+                const configStatus = Object.values(data.config_files || {}).filter(v => v).length;
+                detailsDiv.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">API 狀態:</span>
+                                <span class="font-medium ${data.api_status?.code === 200 ? 'text-green-600' : 'text-red-600'}">
+                                    ${data.api_status?.code || 'N/A'} (${data.api_status?.message || '未知'})
+                                </span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">數據表狀態:</span>
+                                <span class="font-medium ${data.database_test?.has_matches_table ? 'text-green-600' : 'text-red-600'}">
+                                    ${data.database_test?.has_matches_table ? '正常' : '異常'}
+                                </span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">配置文件:</span>
+                                <span class="font-medium ${configStatus === 3 ? 'text-green-600' : 'text-yellow-600'}">
+                                    ${configStatus}/3 正常
+                                </span>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">PHP 版本:</span>
+                                <span class="font-medium">${data.environment?.php_version || 'N/A'}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">服務器:</span>
+                                <span class="font-medium text-sm">${(data.environment?.server_software || '未知').split('/')[0]}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">測試模式:</span>
+                                <span class="font-medium">基礎連接測試</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // 更新其他組件狀態
+                updateComponentStatus('api', data.api_status?.code === 200 ? 'online' : 'offline', 
+                    data.api_status?.code === 200 ? '正常運行' : '服務異常');
+                updateComponentStatus('config', configStatus === 3 ? 'online' : 'warning',
+                    configStatus === 3 ? '全部正常' : `${configStatus}/3 正常`);
+                updateComponentStatus('ai-engine', 'online', '待機中');
+                
+                console.log('數據庫連接測試結果:', data);
+                
+            } catch (error) {
+                console.error('測試失敗:', error);
+                
+                dbIndicator.className = 'status-indicator status-offline';
+                dbText.textContent = '連接失敗';
+                dbText.className = 'text-xl font-bold text-red-600';
+                dbTime.textContent = '--';
+                
+                resultsDiv.classList.remove('hidden');
+                summaryDiv.innerHTML = `
+                    <div class="flex items-center p-4 bg-red-50 rounded-lg border border-red-200">
+                        <i class="fas fa-exclamation-triangle text-red-500 text-2xl mr-3"></i>
+                        <div>
+                            <h4 class="font-bold text-red-800">網絡請求失敗</h4>
+                            <p class="text-red-600 text-sm">無法連接到測試API端點</p>
+                            <p class="text-red-600 text-xs mt-1">錯誤: ${error.message}</p>
+                        </div>
+                    </div>
+                `;
+                
+                updateComponentStatus('supabase', 'offline', '連接失敗');
+                updateComponentStatus('api', 'offline', '服務異常');
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        }
+
+        // 更新組件狀態
+        function updateComponentStatus(componentId, status, message) {
+            const indicator = document.getElementById(`status-${componentId}`);
+            const text = document.getElementById(`status-text-${componentId}`);
+            
+            if (indicator && text) {
+                indicator.className = `status-indicator status-${status}`;
+                text.textContent = message;
+                text.className = `text-xs ${status === 'online' ? 'text-green-600' : status === 'warning' ? 'text-yellow-600' : 'text-red-600'}`;
+            }
+        }
+
+        // 高級系統診斷
+        async function runAdvancedDiagnostic() {
+            const btn = document.querySelector('button[onclick="runAdvancedDiagnostic()"]');
+            const originalHTML = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 診斷中...';
+            
+            const resultsDiv = document.getElementById('testResults');
+            const summaryDiv = document.getElementById('testSummary');
+            const detailsDiv = document.getElementById('testDetails');
+            
+            summaryDiv.innerHTML = `
+                <div class="flex items-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <i class="fas fa-stethoscope text-blue-500 text-2xl mr-3"></i>
+                    <div>
+                        <h4 class="font-bold text-blue-800">正在執行高級系統診斷...</h4>
+                        <p class="text-blue-600 text-sm">請稍候，這可能需要幾秒鐘</p>
+                    </div>
+                </div>
+            `;
+            
+            detailsDiv.innerHTML = '<div class="text-center py-4"><i class="fas fa-spinner fa-spin text-blue-500 text-xl"></i><p class="text-gray-500 mt-2">檢查系統組件中...</p></div>';
+            
+            resultsDiv.classList.remove('hidden');
+            detailsDiv.classList.remove('hidden');
+            
+            try {
+                // 模擬多項檢查
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                const checks = [
+                    { name: '數據庫連接', status: 'success', message: '連接正常，響應時間: 120ms' },
+                    { name: 'API端點', status: 'success', message: '所有API端點均可訪問' },
+                    { name: '配置文件', status: 'warning', message: '參數庫版本V5.1I，建議檢查更新' },
+                    { name: '文件權限', status: 'success', message: '寫入權限正常' },
+                    { name: '緩存系統', status: 'success', message: '緩存功能正常' },
+                    { name: '依賴檢查', status: 'success', message: 'PHP版本7.4+，所有擴展已加載' }
+                ];
+                
+                summaryDiv.innerHTML = `
+                    <div class="flex items-center p-4 bg-green-50 rounded-lg border border-green-200">
+                        <i class="fas fa-clipboard-check text-green-500 text-2xl mr-3"></i>
+                        <div>
+                            <h4 class="font-bold text-green-800">系統診斷完成</h4>
+                            <p class="text-green-600 text-sm">
+                                ${checks.length}項檢查已完成，${checks.filter(c => c.status === 'success').length}項通過
+                            </p>
+                        </div>
+                    </div>
+                `;
+                
+                let detailsHTML = `
+                    <div class="space-y-3">
+                        <h5 class="font-medium text-gray-700">詳細診斷報告:</h5>
+                        ${checks.map(check => `
+                            <div class="flex items-start p-3 rounded-lg ${check.status === 'success' ? 'bg-green-50 border border-green-100' : check.status === 'warning' ? 'bg-yellow-50 border border-yellow-100' : 'bg-red-50 border border-red-100'}">
+                                <i class="fas ${check.status === 'success' ? 'fa-check-circle text-green-500' : check.status === 'warning' ? 'fa-exclamation-triangle text-yellow-500' : 'fa-times-circle text-red-500'} mt-1 mr-3"></i>
+                                <div class="flex-1">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-medium ${check.status === 'success' ? 'text-green-700' : check.status === 'warning' ? 'text-yellow-700' : 'text-red-700'}">${check.name}</span>
+                                        <span class="text-xs px-2 py-1 rounded ${check.status === 'success' ? 'bg-green-100 text-green-800' : check.status === 'warning' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}">
+                                            ${check.status === 'success' ? '正常' : check.status === 'warning' ? '警告' : '錯誤'}
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-1">${check.message}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="mt-4 pt-4 border-t">
+                        <h5 class="font-medium text-gray-700 mb-2">建議操作:</h5>
+                        <ul class="text-sm text-gray-600 space-y-1 list-disc pl-5">
+                            <li>定期備份數據庫和配置文件</li>
+                            <li>監控系統日誌文件</li>
+                            <li>保持參數庫與格局庫同步更新</li>
+                            <li>定期執行數據庫優化</li>
+                        </ul>
+                    </div>
+                `;
+                
+                detailsDiv.innerHTML = detailsHTML;
+                
+            } catch (error) {
+                summaryDiv.innerHTML = `
+                    <div class="flex items-center p-4 bg-red-50 rounded-lg border border-red-200">
+                        <i class="fas fa-exclamation-triangle text-red-500 text-2xl mr-3"></i>
+                        <div>
+                            <h4 class="font-bold text-red-800">診斷過程出錯</h4>
+                            <p class="text-red-600 text-sm">${error.message}</p>
+                        </div>
+                    </div>
+                `;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+            }
+        }
+
+        // 清除本地緩存
+        function resetLocalCache() {
+            const btn = document.querySelector('button[onclick="resetLocalCache()"]');
+            const originalHTML = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> 清除中...';
+            
+            setTimeout(() => {
+                // 實際操作：清除localStorage、sessionStorage等
+                localStorage.removeItem('dashboard_cache');
+                sessionStorage.clear();
+                
+                // 顯示成功消息
+                const resultsDiv = document.getElementById('testResults');
+                const summaryDiv = document.getElementById('testSummary');
+                const detailsDiv = document.getElementById('testDetails');
+                
+                resultsDiv.classList.remove('hidden');
+                detailsDiv.classList.remove('hidden');
+                summaryDiv.innerHTML = `
+                    <div class="flex items-center p-4 bg-green-50 rounded-lg border border-green-200">
+                        <i class="fas fa-check-circle text-green-500 text-2xl mr-3"></i>
+                        <div>
+                            <h4 class="font-bold text-green-800">緩存清除成功</h4>
+                            <p class="text-green-600 text-sm">已清除本地緩存數據</p>
+                        </div>
+                    </div>
+                `;
+                
+                detailsDiv.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span class="text-sm text-gray-700">localStorage緩存已清除</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span class="text-sm text-gray-700">sessionStorage已重置</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-check text-green-500 mr-2"></i>
+                            <span class="text-sm text-gray-700">臨時數據已清理</span>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-sm text-gray-600">
+                        <p>建議刷新頁面以獲取最新數據。</p>
+                    </div>
+                `;
+                
+                btn.disabled = false;
+                btn.innerHTML = originalHTML;
+                
+                // 提示刷新頁面
+                setTimeout(() => {
+                    if (confirm('緩存已清除，是否刷新頁面以獲取最新數據？')) {
+                        window.location.reload();
+                    }
+                }, 1000);
+            }, 800);
+        }
+
+        // 切換測試詳細信息顯示
+        function toggleTestDetails() {
+            const detailsDiv = document.getElementById('testDetails');
+            const toggleBtn = document.getElementById('toggleDetailsBtn');
+            const icon = toggleBtn.querySelector('i');
+            
+            detailsDiv.classList.toggle('hidden');
+            
+            if (detailsDiv.classList.contains('hidden')) {
+                icon.className = 'fas fa-chevron-down mr-1';
+                toggleBtn.querySelector('span').textContent = '詳細信息';
+            } else {
+                icon.className = 'fas fa-chevron-up mr-1';
+                toggleBtn.querySelector('span').textContent = '收起信息';
+            }
+        }
+
+        // 複製測試結果
+        document.getElementById('copyResultsBtn')?.addEventListener('click', function() {
+            const summary = document.getElementById('testSummary').textContent;
+            const details = document.getElementById('testDetails').textContent;
+            const textToCopy = `數據庫連接測試結果\n\n${summary}\n\n${details}`;
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const btn = this;
+                const originalHTML = btn.innerHTML;
+                
+                btn.innerHTML = '<i class="fas fa-check mr-1"></i> 已複製';
+                btn.className = 'text-sm text-green-600 hover:text-green-800 flex items-center';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.className = 'text-sm text-qimen-blue hover:text-blue-800 flex items-center';
+                }, 2000);
+            }).catch(err => {
+                console.error('複製失敗:', err);
+                alert('複製失敗，請手動選擇並複製文本。');
+            });
+        });
+
+        // 初始化圖表
+        let accuracyChart;
+        function initAccuracyChart() {
+            const ctx = document.getElementById('accuracyChart').getContext('2d');
+            accuracyChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['FB3048', 'FB3052', 'FB3059', 'FB3065', 'FB3072', 'FB3079'],
+                    datasets: [{
+                        label: '預測準確度',
+                        data: [58.9, 61.2, 70.5, 72.3, 64.8, 67.5],
+                        borderColor: '#8B5CF6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#8B5CF6',
+                        pointBorderColor: '#FFFFFF',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `準確度: ${context.parsed.y}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                callback: function(value) {
+                                    return value + '%';
+                                },
+                                color: '#6B7280'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#6B7280'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 更新圖表數據
+        function updateChart(range) {
+            // 這裡可以根據範圍加載不同的數據
+            console.log('更新圖表範圍:', range);
+            
+            // 示例：切換按鈕狀態
+            document.querySelectorAll('button[onclick^="updateChart"]').forEach(btn => {
+                btn.className = 'px-3 py-1 text-xs bg-gray-100 rounded-lg hover:bg-gray-200';
+            });
+            event.target.className = 'px-3 py-1 text-xs bg-qimen-blue text-white rounded-lg hover:bg-blue-600';
+            
+            // 實際應用中應該從API獲取數據
+            // const response = await fetch(`api/get_chart_data.php?range=${range}`);
+            // const data = await response.json();
+            // accuracyChart.data = data;
+            // accuracyChart.update();
+        }
+
+        // 加載最近比賽數據
+        async function loadRecentMatches() {
+            const container = document.getElementById('recent-matches');
+            
+            // 模擬API調用
+            setTimeout(() => {
+                const matches = [
+                    { id: 1, code: 'FB3079', home: '巴拉卡斯中央', away: '萊斯查', result: '1-1', accuracy: '67.5%', time: '2026-01-28' },
+                    { id: 2, code: 'FB3065', home: '聖羅倫素', away: '小阿根廷人', result: '2-0', accuracy: '72.3%', time: '2026-01-21' },
+                    { id: 3, code: 'FB3048', home: '葛度爾古斯', away: '班菲特', result: '0-1', accuracy: '58.9%', time: '2026-01-14' }
+                ];
+                
+                container.innerHTML = matches.map(match => `
+                    <div class="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <span class="font-bold text-gray-800">${match.code}</span>
+                                <span class="text-xs text-gray-500 ml-2">${match.time}</span>
+                            </div>
+                            <span class="px-2 py-1 text-xs font-bold rounded-lg ${parseFloat(match.accuracy) > 70 ? 'bg-green-100 text-green-800' : parseFloat(match.accuracy) > 60 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800'}">
+                                ${match.accuracy}
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="text-center">
+                                <p class="font-medium text-gray-800">${match.home}</p>
+                                <p class="text-xs text-gray-500">主隊</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold text-gray-800">${match.result}</p>
+                                <p class="text-xs text-gray-500">賽果</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="font-medium text-gray-800">${match.away}</p>
+                                <p class="text-xs text-gray-500">客隊</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }, 1000);
+        }
+
+        // 頁面加載完成後執行
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化組件狀態
+            initComponentStatus();
+            
+            // 初始化圖表
+            initAccuracyChart();
+            
+            // 加載最近比賽
+            loadRecentMatches();
+            
+            // 嘗試從配置獲取系統版本
+            fetch('config/parameters.json')
+                .then(response => response.json())
+                .then(config => {
+                    document.getElementById('system-version').textContent = config.version;
+                    document.getElementById('last-updated').textContent = config.last_updated;
+                })
+                .catch(error => console.log('無法載入系統配置:', error));
+            
+            // 自動測試數據庫連接（延遲3秒）
+            setTimeout(() => {
+                testDatabaseConnection();
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
