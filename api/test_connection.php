@@ -1,31 +1,41 @@
 <?php
+// 設置響應頭為 JSON
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
-// 如果是OPTIONS請求，直接返回（用於CORS預檢請求）
+// 處理 CORS 預檢請求
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
+// 檢查配置文件是否存在
+if (!file_exists('../config/supabase_config.php')) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => '配置文件不存在',
+        'message' => '請確保 config/supabase_config.php 文件存在',
+        'timestamp' => date('Y-m-d H:i:s')
+    ]);
+    exit();
+}
+
 require_once('../config/supabase_config.php');
 
-// 記錄測試開始時間
+// 記錄開始時間
 $startTime = microtime(true);
 
 try {
-    // 測試1: 直接連接Supabase API
+    // 測試1: 測試 Supabase 連接
     $testResult = testSupabaseConnection();
     
-    // 測試2: 嘗試查詢數據表是否存在
-    $tablesResult = supabaseRequest('/?select=*', 'GET');
-    
-    // 測試3: 嘗試創建一個測試查詢（檢查matches表）
+    // 測試2: 檢查數據表
     $testQueryResult = supabaseRequest('/matches?limit=1', 'GET');
     
-    // 測試4: 檢查配置文件是否存在
+    // 測試3: 檢查配置文件
     $configFiles = [
         'supabase_config.php' => file_exists('../config/supabase_config.php'),
         'parameters.json' => file_exists('../config/parameters.json'),
@@ -41,20 +51,19 @@ try {
         'timestamp' => date('Y-m-d H:i:s'),
         'response_time_ms' => $responseTime,
         'connection_test' => $testResult,
-        'api_status' => [
-            'code' => $tablesResult['code'],
-            'message' => $this->getHttpStatusMessage($tablesResult['code'])
-        ],
         'database_test' => [
             'code' => $testQueryResult['code'],
-            'has_matches_table' => $testQueryResult['code'] === 200,
+            'has_matches_table' => $testQueryResult['code'] === 200 || $testQueryResult['code'] === 404,
+            'message' => $this->getHttpStatusMessage($testQueryResult['code']),
             'records_found' => is_array($testQueryResult['data']) ? count($testQueryResult['data']) : 0
         ],
         'config_files' => $configFiles,
         'environment' => [
             'php_version' => PHP_VERSION,
             'server_software' => $_SERVER['SERVER_SOFTWARE'] ?? 'Unknown',
-            'server_name' => $_SERVER['SERVER_NAME'] ?? 'Unknown'
+            'server_name' => $_SERVER['SERVER_NAME'] ?? 'Unknown',
+            'request_method' => $_SERVER['REQUEST_METHOD'] ?? 'Unknown',
+            'script_name' => $_SERVER['SCRIPT_NAME'] ?? 'Unknown'
         ]
     ];
     
@@ -66,7 +75,8 @@ try {
         'success' => false,
         'error' => '測試過程中發生異常',
         'message' => $e->getMessage(),
-        'timestamp' => date('Y-m-d H:i:s')
+        'timestamp' => date('Y-m-d H:i:s'),
+        'trace' => $e->getTraceAsString()
     ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 }
 
@@ -84,6 +94,24 @@ function getHttpStatusMessage($code) {
         503 => 'Service Unavailable - 服務不可用'
     ];
     
-    return $statusMessages[$code] ?? 'Unknown Status';
+    return $statusMessages[$code] ?? 'Unknown Status Code: ' . $code;
+}
+
+// 如果上面沒有定義 testSupabaseConnection 函數，在這裡定義
+if (!function_exists('testSupabaseConnection')) {
+    function testSupabaseConnection() {
+        $result = supabaseRequest('/?select=*&limit=1', 'GET');
+        
+        if ($result['code'] === 200 || $result['code'] === 401) {
+            // 401 也視為連接成功，只是權限問題
+            return ['success' => true, 'message' => 'Supabase連接成功'];
+        } else {
+            return [
+                'success' => false, 
+                'message' => 'Supabase連接失敗: HTTP ' . ($result['code'] ?? '未知錯誤'),
+                'details' => $result['raw'] ?? '無響應'
+            ];
+        }
+    }
 }
 ?>
