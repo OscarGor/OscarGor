@@ -2,8 +2,8 @@
 // config/supabase_config.php
 // 從Supabase項目設置中獲取這些值
 define('SUPABASE_URL', 'https://kbzujfozktjaouodjrdj.supabase.co');
-define('SUPABASE_KEY', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtienVqZm96a3RqYW91b2RqcmRqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MDYxNjQ1MywiZXhwIjoyMDg2MTkyNDUzfQ.n5XletFv61prKI4PATv2sob09nu-Shk9ZM6tIrXsILA');
-define('SUPABASE_ANON_KEY', 'sb_publishable_o2rVjuQmzWwAv-h8pi2Ylg_5LjlQC6P');
+define('SUPABASE_KEY', 'sb_publishable_o2rVjuQmzWwAv-h8pi2Ylg_5LjlQC6P');
+define('SUPABASE_ANON_KEY', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtienVqZm96a3RqYW91b2RqcmRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA2MTY0NTMsImV4cCI6MjA4NjE5MjQ1M30.76f-WKYJvhzaaOUJqxLPqu5ckLpkPRrlswQGtDy16n8');
 
 // 通用Supabase請求函數
 function supabaseRequest($endpoint, $method = 'GET', $data = null) {
