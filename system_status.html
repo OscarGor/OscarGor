@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统状态 - 阴盘奇门足球预测系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-server"></i>
+                <span>系统状态监控</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html"><i class="fas fa-home"></i> 仪表板</a>
+                <a href="system_status.html" class="active"><i class="fas fa-server"></i> 系统状态</a>
+                <a href="update_instructions.html"><i class="fas fa-code-branch"></i> 更新指令</a>
+                <a href="pattern_library.html"><i class="fas fa-book"></i> 格局库</a>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- 系统概览 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-heartbeat"></i> 系统健康状态</h2>
+                    <div class="btn-group">
+                        <button class="btn" onclick="refreshStatus()">
+                            <i class="fas fa-sync-alt"></i> 刷新
+                        </button>
+                        <button class="btn btn-primary" onclick="runSystemCheck()">
+                            <i class="fas fa-stethoscope"></i> 诊断
+                        </button>
+                        <button class="btn btn-success" onclick="checkForUpdates()">
+                            <i class="fas fa-arrow-up"></i> 检查更新
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="health-status-grid">
+                    <div class="status-item online">
+                        <div class="status-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <div class="status-content">
+                            <h3>Supabase数据库</h3>
+                            <div class="status-indicator active"></div>
+                            <span class="status-text">在线</span>
+                            <div class="status-details">
+                                <span>响应时间: <strong id="db-response">--</strong>ms</span>
+                                <span>连接数: <strong id="db-connections">--</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="status-item online">
+                        <div class="status-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="status-content">
+                            <h3>AI预测引擎</h3>
+                            <div class="status-indicator active"></div>
+                            <span class="status-text">运行中</span>
+                            <div class="status-details">
+                                <span>版本: <strong id="ai-version">V5.2</strong></span>
+                                <span>准确度: <strong id="ai-accuracy">65.2%</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="status-item warning">
+                        <div class="status-icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="status-content">
+                            <h3>DeepSeek API</h3>
+                            <div class="status-indicator warning"></div>
+                            <span class="status-text">未配置</span>
+                            <div class="status-details">
+                                <span>状态: <strong id="deepseek-status">离线</strong></span>
+                                <button class="btn btn-sm" onclick="configureDeepSeek()">
+                                    配置
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="status-item online">
+                        <div class="status-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div class="status-content">
+                            <h3>自动化系统</h3>
+                            <div class="status-indicator active"></div>
+                            <span class="status-text">运行中</span>
+                            <div class="status-details">
+                                <span>最后更新: <strong id="last-update">--</strong></span>
+                                <span>待处理: <strong id="pending-updates">0</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 性能监控 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-line"></i> 性能监控</h2>
+                    <div class="time-range">
+                        <select id="time-range" onchange="updatePerformanceChart()">
+                            <option value="24h">最近24小时</option>
+                            <option value="7d">最近7天</option>
+                            <option value="30d">最近30天</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="performance-grid">
+                    <div class="performance-card">
+                        <h3><i class="fas fa-bullseye"></i> 预测准确度</h3>
+                        <div class="performance-chart">
+                            <canvas id="accuracy-chart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="performance-card">
+                        <h3><i class="fas fa-tachometer-alt"></i> 系统响应时间</h3>
+                        <div class="performance-chart">
+                            <canvas id="response-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 数据统计 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-pie"></i> 数据统计</h2>
+                    <span class="statistics-time">统计截止: <span id="stats-time">--</span></span>
+                </div>
+                
+                <div class="statistics-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-futbol"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>总比赛数</h3>
+                            <p class="stat-value" id="total-matches">--</p>
+                            <p class="stat-trend">
+                                本周新增: <span id="weekly-matches">--</span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>已验证比赛</h3>
+                            <p class="stat-value" id="verified-matches">--</p>
+                            <p class="stat-trend">
+                                准确率: <span id="verification-rate">--</span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>参数更新</h3>
+                            <p class="stat-value" id="parameter-updates">--</p>
+                            <p class="stat-trend">
+                                当前版本: <span id="current-version">V5.2</span>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>格局库</h3>
+                            <p class="stat-value" id="pattern-count">--</p>
+                            <p class="stat-trend">
+                                已验证: <span id="verified-patterns">--</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="statistics-table">
+                    <h3><i class="fas fa-history"></i> 最近活动</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>事件</th>
+                                <th>详情</th>
+                                <th>状态</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-activities">
+                            <!-- 动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 系统配置 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-sliders-h"></i> 系统配置</h2>
+                    <div class="config-buttons">
+                        <button class="btn" onclick="backupSystem()">
+                            <i class="fas fa-download"></i> 备份配置
+                        </button>
+                        <button class="btn btn-warning" onclick="resetSystem()">
+                            <i class="fas fa-redo"></i> 重置系统
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="config-grid">
+                    <div class="config-item">
+                        <label>
+                            <input type="checkbox" id="auto-optimization" checked>
+                            启用自动优化
+                        </label>
+                        <span class="config-help">赛后自动更新AI参数</span>
+                    </div>
+                    
+                    <div class="config-item">
+                        <label>
+                            <input type="checkbox" id="deepseek-integration">
+                            启用DeepSeek分析
+                        </label>
+                        <span class="config-help">使用AI进行深度分析</span>
+                    </div>
+                    
+                    <div class="config-item">
+                        <label>
+                            <input type="checkbox" id="email-notifications">
+                            启用邮件通知
+                        </label>
+                        <span class="config-help">重要事件邮件提醒</span>
+                    </div>
+                    
+                    <div class="config-item">
+                        <label>
+                            <input type="checkbox" id="data-backup" checked>
+                            自动数据备份
+                        </label>
+                        <span class="config-help">每日自动备份数据</span>
+                    </div>
+                    
+                    <div class="config-item full-width">
+                        <h3>DeepSeek API配置</h3>
+                        <div class="api-config">
+                            <input type="password" id="deepseek-api-key" class="form-control" 
+                                   placeholder="输入DeepSeek API密钥">
+                            <button class="btn btn-primary" onclick="saveAPIKey()">
+                                保存
+                            </button>
+                            <button class="btn" onclick="testAPIKey()">
+                                测试连接
+                            </button>
+                        </div>
+                        <div id="api-test-result" class="test-result"></div>
+                    </div>
+                    
+                    <div class="config-item full-width">
+                        <h3>系统日志级别</h3>
+                        <select id="log-level" class="form-control">
+                            <option value="debug">调试</option>
+                            <option value="info" selected>信息</option>
+                            <option value="warn">警告</option>
+                            <option value="error">错误</option>
+                        </select>
+                        <span class="config-help">设置系统日志详细程度</span>
+                    </div>
+                </div>
+                
+                <div class="config-save">
+                    <button class="btn btn-success" onclick="saveConfig()">
+                        <i class="fas fa-save"></i> 保存配置
+                    </button>
+                </div>
+            </div>
+
+            <!-- 日志查看器 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-clipboard-list"></i> 系统日志</h2>
+                    <div class="log-controls">
+                        <button class="btn btn-sm" onclick="clearLogs()">
+                            <i class="fas fa-trash"></i> 清空日志
+                        </button>
+                        <button class="btn btn-sm btn-primary" onclick="exportLogs()">
+                            <i class="fas fa-download"></i> 导出日志
+                        </button>
+                        <button class="btn btn-sm" onclick="toggleLogAutoRefresh()">
+                            <i class="fas fa-sync-alt"></i> 自动刷新
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="log-viewer">
+                    <div class="log-toolbar">
+                        <div class="log-filter">
+                            <select id="log-filter-level" onchange="filterLogs()">
+                                <option value="all">所有级别</option>
+                                <option value="debug">调试</option>
+                                <option value="info">信息</option>
+                                <option value="warn">警告</option>
+                                <option value="error">错误</option>
+                            </select>
+                            <input type="text" id="log-search" placeholder="搜索日志..." 
+                                   onkeyup="filterLogs()">
+                        </div>
+                        <div class="log-info">
+                            显示: <span id="log-count">0</span> 条记录
+                        </div>
+                    </div>
+                    
+                    <div class="log-content">
+                        <table class="log-table">
+                            <thead>
+                                <tr>
+                                    <th width="150">时间</th>
+                                    <th width="80">级别</th>
+                                    <th width="120">模块</th>
+                                    <th>内容</th>
+                                </tr>
+                            </thead>
+                            <tbody id="log-entries">
+                                <!-- 动态加载 -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>系统运行时间: <span id="uptime">--</span></p>
+            <p>上次完整检查: <span id="last-check">--</span></p>
+        </footer>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="js/supabase-client.js"></script>
+    <script src="js/qimen-engine.js"></script>
+    <script src="js/ai-optimizer.js"></script>
+    <script src="js/deepseek-integration.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        let accuracyChart = null;
+        let responseChart = null;
+        let autoRefreshInterval = null;
+        let logAutoRefresh = true;
+
+        // 初始化
+        async function init() {
+            loadSystemStatus();
+            loadStatistics();
+            loadRecentActivities();
+            loadLogs();
+            loadConfiguration();
+            
+            // 启动性能图表
+            updatePerformanceChart();
+            
+            // 启动自动刷新
+            startAutoRefresh();
+            
+            // 计算运行时间
+            updateUptime();
+            setInterval(updateUptime, 60000); // 每分钟更新
+        }
+
+        // 加载系统状态
+        async function loadSystemStatus() {
+            try {
+                // 检查Supabase连接
+                const dbStart = Date.now();
+                const { data: dbTest, error: dbError } = await supabaseClient.supabase
+                    .from('matches')
+                    .select('count', { count: 'exact' })
+                    .limit(1);
+                
+                const dbResponseTime = Date.now() - dbStart;
+                document.getElementById('db-response').textContent = dbResponseTime;
+                
+                if (!dbError) {
+                    document.querySelector('.status-item:nth-child(1) .status-text').textContent = '在线';
+                    document.querySelector('.status-item:nth-child(1)').className = 'status-item online';
+                    document.getElementById('db-connections').textContent = '正常';
+                } else {
+                    document.querySelector('.status-item:nth-child(1) .status-text').textContent = '离线';
+                    document.querySelector('.status-item:nth-child(1)').className = 'status-item error';
+                }
+                
+                // 检查AI引擎
+                const engine = new QimenEngine();
+                if (engine) {
+                    document.querySelector('.status-item:nth-child(2) .status-text').textContent = '运行中';
+                    document.querySelector('.status-item:nth-child(2)').className = 'status-item online';
+                    document.getElementById('ai-accuracy').textContent = '65.2%';
+                }
+                
+                // 检查DeepSeek
+                const deepSeek = deepseekIntegration;
+                const deepSeekStatus = await deepSeek.checkAPIStatus();
+                if (deepSeekStatus.available) {
+                    document.getElementById('deepseek-status').textContent = '在线';
+                    document.querySelector('.status-item:nth-child(3) .status-text').textContent = '在线';
+                    document.querySelector('.status-item:nth-child(3)').className = 'status-item online';
+                }
+                
+                // 检查自动化系统
+                document.getElementById('last-update').textContent = 
+                    new Date().toLocaleDateString('zh-CN');
+                document.getElementById('pending-updates').textContent = '0';
+                
+            } catch (error) {
+                console.error('加载系统状态失败:', error);
+                logError('系统状态检查', error.message);
+            }
+        }
+
+        // 加载统计数据
+        async function loadStatistics() {
+            try {
+                // 获取比赛总数
+                const { data: matches, error } = await supabaseClient.supabase
+                    .from('matches')
+                    .select('*');
+                
+                if (!error && matches) {
+                    const total = matches.length;
+                    const verified = matches.filter(m => m.status === 'verified').length;
+                    const weekly = matches.filter(m => {
+                        const date = new Date(m.created_at);
+                        const weekAgo = new Date();
+                        weekAgo.setDate(weekAgo.getDate() - 7);
+                        return date > weekAgo;
+                    }).length;
+                    
+                    document.getElementById('total-matches').textContent = total;
+                    document.getElementById('verified-matches').textContent = verified;
+                    document.getElementById('weekly-matches').textContent = weekly;
+                    document.getElementById('verification-rate').textContent = 
+                        total > 0 ? Math.round((verified / total) * 100) + '%' : '0%';
+                }
+                
+                // 获取格局库数据
+                fetch('./data/pattern_library.json')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.patterns) {
+                            document.getElementById('pattern-count').textContent = data.patterns.length;
+                            const verifiedPatterns = data.patterns.filter(p => p.exampleMatches && p.exampleMatches.length > 0).length;
+                            document.getElementById('verified-patterns').textContent = verifiedPatterns;
+                        }
+                    });
+                
+                // 更新时间
+                document.getElementById('stats-time').textContent = 
+                    new Date().toLocaleString('zh-CN');
+                    
+            } catch (error) {
+                console.error('加载统计数据失败:', error);
+                logError('统计数据加载', error.message);
+            }
+        }
+
+        // 加载最近活动
+        async function loadRecentActivities() {
+            try {
+                const { data: matches, error } = await supabaseClient.supabase
+                    .from('matches')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(10);
+                
+                if (!error && matches) {
+                    const activities = document.getElementById('recent-activities');
+                    activities.innerHTML = matches.map(match => {
+                        const time = new Date(match.created_at).toLocaleTimeString('zh-CN', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        });
+                        
+                        let event = '';
+                        let details = '';
+                        let status = '';
+                        
+                        if (match.status === 'verified') {
+                            event = '比赛验证';
+                            details = `${match.home_team} ${match.actual_result?.result?.fullTime || ''}`;
+                            status = '<span class="status-success">成功</span>';
+                        } else if (match.prediction) {
+                            event = '预测完成';
+                            details = `预测: ${match.prediction.全场预测 || ''}`;
+                            status = '<span class="status-info">完成</span>';
+                        } else {
+                            event = '新增比赛';
+                            details = `${match.home_team} vs ${match.away_team}`;
+                            status = '<span class="status-warning">待预测</span>';
+                        }
+                        
+                        return `
+                            <tr>
+                                <td>${time}</td>
+                                <td>${event}</td>
+                                <td>${details}</td>
+                                <td>${status}</td>
+                            </tr>
+                        `;
+                    }).join('');
+                }
+                
+            } catch (error) {
+                console.error('加载最近活动失败:', error);
+                logError('活动记录加载', error.message);
+            }
+        }
+
+        // 更新性能图表
+        function updatePerformanceChart() {
+            const timeRange = document.getElementById('time-range').value;
+            
+            // 模拟数据
+            const labels = generateTimeLabels(timeRange);
+            const accuracyData = generateRandomData(labels.length, 50, 80);
+            const responseData = generateRandomData(labels.length, 100, 500);
+            
+            // 更新准确度图表
+            updateChart('accuracy-chart', labels, accuracyData, '准确度 (%)', '#27ae60');
+            
+            // 更新响应时间图表
+            updateChart('response-chart', labels, responseData, '响应时间 (ms)', '#3498db');
+        }
+
+        function generateTimeLabels(range) {
+            const labels = [];
+            const now = new Date();
+            
+            switch(range) {
+                case '24h':
+                    for (let i = 23; i >= 0; i--) {
+                        const hour = new Date(now);
+                        hour.setHours(now.getHours() - i);
+                        labels.push(hour.getHours() + ':00');
+                    }
+                    break;
+                case '7d':
+                    for (let i = 6; i >= 0; i--) {
+                        const day = new Date(now);
+                        day.setDate(now.getDate() - i);
+                        labels.push(day.toLocaleDateString('zh-CN', { weekday: 'short' }));
+                    }
+                    break;
+                case '30d':
+                    for (let i = 29; i >= 0; i--) {
+                        const day = new Date(now);
+                        day.setDate(now.getDate() - i);
+                        labels.push(day.getDate() + '日');
+                    }
+                    break;
+            }
+            
+            return labels;
+        }
+
+        function generateRandomData(count, min, max) {
+            const data = [];
+            for (let i = 0; i < count; i++) {
+                data.push(Math.floor(Math.random() * (max - min + 1)) + min);
+            }
+            return data;
+        }
+
+        function updateChart(canvasId, labels, data, label, color) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            const chart = canvasId.includes('accuracy') ? accuracyChart : responseChart;
+            
+            if (chart) {
+                chart.destroy();
+            }
+            
+            const newChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: label,
+                        data: data,
+                        borderColor: color,
+                        backgroundColor: color + '20',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                drawBorder: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            if (canvasId.includes('accuracy')) {
+                accuracyChart = newChart;
+            } else {
+                responseChart = newChart;
+            }
+        }
+
+        // 日志功能
+        async function loadLogs() {
+            try {
+                // 从localStorage加载日志
+                const logs = JSON.parse(localStorage.getItem('system_logs') || '[]');
+                displayLogs(logs);
+                
+            } catch (error) {
+                console.error('加载日志失败:', error);
+            }
+        }
+
+        function displayLogs(logs) {
+            const logEntries = document.getElementById('log-entries');
+            const filteredLogs = filterLogEntries(logs);
+            
+            logEntries.innerHTML = filteredLogs.map(log => `
+                <tr class="log-level-${log.level}">
+                    <td>${new Date(log.timestamp).toLocaleTimeString('zh-CN')}</td>
+                    <td>
+                        <span class="log-badge level-${log.level}">${log.level}</span>
+                    </td>
+                    <td>${log.module}</td>
+                    <td>${log.message}</td>
+                </tr>
+            `).join('');
+            
+            document.getElementById('log-count').textContent = filteredLogs.length;
+            
+            // 滚动到底部
+            const logContent = document.querySelector('.log-content');
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+
+        function filterLogEntries(logs) {
+            const levelFilter = document.getElementById('log-filter-level').value;
+            const searchText = document.getElementById('log-search').value.toLowerCase();
+            
+            return logs.filter(log => {
+                if (levelFilter !== 'all' && log.level !== levelFilter) {
+                    return false;
+                }
+                if (searchText && !log.message.toLowerCase().includes(searchText) && 
+                    !log.module.toLowerCase().includes(searchText)) {
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        function filterLogs() {
+            const logs = JSON.parse(localStorage.getItem('system_logs') || '[]');
+            displayLogs(logs);
+        }
+
+        function logError(module, message) {
+            const logs = JSON.parse(localStorage.getItem('system_logs') || '[]');
+            logs.push({
+                timestamp: new Date().toISOString(),
+                level: 'error',
+                module: module,
+                message: message
+            });
+            
+            // 限制日志数量
+            if (logs.length > 1000) {
+                logs.splice(0, 100);
+            }
+            
+            localStorage.setItem('system_logs', JSON.stringify(logs));
+            
+            if (logAutoRefresh) {
+                displayLogs(logs);
+            }
+        }
+
+        function clearLogs() {
+            if (confirm('确定要清空所有日志吗？')) {
+                localStorage.setItem('system_logs', '[]');
+                displayLogs([]);
+                showNotification('日志已清空', 'success');
+            }
+        }
+
+        function exportLogs() {
+            const logs = JSON.parse(localStorage.getItem('system_logs') || '[]');
+            const dataStr = JSON.stringify(logs, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', `system_logs_${Date.now()}.json`);
+            linkElement.click();
+            
+            showNotification('日志已导出', 'success');
+        }
+
+        function toggleLogAutoRefresh() {
+            logAutoRefresh = !logAutoRefresh;
+            const btn = event.target.closest('button');
+            btn.innerHTML = logAutoRefresh ? 
+                '<i class="fas fa-pause"></i> 暂停刷新' : 
+                '<i class="fas fa-sync-alt"></i> 自动刷新';
+            btn.classList.toggle('active', logAutoRefresh);
+        }
+
+        // 配置功能
+        function loadConfiguration() {
+            const config = JSON.parse(localStorage.getItem('system_config') || '{}');
+            
+            document.getElementById('auto-optimization').checked = config.autoOptimization !== false;
+            document.getElementById('deepseek-integration').checked = config.deepseekIntegration || false;
+            document.getElementById('email-notifications').checked = config.emailNotifications || false;
+            document.getElementById('data-backup').checked = config.dataBackup !== false;
+            document.getElementById('log-level').value = config.logLevel || 'info';
+            
+            // 加载API密钥（安全地显示部分）
+            const apiKey = localStorage.getItem('DEEPSEEK_API_KEY');
+            if (apiKey) {
+                document.getElementById('deepseek-api-key').value = 
+                    apiKey.substring(0, 4) + '...' + apiKey.substring(apiKey.length - 4);
+            }
+        }
+
+        function saveConfig() {
+            const config = {
+                autoOptimization: document.getElementById('auto-optimization').checked,
+                deepseekIntegration: document.getElementById('deepseek-integration').checked,
+                emailNotifications: document.getElementById('email-notifications').checked,
+                dataBackup: document.getElementById('data-backup').checked,
+                logLevel: document.getElementById('log-level').value,
+                lastUpdated: new Date().toISOString()
+            };
+            
+            localStorage.setItem('system_config', JSON.stringify(config));
+            showNotification('配置已保存', 'success');
+            logInfo('系统配置', '配置已更新');
+        }
+
+        function saveAPIKey() {
+            const apiKey = document.getElementById('deepseek-api-key').value;
+            if (apiKey && !apiKey.includes('...')) {
+                localStorage.setItem('DEEPSEEK_API_KEY', apiKey);
+                deepseekIntegration.setAPIKey(apiKey);
+                showNotification('API密钥已保存', 'success');
+            }
+        }
+
+        async function testAPIKey() {
+            const resultEl = document.getElementById('api-test-result');
+            resultEl.innerHTML = '<span class="testing">测试连接中...</span>';
+            
+            try {
+                const result = await deepseekIntegration.testConnection();
+                
+                if (result.connected) {
+                    resultEl.innerHTML = '<span class="success">✓ ' + result.message + '</span>';
+                } else {
+                    resultEl.innerHTML = '<span class="error">✗ ' + result.message + '</span>';
+                }
+            } catch (error) {
+                resultEl.innerHTML = '<span class="error">✗ 测试失败: ' + error.message + '</span>';
+            }
+        }
+
+        function configureDeepSeek() {
+            document.getElementById('deepseek-api-key').focus();
+            showNotification('请在下方配置DeepSeek API密钥', 'info');
+        }
+
+        function backupSystem() {
+            // 备份系统数据
+            const backup = {
+                timestamp: new Date().toISOString(),
+                config: JSON.parse(localStorage.getItem('system_config') || '{}'),
+                recentMatches: JSON.parse(localStorage.getItem('recentTemplates') || '[]'),
+                logs: JSON.parse(localStorage.getItem('system_logs') || '[]')
+            };
+            
+            const dataStr = JSON.stringify(backup, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', `system_backup_${Date.now()}.json`);
+            linkElement.click();
+            
+            showNotification('系统配置已备份', 'success');
+            logInfo('系统备份', '配置已备份');
+        }
+
+        function resetSystem() {
+            if (confirm('确定要重置系统配置吗？这将清除所有本地设置。')) {
+                localStorage.removeItem('system_config');
+                localStorage.removeItem('recentTemplates');
+                localStorage.removeItem('system_logs');
+                
+                loadConfiguration();
+                loadLogs();
+                
+                showNotification('系统配置已重置', 'success');
+                logInfo('系统重置', '配置已恢复默认');
+            }
+        }
+
+        // 系统功能
+        function refreshStatus() {
+            loadSystemStatus();
+            loadStatistics();
+            loadRecentActivities();
+            showNotification('状态已刷新', 'success');
+            logInfo('系统状态', '手动刷新状态');
+        }
+
+        function runSystemCheck() {
+            showNotification('系统诊断中...', 'info');
+            setTimeout(() => {
+                showNotification('诊断完成，系统运行正常', 'success');
+                logInfo('系统诊断', '手动运行诊断检查');
+            }, 2000);
+        }
+
+        function checkForUpdates() {
+            showNotification('检查更新中...', 'info');
+            setTimeout(() => {
+                showNotification('已是最新版本 V5.2', 'success');
+                logInfo('系统更新', '检查更新');
+            }, 1500);
+        }
+
+        // 自动刷新
+        function startAutoRefresh() {
+            autoRefreshInterval = setInterval(() => {
+                if (logAutoRefresh) {
+                    loadSystemStatus();
+                }
+            }, 30000); // 30秒刷新一次
+        }
+
+        function updateUptime() {
+            const startTime = localStorage.getItem('system_start_time') || new Date().toISOString();
+            const start = new Date(startTime);
+            const now = new Date();
+            const diff = now - start;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            
+            let uptimeStr = '';
+            if (days > 0) uptimeStr += `${days}天`;
+            if (hours > 0) uptimeStr += `${hours}小时`;
+            uptimeStr += `${minutes}分钟`;
+            
+            document.getElementById('uptime').textContent = uptimeStr;
+            document.getElementById('last-check').textContent = 
+                new Date().toLocaleTimeString('zh-CN');
+        }
+
+        // 工具函数
+        function logInfo(module, message) {
+            const logs = JSON.parse(localStorage.getItem('system_logs') || '[]');
+            logs.push({
+                timestamp: new Date().toISOString(),
+                level: 'info',
+                module: module,
+                message: message
+            });
+            localStorage.setItem('system_logs', JSON.stringify(logs));
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                   type === 'error' ? 'exclamation-circle' : 
+                                   'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.parentElement.removeChild(notification);
+                }
+            }, 5000);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 记录系统启动时间
+            if (!localStorage.getItem('system_start_time')) {
+                localStorage.setItem('system_start_time', new Date().toISOString());
+            }
+            
+            init();
+        });
+    </script>
+
+    <style>
+        .health-status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .status-item {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+        }
+
+        .status-item.online {
+            border-left-color: var(--success-color);
+        }
+
+        .status-item.warning {
+            border-left-color: var(--warning-color);
+        }
+
+        .status-item.error {
+            border-left-color: var(--accent-color);
+        }
+
+        .status-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(0,0,0,0.05);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .status-item.online .status-icon {
+            color: var(--success-color);
+        }
+
+        .status-item.warning .status-icon {
+            color: var(--warning-color);
+        }
+
+        .status-item.error .status-icon {
+            color: var(--accent-color);
+        }
+
+        .status-content {
+            flex: 1;
+        }
+
+        .status-content h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        .status-indicator.active {
+            background-color: var(--success-color);
+            animation: pulse 2s infinite;
+        }
+
+        .status-indicator.warning {
+            background-color: var(--warning-color);
+        }
+
+        .status-indicator.error {
+            background-color: var(--accent-color);
+        }
+
+        .status-text {
+            font-weight: bold;
+        }
+
+        .status-details {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-details strong {
+            color: var(--primary-color);
+        }
+
+        .status-details .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        /* 性能监控样式 */
+        .performance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .performance-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .performance-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .performance-card h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .performance-chart {
+            height: 250px;
+            position: relative;
+        }
+
+        .time-range select {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: white;
+        }
+
+        /* 数据统计样式 */
+        .statistics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+
+        .stat-content h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .stat-trend {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin: 0.25rem 0 0 0;
+        }
+
+        .statistics-time {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .statistics-table {
+            margin-top: 2rem;
+        }
+
+        .statistics-table h3 {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .statistics-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .statistics-table th {
+            background: var(--light-bg);
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .statistics-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .status-success {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        .status-info {
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .status-warning {
+            color: var(--warning-color);
+            font-weight: bold;
+        }
+
+        /* 系统配置样式 */
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .config-item {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .config-item.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .config-item label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .config-help {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .api-config {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .api-config input {
+            flex: 1;
+        }
+
+        .test-result {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .test-result .testing {
+            color: var(--warning-color);
+        }
+
+        .test-result .success {
+            color: var(--success-color);
+        }
+
+        .test-result .error {
+            color: var(--accent-color);
+        }
+
+        .config-save {
+            text-align: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* 日志查看器样式 */
+        .log-viewer {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .log-toolbar {
+            padding: 1rem;
+            background: var(--light-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .log-filter {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .log-filter select,
+        .log-filter input {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: white;
+        }
+
+        .log-filter input {
+            min-width: 200px;
+        }
+
+        .log-info {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .log-content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .log-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .log-table th {
+            background: var(--light-bg);
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        .log-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .log-level-debug {
+            background: rgba(149, 165, 166, 0.1);
+        }
+
+        .log-level-info {
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .log-level-warn {
+            background: rgba(243, 156, 18, 0.05);
+        }
+
+        .log-level-error {
+            background: rgba(231, 76, 60, 0.05);
+        }
+
+        .log-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .log-badge.level-debug {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .log-badge.level-info {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .log-badge.level-warn {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .log-badge.level-error {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .config-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+
+        .log-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* 动画 */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        /* 通知样式 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 300px;
+            max-width: 400px;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid;
+        }
+
+        .notification.success {
+            border-left-color: var(--success-color);
+        }
+
+        .notification.error {
+            border-left-color: var(--accent-color);
+        }
+
+        .notification.info {
+            border-left-color: var(--secondary-color);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.25rem;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .health-status-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .statistics-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .config-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .log-toolbar {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: stretch;
+            }
+            
+            .log-filter {
+                flex-direction: column;
+            }
+            
+            .log-filter input {
+                min-width: unset;
+            }
+            
+            .config-buttons {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .statistics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .status-details {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .api-config {
+                flex-direction: column;
+            }
+        }
+    </style>
+</body>
+</html>

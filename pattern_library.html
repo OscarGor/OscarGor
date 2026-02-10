@@ -1,0 +1,2167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>奇门格局库 - 阴盘奇门足球预测系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-book"></i>
+                <span>奇门格局库</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html"><i class="fas fa-home"></i> 仪表板</a>
+                <a href="analysis_view.html"><i class="fas fa-chart-bar"></i> 分析报告</a>
+                <a href="pattern_library.html" class="active"><i class="fas fa-book"></i> 格局库</a>
+                <a href="system_status.html"><i class="fas fa-server"></i> 系统状态</a>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- 格局库概览 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-layer-group"></i> 格局库概览</h2>
+                    <div class="library-stats">
+                        <span class="stat-badge total">
+                            <i class="fas fa-shapes"></i> 总数: <span id="total-patterns">--</span>
+                        </span>
+                        <span class="stat-badge good">
+                            <i class="fas fa-thumbs-up"></i> 吉格: <span id="good-patterns">--</span>
+                        </span>
+                        <span class="stat-badge bad">
+                            <i class="fas fa-thumbs-down"></i> 凶格: <span id="bad-patterns">--</span>
+                        </span>
+                        <span class="stat-badge verified">
+                            <i class="fas fa-check-circle"></i> 已验证: <span id="verified-patterns">--</span>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="library-controls">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="pattern-search" placeholder="搜索格局名称、代码或描述..." 
+                               onkeyup="searchPatterns()">
+                        <button class="btn btn-sm" onclick="clearSearch()">
+                            <i class="fas fa-times"></i> 清除
+                        </button>
+                    </div>
+                    
+                    <div class="filter-controls">
+                        <select id="type-filter" onchange="filterPatterns()">
+                            <option value="all">所有类型</option>
+                            <option value="吉格">吉格</option>
+                            <option value="凶格">凶格</option>
+                        </select>
+                        
+                        <select id="category-filter" onchange="filterPatterns()">
+                            <option value="all">所有分类</option>
+                        </select>
+                        
+                        <select id="sort-by" onchange="sortPatterns()">
+                            <option value="name">按名称排序</option>
+                            <option value="effect">按影响值排序</option>
+                            <option value="accuracy">按准确率排序</option>
+                            <option value="frequency">按出现频率排序</option>
+                        </select>
+                        
+                        <button class="btn btn-primary" onclick="exportLibrary()">
+                            <i class="fas fa-download"></i> 导出库
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 格局列表 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-list"></i> 格局列表</h2>
+                    <div class="view-toggle">
+                        <button class="view-btn active" onclick="setViewMode('grid')">
+                            <i class="fas fa-th-large"></i> 网格视图
+                        </button>
+                        <button class="view-btn" onclick="setViewMode('table')">
+                            <i class="fas fa-table"></i> 表格视图
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 网格视图 -->
+                <div id="grid-view" class="patterns-grid">
+                    <!-- 动态加载格局卡片 -->
+                </div>
+                
+                <!-- 表格视图 -->
+                <div id="table-view" class="patterns-table" style="display: none;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>代码</th>
+                                <th>格局名称</th>
+                                <th>类型</th>
+                                <th>分类</th>
+                                <th>影响值</th>
+                                <th>出现次数</th>
+                                <th>准确率</th>
+                                <th>已验证案例</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- 动态加载表格行 -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- 分页控件 -->
+                <div class="pagination" id="pagination-controls">
+                    <!-- 动态生成分页 -->
+                </div>
+            </div>
+
+            <!-- 格局详情模态框 -->
+            <div id="pattern-modal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 id="modal-title">格局详情</h3>
+                        <button class="modal-close" onclick="closeModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="modal-body" id="modal-content">
+                        <!-- 动态加载格局详情 -->
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button class="btn" onclick="closeModal()">
+                            关闭
+                        </button>
+                        <button class="btn btn-primary" onclick="editPattern()">
+                            <i class="fas fa-edit"></i> 编辑
+                        </button>
+                        <button class="btn btn-success" onclick="addToAnalysis()">
+                            <i class="fas fa-plus"></i> 添加到分析
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 格局统计图表 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-bar"></i> 格局统计分析</h2>
+                    <div class="chart-controls">
+                        <select id="chart-type" onchange="updateStatisticsChart()">
+                            <option value="frequency">出现频率</option>
+                            <option value="accuracy">准确率分布</option>
+                            <option value="effect">影响值分布</option>
+                            <option value="category">分类统计</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="statistics-charts">
+                    <div class="chart-container">
+                        <canvas id="statistics-chart"></canvas>
+                    </div>
+                    
+                    <div class="chart-sidebar">
+                        <h3><i class="fas fa-star"></i> 关键统计</h3>
+                        <div class="key-stats">
+                            <div class="key-stat">
+                                <div class="key-label">最高准确率</div>
+                                <div class="key-value" id="highest-accuracy">--%</div>
+                                <div class="key-pattern" id="highest-accuracy-pattern">--</div>
+                            </div>
+                            
+                            <div class="key-stat">
+                                <div class="key-label">最常见格局</div>
+                                <div class="key-value" id="most-frequent">--次</div>
+                                <div class="key-pattern" id="most-frequent-pattern">--</div>
+                            </div>
+                            
+                            <div class="key-stat">
+                                <div class="key-label">最强吉格</div>
+                                <div class="key-value" id="best-good">+--</div>
+                                <div class="key-pattern" id="best-good-pattern">--</div>
+                            </div>
+                            
+                            <div class="key-stat">
+                                <div class="key-label">最强凶格</div>
+                                <div class="key-value" id="worst-bad">---</div>
+                                <div class="key-pattern" id="worst-bad-pattern">--</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 格局检测器 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-search-plus"></i> 格局检测器</h2>
+                    <button class="btn btn-primary" onclick="testDetection()">
+                        <i class="fas fa-vial"></i> 测试检测
+                    </button>
+                </div>
+                
+                <div class="detector-container">
+                    <div class="detector-input">
+                        <h3>输入奇门数据</h3>
+                        <textarea id="detection-input" class="form-control" rows="8" 
+                                  placeholder="粘贴奇门数据或选择示例..."></textarea>
+                        
+                        <div class="detector-actions">
+                            <select id="example-select" class="form-control" onchange="loadExample()">
+                                <option value="">选择示例数据</option>
+                                <option value="FB3200">FB3200 - 女足西班牙杯</option>
+                                <option value="FB3079">FB3079 - 阿根廷甲组联赛</option>
+                                <option value="FB2959">FB2959 - 荷兰甲组联赛</option>
+                            </select>
+                            
+                            <button class="btn btn-success" onclick="detectPatterns()">
+                                <i class="fas fa-search"></i> 检测格局
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="detector-results">
+                        <h3>检测结果</h3>
+                        <div id="detection-results">
+                            <div class="empty-state">
+                                <i class="fas fa-search fa-2x"></i>
+                                <p>输入奇门数据开始检测</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 格局学习模块 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-graduation-cap"></i> 格局学习</h2>
+                    <div class="learning-progress">
+                        学习进度: <span id="learning-progress">0%</span>
+                    </div>
+                </div>
+                
+                <div class="learning-modules">
+                    <div class="learning-card">
+                        <div class="learning-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="learning-content">
+                            <h3>基础知识</h3>
+                            <p>了解奇门格局的基本概念和分类</p>
+                            <button class="btn btn-sm" onclick="startLearning('basics')">
+                                开始学习
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="learning-card">
+                        <div class="learning-icon">
+                            <i class="fas fa-futbol"></i>
+                        </div>
+                        <div class="learning-content">
+                            <h3>足球应用</h3>
+                            <p>学习格局在足球预测中的应用</p>
+                            <button class="btn btn-sm" onclick="startLearning('football')">
+                                开始学习
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="learning-card">
+                        <div class="learning-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="learning-content">
+                            <h3>案例分析</h3>
+                            <p>研究实际比赛中的格局应用案例</p>
+                            <button class="btn btn-sm" onclick="startLearning('cases')">
+                                开始学习
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="learning-card">
+                        <div class="learning-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="learning-content">
+                            <h3>AI优化</h3>
+                            <p>了解AI如何优化格局参数</p>
+                            <button class="btn btn-sm" onclick="startLearning('ai')">
+                                开始学习
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 格局反馈 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-comment-alt"></i> 格局反馈</h2>
+                </div>
+                
+                <div class="feedback-form">
+                    <div class="form-group">
+                        <label>选择格局</label>
+                        <select id="feedback-pattern" class="form-control">
+                            <option value="">-- 选择格局 --</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>反馈类型</label>
+                        <select id="feedback-type" class="form-control">
+                            <option value="correction">数据修正</option>
+                            <option value="addition">补充信息</option>
+                            <option value="application">应用建议</option>
+                            <option value="accuracy">准确率反馈</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>详细说明</label>
+                        <textarea id="feedback-details" class="form-control" rows="4" 
+                                  placeholder="请详细说明您的反馈..."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>相关比赛（可选）</label>
+                        <input type="text" id="feedback-match" class="form-control" 
+                               placeholder="比赛编号，如：FB3200">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button class="btn" onclick="clearFeedback()">
+                            清空
+                        </button>
+                        <button class="btn btn-success" onclick="submitFeedback()">
+                            <i class="fas fa-paper-plane"></i> 提交反馈
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>格局库版本：<span id="library-version">V1.0</span> | 最后更新：<span id="library-updated">--</span></p>
+            <p>数据基于历史比赛统计和AI优化结果</p>
+        </footer>
+    </div>
+
+    <!-- 图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- 脚本 -->
+    <script src="js/supabase-client.js"></script>
+    <script src="js/qimen-engine.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        let patternsData = [];
+        let filteredPatterns = [];
+        let currentViewMode = 'grid';
+        let currentPage = 1;
+        const itemsPerPage = 12;
+        let statisticsChart = null;
+
+        // 初始化
+        async function init() {
+            await loadPatternLibrary();
+            setupFilters();
+            displayPatterns();
+            updateStatistics();
+            updateStatisticsChart();
+            setupFeedbackPatterns();
+        }
+
+        // 加载格局库
+        async function loadPatternLibrary() {
+            try {
+                const response = await fetch('./data/pattern_library.json');
+                const data = await response.json();
+                
+                patternsData = data.patterns || [];
+                
+                // 更新统计信息
+                document.getElementById('total-patterns').textContent = patternsData.length;
+                document.getElementById('good-patterns').textContent = 
+                    patternsData.filter(p => p.type === '吉格').length;
+                document.getElementById('bad-patterns').textContent = 
+                    patternsData.filter(p => p.type === '凶格').length;
+                document.getElementById('verified-patterns').textContent = 
+                    patternsData.filter(p => p.exampleMatches && p.exampleMatches.length > 0).length;
+                
+                // 更新库信息
+                document.getElementById('library-version').textContent = 
+                    data.statistics?.lastUpdated ? `V${data.statistics.lastUpdated.replace(/-/g, '.')}` : 'V1.0';
+                document.getElementById('library-updated').textContent = 
+                    data.statistics?.lastUpdated || '--';
+                
+            } catch (error) {
+                console.error('加载格局库失败:', error);
+                showError('加载格局库失败: ' + error.message);
+            }
+        }
+
+        // 设置过滤器
+        function setupFilters() {
+            const categories = new Set();
+            patternsData.forEach(pattern => {
+                if (pattern.category) {
+                    categories.add(pattern.category);
+                }
+            });
+            
+            const categoryFilter = document.getElementById('category-filter');
+            Array.from(categories).sort().forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        // 搜索格局
+        function searchPatterns() {
+            const searchTerm = document.getElementById('pattern-search').value.toLowerCase();
+            
+            filteredPatterns = patternsData.filter(pattern => {
+                return pattern.name.toLowerCase().includes(searchTerm) ||
+                       pattern.code.toLowerCase().includes(searchTerm) ||
+                       pattern.description.toLowerCase().includes(searchTerm) ||
+                       pattern.footballInterpretation?.toLowerCase().includes(searchTerm);
+            });
+            
+            currentPage = 1;
+            displayPatterns();
+        }
+
+        // 过滤格局
+        function filterPatterns() {
+            const typeFilter = document.getElementById('type-filter').value;
+            const categoryFilter = document.getElementById('category-filter').value;
+            const searchTerm = document.getElementById('pattern-search').value.toLowerCase();
+            
+            filteredPatterns = patternsData.filter(pattern => {
+                // 类型过滤
+                if (typeFilter !== 'all' && pattern.type !== typeFilter) {
+                    return false;
+                }
+                
+                // 分类过滤
+                if (categoryFilter !== 'all' && pattern.category !== categoryFilter) {
+                    return false;
+                }
+                
+                // 搜索过滤
+                if (searchTerm && !(
+                    pattern.name.toLowerCase().includes(searchTerm) ||
+                    pattern.code.toLowerCase().includes(searchTerm) ||
+                    pattern.description.toLowerCase().includes(searchTerm) ||
+                    pattern.footballInterpretation?.toLowerCase().includes(searchTerm)
+                )) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            currentPage = 1;
+            displayPatterns();
+        }
+
+        // 排序格局
+        function sortPatterns() {
+            const sortBy = document.getElementById('sort-by').value;
+            
+            filteredPatterns.sort((a, b) => {
+                switch(sortBy) {
+                    case 'name':
+                        return a.name.localeCompare(b.name, 'zh-CN');
+                    case 'effect':
+                        return Math.abs(b.effect || 0) - Math.abs(a.effect || 0);
+                    case 'accuracy':
+                        const accuracyA = a.exampleMatches ? a.exampleMatches.length : 0;
+                        const accuracyB = b.exampleMatches ? b.exampleMatches.length : 0;
+                        return accuracyB - accuracyA;
+                    case 'frequency':
+                        // 这里可以使用实际统计数据
+                        return 0;
+                    default:
+                        return 0;
+                }
+            });
+            
+            displayPatterns();
+        }
+
+        // 清除搜索
+        function clearSearch() {
+            document.getElementById('pattern-search').value = '';
+            filteredPatterns = [...patternsData];
+            currentPage = 1;
+            displayPatterns();
+        }
+
+        // 设置视图模式
+        function setViewMode(mode) {
+            currentViewMode = mode;
+            
+            // 更新按钮状态
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.view-btn').classList.add('active');
+            
+            // 显示对应的视图
+            if (mode === 'grid') {
+                document.getElementById('grid-view').style.display = 'grid';
+                document.getElementById('table-view').style.display = 'none';
+            } else {
+                document.getElementById('grid-view').style.display = 'none';
+                document.getElementById('table-view').style.display = 'block';
+            }
+            
+            displayPatterns();
+        }
+
+        // 显示格局
+        function displayPatterns() {
+            if (filteredPatterns.length === 0) {
+                filteredPatterns = [...patternsData];
+            }
+            
+            // 分页
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedPatterns = filteredPatterns.slice(startIndex, endIndex);
+            
+            if (currentViewMode === 'grid') {
+                displayGrid(paginatedPatterns);
+            } else {
+                displayTable(paginatedPatterns);
+            }
+            
+            // 更新分页控件
+            updatePagination();
+        }
+
+        // 显示网格视图
+        function displayGrid(patterns) {
+            const gridContainer = document.getElementById('grid-view');
+            
+            gridContainer.innerHTML = patterns.map(pattern => `
+                <div class="pattern-card ${pattern.type === '吉格' ? 'good' : 'bad'}">
+                    <div class="pattern-header">
+                        <h3 class="pattern-name">${pattern.name}</h3>
+                        <span class="pattern-code">${pattern.code}</span>
+                    </div>
+                    
+                    <div class="pattern-body">
+                        <div class="pattern-type ${pattern.type === '吉格' ? 'type-good' : 'type-bad'}">
+                            ${pattern.type}
+                        </div>
+                        
+                        <div class="pattern-category">
+                            ${pattern.category || '未分类'}
+                        </div>
+                        
+                        <div class="pattern-effect">
+                            影响值: <span class="effect-value ${pattern.effect >= 0 ? 'positive' : 'negative'}">
+                                ${pattern.effect >= 0 ? '+' : ''}${pattern.effect}
+                            </span>
+                        </div>
+                        
+                        <div class="pattern-description">
+                            ${pattern.description.substring(0, 100)}...
+                        </div>
+                        
+                        <div class="pattern-football">
+                            <strong>足球解读:</strong> ${pattern.footballInterpretation?.substring(0, 80) || '暂无解读'}...
+                        </div>
+                        
+                        <div class="pattern-examples">
+                            ${pattern.exampleMatches && pattern.exampleMatches.length > 0 ? 
+                                `已验证案例: ${pattern.exampleMatches.length}个` : 
+                                '暂无验证案例'}
+                        </div>
+                    </div>
+                    
+                    <div class="pattern-actions">
+                        <button class="btn btn-sm" onclick="viewPatternDetail('${pattern.code}')">
+                            <i class="fas fa-eye"></i> 查看详情
+                        </button>
+                        <button class="btn btn-sm btn-primary" onclick="usePattern('${pattern.code}')">
+                            <i class="fas fa-magic"></i> 应用
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 显示表格视图
+        function displayTable(patterns) {
+            const tableBody = document.getElementById('table-body');
+            
+            tableBody.innerHTML = patterns.map(pattern => `
+                <tr class="${pattern.type === '吉格' ? 'good-row' : 'bad-row'}">
+                    <td><code>${pattern.code}</code></td>
+                    <td><strong>${pattern.name}</strong></td>
+                    <td>
+                        <span class="type-badge ${pattern.type === '吉格' ? 'good' : 'bad'}">
+                            ${pattern.type}
+                        </span>
+                    </td>
+                    <td>${pattern.category || '--'}</td>
+                    <td>
+                        <span class="effect-badge ${pattern.effect >= 0 ? 'positive' : 'negative'}">
+                            ${pattern.effect >= 0 ? '+' : ''}${pattern.effect}
+                        </span>
+                    </td>
+                    <td>
+                        ${pattern.exampleMatches ? pattern.exampleMatches.length : '0'}
+                    </td>
+                    <td>
+                        <div class="accuracy-bar">
+                            <div class="accuracy-fill" style="width: ${pattern.exampleMatches ? pattern.exampleMatches.length * 10 : 0}%">
+                                ${pattern.exampleMatches ? pattern.exampleMatches.length * 10 : 0}%
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        ${pattern.exampleMatches ? 
+                            pattern.exampleMatches.slice(0, 2).map(m => 
+                                `<span class="match-tag">${m}</span>`
+                            ).join('') + 
+                            (pattern.exampleMatches.length > 2 ? '...' : '') : 
+                            '--'}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm" onclick="viewPatternDetail('${pattern.code}')">
+                            查看
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // 更新分页
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredPatterns.length / itemsPerPage);
+            const paginationEl = document.getElementById('pagination-controls');
+            
+            if (totalPages <= 1) {
+                paginationEl.innerHTML = '';
+                return;
+            }
+            
+            let html = `
+                <button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                        onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                    <i class="fas fa-chevron-left"></i> 上一页
+                </button>
+            `;
+            
+            // 显示页码
+            const maxPages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxPages / 2));
+            let endPage = Math.min(totalPages, startPage + maxPages - 1);
+            
+            if (endPage - startPage + 1 < maxPages) {
+                startPage = Math.max(1, endPage - maxPages + 1);
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                html += `
+                    <button class="pagination-btn ${i === currentPage ? 'active' : ''}" 
+                            onclick="changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+            
+            html += `
+                <button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                        onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    下一页 <i class="fas fa-chevron-right"></i>
+                </button>
+                
+                <span class="pagination-info">
+                    第 ${currentPage} 页，共 ${totalPages} 页 (${filteredPatterns.length} 个格局)
+                </span>
+            `;
+            
+            paginationEl.innerHTML = html;
+        }
+
+        // 改变页码
+        function changePage(page) {
+            if (page < 1 || page > Math.ceil(filteredPatterns.length / itemsPerPage)) {
+                return;
+            }
+            
+            currentPage = page;
+            displayPatterns();
+            
+            // 滚动到顶部
+            document.querySelector('.patterns-grid, .patterns-table').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // 查看格局详情
+        function viewPatternDetail(patternCode) {
+            const pattern = patternsData.find(p => p.code === patternCode);
+            if (!pattern) return;
+            
+            document.getElementById('modal-title').textContent = pattern.name;
+            
+            let content = `
+                <div class="pattern-detail">
+                    <div class="detail-header">
+                        <div class="detail-code">代码: ${pattern.code}</div>
+                        <div class="detail-type ${pattern.type === '吉格' ? 'good' : 'bad'}">
+                            ${pattern.type}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h4><i class="fas fa-info-circle"></i> 基本信息</h4>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <div class="detail-label">分类:</div>
+                                <div class="detail-value">${pattern.category || '未分类'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">影响值:</div>
+                                <div class="detail-value ${pattern.effect >= 0 ? 'positive' : 'negative'}">
+                                    ${pattern.effect >= 0 ? '+' : ''}${pattern.effect}
+                                </div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">时间影响:</div>
+                                <div class="detail-value">
+                                    ${pattern.timeInfluence ? 
+                                        `上半场: ${pattern.timeInfluence.上半场}, 下半场: ${pattern.timeInfluence.下半场}` : 
+                                        '无时间影响'}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h4><i class="fas fa-align-left"></i> 格局描述</h4>
+                        <div class="detail-description">
+                            ${pattern.description}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h4><i class="fas fa-futbol"></i> 足球解读</h4>
+                        <div class="football-interpretation">
+                            ${pattern.footballInterpretation || '暂无足球相关解读'}
+                        </div>
+                    </div>
+                    
+                    <div class="detail-section">
+                        <h4><i class="fas fa-bullseye"></i> 检测规则</h4>
+                        <div class="detection-rules">
+            `;
+            
+            if (pattern.detectionRule) {
+                if (pattern.detectionRule.tianPan || pattern.detectionRule.diPan) {
+                    content += `
+                        <div class="rule-item">
+                            <strong>天地盘组合:</strong>
+                            ${pattern.detectionRule.tianPan ? '天盘: ' + pattern.detectionRule.tianPan.join(', ') : ''}
+                            ${pattern.detectionRule.diPan ? '地盘: ' + pattern.detectionRule.diPan.join(', ') : ''}
+                        </div>
+                    `;
+                }
+                if (pattern.detectionRule.condition) {
+                    content += `
+                        <div class="rule-item">
+                            <strong>条件:</strong> ${pattern.detectionRule.condition}
+                        </div>
+                    `;
+                }
+            } else {
+                content += `<div class="rule-item">无检测规则定义</div>`;
+            }
+            
+            content += `
+                        </div>
+                    </div>
+            `;
+            
+            if (pattern.exampleMatches && pattern.exampleMatches.length > 0) {
+                content += `
+                    <div class="detail-section">
+                        <h4><i class="fas fa-check-circle"></i> 验证案例</h4>
+                        <div class="example-matches">
+                            ${pattern.exampleMatches.map(match => `
+                                <span class="match-example" onclick="viewMatchExample('${match}')">
+                                    ${match}
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('modal-content').innerHTML = content;
+            document.getElementById('pattern-modal').style.display = 'block';
+        }
+
+        // 关闭模态框
+        function closeModal() {
+            document.getElementById('pattern-modal').style.display = 'none';
+        }
+
+        // 编辑格局
+        function editPattern() {
+            const patternCode = document.querySelector('.pattern-detail .detail-code').textContent.split(': ')[1];
+            showNotification(`编辑功能开发中 - ${patternCode}`, 'info');
+        }
+
+        // 添加到分析
+        function addToAnalysis() {
+            const patternCode = document.querySelector('.pattern-detail .detail-code').textContent.split(': ')[1];
+            showNotification(`已添加到分析队列 - ${patternCode}`, 'success');
+        }
+
+        // 使用格局
+        function usePattern(patternCode) {
+            showNotification(`应用格局: ${patternCode}`, 'success');
+            // 这里可以添加具体的应用逻辑
+        }
+
+        // 查看比赛案例
+        function viewMatchExample(matchCode) {
+            localStorage.setItem('selectedMatch', matchCode);
+            window.location.href = `analysis_view.html?match=${matchCode}`;
+        }
+
+        // 更新统计信息
+        function updateStatistics() {
+            if (patternsData.length === 0) return;
+            
+            // 最高准确率
+            const patternsWithExamples = patternsData.filter(p => p.exampleMatches && p.exampleMatches.length > 0);
+            if (patternsWithExamples.length > 0) {
+                const highestAccuracy = patternsWithExamples.reduce((max, p) => 
+                    p.exampleMatches.length > max.exampleMatches.length ? p : max
+                );
+                document.getElementById('highest-accuracy').textContent = 
+                    Math.min(100, highestAccuracy.exampleMatches.length * 10) + '%';
+                document.getElementById('highest-accuracy-pattern').textContent = highestAccuracy.name;
+            }
+            
+            // 最常见格局
+            const mostFrequent = patternsData.reduce((max, p) => 
+                (p.exampleMatches ? p.exampleMatches.length : 0) > 
+                (max.exampleMatches ? max.exampleMatches.length : 0) ? p : max
+            );
+            document.getElementById('most-frequent').textContent = 
+                mostFrequent.exampleMatches ? mostFrequent.exampleMatches.length + '次' : '0次';
+            document.getElementById('most-frequent-pattern').textContent = mostFrequent.name;
+            
+            // 最强吉格
+            const goodPatterns = patternsData.filter(p => p.type === '吉格');
+            if (goodPatterns.length > 0) {
+                const bestGood = goodPatterns.reduce((max, p) => 
+                    (p.effect || 0) > (max.effect || 0) ? p : max
+                );
+                document.getElementById('best-good').textContent = '+' + (bestGood.effect || 0);
+                document.getElementById('best-good-pattern').textContent = bestGood.name;
+            }
+            
+            // 最强凶格
+            const badPatterns = patternsData.filter(p => p.type === '凶格');
+            if (badPatterns.length > 0) {
+                const worstBad = badPatterns.reduce((min, p) => 
+                    (p.effect || 0) < (min.effect || 0) ? p : min
+                );
+                document.getElementById('worst-bad').textContent = (worstBad.effect || 0);
+                document.getElementById('worst-bad-pattern').textContent = worstBad.name;
+            }
+        }
+
+        // 更新统计图表
+        function updateStatisticsChart() {
+            const chartType = document.getElementById('chart-type').value;
+            const ctx = document.getElementById('statistics-chart').getContext('2d');
+            
+            if (statisticsChart) {
+                statisticsChart.destroy();
+            }
+            
+            let data, labels, colors;
+            
+            switch(chartType) {
+                case 'frequency':
+                    // 出现频率最高的10个格局
+                    const sortedByFrequency = [...patternsData]
+                        .sort((a, b) => 
+                            (b.exampleMatches ? b.exampleMatches.length : 0) - 
+                            (a.exampleMatches ? a.exampleMatches.length : 0)
+                        )
+                        .slice(0, 10);
+                    
+                    labels = sortedByFrequency.map(p => p.name);
+                    data = sortedByFrequency.map(p => p.exampleMatches ? p.exampleMatches.length : 0);
+                    colors = sortedByFrequency.map(p => p.type === '吉格' ? '#27ae60' : '#e74c3c');
+                    break;
+                    
+                case 'accuracy':
+                    // 准确率分布
+                    const accuracyRanges = ['0-20%', '21-40%', '41-60%', '61-80%', '81-100%'];
+                    const accuracyData = accuracyRanges.map(range => {
+                        const [min, max] = range.split('-').map(s => parseInt(s));
+                        return patternsData.filter(p => {
+                            const accuracy = p.exampleMatches ? p.exampleMatches.length * 10 : 0;
+                            return accuracy >= min && accuracy <= max;
+                        }).length;
+                    });
+                    
+                    labels = accuracyRanges;
+                    data = accuracyData;
+                    colors = ['#e74c3c', '#f39c12', '#f1c40f', '#2ecc71', '#27ae60'];
+                    break;
+                    
+                case 'effect':
+                    // 影响值分布
+                    const effectRanges = ['<-0.3', '-0.3 to -0.1', '-0.1 to 0', '0 to 0.1', '0.1 to 0.3', '>0.3'];
+                    const effectData = effectRanges.map(range => {
+                        return patternsData.filter(p => {
+                            const effect = p.effect || 0;
+                            if (range === '<-0.3') return effect < -0.3;
+                            if (range === '-0.3 to -0.1') return effect >= -0.3 && effect < -0.1;
+                            if (range === '-0.1 to 0') return effect >= -0.1 && effect < 0;
+                            if (range === '0 to 0.1') return effect >= 0 && effect < 0.1;
+                            if (range === '0.1 to 0.3') return effect >= 0.1 && effect < 0.3;
+                            return effect >= 0.3;
+                        }).length;
+                    });
+                    
+                    labels = effectRanges;
+                    data = effectData;
+                    colors = ['#c0392b', '#e74c3c', '#f39c12', '#3498db', '#2ecc71', '#27ae60'];
+                    break;
+                    
+                case 'category':
+                    // 分类统计
+                    const categories = {};
+                    patternsData.forEach(p => {
+                        const category = p.category || '未分类';
+                        categories[category] = (categories[category] || 0) + 1;
+                    });
+                    
+                    labels = Object.keys(categories);
+                    data = Object.values(categories);
+                    colors = generateColors(labels.length);
+                    break;
+            }
+            
+            statisticsChart = new Chart(ctx, {
+                type: chartType === 'category' ? 'pie' : 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: chartType === 'category' ? '数量' : chartType,
+                        data: data,
+                        backgroundColor: colors,
+                        borderColor: colors.map(c => c.replace('0.8', '1')),
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: chartType === 'category' ? 'right' : 'top',
+                        }
+                    }
+                }
+            });
+        }
+
+        function generateColors(count) {
+            const colors = [];
+            for (let i = 0; i < count; i++) {
+                const hue = (i * 137.508) % 360; // 黄金角分布
+                colors.push(`hsla(${hue}, 70%, 60%, 0.8)`);
+            }
+            return colors;
+        }
+
+        // 格局检测功能
+        function loadExample() {
+            const example = document.getElementById('example-select').value;
+            if (!example) return;
+            
+            // 这里可以加载实际的示例数据
+            const examples = {
+                'FB3200': `问测者落宫为兑宫(西方)
+四害：空亡（深挖到坎宫）
+乙天干临：绝 位
+庚天干临：帝旺 位
+天盘─ 乙
+天盘寄宫─ 庚
+地盘─ 壬
+天盘＋天盘寄宫─ 乙 + 庚：日奇被刑
+...`,
+                'FB3079': `全局伏吟局示例数据...
+天盘─ 丁
+地盘─ 己
+丁+己：星奇入墓
+死门门迫
+...`,
+                'FB2959': `全局伏吟局示例数据...
+青龙逃走格局
+乙+辛组合
+...`
+            };
+            
+            document.getElementById('detection-input').value = examples[example] || '';
+        }
+
+        async function detectPatterns() {
+            const input = document.getElementById('detection-input').value;
+            if (!input.trim()) {
+                showError('请输入奇门数据');
+                return;
+            }
+            
+            try {
+                const engine = new QimenEngine();
+                const analysis = engine.parseFB3200Format(input);
+                
+                // 检测格局
+                const detectedPatterns = [];
+                patternsData.forEach(pattern => {
+                    if (checkPatternInAnalysis(pattern, analysis)) {
+                        detectedPatterns.push(pattern);
+                    }
+                });
+                
+                displayDetectionResults(detectedPatterns);
+                
+            } catch (error) {
+                console.error('格局检测失败:', error);
+                showError('检测失败: ' + error.message);
+            }
+        }
+
+        function checkPatternInAnalysis(pattern, analysis) {
+            // 简化的检测逻辑
+            // 实际应该根据pattern.detectionRule进行检测
+            if (pattern.detectionRule) {
+                if (pattern.detectionRule.condition) {
+                    // 根据条件检测
+                    return checkCondition(pattern.detectionRule.condition, analysis);
+                }
+            }
+            
+            // 默认检测：检查是否有匹配的天地盘组合
+            const palaceData = analysis.palaces || analysis.palaces?.palaces;
+            if (!palaceData) return false;
+            
+            for (const palace of Object.values(palaceData)) {
+                if (pattern.detectionRule?.tianPan && palace.tianPan) {
+                    if (pattern.detectionRule.tianPan.includes(palace.tianPan)) {
+                        return true;
+                    }
+                }
+            }
+            
+            return false;
+        }
+
+        function checkCondition(condition, analysis) {
+            // 简化的条件检查
+            // 实际应该实现完整的条件解析
+            if (condition.includes('乙在乾宫')) {
+                // 检查乙奇是否在乾宫
+                const dryPalace = analysis.palaces?.palaces?.[6]; // 乾宫
+                return dryPalace && dryPalace.stems && dryPalace.stems.includes('乙');
+            }
+            
+            return false;
+        }
+
+        function displayDetectionResults(detectedPatterns) {
+            const resultsEl = document.getElementById('detection-results');
+            
+            if (detectedPatterns.length === 0) {
+                resultsEl.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search fa-2x"></i>
+                        <p>未检测到任何格局</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = `
+                <div class="detection-summary">
+                    共检测到 <strong>${detectedPatterns.length}</strong> 个格局
+                </div>
+                
+                <div class="detection-list">
+            `;
+            
+            detectedPatterns.forEach(pattern => {
+                html += `
+                    <div class="detected-pattern ${pattern.type === '吉格' ? 'good' : 'bad'}">
+                        <div class="pattern-header">
+                            <h4>${pattern.name} <small>(${pattern.code})</small></h4>
+                            <span class="pattern-type">${pattern.type}</span>
+                        </div>
+                        
+                        <div class="pattern-effect">
+                            影响值: <span class="${pattern.effect >= 0 ? 'positive' : 'negative'}">
+                                ${pattern.effect >= 0 ? '+' : ''}${pattern.effect}
+                            </span>
+                        </div>
+                        
+                        <div class="pattern-description">
+                            ${pattern.description.substring(0, 120)}...
+                        </div>
+                        
+                        <div class="pattern-actions">
+                            <button class="btn btn-sm" onclick="viewPatternDetail('${pattern.code}')">
+                                查看详情
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+            resultsEl.innerHTML = html;
+        }
+
+        function testDetection() {
+            // 加载一个示例进行测试
+            document.getElementById('example-select').value = 'FB3200';
+            loadExample();
+            setTimeout(() => detectPatterns(), 500);
+        }
+
+        // 学习功能
+        function startLearning(module) {
+            showNotification(`开始学习: ${module}`, 'info');
+            // 这里可以跳转到具体的学习页面或显示学习内容
+        }
+
+        // 反馈功能
+        function setupFeedbackPatterns() {
+            const select = document.getElementById('feedback-pattern');
+            select.innerHTML = '<option value="">-- 选择格局 --</option>';
+            
+            patternsData.forEach(pattern => {
+                const option = document.createElement('option');
+                option.value = pattern.code;
+                option.textContent = `${pattern.code} - ${pattern.name}`;
+                select.appendChild(option);
+            });
+        }
+
+        function clearFeedback() {
+            document.getElementById('feedback-pattern').value = '';
+            document.getElementById('feedback-type').value = 'correction';
+            document.getElementById('feedback-details').value = '';
+            document.getElementById('feedback-match').value = '';
+        }
+
+        function submitFeedback() {
+            const pattern = document.getElementById('feedback-pattern').value;
+            const type = document.getElementById('feedback-type').value;
+            const details = document.getElementById('feedback-details').value;
+            const match = document.getElementById('feedback-match').value;
+            
+            if (!pattern || !details) {
+                showError('请选择格局并填写详细说明');
+                return;
+            }
+            
+            // 保存反馈到本地存储
+            const feedbacks = JSON.parse(localStorage.getItem('pattern_feedbacks') || '[]');
+            feedbacks.push({
+                pattern,
+                type,
+                details,
+                match,
+                timestamp: new Date().toISOString(),
+                status: 'pending'
+            });
+            
+            localStorage.setItem('pattern_feedbacks', JSON.stringify(feedbacks));
+            
+            showNotification('感谢您的反馈！已记录', 'success');
+            clearFeedback();
+        }
+
+        // 导出库
+        function exportLibrary() {
+            const exportData = {
+                patterns: patternsData,
+                exportTime: new Date().toISOString(),
+                totalPatterns: patternsData.length,
+                statistics: {
+                    good: patternsData.filter(p => p.type === '吉格').length,
+                    bad: patternsData.filter(p => p.type === '凶格').length,
+                    verified: patternsData.filter(p => p.exampleMatches && p.exampleMatches.length > 0).length
+                }
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', `pattern_library_export_${Date.now()}.json`);
+            linkElement.click();
+            
+            showNotification('格局库已导出', 'success');
+        }
+
+        // 工具函数
+        function showError(message) {
+            alert('错误: ' + message);
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                   type === 'error' ? 'exclamation-circle' : 
+                                   'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.parentElement.removeChild(notification);
+                }
+            }, 5000);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            filteredPatterns = [...patternsData];
+            init();
+        });
+    </script>
+
+    <style>
+        .library-stats {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stat-badge.total {
+            background: rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+        }
+
+        .stat-badge.good {
+            background: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+        }
+
+        .stat-badge.bad {
+            background: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+
+        .stat-badge.verified {
+            background: rgba(155, 89, 182, 0.2);
+            color: #9b59b6;
+        }
+
+        .library-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .search-box i {
+            color: var(--text-light);
+        }
+
+        .search-box input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-controls select {
+            padding: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            background: white;
+            min-width: 150px;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .view-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .view-btn.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* 格局卡片样式 */
+        .patterns-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .pattern-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            border-top: 4px solid;
+        }
+
+        .pattern-card.good {
+            border-top-color: var(--success-color);
+        }
+
+        .pattern-card.bad {
+            border-top-color: var(--accent-color);
+        }
+
+        .pattern-header {
+            padding: 1rem;
+            background: var(--light-bg);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .pattern-name {
+            margin: 0 0 0.25rem 0;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .pattern-code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .pattern-body {
+            padding: 1rem;
+            flex: 1;
+        }
+
+        .pattern-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+        }
+
+        .pattern-type.type-good {
+            background: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+        }
+
+        .pattern-type.type-bad {
+            background: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+
+        .pattern-category {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .pattern-effect {
+            margin-bottom: 0.75rem;
+        }
+
+        .effect-value {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .effect-value.positive {
+            color: var(--success-color);
+        }
+
+        .effect-value.negative {
+            color: var(--accent-color);
+        }
+
+        .pattern-description {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+            color: var(--text-color);
+        }
+
+        .pattern-football {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .pattern-football strong {
+            color: var(--text-color);
+            font-style: normal;
+        }
+
+        .pattern-examples {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 0.75rem;
+        }
+
+        .pattern-actions {
+            padding: 1rem;
+            background: var(--light-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* 表格样式 */
+        .patterns-table {
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        .patterns-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .patterns-table th {
+            background: var(--light-bg);
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .patterns-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: middle;
+        }
+
+        .good-row {
+            background: rgba(39, 174, 96, 0.05);
+        }
+
+        .bad-row {
+            background: rgba(231, 76, 60, 0.05);
+        }
+
+        .type-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .type-badge.good {
+            background: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+        }
+
+        .type-badge.bad {
+            background: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+
+        .effect-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .effect-badge.positive {
+            background: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+        }
+
+        .effect-badge.negative {
+            background: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+
+        .accuracy-bar {
+            width: 100%;
+            height: 20px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .accuracy-fill {
+            height: 100%;
+            background: var(--secondary-color);
+            color: white;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 30px;
+        }
+
+        .match-tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 0.25rem;
+            cursor: pointer;
+        }
+
+        .match-tag:hover {
+            background: rgba(52, 152, 219, 0.3);
+        }
+
+        /* 分页样式 */
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .pagination-btn:hover:not(.disabled) {
+            background: var(--light-bg);
+        }
+
+        .pagination-btn.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .pagination-btn.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .pagination-info {
+            margin-left: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* 模态框样式 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            width: 100%;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            background: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            background: var(--light-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            position: sticky;
+            bottom: 0;
+        }
+
+        /* 格局详情样式 */
+        .pattern-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .detail-code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .detail-section h4 {
+            margin: 0 0 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .detail-item {
+            padding: 0.75rem;
+            background: var(--light-bg);
+            border-radius: 6px;
+        }
+
+        .detail-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            font-weight: 500;
+        }
+
+        .detail-description, .football-interpretation {
+            line-height: 1.6;
+            padding: 0.75rem;
+            background: var(--light-bg);
+            border-radius: 6px;
+        }
+
+        .detection-rules {
+            padding: 0.75rem;
+            background: var(--light-bg);
+            border-radius: 6px;
+        }
+
+        .rule-item {
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .rule-item:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        .example-matches {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .match-example {
+            padding: 0.5rem 0.75rem;
+            background: rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .match-example:hover {
+            background: rgba(52, 152, 219, 0.3);
+        }
+
+        /* 统计图表样式 */
+        .statistics-charts {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .statistics-charts {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .chart-container {
+            height: 300px;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .chart-sidebar {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .chart-sidebar h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .key-stats {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .key-stat {
+            padding: 0.75rem;
+            background: var(--light-bg);
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .key-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .key-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .key-pattern {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-top: 0.25rem;
+        }
+
+        /* 格局检测器样式 */
+        .detector-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .detector-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .detector-input, .detector-results {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .detector-input h3, .detector-results h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .detector-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .detector-actions select {
+            flex: 1;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+
+        .empty-state i {
+            margin-bottom: 1rem;
+        }
+
+        .detection-summary {
+            padding: 1rem;
+            background: var(--light-bg);
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .detection-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .detected-pattern {
+            padding: 1rem;
+            border-radius: 6px;
+            border-left: 4px solid;
+        }
+
+        .detected-pattern.good {
+            background: rgba(39, 174, 96, 0.1);
+            border-left-color: var(--success-color);
+        }
+
+        .detected-pattern.bad {
+            background: rgba(231, 76, 60, 0.1);
+            border-left-color: var(--accent-color);
+        }
+
+        .detected-pattern .pattern-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding: 0;
+            background: none;
+            border: none;
+        }
+
+        .detected-pattern h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .detected-pattern .pattern-type {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .detected-pattern .pattern-actions {
+            padding: 0;
+            margin-top: 0.5rem;
+            background: none;
+            border: none;
+        }
+
+        /* 学习模块样式 */
+        .learning-modules {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .learning-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .learning-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--secondary-color);
+        }
+
+        .learning-content {
+            flex: 1;
+        }
+
+        .learning-content h3 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1rem;
+        }
+
+        .learning-content p {
+            margin: 0 0 0.5rem 0;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .learning-progress {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* 反馈表单样式 */
+        .feedback-form {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .feedback-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* 通知样式 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 300px;
+            max-width: 400px;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid;
+        }
+
+        .notification.success {
+            border-left-color: var(--success-color);
+        }
+
+        .notification.error {
+            border-left-color: var(--accent-color);
+        }
+
+        .notification.info {
+            border-left-color: var(--secondary-color);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.25rem;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .library-controls {
+                flex-direction: column;
+            }
+            
+            .filter-controls {
+                flex-direction: column;
+            }
+            
+            .patterns-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .statistics-charts {
+                grid-template-columns: 1fr;
+            }
+            
+            .detector-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .learning-modules {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .library-stats {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .stat-badge {
+                text-align: center;
+                justify-content: center;
+            }
+            
+            .pagination {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .pagination-info {
+                margin: 0.5rem 0 0 0;
+            }
+        }
+    </style>
+</body>
+</html>

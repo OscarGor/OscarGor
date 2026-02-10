@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阴盘奇门足球AI预测系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部导航 -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-futbol"></i>
+                <span>阴盘奇门足球AI预测系统 V5.2</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="active"><i class="fas fa-home"></i> 仪表板</a>
+                <a href="match_input.html"><i class="fas fa-plus-circle"></i> 输入比赛</a>
+                <a href="analysis_view.html"><i class="fas fa-chart-bar"></i> 分析报告</a>
+                <a href="result_verification.html"><i class="fas fa-check-circle"></i> 赛果验证</a>
+                <a href="pattern_library.html"><i class="fas fa-book"></i> 格局库</a>
+                <a href="system_status.html"><i class="fas fa-server"></i> 系统状态</a>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 实时统计卡片 -->
+            <div class="stats-grid">
+                <div class="stat-card primary">
+                    <div class="stat-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>总体准确度</h3>
+                        <p class="stat-value">65.2%</p>
+                        <p class="stat-desc">基于12场历史数据</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card success">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>已验证比赛</h3>
+                        <p class="stat-value">11场</p>
+                        <p class="stat-desc">5场方向正确</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card warning">
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>待验证比赛</h3>
+                        <p class="stat-value">1场</p>
+                        <p class="stat-desc">FB3200</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card info">
+                    <div class="stat-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>当前参数版本</h3>
+                        <p class="stat-value">V5.2</p>
+                        <p class="stat-desc">基于FB3200优化</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 最近比赛列表 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-history"></i> 最近比赛记录</h2>
+                    <button class="btn btn-primary" onclick="loadTemplate('FB3200')">
+                        <i class="fas fa-magic"></i> 加载FB3200模板
+                    </button>
+                </div>
+                
+                <div class="matches-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>比赛编号</th>
+                                <th>对阵</th>
+                                <th>赛事</th>
+                                <th>状态</th>
+                                <th>预测结果</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matches-list">
+                            <!-- 动态加载比赛列表 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 系统状态监控 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-heartbeat"></i> 系统状态监控</h2>
+                </div>
+                
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="status-indicator online"></div>
+                        <span>Supabase连接</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-indicator online"></div>
+                        <span>AI引擎</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-indicator online"></div>
+                        <span>参数库</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-indicator warning"></div>
+                        <span>待验证数据</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 快速操作按钮 -->
+            <div class="quick-actions">
+                <button class="action-btn" onclick="location.href='match_input.html'">
+                    <i class="fas fa-plus"></i>
+                    <span>新比赛输入</span>
+                </button>
+                <button class="action-btn" onclick="location.href='result_verification.html'">
+                    <i class="fas fa-check-double"></i>
+                    <span>赛果验证</span>
+                </button>
+                <button class="action-btn" onclick="location.href='update_instructions.html'">
+                    <i class="fas fa-code-branch"></i>
+                    <span>查看更新指令</span>
+                </button>
+                <button class="action-btn" onclick="refreshSystem()">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>刷新系统</span>
+                </button>
+            </div>
+        </main>
+
+        <!-- 底部信息 -->
+        <footer class="footer">
+            <p>甲方己土玄学顾问公司 · AI阴盘奇门足球分析系统 V5.2</p>
+            <p>报告时间：<span id="current-time"></span></p>
+        </footer>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="js/supabase-client.js"></script>
+    <script src="js/qimen-engine.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // 更新时间显示
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = 
+                now.toLocaleString('zh-CN', { 
+                    year: 'numeric', 
+                    month: '2-digit', 
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+        }
+        
+        setInterval(updateTime, 1000);
+        updateTime();
+        
+        // 加载比赛列表
+        async function loadMatches() {
+            try {
+                const matches = await supabaseClient.getPendingMatches();
+                const matchesList = document.getElementById('matches-list');
+                
+                if (matches && matches.length > 0) {
+                    matchesList.innerHTML = matches.map(match => `
+                        <tr>
+                            <td>${match.match_code}</td>
+                            <td>${match.home_team} vs ${match.away_team}</td>
+                            <td>${match.competition_type}</td>
+                            <td><span class="status-badge pending">${match.status}</span></td>
+                            <td>${match.prediction ? match.prediction.result : '未预测'}</td>
+                            <td>
+                                <button class="btn btn-sm" onclick="viewMatch('${match.match_code}')">查看</button>
+                                <button class="btn btn-sm btn-primary" onclick="analyzeMatch('${match.match_code}')">分析</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    matchesList.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center">暂无比赛数据</td>
+                        </tr>
+                    `;
+                }
+            } catch (error) {
+                console.error('加载比赛列表失败:', error);
+            }
+        }
+        
+        // 加载模板
+        function loadTemplate(templateCode) {
+            localStorage.setItem('selectedTemplate', templateCode);
+            window.location.href = 'match_input.html?template=' + templateCode;
+        }
+        
+        // 查看比赛
+        function viewMatch(matchCode) {
+            localStorage.setItem('selectedMatch', matchCode);
+            window.location.href = 'analysis_view.html?match=' + matchCode;
+        }
+        
+        // 分析比赛
+        async function analyzeMatch(matchCode) {
+            try {
+                const match = await supabaseClient.getMatch(matchCode);
+                if (match && match.qimen_data) {
+                    const engine = new QimenEngine();
+                    const analysis = engine.analyzeFB3200(match.qimen_data);
+                    
+                    // 保存预测结果
+                    match.prediction = analysis.预测;
+                    await supabaseClient.saveMatch(match);
+                    
+                    alert('分析完成！');
+                    viewMatch(matchCode);
+                }
+            } catch (error) {
+                console.error('分析失败:', error);
+                alert('分析失败：' + error.message);
+            }
+        }
+        
+        // 刷新系统
+        function refreshSystem() {
+            loadMatches();
+            alert('系统已刷新');
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMatches();
+        });
+    </script>
+</body>
+</html>

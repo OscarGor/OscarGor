@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>更新指令 - 阴盘奇门足球预测系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-code-branch"></i>
+                <span>系统更新指令</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html"><i class="fas fa-home"></i> 返回首页</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-tasks"></i> 最新更新指令</h2>
+                    <button class="btn btn-primary" onclick="checkForUpdates()">
+                        <i class="fas fa-sync-alt"></i> 检查更新
+                    </button>
+                </div>
+                
+                <div id="update-content">
+                    <!-- 动态加载更新指令 -->
+                    <div class="text-center">
+                        <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--secondary-color);"></i>
+                        <p>加载更新指令中...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2><i class="fas fa-history"></i> 更新历史</h2>
+                <div class="updates-timeline">
+                    <!-- 更新时间线 -->
+                    <div class="timeline-item">
+                        <div class="timeline-date">2026-02-03</div>
+                        <div class="timeline-content">
+                            <h3>V5.1I 赛后验证优化版</h3>
+                            <p>基于FB3079实际赛果的三维参数体系验证与优化</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2026-01-28</div>
+                        <div class="timeline-content">
+                            <h3>V5.0H 三维参数体系</h3>
+                            <p>引入时限性、时效性、能量转换三维参数体系</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">2026-01-20</div>
+                        <div class="timeline-content">
+                            <h3>V4.9G 全局伏吟优化</h3>
+                            <p>针对全局伏吟局的专门算法优化</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>甲方己土玄学顾问公司 · AI阴盘奇门足球分析系统</p>
+            <p>自动更新系统版本 1.0</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // 加载更新指令
+        async function loadUpdateInstructions() {
+            try {
+                const response = await fetch('./update_instructions/latest_update.md');
+                if (response.ok) {
+                    const markdown = await response.text();
+                    // 简单Markdown转HTML（实际项目可以使用marked.js库）
+                    const html = markdown
+                        .replace(/^# (.*$)/gm, '<h1>$1</h1>')
+                        .replace(/^## (.*$)/gm, '<h2>$1</h2>')
+                        .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+                        .replace(/`{3}(.*?)\n([\s\S]*?)`{3}/g, '<pre><code class="$1">$2</code></pre>')
+                        .replace(/`(.*?)`/g, '<code>$1</code>')
+                        .replace(/\n- (.*$)/gm, '<li>$1</li>')
+                        .replace(/^\- (.*$)/gm, '<li>$1</li>')
+                        .replace(/<li>/g, '<ul><li>')
+                        .replace(/<\/li>\n(?!<li>)/g, '</li></ul>')
+                        .replace(/\n\n/g, '</p><p>')
+                        .replace(/^(?!<[a-z])(.*$)/gm, '<p>$1</p>');
+                    
+                    document.getElementById('update-content').innerHTML = html;
+                    
+                    // 高亮代码
+                    document.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+                } else {
+                    document.getElementById('update-content').innerHTML = `
+                        <div class="alert warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            暂无更新指令文件，请先运行一次自动更新流程。
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('加载更新指令失败:', error);
+                document.getElementById('update-content').innerHTML = `
+                    <div class="alert error">
+                        <i class="fas fa-times-circle"></i>
+                        加载更新指令失败：${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        // 检查更新
+        function checkForUpdates() {
+            // 模拟触发更新检查
+            document.getElementById('update-content').innerHTML = `
+                <div class="alert info">
+                    <i class="fas fa-sync-alt fa-spin"></i>
+                    正在检查更新...
+                </div>
+            `;
+            
+            setTimeout(() => {
+                loadUpdateInstructions();
+                alert('更新检查完成！');
+            }, 1500);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUpdateInstructions();
+        });
+    </script>
+    
+    <style>
+        /* 更新页面特殊样式 */
+        .updates-timeline {
+            border-left: 2px solid var(--secondary-color);
+            margin-left: 1rem;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: -2.6rem;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            border: 2px solid white;
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-content {
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: 6px;
+        }
+        
+        .timeline-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--secondary-color);
+        }
+        
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin: 1rem 0;
+        }
+        
+        .alert.warning {
+            background-color: #fff3cd;
+            border-left: 4px solid var(--warning-color);
+        }
+        
+        .alert.error {
+            background-color: #f8d7da;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .alert.info {
+            background-color: #d1ecf1;
+            border-left: 4px solid var(--info-color);
+        }
+        
+        pre {
+            background: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        code {
+            background: rgba(0,0,0,0.05);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</body>
+</html>

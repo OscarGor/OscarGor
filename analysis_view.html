@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分析报告 - 阴盘奇门足球预测系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-chart-bar"></i>
+                <span>分析报告</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html"><i class="fas fa-home"></i> 仪表板</a>
+                <a href="match_input.html"><i class="fas fa-plus-circle"></i> 输入比赛</a>
+                <a href="analysis_view.html" class="active"><i class="fas fa-chart-bar"></i> 分析报告</a>
+                <a href="result_verification.html"><i class="fas fa-check-circle"></i> 赛果验证</a>
+                <a href="pattern_library.html"><i class="fas fa-book"></i> 格局库</a>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- 比赛信息摘要 -->
+            <div class="section" id="match-summary">
+                <div class="section-header">
+                    <h2><i class="fas fa-info-circle"></i> 比赛信息</h2>
+                    <div class="btn-group">
+                        <button class="btn" onclick="refreshAnalysis()">
+                            <i class="fas fa-sync-alt"></i> 刷新
+                        </button>
+                        <button class="btn btn-primary" onclick="exportReport()">
+                            <i class="fas fa-download"></i> 导出报告
+                        </button>
+                        <button class="btn btn-success" onclick="verifyThisMatch()">
+                            <i class="fas fa-check-double"></i> 去验证
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="match-info" class="match-info-card">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin fa-2x"></i>
+                        <p>加载比赛数据中...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 奇门格局分析 -->
+            <div class="section" id="qimen-analysis">
+                <div class="section-header">
+                    <h2><i class="fas fa-yin-yang"></i> 奇门格局分析</h2>
+                    <div class="analysis-filter">
+                        <select id="palace-filter" onchange="filterPalaces()">
+                            <option value="all">全部宫位</option>
+                            <option value="home">主队相关</option>
+                            <option value="away">客队相关</option>
+                            <option value="harm">有四害</option>
+                            <option value="good">吉格</option>
+                            <option value="bad">凶格</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="palaces-container" class="palaces-grid">
+                    <!-- 动态加载宫位信息 -->
+                </div>
+            </div>
+
+            <!-- 预测结果 -->
+            <div class="section" id="prediction-results">
+                <div class="section-header">
+                    <h2><i class="fas fa-crystal-ball"></i> 预测结果</h2>
+                    <div class="prediction-tabs">
+                        <button class="tab-btn active" onclick="switchTab('full-time')">全场预测</button>
+                        <button class="tab-btn" onclick="switchTab('first-half')">上半场预测</button>
+                        <button class="tab-btn" onclick="switchTab('technical')">技术预测</button>
+                        <button class="tab-btn" onclick="switchTab('score')">比分预测</button>
+                    </div>
+                </div>
+                
+                <div class="tab-content">
+                    <!-- 全场预测 -->
+                    <div id="full-time-tab" class="tab-pane active">
+                        <div class="prediction-overview">
+                            <div class="prediction-main">
+                                <div class="prediction-result" id="full-time-result">
+                                    <!-- 动态加载 -->
+                                </div>
+                                <div class="probability-chart">
+                                    <canvas id="probability-chart"></canvas>
+                                </div>
+                            </div>
+                            <div class="energy-comparison">
+                                <h3><i class="fas fa-bolt"></i> 能量对比</h3>
+                                <div class="energy-bars">
+                                    <!-- 动态加载 -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 上半场预测 -->
+                    <div id="first-half-tab" class="tab-pane">
+                        <div id="first-half-content">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 技术预测 -->
+                    <div id="technical-tab" class="tab-pane">
+                        <div id="technical-content">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 比分预测 -->
+                    <div id="score-tab" class="tab-pane">
+                        <div id="score-content">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI参数信息 -->
+            <div class="section" id="ai-parameters">
+                <div class="section-header">
+                    <h2><i class="fas fa-brain"></i> AI参数信息</h2>
+                    <span class="parameter-version" id="param-version">V5.2</span>
+                </div>
+                
+                <div class="parameter-grid">
+                    <div class="parameter-card">
+                        <h3><i class="fas fa-star"></i> 星门权重</h3>
+                        <div id="star-weights">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                    
+                    <div class="parameter-card">
+                        <h3><i class="fas fa-clock"></i> 时间参数</h3>
+                        <div id="time-parameters">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                    
+                    <div class="parameter-card">
+                        <h3><i class="fas fa-exchange-alt"></i> 能量转换</h3>
+                        <div id="energy-conversion">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                    
+                    <div class="parameter-card">
+                        <h3><i class="fas fa-cogs"></i> 技术预测</h3>
+                        <div id="tech-parameters">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 原始奇门数据 -->
+            <div class="section" id="raw-qimen-data">
+                <div class="section-header">
+                    <h2><i class="fas fa-database"></i> 原始奇门数据</h2>
+                    <button class="btn btn-sm" onclick="toggleRawData()">
+                        <i class="fas fa-eye"></i> 显示/隐藏
+                    </button>
+                </div>
+                
+                <div id="qimen-raw-content" class="raw-data-content" style="display: none;">
+                    <pre id="qimen-raw-text"></pre>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>分析报告仅供参考，实际结果请以比赛为准</p>
+            <p>预测生成时间：<span id="analysis-time"></span></p>
+        </footer>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="js/supabase-client.js"></script>
+    <script src="js/qimen-engine.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        let currentMatch = null;
+        let currentAnalysis = null;
+        let probabilityChart = null;
+
+        // 从URL参数获取比赛编号
+        function getMatchCodeFromURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('match') || localStorage.getItem('selectedMatch');
+        }
+
+        // 加载比赛数据
+        async function loadMatchData() {
+            const matchCode = getMatchCodeFromURL();
+            
+            if (!matchCode) {
+                showError('未指定比赛编号');
+                return;
+            }
+
+            try {
+                // 从Supabase加载比赛数据
+                const match = await supabaseClient.getMatch(matchCode);
+                
+                if (!match) {
+                    showError(`未找到比赛数据：${matchCode}`);
+                    return;
+                }
+
+                currentMatch = match;
+                
+                // 如果已有分析结果，直接显示
+                if (match.prediction) {
+                    currentAnalysis = match.prediction;
+                    displayMatchInfo(match);
+                    displayAnalysis(match.prediction);
+                } else {
+                    // 否则运行分析
+                    await runAnalysis(match);
+                }
+
+                // 显示原始奇门数据
+                if (match.qimen_data) {
+                    document.getElementById('qimen-raw-text').textContent = match.qimen_data;
+                }
+
+                // 更新分析时间
+                document.getElementById('analysis-time').textContent = 
+                    new Date().toLocaleString('zh-CN');
+
+            } catch (error) {
+                console.error('加载比赛数据失败:', error);
+                showError('加载失败：' + error.message);
+            }
+        }
+
+        // 运行分析
+        async function runAnalysis(match) {
+            try {
+                const engine = new QimenEngine();
+                
+                // 运行分析
+                const analysis = engine.analyzeFB3200(match.qimen_data);
+                
+                // 保存分析结果到数据库
+                match.prediction = analysis.预测;
+                match.qimen_analysis = analysis;
+                match.technical_predictions = analysis.technical;
+                
+                await supabaseClient.saveMatch(match);
+                
+                currentAnalysis = analysis.预测;
+                displayMatchInfo(match);
+                displayAnalysis(analysis.预测);
+                
+            } catch (error) {
+                console.error('分析失败:', error);
+                showError('分析失败：' + error.message);
+            }
+        }
+
+        // 显示比赛信息
+        function displayMatchInfo(match) {
+            const matchInfoEl = document.getElementById('match-info');
+            
+            matchInfoEl.innerHTML = `
+                <div class="match-header">
+                    <div class="match-code">${match.match_code}</div>
+                    <div class="match-status ${match.status || 'pending'}">${match.status || '待验证'}</div>
+                </div>
+                
+                <div class="match-details">
+                    <div class="match-teams">
+                        <div class="team home-team">
+                            <div class="team-name">${match.home_team}</div>
+                            <div class="team-label">主队</div>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="team away-team">
+                            <div class="team-name">${match.away_team}</div>
+                            <div class="team-label">客队</div>
+                        </div>
+                    </div>
+                    
+                    <div class="match-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-trophy"></i>
+                            <span>${match.competition_type}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>${new Date(match.match_time).toLocaleString('zh-CN')}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-history"></i>
+                            <span>创建：${new Date(match.created_at).toLocaleDateString('zh-CN')}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 显示分析结果
+        function displayAnalysis(analysis) {
+            // 显示奇门格局
+            displayQimenPalaces(analysis.palaces);
+            
+            // 显示预测结果
+            displayFullTimePrediction(analysis);
+            
+            // 显示技术预测
+            if (analysis.technical) {
+                displayTechnicalPredictions(analysis.technical);
+            }
+            
+            // 显示比分预测
+            if (analysis.scorePrediction) {
+                displayScorePrediction(analysis.scorePrediction);
+            }
+            
+            // 显示AI参数
+            displayAIParameters();
+        }
+
+        // 显示奇门宫位
+        function displayQimenPalaces(palaces) {
+            const container = document.getElementById('palaces-container');
+            
+            if (!palaces || !palaces.palaces) {
+                container.innerHTML = '<p class="text-center">无奇门数据</p>';
+                return;
+            }
+            
+            let html = '';
+            const palaceData = palaces.palaces;
+            
+            // 按照宫位顺序显示（1-9）
+            for (let i = 1; i <= 9; i++) {
+                const palace = palaceData[i];
+                if (!palace) continue;
+                
+                const isHomePalace = i === 7; // 主队兑宫
+                const isAwayPalace = i === 3; // 客队震宫
+                const hasHarm = palace.fourHarms && palace.fourHarms.length > 0;
+                const hasGoodPattern = palace.patterns && palace.patterns.some(p => 
+                    p.pattern.includes('天乙') || p.pattern.includes('小蛇化龙')
+                );
+                const hasBadPattern = palace.patterns && palace.patterns.some(p => 
+                    p.pattern.includes('刑') || p.pattern.includes('悖师')
+                );
+                
+                html += `
+                    <div class="palace-card ${isHomePalace ? 'home-palace' : ''} ${isAwayPalace ? 'away-palace' : ''}"
+                         data-palace="${i}" 
+                         data-harm="${hasHarm}" 
+                         data-good="${hasGoodPattern}" 
+                         data-bad="${hasBadPattern}">
+                        <div class="palace-header">
+                            <h3>${palace.name} (${i}宫)</h3>
+                            <div class="palace-energy">能量: ${Math.round(palace.energy || 0)}</div>
+                        </div>
+                        
+                        <div class="palace-body">
+                            ${palace.stars && palace.stars.length > 0 ? `
+                                <div class="palace-item">
+                                    <span class="item-label">九星:</span>
+                                    <span class="item-value">${palace.stars.join(', ')}</span>
+                                </div>
+                            ` : ''}
+                            
+                            ${palace.gates && palace.gates.length > 0 ? `
+                                <div class="palace-item">
+                                    <span class="item-label">八门:</span>
+                                    <span class="item-value">${palace.gates.join(', ')}</span>
+                                </div>
+                            ` : ''}
+                            
+                            ${palace.gods && palace.gods.length > 0 ? `
+                                <div class="palace-item">
+                                    <span class="item-label">八神:</span>
+                                    <span class="item-value">${palace.gods.join(', ')}</span>
+                                </div>
+                            ` : ''}
+                            
+                            ${palace.fourHarms && palace.fourHarms.length > 0 ? `
+                                <div class="palace-item harm">
+                                    <span class="item-label"><i class="fas fa-exclamation-triangle"></i> 四害:</span>
+                                    <span class="item-value">${palace.fourHarms.join(', ')}</span>
+                                </div>
+                            ` : ''}
+                            
+                            ${palace.patterns && palace.patterns.length > 0 ? `
+                                <div class="palace-patterns">
+                                    ${palace.patterns.map(pattern => `
+                                        <div class="pattern-tag ${pattern.pattern.includes('凶') || pattern.pattern.includes('刑') ? 'bad' : 'good'}">
+                                            ${pattern.pattern}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        ${isHomePalace ? '<div class="palace-tag home-tag">主队</div>' : ''}
+                        ${isAwayPalace ? '<div class="palace-tag away-tag">客队</div>' : ''}
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        // 过滤宫位显示
+        function filterPalaces() {
+            const filter = document.getElementById('palace-filter').value;
+            const cards = document.querySelectorAll('.palace-card');
+            
+            cards.forEach(card => {
+                let show = true;
+                
+                switch(filter) {
+                    case 'home':
+                        show = card.classList.contains('home-palace');
+                        break;
+                    case 'away':
+                        show = card.classList.contains('away-palace');
+                        break;
+                    case 'harm':
+                        show = card.getAttribute('data-harm') === 'true';
+                        break;
+                    case 'good':
+                        show = card.getAttribute('data-good') === 'true';
+                        break;
+                    case 'bad':
+                        show = card.getAttribute('data-bad') === 'true';
+                        break;
+                }
+                
+                card.style.display = show ? 'block' : 'none';
+            });
+        }
+
+        // 显示全场预测
+        function displayFullTimePrediction(analysis) {
+            const resultEl = document.getElementById('full-time-result');
+            const pred = analysis.预测;
+            
+            if (!pred) return;
+            
+            resultEl.innerHTML = `
+                <div class="prediction-main-result">
+                    <div class="prediction-title">全场预测结果</div>
+                    <div class="prediction-outcome">${pred.全场预测}</div>
+                    <div class="prediction-confidence">
+                        置信度: <span class="confidence-value">${analysis.confidence || '--'}%</span>
+                    </div>
+                </div>
+                
+                <div class="probability-distribution">
+                    <h4>概率分布</h4>
+                    <div class="probabilities">
+                        <div class="probability home-prob">
+                            <div class="prob-label">主胜</div>
+                            <div class="prob-value">${pred.概率?.主胜 || 0}%</div>
+                        </div>
+                        <div class="probability draw-prob">
+                            <div class="prob-label">平局</div>
+                            <div class="prob-value">${pred.概率?.平局 || 0}%</div>
+                        </div>
+                        <div class="probability away-prob">
+                            <div class="prob-label">客胜</div>
+                            <div class="prob-value">${pred.概率?.客胜 || 0}%</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 创建图表
+            createProbabilityChart(pred.概率);
+            
+            // 显示能量对比
+            displayEnergyComparison(pred.能量对比);
+        }
+
+        // 创建概率图表
+        function createProbabilityChart(probabilities) {
+            const ctx = document.getElementById('probability-chart').getContext('2d');
+            
+            if (probabilityChart) {
+                probabilityChart.destroy();
+            }
+            
+            const data = {
+                labels: ['主胜', '平局', '客胜'],
+                datasets: [{
+                    data: [
+                        probabilities?.主胜 || 0,
+                        probabilities?.平局 || 0,
+                        probabilities?.客胜 || 0
+                    ],
+                    backgroundColor: [
+                        'rgba(52, 152, 219, 0.8)',
+                        'rgba(243, 156, 18, 0.8)',
+                        'rgba(231, 76, 60, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgb(52, 152, 219)',
+                        'rgb(243, 156, 18)',
+                        'rgb(231, 76, 60)'
+                    ],
+                    borderWidth: 2
+                }]
+            };
+            
+            probabilityChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: data,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.parsed}%`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '60%'
+                }
+            });
+        }
+
+        // 显示能量对比
+        function displayEnergyComparison(energy) {
+            const barsEl = document.querySelector('.energy-bars');
+            
+            if (!energy) return;
+            
+            const maxEnergy = Math.max(energy.全场主队 || 0, energy.全场客队 || 0);
+            
+            barsEl.innerHTML = `
+                <div class="energy-bar home-energy">
+                    <div class="energy-label">主队能量</div>
+                    <div class="energy-bar-container">
+                        <div class="energy-fill" style="width: ${(energy.全场主队 / maxEnergy) * 100}%">
+                            ${Math.round(energy.全场主队)}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="energy-bar away-energy">
+                    <div class="energy-label">客队能量</div>
+                    <div class="energy-bar-container">
+                        <div class="energy-fill" style="width: ${(energy.全场客队 / maxEnergy) * 100}%">
+                            ${Math.round(energy.全场客队)}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="energy-diff">
+                    能量差: <span class="diff-value">${Math.round((energy.全场主队 || 0) - (energy.全场客队 || 0))}</span>
+                </div>
+            `;
+        }
+
+        // 显示技术预测
+        function displayTechnicalPredictions(technical) {
+            const contentEl = document.getElementById('technical-content');
+            
+            if (!technical || technical.length === 0) {
+                contentEl.innerHTML = '<p class="text-center">无技术预测数据</p>';
+                return;
+            }
+            
+            let html = '<div class="technical-grid">';
+            
+            technical.forEach(item => {
+                html += `
+                    <div class="technical-card">
+                        <div class="technical-header">
+                            <h4>${item.aspect}</h4>
+                            <div class="technical-rating">
+                                ${item.rating ? `<span class="rating-value">${item.rating}</span>/100` : ''}
+                            </div>
+                        </div>
+                        <div class="technical-prediction">${item.prediction}</div>
+                        <div class="technical-description">${item.description || ''}</div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            contentEl.innerHTML = html;
+        }
+
+        // 显示比分预测
+        function displayScorePrediction(scorePrediction) {
+            const contentEl = document.getElementById('score-content');
+            
+            if (!scorePrediction) {
+                contentEl.innerHTML = '<p class="text-center">无比分预测数据</p>';
+                return;
+            }
+            
+            let html = `
+                <div class="score-prediction-main">
+                    <div class="most-likely-score">
+                        <h3>最可能比分</h3>
+                        <div class="score-value">${scorePrediction.mostLikely}</div>
+                    </div>
+                </div>
+            `;
+            
+            if (scorePrediction.probabilities && scorePrediction.probabilities.length > 0) {
+                html += `
+                    <div class="score-probabilities">
+                        <h3>比分概率分布</h3>
+                        <div class="score-grid">
+                `;
+                
+                scorePrediction.probabilities.slice(0, 12).forEach(prob => {
+                    const width = Math.max(30, Math.min(100, prob.probability));
+                    
+                    html += `
+                        <div class="score-item">
+                            <div class="score">${prob.score}</div>
+                            <div class="score-prob">
+                                <div class="prob-bar" style="width: ${width}%">
+                                    <span class="prob-value">${prob.probability}%</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div></div>`;
+            }
+            
+            contentEl.innerHTML = html;
+        }
+
+        // 显示AI参数
+        async function displayAIParameters() {
+            try {
+                const paramsData = await supabaseClient.getActiveParameters();
+                const params = paramsData.parameters;
+                
+                if (!params) return;
+                
+                document.getElementById('param-version').textContent = paramsData.version || 'V5.2';
+                
+                // 星门权重
+                displayStarWeights(params.starWeights, params.gateWeights);
+                
+                // 时间参数
+                displayTimeParameters(params.timeBasedParameters);
+                
+                // 能量转换
+                displayEnergyConversion(params.energyConversion);
+                
+                // 技术预测参数
+                displayTechParameters(params.technicalPrediction);
+                
+            } catch (error) {
+                console.error('加载AI参数失败:', error);
+            }
+        }
+
+        // 切换标签页
+        function switchTab(tabName) {
+            // 更新按钮状态
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // 更新内容显示
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+                pane.classList.remove('active');
+            });
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+        }
+
+        // 导出报告
+        function exportReport() {
+            if (!currentMatch) {
+                showError('无报告可导出');
+                return;
+            }
+            
+            // 创建报告内容
+            const report = {
+                比赛信息: currentMatch,
+                分析结果: currentAnalysis,
+                分析时间: new Date().toLocaleString('zh-CN'),
+                系统版本: 'V5.2'
+            };
+            
+            // 创建下载链接
+            const dataStr = JSON.stringify(report, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            const exportFileDefaultName = `分析报告_${currentMatch.match_code}_${Date.now()}.json`;
+            
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            
+            showNotification('报告已导出', 'success');
+        }
+
+        // 验证此比赛
+        function verifyThisMatch() {
+            if (!currentMatch) return;
+            
+            localStorage.setItem('selectedMatch', currentMatch.match_code);
+            window.location.href = `result_verification.html?match=${currentMatch.match_code}`;
+        }
+
+        // 刷新分析
+        function refreshAnalysis() {
+            location.reload();
+        }
+
+        // 切换原始数据显示
+        function toggleRawData() {
+            const content = document.getElementById('qimen-raw-content');
+            const btn = event.target.closest('button');
+            
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                btn.innerHTML = '<i class="fas fa-eye-slash"></i> 隐藏';
+            } else {
+                content.style.display = 'none';
+                btn.innerHTML = '<i class="fas fa-eye"></i> 显示';
+            }
+        }
+
+        // 显示错误
+        function showError(message) {
+            const matchInfoEl = document.getElementById('match-info');
+            matchInfoEl.innerHTML = `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h3>错误</h3>
+                    <p>${message}</p>
+                    <button class="btn btn-primary" onclick="location.href='match_input.html'">
+                        <i class="fas fa-plus-circle"></i> 输入新比赛
+                    </button>
+                </div>
+            `;
+        }
+
+        // 显示通知
+        function showNotification(message, type) {
+            // 简化的通知函数
+            alert(`${type}: ${message}`);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMatchData();
+        });
+    </script>
+
+    <style>
+        .match-info-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .match-code {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .match-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .match-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .match-status.verified {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .match-teams {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .team {
+            text-align: center;
+            flex: 1;
+        }
+
+        .team-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .vs {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .match-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* 宫位网格 */
+        .palaces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .palace-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: relative;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .palace-card.home-palace {
+            border-left-color: var(--secondary-color);
+            background: rgba(52, 152, 219, 0.05);
+        }
+
+        .palace-card.away-palace {
+            border-left-color: var(--accent-color);
+            background: rgba(231, 76, 60, 0.05);
+        }
+
+        .palace-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .palace-header h3 {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .palace-energy {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .palace-body {
+            font-size: 0.9rem;
+        }
+
+        .palace-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.25rem 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .palace-item.harm {
+            color: var(--accent-color);
+        }
+
+        .palace-patterns {
+            margin-top: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+        }
+
+        .pattern-tag {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .pattern-tag.good {
+            background: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+        }
+
+        .pattern-tag.bad {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .palace-tag {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .home-tag {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .away-tag {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* 预测结果样式 */
+        .prediction-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+
+        .tab-btn.active {
+            border-bottom-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .tab-content {
+            margin-top: 1rem;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .prediction-overview {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .prediction-overview {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .prediction-main {
+            padding: 1rem;
+        }
+
+        .prediction-main-result {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .prediction-title {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .prediction-outcome {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .prediction-confidence {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .confidence-value {
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+        .probability-distribution {
+            margin-top: 2rem;
+        }
+
+        .probabilities {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 1rem;
+        }
+
+        .probability {
+            text-align: center;
+        }
+
+        .prob-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .prob-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .home-prob .prob-value { color: var(--secondary-color); }
+        .draw-prob .prob-value { color: var(--warning-color); }
+        .away-prob .prob-value { color: var(--accent-color); }
+
+        .probability-chart {
+            height: 250px;
+            margin-top: 1rem;
+        }
+
+        .energy-comparison {
+            padding: 1rem;
+            background: var(--light-bg);
+            border-radius: 8px;
+        }
+
+        .energy-bar {
+            margin: 1rem 0;
+        }
+
+        .energy-label {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .energy-bar-container {
+            height: 25px;
+            background: #eee;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .energy-fill {
+            height: 100%;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: width 0.5s ease;
+        }
+
+        .home-energy .energy-fill {
+            background: var(--secondary-color);
+        }
+
+        .away-energy .energy-fill {
+            background: var(--accent-color);
+        }
+
+        .energy-diff {
+            text-align: center;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .diff-value {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* 技术预测网格 */
+        .technical-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .technical-card {
+            background: var(--light-bg);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .technical-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .technical-header h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .technical-rating {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .technical-prediction {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .technical-description {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* 比分预测样式 */
+        .score-prediction-main {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .most-likely-score .score-value {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .score-probabilities {
+            margin-top: 2rem;
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .score-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .score {
+            min-width: 40px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .score-prob {
+            flex: 1;
+        }
+
+        .prob-bar {
+            height: 20px;
+            background: var(--secondary-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        /* AI参数网格 */
+        .parameter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .parameter-card {
+            background: var(--light-bg);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .parameter-card h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .parameter-version {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        /* 原始数据样式 */
+        .raw-data-content {
+            max-height: 500px;
+            overflow: auto;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            white-space: pre-wrap;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+
+        .error-message {
+            text-align: center;
+            padding: 2rem;
+            color: var(--accent-color);
+        }
+
+        .error-message i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .error-message h3 {
+            margin-bottom: 1rem;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .palaces-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .technical-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .parameter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .match-teams {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .match-meta {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+            
+            .prediction-tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</body>
+</html>

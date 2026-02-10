@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>比赛输入 - 阴盘奇门足球预测系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-plus-circle"></i>
+                <span>比赛输入</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html"><i class="fas fa-home"></i> 仪表板</a>
+                <a href="analysis_view.html"><i class="fas fa-chart-bar"></i> 分析报告</a>
+                <a href="result_verification.html"><i class="fas fa-check-circle"></i> 赛果验证</a>
+                <a href="match_input.html" class="active"><i class="fas fa-plus-circle"></i> 输入比赛</a>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-futbol"></i> 输入新比赛数据</h2>
+                    <div class="btn-group">
+                        <button class="btn" onclick="loadTemplate()">
+                            <i class="fas fa-file-import"></i> 加载模板
+                        </button>
+                        <button class="btn btn-primary" onclick="previewAnalysis()">
+                            <i class="fas fa-eye"></i> 预览分析
+                        </button>
+                        <button class="btn btn-success" onclick="submitMatch()">
+                            <i class="fas fa-save"></i> 保存并分析
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-container">
+                    <!-- 模板选择 -->
+                    <div class="form-group">
+                        <label class="form-label">选择模板</label>
+                        <select id="template-select" class="form-control" onchange="onTemplateSelect()">
+                            <option value="">-- 选择比赛模板 --</option>
+                            <option value="FB3200">FB3200 - 女足西班牙杯（示例）</option>
+                            <option value="FB3079">FB3079 - 阿根廷甲组联赛</option>
+                            <option value="empty">空白模板</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">比赛编号 <span class="required">*</span></label>
+                            <input type="text" id="match-code" class="form-control" 
+                                   placeholder="如：FB3200" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">赛事类别 <span class="required">*</span></label>
+                            <select id="competition-type" class="form-control" required>
+                                <option value="">选择赛事类别</option>
+                                <option value="女子西班牙杯">女子西班牙杯</option>
+                                <option value="阿根廷甲组联赛">阿根廷甲组联赛</option>
+                                <option value="荷兰甲组联赛">荷兰甲组联赛</option>
+                                <option value="德国乙组联赛">德国乙组联赛</option>
+                                <option value="澳洲职业联赛">澳洲职业联赛</option>
+                                <option value="巴西甲组联赛">巴西甲组联赛</option>
+                                <option value="欧洲联赛冠军盃">欧洲联赛冠军盃</option>
+                                <option value="沙特职业联赛">沙特职业联赛</option>
+                                <option value="其他">其他</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">主队名称 <span class="required">*</span></label>
+                            <input type="text" id="home-team" class="form-control" 
+                                   placeholder="如：马德里CFF女足" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">客队名称 <span class="required">*</span></label>
+                            <input type="text" id="away-team" class="form-control" 
+                                   placeholder="如：特内里费女足" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">比赛时间 <span class="required">*</span></label>
+                        <input type="datetime-local" id="match-time" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">奇门数据 <span class="required">*</span></label>
+                        <div class="form-help">
+                            <i class="fas fa-info-circle"></i> 必须严格按照甲方提供的格式输入
+                        </div>
+                        <textarea id="qimen-data" class="form-control" rows="25" 
+                                  placeholder="请严格按照以下格式输入奇门数据：
+足球资料如下
+球赛编号：FB3200
+主队：马德里CFF女足
+客队：特内里费女足
+赛事类别：女子西班牙杯
+比赛时间为2026-02-05 02:00:00
+
+奇门遁甲信息如下（由师傅提供，不需要修改，注意网页一定要显示出奇门信息，AI会记录奇门格局库）
+（中宫寄值符，主客队定位方法
+问测者宫位为基点作主队
+对冲宫位为客队）
+公历：2026年2月5日2时0分
+农历：2025年12月18日 阳遁3局
+四柱：丙午 庚寅 庚戌 丁丑
+时空亡：甲戌旬  申酉空　马星：亥
+值符：天辅星  值使：杜门
+
+问测者落宫为兑宫(西方)
+四害：空亡（深挖到坎宫）
+..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">附加信息</label>
+                        <textarea id="additional-info" class="form-control" rows="3" 
+                                  placeholder="其他相关信息，如天气、场地、伤病情况等（可选）"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 预览区域 -->
+            <div id="preview-section" class="section" style="display: none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-eye"></i> 分析预览</h2>
+                    <button class="btn" onclick="hidePreview()">
+                        <i class="fas fa-times"></i> 关闭预览
+                    </button>
+                </div>
+                
+                <div id="preview-content">
+                    <!-- 动态加载预览内容 -->
+                </div>
+            </div>
+
+            <!-- 最近使用的模板 -->
+            <div class="section">
+                <h2><i class="fas fa-history"></i> 最近使用的模板</h2>
+                <div id="recent-templates" class="templates-grid">
+                    <!-- 动态加载 -->
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>请确保奇门数据格式完全正确，否则可能影响预测结果</p>
+            <p>系统版本：V5.2 | 最后更新：2026-02-05</p>
+        </footer>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="js/supabase-client.js"></script>
+    <script src="js/qimen-engine.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // 模板数据
+        const templates = {
+            FB3200: {
+                match_code: 'FB3200',
+                home_team: '马德里CFF女足',
+                away_team: '特内里费女足',
+                competition_type: '女子西班牙杯',
+                match_time: '2026-02-05T02:00',
+                qimen_data: `足球资料如下
+球赛编号：FB3200
+主队：马德里CFF女足
+客队：特内里费女足
+赛事类别：女子西班牙杯
+比赛时间为2026-02-05 02:00:00
+
+奇门遁甲信息如下（由师傅提供，不需要修改，注意网页一定要显示出奇门信息，AI会记录奇门格局库）
+（中宫寄值符，主客队定位方法
+问测者宫位为基点作主队
+对冲宫位为客队）
+公历：2026年2月5日2时0分
+农历：2025年12月18日 阳遁3局
+四柱：丙午 庚寅 庚戌 丁丑
+时空亡：甲戌旬  申酉空　马星：亥
+值符：天辅星  值使：杜门
+
+问测者落宫为兑宫(西方)
+四害：空亡（深挖到坎宫）
+乙天干临：绝 位
+庚天干临：帝旺 位
+天盘─ 乙
+天盘寄宫─ 庚
+地盘─ 壬
+天盘＋天盘寄宫─ 乙 + 庚：日奇被刑
+天盘＋地盘─ 乙 + 壬：日奇入地
+天盘寄宫＋地盘─ 庚 + 壬：小格（移荡格）
+八门─ 杜门
+八门+天盘─ 杜 + 乙：飞来横祸(诉讼)
+九星─ 天芮星
+八神─ 太阴
+
+乾宫(西北方)
+四害：景门门迫
+壬天干临：冠带 临官 马星位
+天盘─ 壬
+地盘─ 辛
+天盘＋地盘─ 壬 + 辛：腾蛇相缠
+八门─ 景门
+八门+天盘─ 景 + 壬：因贼牵连
+九星─ 天柱星
+八神─ 六合
+
+坎宫(北方)
+四害：死门门迫
+辛天干临：长生 位
+天盘─ 辛
+地盘─ 丙
+天盘＋地盘─ 辛 + 丙：干合悖师
+八门─ 死门
+八门+天盘─ 死 + 辛：盗贼猖狂，失物难回
+九星─ 天心星
+八神─ 白虎
+
+艮宫(东北方)
+丙天干临：长生 养 位
+天盘─ 丙
+地盘─ 癸
+天盘＋地盘─ 丙 + 癸：华盖悖师
+八门─ 惊门
+八门+天盘─ 惊 + 丙：文书弃约惊恐
+九星─ 天蓬星
+
+震宫(东方)
+四害：开门门迫 戊击刑
+癸天干临：长生 位
+天盘─ 癸
+地盘─ 戊
+天盘＋地盘─ 癸 + 戊：天乙会合
+八门─ 开门
+八门+天盘─ 开 + 癸：女性失财小凶
+九星─ 天任星
+八神─ 九地
+
+巽宫(东南方)
+戊天干临：冠带 临官 位
+天盘─ 戊
+地盘─ 己
+天盘＋地盘─ 戊 + 己：贵人入狱
+八门─ 休门
+八门+天盘─ 休 + 戊：财物可得
+九星─ 天冲星
+八神─ 九天
+
+离宫(南方)
+己天干临：临官 位
+天盘─ 己
+地盘─ 丁
+天盘＋地盘─ 己 + 丁：朱雀入墓
+八门─ 生门
+八门+天盘─ 生 + 己：主得贵人扶持
+九星─ 天辅星
+八神─ 值符`
+            },
+            FB3079: {
+                match_code: 'FB3079',
+                home_team: '巴拉卡斯中央',
+                away_team: '莱斯查',
+                competition_type: '阿根廷甲组联赛',
+                match_time: '2026-01-30T00:30',
+                qimen_data: `足球资料如下
+球赛编号：FB3079
+主队：巴拉卡斯中央
+客队：莱斯查
+赛事类别：阿根廷甲组联赛
+比赛时间为2026-01-30 00:30:00
+
+奇门遁甲信息如下（由师傅提供）
+...（其他奇门数据）...`
+            }
+        };
+
+        // 加载模板
+        function loadTemplate() {
+            const templateSelect = document.getElementById('template-select');
+            const selectedTemplate = templateSelect.value;
+            
+            if (selectedTemplate && templates[selectedTemplate]) {
+                const template = templates[selectedTemplate];
+                
+                document.getElementById('match-code').value = template.match_code;
+                document.getElementById('home-team').value = template.home_team;
+                document.getElementById('away-team').value = template.away_team;
+                document.getElementById('competition-type').value = template.competition_type;
+                document.getElementById('match-time').value = template.match_time;
+                document.getElementById('qimen-data').value = template.qimen_data;
+                
+                showNotification('模板加载成功', 'success');
+            } else if (selectedTemplate === 'empty') {
+                // 清空表单
+                document.getElementById('match-code').value = '';
+                document.getElementById('home-team').value = '';
+                document.getElementById('away-team').value = '';
+                document.getElementById('competition-type').value = '';
+                document.getElementById('match-time').value = '';
+                document.getElementById('qimen-data').value = '';
+                document.getElementById('additional-info').value = '';
+                
+                showNotification('已加载空白模板', 'info');
+            }
+        }
+
+        // 模板选择变化
+        function onTemplateSelect() {
+            loadTemplate();
+        }
+
+        // 预览分析
+        async function previewAnalysis() {
+            // 验证必填字段
+            const requiredFields = [
+                'match-code', 'home-team', 'away-team', 
+                'competition-type', 'match-time', 'qimen-data'
+            ];
+            
+            for (const fieldId of requiredFields) {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    showNotification(`请填写${field.previousElementSibling.textContent}`, 'error');
+                    field.focus();
+                    return;
+                }
+            }
+            
+            try {
+                // 收集数据
+                const matchData = {
+                    match_code: document.getElementById('match-code').value,
+                    home_team: document.getElementById('home-team').value,
+                    away_team: document.getElementById('away-team').value,
+                    competition_type: document.getElementById('competition-type').value,
+                    match_time: document.getElementById('match-time').value,
+                    qimen_data: document.getElementById('qimen-data').value,
+                    additional_info: document.getElementById('additional-info').value,
+                    status: 'pending'
+                };
+                
+                // 运行分析
+                const engine = new QimenEngine();
+                const analysis = engine.analyzeFB3200(matchData.qimen_data);
+                
+                // 显示预览
+                displayPreview(matchData, analysis);
+                document.getElementById('preview-section').style.display = 'block';
+                
+                // 滚动到预览区域
+                document.getElementById('preview-section').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+                
+            } catch (error) {
+                console.error('预览分析失败:', error);
+                showNotification(`分析失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 显示预览
+        function displayPreview(matchData, analysis) {
+            const previewContent = document.getElementById('preview-content');
+            
+            let html = `
+                <div class="preview-card">
+                    <h3>比赛基本信息</h3>
+                    <div class="preview-grid">
+                        <div class="preview-item">
+                            <strong>比赛编号:</strong> ${matchData.match_code}
+                        </div>
+                        <div class="preview-item">
+                            <strong>对阵:</strong> ${matchData.home_team} vs ${matchData.away_team}
+                        </div>
+                        <div class="preview-item">
+                            <strong>赛事:</strong> ${matchData.competition_type}
+                        </div>
+                        <div class="preview-item">
+                            <strong>时间:</strong> ${new Date(matchData.match_time).toLocaleString('zh-CN')}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="preview-card">
+                    <h3>预测结果</h3>
+            `;
+            
+            if (analysis.预测) {
+                const pred = analysis.预测;
+                html += `
+                    <div class="prediction-preview">
+                        <div class="prediction-row">
+                            <div class="prediction-col">
+                                <h4>半场预测</h4>
+                                <div class="prediction-value">${pred.半场预测 || '--'}</div>
+                            </div>
+                            <div class="prediction-col">
+                                <h4>全场预测</h4>
+                                <div class="prediction-value">${pred.全场预测 || '--'}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="probability-preview">
+                            <h4>赛果概率</h4>
+                `;
+                
+                if (pred.概率) {
+                    html += `
+                        <div class="probability-bars">
+                            <div class="probability-bar">
+                                <div class="prob-label">主胜</div>
+                                <div class="prob-bar">
+                                    <div class="prob-fill home-prob" style="width: ${pred.概率.主胜 || 0}%">
+                                        ${pred.概率.主胜 || 0}%
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="probability-bar">
+                                <div class="prob-label">平局</div>
+                                <div class="prob-bar">
+                                    <div class="prob-fill draw-prob" style="width: ${pred.概率.平局 || 0}%">
+                                        ${pred.概率.平局 || 0}%
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="probability-bar">
+                                <div class="prob-label">客胜</div>
+                                <div class="prob-bar">
+                                    <div class="prob-fill away-prob" style="width: ${pred.概率.客胜 || 0}%">
+                                        ${pred.概率.客胜 || 0}%
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                html += `</div></div>`;
+            }
+            
+            // 奇门格局预览
+            if (analysis.palaces) {
+                html += `
+                    <div class="preview-card">
+                        <h3>奇门格局检测</h3>
+                        <div class="patterns-preview">
+                `;
+                
+                const palaces = analysis.palaces.palaces;
+                Object.values(palaces).forEach(palace => {
+                    if (palace.patterns && palace.patterns.length > 0) {
+                        palace.patterns.forEach(pattern => {
+                            html += `
+                                <div class="pattern-item">
+                                    <span class="pattern-name">${pattern.pattern}</span>
+                                    <span class="pattern-palace">${palace.name}</span>
+                                </div>
+                            `;
+                        });
+                    }
+                });
+                
+                html += `</div></div>`;
+            }
+            
+            // 技术预测预览
+            if (analysis.technical) {
+                html += `
+                    <div class="preview-card">
+                        <h3>技术预测</h3>
+                        <div class="technical-preview">
+                `;
+                
+                analysis.technical.forEach(tech => {
+                    html += `
+                        <div class="tech-item">
+                            <div class="tech-name">${tech.aspect}</div>
+                            <div class="tech-value">${tech.prediction}</div>
+                        </div>
+                    `;
+                });
+                
+                html += `</div></div>`;
+            }
+            
+            previewContent.innerHTML = html;
+        }
+
+        // 隐藏预览
+        function hidePreview() {
+            document.getElementById('preview-section').style.display = 'none';
+        }
+
+        // 提交比赛数据
+        async function submitMatch() {
+            // 验证必填字段
+            const requiredFields = [
+                'match-code', 'home-team', 'away-team', 
+                'competition-type', 'match-time', 'qimen-data'
+            ];
+            
+            for (const fieldId of requiredFields) {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    showNotification(`请填写${field.previousElementSibling.textContent}`, 'error');
+                    field.focus();
+                    return;
+                }
+            }
+            
+            try {
+                // 收集数据
+                const matchData = {
+                    match_code: document.getElementById('match-code').value,
+                    home_team: document.getElementById('home-team').value,
+                    away_team: document.getElementById('away-team').value,
+                    competition_type: document.getElementById('competition-type').value,
+                    match_time: document.getElementById('match-time').value,
+                    qimen_data: document.getElementById('qimen-data').value,
+                    additional_info: document.getElementById('additional-info').value,
+                    status: 'pending'
+                };
+                
+                // 运行分析
+                const engine = new QimenEngine();
+                const analysis = engine.analyzeFB3200(matchData.qimen_data);
+                
+                // 保存到Supabase
+                const savedMatch = await supabaseClient.saveMatch(matchData);
+                
+                // 更新预测结果
+                savedMatch.prediction = analysis.预测;
+                savedMatch.qimen_analysis = analysis;
+                savedMatch.technical_predictions = analysis.technical;
+                await supabaseClient.saveMatch(savedMatch);
+                
+                showNotification('比赛数据已保存并分析完成！', 'success');
+                
+                // 保存到最近模板
+                saveToRecentTemplates(matchData);
+                
+                // 跳转到分析报告页面
+                setTimeout(() => {
+                    localStorage.setItem('selectedMatch', matchData.match_code);
+                    window.location.href = `analysis_view.html?match=${matchData.match_code}`;
+                }, 1500);
+                
+            } catch (error) {
+                console.error('提交失败:', error);
+                showNotification(`提交失败: ${error.message}`, 'error');
+            }
+        }
+
+        // 保存到最近模板
+        function saveToRecentTemplates(matchData) {
+            try {
+                const recentTemplates = JSON.parse(localStorage.getItem('recentTemplates') || '[]');
+                
+                // 检查是否已存在
+                const existingIndex = recentTemplates.findIndex(
+                    t => t.match_code === matchData.match_code
+                );
+                
+                if (existingIndex > -1) {
+                    // 移到最前面
+                    recentTemplates.splice(existingIndex, 1);
+                }
+                
+                // 添加到开头
+                recentTemplates.unshift({
+                    match_code: matchData.match_code,
+                    home_team: matchData.home_team,
+                    away_team: matchData.away_team,
+                    competition_type: matchData.competition_type,
+                    timestamp: new Date().toISOString()
+                });
+                
+                // 限制数量
+                if (recentTemplates.length > 10) {
+                    recentTemplates.pop();
+                }
+                
+                localStorage.setItem('recentTemplates', JSON.stringify(recentTemplates));
+                loadRecentTemplates();
+                
+            } catch (error) {
+                console.error('保存最近模板失败:', error);
+            }
+        }
+
+        // 加载最近模板
+        function loadRecentTemplates() {
+            const recentTemplates = JSON.parse(localStorage.getItem('recentTemplates') || '[]');
+            const container = document.getElementById('recent-templates');
+            
+            if (recentTemplates.length === 0) {
+                container.innerHTML = '<p class="text-center">暂无最近使用的模板</p>';
+                return;
+            }
+            
+            container.innerHTML = recentTemplates.map(template => `
+                <div class="template-card" onclick="loadRecentTemplate('${template.match_code}')">
+                    <div class="template-header">
+                        <span class="template-code">${template.match_code}</span>
+                        <span class="template-time">${new Date(template.timestamp).toLocaleDateString('zh-CN')}</span>
+                    </div>
+                    <div class="template-teams">${template.home_team} vs ${template.away_team}</div>
+                    <div class="template-type">${template.competition_type}</div>
+                </div>
+            `).join('');
+        }
+
+        // 加载最近模板
+        function loadRecentTemplate(matchCode) {
+            // 从Supabase加载完整数据
+            supabaseClient.getMatch(matchCode)
+                .then(match => {
+                    if (match) {
+                        document.getElementById('match-code').value = match.match_code;
+                        document.getElementById('home-team').value = match.home_team;
+                        document.getElementById('away-team').value = match.away_team;
+                        document.getElementById('competition-type').value = match.competition_type;
+                        document.getElementById('match-time').value = match.match_time.substring(0, 16);
+                        document.getElementById('qimen-data').value = match.qimen_data;
+                        
+                        showNotification(`已加载模板 ${matchCode}`, 'success');
+                    }
+                })
+                .catch(error => {
+                    console.error('加载模板失败:', error);
+                    showNotification(`加载模板失败: ${error.message}`, 'error');
+                });
+        }
+
+        // 显示通知
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                   type === 'error' ? 'exclamation-circle' : 
+                                   'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            // 添加到页面
+            document.body.appendChild(notification);
+            
+            // 自动移除
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.parentElement.removeChild(notification);
+                }
+            }, 5000);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 设置默认时间（明天）
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(20, 0, 0, 0);
+            
+            document.getElementById('match-time').value = 
+                tomorrow.toISOString().slice(0, 16);
+            
+            // 检查URL参数
+            const urlParams = new URLSearchParams(window.location.search);
+            const templateParam = urlParams.get('template');
+            
+            if (templateParam && templates[templateParam]) {
+                document.getElementById('template-select').value = templateParam;
+                loadTemplate();
+            }
+            
+            // 加载最近模板
+            loadRecentTemplates();
+            
+            // 监听表单变化，自动生成比赛编号
+            document.getElementById('home-team').addEventListener('input', function() {
+                const homeAbbr = this.value.substring(0, 3).toUpperCase();
+                const awayAbbr = document.getElementById('away-team').value.substring(0, 3).toUpperCase();
+                
+                if (homeAbbr && awayAbbr) {
+                    const code = `FB${Math.floor(1000 + Math.random() * 9000)}`;
+                    document.getElementById('match-code').value = code;
+                }
+            });
+            
+            document.getElementById('away-team').addEventListener('input', function() {
+                const homeAbbr = document.getElementById('home-team').value.substring(0, 3).toUpperCase();
+                const awayAbbr = this.value.substring(0, 3).toUpperCase();
+                
+                if (homeAbbr && awayAbbr) {
+                    const code = `FB${Math.floor(1000 + Math.random() * 9000)}`;
+                    document.getElementById('match-code').value = code;
+                }
+            });
+        });
+    </script>
+
+    <style>
+        .form-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-help {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .required {
+            color: var(--accent-color);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* 预览样式 */
+        .preview-card {
+            background: var(--light-bg);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .preview-item {
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .prediction-preview {
+            margin-top: 1rem;
+        }
+
+        .prediction-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .prediction-col {
+            text-align: center;
+        }
+
+        .prediction-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .probability-preview {
+            margin-top: 2rem;
+        }
+
+        .probability-bar {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .prob-label {
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .prob-bar {
+            flex: 1;
+            height: 25px;
+            background: #eee;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .prob-fill {
+            height: 100%;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: width 0.5s ease;
+        }
+
+        .home-prob { background-color: var(--secondary-color); }
+        .draw-prob { background-color: var(--warning-color); }
+        .away-prob { background-color: var(--accent-color); }
+
+        .patterns-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .pattern-item {
+            background: white;
+            border-radius: 6px;
+            padding: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid var(--warning-color);
+        }
+
+        .pattern-name {
+            font-weight: 500;
+        }
+
+        .pattern-palace {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .technical-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .tech-item {
+            background: white;
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .tech-name {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* 模板网格 */
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .template-card {
+            background: var(--light-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--border-color);
+        }
+
+        .template-card:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .template-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .template-code {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .template-time {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .template-teams {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .template-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* 通知样式 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 300px;
+            max-width: 400px;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid;
+        }
+
+        .notification.success {
+            border-left-color: var(--success-color);
+        }
+
+        .notification.error {
+            border-left-color: var(--accent-color);
+        }
+
+        .notification.info {
+            border-left-color: var(--secondary-color);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.25rem;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    </style>
+</body>
+</html>

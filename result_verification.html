@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>赛果验证 - 阴盘奇门足球预测系统</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-check-circle"></i>
+                <span>赛果验证</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html"><i class="fas fa-home"></i> 仪表板</a>
+                <a href="analysis_view.html"><i class="fas fa-chart-bar"></i> 分析报告</a>
+                <a href="result_verification.html" class="active"><i class="fas fa-check-circle"></i> 赛果验证</a>
+                <a href="update_instructions.html"><i class="fas fa-code-branch"></i> 更新指令</a>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <!-- 选择比赛 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-search"></i> 选择需要验证的比赛</h2>
+                    <button class="btn btn-primary" onclick="loadPendingMatches()">
+                        <i class="fas fa-sync-alt"></i> 刷新列表
+                    </button>
+                </div>
+                
+                <div class="matches-selector">
+                    <select id="match-select" class="form-control" onchange="loadSelectedMatch()">
+                        <option value="">-- 选择比赛 --</option>
+                    </select>
+                    
+                    <div id="selected-match-info" class="match-info" style="display: none;">
+                        <!-- 动态加载比赛信息 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 实际赛果输入 -->
+            <div class="section" id="result-input-section" style="display: none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-clipboard-check"></i> 输入实际赛果</h2>
+                    <div class="match-code-display">
+                        <span id="current-match-code"></span>
+                    </div>
+                </div>
+                
+                <form id="result-form" onsubmit="submitResult(event)">
+                    <!-- 比分输入 -->
+                    <div class="form-group">
+                        <h3>比赛比分</h3>
+                        <div class="score-input-row">
+                            <div class="team-score-input">
+                                <label>主队 (上半场)</label>
+                                <input type="number" id="home-first-half" class="form-control score-input" min="0" value="0">
+                            </div>
+                            <div class="vs-col">:</div>
+                            <div class="team-score-input">
+                                <label>客队 (上半场)</label>
+                                <input type="number" id="away-first-half" class="form-control score-input" min="0" value="0">
+                            </div>
+                        </div>
+                        
+                        <div class="score-input-row">
+                            <div class="team-score-input">
+                                <label>主队 (全场)</label>
+                                <input type="number" id="home-full-time" class="form-control score-input" min="0" value="0">
+                            </div>
+                            <div class="vs-col">:</div>
+                            <div class="team-score-input">
+                                <label>客队 (全场)</label>
+                                <input type="number" id="away-full-time" class="form-control score-input" min="0" value="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 角球输入 -->
+                    <div class="form-group">
+                        <h3>角球数据</h3>
+                        <div class="corners-input">
+                            <div class="input-group">
+                                <label>半场角球总数</label>
+                                <input type="number" id="first-half-corners" class="form-control" min="0" value="0">
+                            </div>
+                            <div class="input-group">
+                                <label>全场角球总数</label>
+                                <input type="number" id="full-time-corners" class="form-control" min="0" value="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 技术数据输入 -->
+                    <div class="form-group">
+                        <h3>技术统计数据</h3>
+                        <div class="tech-data-grid">
+                            <div class="input-group">
+                                <label>黄牌数</label>
+                                <input type="number" id="yellow-cards" class="form-control" min="0" value="0">
+                            </div>
+                            <div class="input-group">
+                                <label>红牌数</label>
+                                <input type="number" id="red-cards" class="form-control" min="0" value="0">
+                            </div>
+                            <div class="input-group">
+                                <label>控球率 (%)</label>
+                                <input type="number" id="possession" class="form-control" min="0" max="100" value="50">
+                            </div>
+                            <div class="input-group">
+                                <label>射正次数</label>
+                                <input type="number" id="shots-on-target" class="form-control" min="0" value="0">
+                            </div>
+                            <div class="input-group">
+                                <label>危险进攻</label>
+                                <input type="number" id="dangerous-attacks" class="form-control" min="0" value="0">
+                            </div>
+                            <div class="input-group">
+                                <label>进攻次数</label>
+                                <input type="number" id="attacks" class="form-control" min="0" value="0">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 备注 -->
+                    <div class="form-group">
+                        <label>备注</label>
+                        <textarea id="result-notes" class="form-control" rows="3" 
+                                  placeholder="其他说明，如争议判罚、重要事件等"></textarea>
+                    </div>
+
+                    <!-- 提交按钮 -->
+                    <div class="form-actions">
+                        <button type="button" class="btn" onclick="cancelVerification()">
+                            <i class="fas fa-times"></i> 取消
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="previewVerification()">
+                            <i class="fas fa-eye"></i> 预览验证
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check-double"></i> 提交验证
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 验证结果预览 -->
+            <div class="section" id="verification-preview" style="display: none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-line"></i> 验证结果预览</h2>
+                    <button class="btn" onclick="closePreview()">
+                        <i class="fas fa-edit"></i> 返回编辑
+                    </button>
+                </div>
+                
+                <div id="preview-content">
+                    <!-- 动态加载预览内容 -->
+                </div>
+                
+                <div class="preview-actions">
+                    <button class="btn btn-success" onclick="submitVerification()">
+                        <i class="fas fa-check"></i> 确认提交
+                    </button>
+                </div>
+            </div>
+
+            <!-- 偏差分析 -->
+            <div class="section" id="deviation-analysis" style="display: none;">
+                <div class="section-header">
+                    <h2><i class="fas fa-balance-scale"></i> 偏差分析</h2>
+                    <div class="accuracy-score">
+                        准确度: <span id="accuracy-value">0</span>%
+                    </div>
+                </div>
+                
+                <div class="deviation-grid">
+                    <!-- 赛果偏差 -->
+                    <div class="deviation-card">
+                        <h3><i class="fas fa-futbol"></i> 赛果偏差</h3>
+                        <div id="result-deviation">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 技术偏差 -->
+                    <div class="deviation-card">
+                        <h3><i class="fas fa-chart-bar"></i> 技术偏差</h3>
+                        <div id="technical-deviation">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 参数调整建议 -->
+                    <div class="deviation-card">
+                        <h3><i class="fas fa-cogs"></i> 参数调整建议</h3>
+                        <div id="parameter-suggestions">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                    
+                    <!-- AI优化指令 -->
+                    <div class="deviation-card full-width">
+                        <h3><i class="fas fa-robot"></i> AI优化指令</h3>
+                        <div id="ai-instructions">
+                            <!-- 动态加载 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 最近的验证记录 -->
+            <div class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-history"></i> 最近的验证记录</h2>
+                </div>
+                
+                <div id="verification-history">
+                    <table class="history-table">
+                        <thead>
+                            <tr>
+                                <th>比赛编号</th>
+                                <th>对阵</th>
+                                <th>预测结果</th>
+                                <th>实际结果</th>
+                                <th>准确度</th>
+                                <th>验证时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-list">
+                            <!-- 动态加载 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>验证数据将用于AI参数优化，请确保数据准确</p>
+            <p>系统版本：V5.2 | 自动优化：已启用</p>
+        </footer>
+    </div>
+
+    <!-- 脚本 -->
+    <script src="js/supabase-client.js"></script>
+    <script src="js/qimen-engine.js"></script>
+    <script src="js/ai-optimizer.js"></script>
+    <script src="js/deepseek-integration.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        let selectedMatch = null;
+        let aiOptimizer = null;
+        let deepSeek = null;
+        let verificationData = null;
+
+        // 初始化
+        async function init() {
+            try {
+                aiOptimizer = new AIOptimizer();
+                await aiOptimizer.initialize();
+                
+                deepSeek = deepseekIntegration;
+                
+                loadPendingMatches();
+                loadVerificationHistory();
+                
+            } catch (error) {
+                console.error('初始化失败:', error);
+                showError('系统初始化失败: ' + error.message);
+            }
+        }
+
+        // 加载待验证比赛
+        async function loadPendingMatches() {
+            try {
+                const matches = await supabaseClient.getPendingMatches();
+                const selectEl = document.getElementById('match-select');
+                
+                selectEl.innerHTML = '<option value="">-- 选择比赛 --</option>';
+                
+                if (matches && matches.length > 0) {
+                    matches.forEach(match => {
+                        const option = document.createElement('option');
+                        option.value = match.match_code;
+                        option.textContent = `${match.match_code} - ${match.home_team} vs ${match.away_team}`;
+                        selectEl.appendChild(option);
+                    });
+                    
+                    // 检查URL参数
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const matchParam = urlParams.get('match');
+                    
+                    if (matchParam) {
+                        selectEl.value = matchParam;
+                        loadSelectedMatch();
+                    }
+                    
+                } else {
+                    selectEl.innerHTML += '<option value="" disabled>暂无待验证比赛</option>';
+                }
+            } catch (error) {
+                console.error('加载比赛失败:', error);
+                showError('加载比赛列表失败: ' + error.message);
+            }
+        }
+
+        // 加载选中的比赛
+        async function loadSelectedMatch() {
+            const matchCode = document.getElementById('match-select').value;
+            
+            if (!matchCode) {
+                document.getElementById('selected-match-info').style.display = 'none';
+                document.getElementById('result-input-section').style.display = 'none';
+                return;
+            }
+            
+            try {
+                const match = await supabaseClient.getMatch(matchCode);
+                
+                if (!match) {
+                    showError('未找到比赛数据');
+                    return;
+                }
+                
+                selectedMatch = match;
+                
+                // 显示比赛信息
+                const infoEl = document.getElementById('selected-match-info');
+                infoEl.innerHTML = `
+                    <div class="match-card">
+                        <div class="match-header">
+                            <span class="match-code">${match.match_code}</span>
+                            <span class="match-type">${match.competition_type}</span>
+                        </div>
+                        <div class="match-teams">
+                            <div class="team home-team">
+                                <div class="team-name">${match.home_team}</div>
+                                <div class="team-label">主队</div>
+                            </div>
+                            <div class="vs">VS</div>
+                            <div class="team away-team">
+                                <div class="team-name">${match.away_team}</div>
+                                <div class="team-label">客队</div>
+                            </div>
+                        </div>
+                        <div class="match-time">
+                            <i class="fas fa-calendar-alt"></i>
+                            ${new Date(match.match_time).toLocaleString('zh-CN')}
+                        </div>
+                    </div>
+                `;
+                
+                infoEl.style.display = 'block';
+                document.getElementById('current-match-code').textContent = matchCode;
+                document.getElementById('result-input-section').style.display = 'block';
+                
+                // 滚动到输入区域
+                document.getElementById('result-input-section').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+                
+            } catch (error) {
+                console.error('加载比赛详情失败:', error);
+                showError('加载失败: ' + error.message);
+            }
+        }
+
+        // 预览验证
+        async function previewVerification() {
+            if (!selectedMatch || !selectedMatch.prediction) {
+                showError('请先选择比赛并确保已有预测结果');
+                return;
+            }
+            
+            // 收集验证数据
+            const verification = collectVerificationData();
+            
+            // 计算偏差
+            const deviation = aiOptimizer.calculateDeviation(
+                selectedMatch.prediction,
+                verification
+            );
+            
+            verificationData = {
+                match: selectedMatch,
+                verification: verification,
+                deviation: deviation
+            };
+            
+            // 显示预览
+            displayVerificationPreview(verification, deviation);
+        }
+
+        // 收集验证数据
+        function collectVerificationData() {
+            return {
+                matchCode: selectedMatch.match_code,
+                result: {
+                    firstHalf: `${document.getElementById('home-first-half').value}-${document.getElementById('away-first-half').value}`,
+                    fullTime: `${document.getElementById('home-full-time').value}-${document.getElementById('away-full-time').value}`
+                },
+                technical: {
+                    firstHalfCorners: parseInt(document.getElementById('first-half-corners').value) || 0,
+                    fullTimeCorners: parseInt(document.getElementById('full-time-corners').value) || 0,
+                    yellowCards: parseInt(document.getElementById('yellow-cards').value) || 0,
+                    redCards: parseInt(document.getElementById('red-cards').value) || 0,
+                    possession: parseInt(document.getElementById('possession').value) || 50,
+                    shotsOnTarget: parseInt(document.getElementById('shots-on-target').value) || 0,
+                    dangerousAttacks: parseInt(document.getElementById('dangerous-attacks').value) || 0,
+                    attacks: parseInt(document.getElementById('attacks').value) || 0
+                },
+                notes: document.getElementById('result-notes').value,
+                timestamp: new Date().toISOString()
+            };
+        }
+
+        // 显示验证预览
+        function displayVerificationPreview(verification, deviation) {
+            const previewEl = document.getElementById('preview-content');
+            
+            let html = `
+                <div class="comparison-grid">
+                    <div class="comparison-col">
+                        <h3>预测结果</h3>
+                        <div class="prediction-summary">
+            `;
+            
+            if (selectedMatch.prediction) {
+                const pred = selectedMatch.prediction;
+                html += `
+                    <div class="prediction-item">
+                        <div class="pred-label">全场预测:</div>
+                        <div class="pred-value">${pred.全场预测 || '--'}</div>
+                    </div>
+                    <div class="prediction-item">
+                        <div class="pred-label">概率分布:</div>
+                        <div class="pred-probabilities">
+                            <span class="prob home">主胜 ${pred.概率?.主胜 || 0}%</span>
+                            <span class="prob draw">平局 ${pred.概率?.平局 || 0}%</span>
+                            <span class="prob away">客胜 ${pred.概率?.客胜 || 0}%</span>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += `
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-col">
+                        <h3>实际结果</h3>
+                        <div class="actual-summary">
+                            <div class="actual-item">
+                                <div class="actual-label">半场比分:</div>
+                                <div class="actual-value">${verification.result.firstHalf}</div>
+                            </div>
+                            <div class="actual-item">
+                                <div class="actual-label">全场比分:</div>
+                                <div class="actual-value">${verification.result.fullTime}</div>
+                            </div>
+                            <div class="actual-item">
+                                <div class="actual-label">控球率:</div>
+                                <div class="actual-value">${verification.technical.possession}%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="accuracy-preview">
+                    <h3>准确度评估</h3>
+                    <div class="accuracy-score-preview">
+                        总体准确度: <span class="score-value">${deviation.overallDeviation.score}%</span>
+                        <div class="score-grade">${deviation.overallDeviation.grade}</div>
+                    </div>
+                </div>
+            `;
+            
+            previewEl.innerHTML = html;
+            document.getElementById('verification-preview').style.display = 'block';
+            
+            // 滚动到预览区域
+            document.getElementById('verification-preview').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // 关闭预览
+        function closePreview() {
+            document.getElementById('verification-preview').style.display = 'none';
+        }
+
+        // 提交验证
+        async function submitVerification() {
+            if (!verificationData) return;
+            
+            try {
+                // 1. 更新比赛状态为已验证
+                await supabaseClient.updateMatchResult(
+                    selectedMatch.match_code,
+                    verificationData.verification
+                );
+                
+                // 2. 使用AI优化器调整参数
+                const adjustedParams = aiOptimizer.adjustParameters(verificationData.deviation);
+                
+                // 3. 生成更新指令
+                const instructions = await aiOptimizer.generateUpdateInstructions(
+                    selectedMatch.match_code,
+                    verificationData.deviation
+                );
+                
+                // 4. 使用DeepSeek进行深度分析
+                let deepSeekAnalysis = null;
+                try {
+                    deepSeekAnalysis = await deepSeek.analyzeDeviation(verificationData.deviation);
+                } catch (error) {
+                    console.warn('DeepSeek分析失败:', error);
+                }
+                
+                // 5. 显示分析结果
+                displayDeviationAnalysis(verificationData.deviation, instructions, deepSeekAnalysis);
+                
+                // 6. 刷新历史记录
+                loadVerificationHistory();
+                
+                showNotification('验证成功！AI参数已优化', 'success');
+                
+            } catch (error) {
+                console.error('提交验证失败:', error);
+                showError('验证失败: ' + error.message);
+            }
+        }
+
+        // 显示偏差分析
+        function displayDeviationAnalysis(deviation, instructions, deepSeekAnalysis) {
+            document.getElementById('accuracy-value').textContent = deviation.overallDeviation.score;
+            
+            // 显示赛果偏差
+            const resultDevEl = document.getElementById('result-deviation');
+            if (deviation.resultDeviation) {
+                resultDevEl.innerHTML = `
+                    <div class="deviation-item">
+                        <div class="dev-label">预测:</div>
+                        <div class="dev-value">${deviation.resultDeviation.predicted}</div>
+                    </div>
+                    <div class="deviation-item">
+                        <div class="dev-label">实际:</div>
+                        <div class="dev-value">${deviation.resultDeviation.actual}</div>
+                    </div>
+                    <div class="deviation-item">
+                        <div class="dev-label">准确度:</div>
+                        <div class="dev-value ${deviation.resultDeviation.isCorrect ? 'correct' : 'incorrect'}">
+                            ${deviation.resultDeviation.deviationScore}%
+                            ${deviation.resultDeviation.isCorrect ? '✓' : '✗'}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // 显示技术偏差
+            const techDevEl = document.getElementById('technical-deviation');
+            if (deviation.technicalDeviations && deviation.technicalDeviations.length > 0) {
+                let techHtml = '';
+                deviation.technicalDeviations.forEach(tech => {
+                    const accuracyClass = tech.deviationScore >= 70 ? 'good' : 
+                                         tech.deviationScore >= 50 ? 'fair' : 'poor';
+                    
+                    techHtml += `
+                        <div class="tech-deviation-item">
+                            <div class="tech-name">${tech.metric}</div>
+                            <div class="tech-values">
+                                <span class="pred">${tech.predicted}</span>
+                                <span class="arrow">→</span>
+                                <span class="actual">${tech.actual}</span>
+                            </div>
+                            <div class="tech-accuracy ${accuracyClass}">
+                                ${tech.deviationScore}%
+                            </div>
+                        </div>
+                    `;
+                });
+                techDevEl.innerHTML = techHtml;
+            }
+            
+            // 显示参数调整建议
+            const paramSuggestEl = document.getElementById('parameter-suggestions');
+            if (instructions && instructions.parameterAdjustments) {
+                let paramHtml = '';
+                instructions.parameterAdjustments.forEach(adj => {
+                    paramHtml += `
+                        <div class="suggestion-item">
+                            <div class="sug-param">${adj.parameter}</div>
+                            <div class="sug-adjust">${adj.adjustment}</div>
+                            <div class="sug-reason">${adj.reason}</div>
+                        </div>
+                    `;
+                });
+                paramSuggestEl.innerHTML = paramHtml;
+            }
+            
+            // 显示AI优化指令
+            const aiInstructionsEl = document.getElementById('ai-instructions');
+            if (deepSeekAnalysis && deepSeekAnalysis.parameterSuggestions) {
+                let aiHtml = '<div class="deepseek-analysis">';
+                
+                if (deepSeekAnalysis.analysisSummary) {
+                    aiHtml += `<div class="analysis-summary">${deepSeekAnalysis.analysisSummary}</div>`;
+                }
+                
+                deepSeekAnalysis.parameterSuggestions.forEach(sug => {
+                    aiHtml += `
+                        <div class="ai-suggestion">
+                            <div class="ai-param">${sug.parameter}</div>
+                            <div class="ai-adjust">${sug.adjustment}</div>
+                            <div class="ai-reason">${sug.reason}</div>
+                        </div>
+                    `;
+                });
+                
+                aiHtml += '</div>';
+                aiInstructionsEl.innerHTML = aiHtml;
+            }
+            
+            // 显示偏差分析区域
+            document.getElementById('deviation-analysis').style.display = 'block';
+            document.getElementById('deviation-analysis').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+
+        // 取消验证
+        function cancelVerification() {
+            document.getElementById('result-input-section').style.display = 'none';
+            document.getElementById('selected-match-info').style.display = 'none';
+            document.getElementById('match-select').value = '';
+        }
+
+        // 提交表单（阻止默认提交）
+        function submitResult(event) {
+            event.preventDefault();
+            previewVerification();
+            return false;
+        }
+
+        // 加载验证历史
+        async function loadVerificationHistory() {
+            try {
+                const { data: matches, error } = await supabaseClient.supabase
+                    .from('matches')
+                    .select('*')
+                    .eq('status', 'verified')
+                    .order('verified_at', { ascending: false })
+                    .limit(10);
+                
+                if (error) throw error;
+                
+                const historyList = document.getElementById('history-list');
+                
+                if (matches && matches.length > 0) {
+                    historyList.innerHTML = matches.map(match => {
+                        const pred = match.prediction;
+                        const actual = match.actual_result;
+                        
+                        // 计算简单准确度
+                        const accuracy = pred && actual ? 
+                            calculateSimpleAccuracy(pred, actual) : 0;
+                        
+                        return `
+                            <tr>
+                                <td>${match.match_code}</td>
+                                <td>${match.home_team} vs ${match.away_team}</td>
+                                <td>${pred?.全场预测 || '--'}</td>
+                                <td>${actual?.result?.fullTime || '--'}</td>
+                                <td>
+                                    <span class="accuracy-badge ${getAccuracyClass(accuracy)}">
+                                        ${accuracy}%
+                                    </span>
+                                </td>
+                                <td>${new Date(match.verified_at).toLocaleDateString('zh-CN')}</td>
+                                <td>
+                                    <button class="btn btn-sm" onclick="viewVerification('${match.match_code}')">
+                                        查看
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                } else {
+                    historyList.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="text-center">暂无验证记录</td>
+                        </tr>
+                    `;
+                }
+                
+            } catch (error) {
+                console.error('加载历史记录失败:', error);
+                showError('加载历史记录失败: ' + error.message);
+            }
+        }
+
+        // 计算简单准确度
+        function calculateSimpleAccuracy(prediction, actual) {
+            let score = 0;
+            
+            // 检查赛果方向
+            if (prediction.全场预测 && actual.result) {
+                const predWinner = getWinnerFromPrediction(prediction.全场预测);
+                const actualWinner = getWinnerFromScore(actual.result.fullTime);
+                
+                if (predWinner === actualWinner) {
+                    score += 60;
+                }
+            }
+            
+            // 检查比分（近似匹配）
+            if (actual.result && actual.result.fullTime) {
+                const [home, away] = actual.result.fullTime.split('-').map(Number);
+                const predScore = prediction.scorePrediction?.mostLikely;
+                
+                if (predScore) {
+                    const [predHome, predAway] = predScore.split('-').map(Number);
+                    const diff = Math.abs(home - predHome) + Math.abs(away - predAway);
+                    
+                    if (diff === 0) score += 40;
+                    else if (diff === 1) score += 20;
+                    else if (diff === 2) score += 10;
+                }
+            }
+            
+            return score;
+        }
+
+        // 从预测获取胜者
+        function getWinnerFromPrediction(prediction) {
+            if (prediction.includes('主队胜')) return 'home';
+            if (prediction.includes('客队胜')) return 'away';
+            return 'draw';
+        }
+
+        // 从比分获取胜者
+        function getWinnerFromScore(score) {
+            if (!score) return null;
+            const [home, away] = score.split('-').map(Number);
+            if (home > away) return 'home';
+            if (home < away) return 'away';
+            return 'draw';
+        }
+
+        // 获取准确度类别
+        function getAccuracyClass(accuracy) {
+            if (accuracy >= 80) return 'excellent';
+            if (accuracy >= 60) return 'good';
+            if (accuracy >= 40) return 'fair';
+            return 'poor';
+        }
+
+        // 查看验证详情
+        async function viewVerification(matchCode) {
+            try {
+                const match = await supabaseClient.getMatch(matchCode);
+                if (match) {
+                    localStorage.setItem('selectedMatch', matchCode);
+                    window.location.href = `analysis_view.html?match=${matchCode}`;
+                }
+            } catch (error) {
+                console.error('查看验证失败:', error);
+                showError('查看失败: ' + error.message);
+            }
+        }
+
+        // 显示错误
+        function showError(message) {
+            alert('错误: ' + message);
+        }
+
+        // 显示通知
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                   type === 'error' ? 'exclamation-circle' : 
+                                   'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.parentElement.removeChild(notification);
+                }
+            }, 5000);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+    <style>
+        .matches-selector {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .match-info {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--light-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .match-card {
+            text-align: center;
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .match-code {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .match-type {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .match-teams {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .team {
+            flex: 1;
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 0.25rem;
+        }
+
+        .team-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .vs {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .match-time {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .match-code-display {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* 比分输入样式 */
+        .score-input-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .team-score-input {
+            flex: 1;
+        }
+
+        .team-score-input label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .score-input {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .vs-col {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .corners-input {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .tech-data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* 预览样式 */
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comparison-col h3 {
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .prediction-item, .actual-item {
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .pred-label, .actual-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .pred-value, .actual-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 0.25rem;
+        }
+
+        .pred-probabilities {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .prob {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .prob.home { background: rgba(52, 152, 219, 0.2); color: #2980b9; }
+        .prob.draw { background: rgba(243, 156, 18, 0.2); color: #d35400; }
+        .prob.away { background: rgba(231, 76, 60, 0.2); color: #c0392b; }
+
+        .accuracy-preview {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: var(--light-bg);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .accuracy-score-preview {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .score-value {
+            color: var(--secondary-color);
+            font-size: 2rem;
+        }
+
+        .score-grade {
+            display: inline-block;
+            margin-left: 1rem;
+            padding: 0.25rem 1rem;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .preview-actions {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* 偏差分析样式 */
+        .deviation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .deviation-card {
+            background: var(--light-bg);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .deviation-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .deviation-card h3 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .deviation-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .dev-label {
+            font-weight: 500;
+        }
+
+        .dev-value {
+            font-weight: bold;
+        }
+
+        .dev-value.correct {
+            color: var(--success-color);
+        }
+
+        .dev-value.incorrect {
+            color: var(--accent-color);
+        }
+
+        .tech-deviation-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .tech-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .tech-values {
+            flex: 2;
+            text-align: center;
+        }
+
+        .tech-values .pred {
+            color: var(--secondary-color);
+        }
+
+        .tech-values .actual {
+            color: var(--primary-color);
+        }
+
+        .tech-values .arrow {
+            margin: 0 0.5rem;
+            color: var(--text-light);
+        }
+
+        .tech-accuracy {
+            flex: 1;
+            text-align: right;
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .tech-accuracy.good {
+            background: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+        }
+
+        .tech-accuracy.fair {
+            background: rgba(243, 156, 18, 0.2);
+            color: #f39c12;
+        }
+
+        .tech-accuracy.poor {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .suggestion-item, .ai-suggestion {
+            margin: 0.5rem 0;
+            padding: 0.75rem;
+            background: white;
+            border-radius: 6px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 2fr;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .sug-param, .ai-param {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .sug-adjust, .ai-adjust {
+            padding: 0.25rem 0.5rem;
+            background: var(--warning-color);
+            color: white;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .sug-reason, .ai-reason {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .deepseek-analysis {
+            margin-top: 1rem;
+        }
+
+        .analysis-summary {
+            padding: 1rem;
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* 历史记录样式 */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .history-table th {
+            background: var(--light-bg);
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .history-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .accuracy-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .accuracy-badge.excellent {
+            background: rgba(39, 174, 96, 0.2);
+            color: #27ae60;
+        }
+
+        .accuracy-badge.good {
+            background: rgba(52, 152, 219, 0.2);
+            color: #2980b9;
+        }
+
+        .accuracy-badge.fair {
+            background: rgba(243, 156, 18, 0.2);
+            color: #f39c12;
+        }
+
+        .accuracy-badge.poor {
+            background: rgba(231, 76, 60, 0.2);
+            color: #c0392b;
+        }
+
+        .accuracy-score {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        /* 通知样式 */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 300px;
+            max-width: 400px;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid;
+        }
+
+        .notification.success {
+            border-left-color: var(--success-color);
+        }
+
+        .notification.error {
+            border-left-color: var(--accent-color);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 0.25rem;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .tech-data-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .deviation-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .suggestion-item, .ai-suggestion {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tech-data-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .corners-input {
+                grid-template-columns: 1fr;
+            }
+            
+            .score-input-row {
+                flex-direction: column;
+            }
+            
+            .vs-col {
+                transform: rotate(90deg);
+            }
+        }
+    </style>
+</body>
+</html>
