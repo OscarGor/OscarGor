@@ -1,155 +1,110 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>陰盤奇門足球預測系統 V6.0</title>
+    <title>陰盤奇門足球預測系統</title>
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">
-                    <img src="logo.png" alt="己土玄學" height="40">
-                    陰盤奇門足球AI預測系統 V6.0
-                </a>
+    <div class="container">
+        <!-- 響應式導航欄 -->
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-futbol"></i>
+                <span>甲方己土 · 陰盤奇門足球AI預測系統</span>
+            </div>
+            <div class="nav-menu">
+                <a href="index.php" class="active"><i class="fas fa-home"></i> 主頁</a>
+                <a href="match_input.php"><i class="fas fa-plus-circle"></i> 新增比賽</a>
+                <a href="analysis_view.php"><i class="fas fa-chart-line"></i> 分析報告</a>
+                <a href="result_verification.php"><i class="fas fa-check-double"></i> 賽果驗證</a>
+                <a href="system_status.php"><i class="fas fa-server"></i> 系統狀態</a>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
             </div>
         </nav>
 
-        <div class="row mt-3">
-            <!-- 左側: 輸入區域 -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h5>階段一：賽前預測輸入</h5>
+        <!-- 主儀表板 -->
+        <div class="dashboard">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #4CAF50;">
+                        <i class="fas fa-bullseye"></i>
                     </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label">選擇操作模式:</label>
-                            <select class="form-select" id="modeSelect">
-                                <option value="input">輸入比賽數據</option>
-                                <option value="predict">生成預測報告</option>
-                                <option value="result">輸入賽果</option>
-                                <option value="deviation">偏差分析</option>
-                                <option value="update">系統升級</option>
-                            </select>
-                        </div>
-
-                        <!-- 比賽輸入表單 -->
-                        <div id="inputForm">
-                            <h6>足球比賽資料</h6>
-                            <div class="mb-3">
-                                <label class="form-label">球賽編號:</label>
-                                <input type="text" class="form-control" id="matchCode" placeholder="FB3200">
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col">
-                                    <label class="form-label">主隊:</label>
-                                    <input type="text" class="form-control" id="homeTeam">
-                                </div>
-                                <div class="col">
-                                    <label class="form-label">客隊:</label>
-                                    <input type="text" class="form-control" id="awayTeam">
-                                </div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">賽事類別:</label>
-                                <input type="text" class="form-control" id="competition">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">比賽時間:</label>
-                                <input type="datetime-local" class="form-control" id="matchTime">
-                            </div>
-                            
-                            <!-- 奇門信息輸入 -->
-                            <div class="accordion" id="qimenAccordion">
-                                <div class="accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#qimenBasic">
-                                            奇門遁甲基本信息
-                                        </button>
-                                    </h2>
-                                    <div id="qimenBasic" class="accordion-collapse collapse show">
-                                        <div class="accordion-body">
-                                            <!-- 奇門基本字段 -->
-                                            <div class="row g-2">
-                                                <div class="col-md-6">
-                                                    <label class="form-label">公曆:</label>
-                                                    <input type="text" class="form-control" id="gregorianDate">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="form-label">農曆:</label>
-                                                    <input type="text" class="form-control" id="lunarDate">
-                                                </div>
-                                            </div>
-                                            <!-- 更多奇門字段... -->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <button class="btn btn-success mt-3" onclick="submitMatchData()">提交比賽數據</button>
-                        </div>
+                    <div class="stat-info">
+                        <h3>65.2%</h3>
+                        <p>平均預測準確度</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #2196F3;">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>12</h3>
+                        <p>已分析比賽</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #FF9800;">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>V5.1I</h3>
+                        <p>當前AI版本</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon" style="background: #9C27B0;">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>3</h3>
+                        <p>待優化參數</p>
                     </div>
                 </div>
             </div>
 
-            <!-- 中間: 顯示區域 -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header bg-info text-white">
-                        <h5>奇門格局顯示</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="qimenDisplay">
-                            <!-- 九宮格顯示 -->
-                            <div class="qimen-grid">
-                                <!-- 這裡用JS動態生成九宮格 -->
-                            </div>
-                        </div>
-                    </div>
+            <!-- 最近比賽 -->
+            <div class="recent-matches">
+                <h2><i class="fas fa-history"></i> 最近比賽預測</h2>
+                <div class="matches-list">
+                    <?php include 'backend/api/get_recent_matches.php'; ?>
                 </div>
             </div>
 
-            <!-- 右側: 預測結果 -->
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header bg-warning text-dark">
-                        <h5>AI預測結果</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="predictionResult">
-                            <!-- 預測結果將在這裡顯示 -->
-                        </div>
-                        <div class="mt-3">
-                            <button class="btn btn-primary" onclick="generatePrediction()">生成AI預測報告</button>
-                            <button class="btn btn-secondary" onclick="savePrediction()">保存到數據庫</button>
-                        </div>
-                    </div>
+            <!-- 系統通知 -->
+            <div class="notifications">
+                <h2><i class="fas fa-bell"></i> 系統通知</h2>
+                <div class="notification-list">
+                    <?php include 'backend/api/get_notifications.php'; ?>
                 </div>
             </div>
-        </div>
 
-        <!-- 歷史記錄和日誌 -->
-        <div class="row mt-3">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-dark text-white">
-                        <h5>系統日誌與歷史記錄</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="systemLogs">
-                            <!-- 系統日誌顯示 -->
-                        </div>
-                    </div>
+            <!-- 快速操作 -->
+            <div class="quick-actions">
+                <h2><i class="fas fa-bolt"></i> 快速操作</h2>
+                <div class="action-buttons">
+                    <button class="btn-primary" onclick="location.href='match_input.php'">
+                        <i class="fas fa-plus"></i> 新增比賽預測
+                    </button>
+                    <button class="btn-secondary" onclick="runVerification()">
+                        <i class="fas fa-check-circle"></i> 運行賽後驗證
+                    </button>
+                    <button class="btn-warning" onclick="triggerAIOptimization()">
+                        <i class="fas fa-robot"></i> 啟動AI優化
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/main.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
