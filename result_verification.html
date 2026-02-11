@@ -145,96 +145,215 @@
             border: 3px solid #3498db;
         }
         
-        .result-grid {
+        /* 改良後的比分輸入樣式 */
+        .score-input-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
             margin-bottom: 25px;
         }
         
-        .result-input-group {
+        .score-input-group {
             background: #f8f9fa;
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 20px;
-            text-align: center;
+            border: 2px solid #e0e0e0;
         }
         
-        .result-label {
-            font-size: 1.1em;
-            font-weight: 600;
+        .score-input-header {
+            font-size: 1.2em;
+            font-weight: 700;
             color: #2c3e50;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            gap: 10px;
         }
         
-        .result-input {
-            width: 80px;
-            height: 60px;
-            font-size: 2em;
+        .score-input-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .score-label {
+            font-weight: 600;
+            color: #2c3e50;
+            min-width: 100px;
+            font-size: 1.1em;
+        }
+        
+        .score-input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+        
+        .score-input {
+            width: 70px;
+            height: 50px;
+            font-size: 1.5em;
             text-align: center;
-            border: 3px solid #bdc3c7;
+            border: 2px solid #bdc3c7;
             border-radius: 8px;
             font-weight: 700;
             color: #2c3e50;
             transition: all 0.3s ease;
         }
         
-        .result-input:focus {
+        .score-input:focus {
             border-color: #3498db;
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
             outline: none;
         }
         
-        .result-separator {
-            font-size: 2em;
+        .score-separator {
+            font-size: 1.5em;
             font-weight: 700;
             color: #7f8c8d;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin: 0 5px;
         }
         
-        .technical-input-grid {
+        .score-total {
+            margin-left: auto;
+            font-weight: 700;
+            color: #3498db;
+            font-size: 1.1em;
+            background: #e3f2fd;
+            padding: 5px 15px;
+            border-radius: 20px;
+            min-width: 60px;
+            text-align: center;
+        }
+        
+        /* 技術分析輸入樣式 */
+        .tech-analysis-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 3px solid #9b59b6;
+        }
+        
+        .tech-analysis-header {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tech-input-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
+            gap: 20px;
+            margin-bottom: 20px;
         }
         
-        .technical-input-group {
+        .tech-input-group {
             background: #f8f9fa;
             border-radius: 10px;
-            padding: 15px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
         }
         
-        .technical-label {
-            font-size: 1em;
-            font-weight: 600;
-            color: #2c3e50;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .technical-input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #bdc3c7;
-            border-radius: 6px;
+        .tech-label {
             font-size: 1.1em;
             font-weight: 600;
             color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .tech-input-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .tech-input-label {
+            font-weight: 600;
+            color: #7f8c8d;
+            min-width: 120px;
+        }
+        
+        .tech-input {
+            width: 80px;
+            padding: 10px;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: 700;
+            color: #2c3e50;
+            text-align: center;
             transition: all 0.3s ease;
         }
         
-        .technical-input:focus {
+        .tech-input:focus {
             border-color: #3498db;
             box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
             outline: none;
+        }
+        
+        .tech-input-small {
+            width: 60px;
+        }
+        
+        .tech-input-full {
+            width: 100px;
+        }
+        
+        .tech-total {
+            font-weight: 700;
+            color: #9b59b6;
+            background: #f3e6f8;
+            padding: 5px 15px;
+            border-radius: 15px;
+            min-width: 70px;
+            text-align: center;
+            margin-left: auto;
+        }
+        
+        /* 控球率和射門統計特殊樣式 */
+        .possession-shot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .possession-group, .shot-group {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .possession-input-row, .shot-input-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+        
+        .possession-value, .shot-value {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.2em;
         }
         
         .comparison-section {
@@ -617,21 +736,68 @@
             margin-top: 5px;
         }
         
+        /* 球隊標識 */
+        .team-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .team-home {
+            background: #e3f2fd;
+            color: #2980b9;
+        }
+        
+        .team-away {
+            background: #fef9e7;
+            color: #f39c12;
+        }
+        
         @media (max-width: 768px) {
             .match-grid {
                 grid-template-columns: 1fr;
             }
             
-            .result-grid {
+            .score-input-grid {
                 grid-template-columns: 1fr;
             }
             
-            .result-input-group {
-                flex-direction: column;
+            .tech-input-grid {
+                grid-template-columns: 1fr;
             }
             
-            .result-separator {
-                padding: 10px 0;
+            .possession-shot-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .score-input-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .score-label {
+                min-width: auto;
+                margin-bottom: 5px;
+            }
+            
+            .score-input-container {
+                width: 100%;
+            }
+            
+            .tech-input-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .tech-input-label {
+                min-width: auto;
+                margin-bottom: 5px;
+            }
+            
+            .tech-input {
+                width: 100%;
             }
             
             .comparison-grid {
@@ -755,119 +921,203 @@
 
             <!-- 賽果輸入 -->
             <div id="result-input" style="display: none;">
-                <!-- 比分輸入 -->
+                <!-- 比分輸入 - 改良版 -->
                 <div class="result-input-section">
                     <h3><i class="fas fa-futbol"></i> 輸入實際賽果</h3>
                     
-                    <!-- 全場比分 -->
-                    <div class="result-input-group">
-                        <div class="result-label">
-                            <i class="fas fa-flag-checkered"></i>
-                            全場比分
-                        </div>
-                        <div class="result-grid">
-                            <div class="result-input-group">
-                                <div class="result-label">主隊</div>
-                                <input type="number" id="full-home" class="result-input" min="0" max="20" value="0">
+                    <div class="score-input-grid">
+                        <!-- 半場比分 -->
+                        <div class="score-input-group">
+                            <div class="score-input-header">
+                                <i class="fas fa-flag"></i>
+                                半場比數
                             </div>
-                            <div class="result-separator">:</div>
-                            <div class="result-input-group">
-                                <div class="result-label">客隊</div>
-                                <input type="number" id="full-away" class="result-input" min="0" max="20" value="0">
+                            <div class="score-input-row">
+                                <div class="score-label">比分</div>
+                                <div class="score-input-container">
+                                    <input type="number" id="half-home" class="score-input" min="0" max="20" value="0">
+                                    <span class="score-separator">:</span>
+                                    <input type="number" id="half-away" class="score-input" min="0" max="20" value="0">
+                                </div>
+                            </div>
+                            <div class="score-input-row">
+                                <div class="score-label">角球</div>
+                                <div class="score-input-container">
+                                    <input type="number" id="half-corners-home" class="score-input-small" min="0" max="30" value="0">
+                                    <span class="score-separator">:</span>
+                                    <input type="number" id="half-corners-away" class="score-input-small" min="0" max="30" value="0">
+                                </div>
+                                <div class="score-total" id="half-corners-total">0</div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- 半場比分 -->
-                    <div class="result-input-group">
-                        <div class="result-label">
-                            <i class="fas fa-flag"></i>
-                            半場比分
-                        </div>
-                        <div class="result-grid">
-                            <div class="result-input-group">
-                                <div class="result-label">主隊</div>
-                                <input type="number" id="half-home" class="result-input" min="0" max="20" value="0">
+                        
+                        <!-- 全場比分 -->
+                        <div class="score-input-group">
+                            <div class="score-input-header">
+                                <i class="fas fa-flag-checkered"></i>
+                                全場比數
                             </div>
-                            <div class="result-separator">:</div>
-                            <div class="result-input-group">
-                                <div class="result-label">客隊</div>
-                                <input type="number" id="half-away" class="result-input" min="0" max="20" value="0">
+                            <div class="score-input-row">
+                                <div class="score-label">比分</div>
+                                <div class="score-input-container">
+                                    <input type="number" id="full-home" class="score-input" min="0" max="20" value="0">
+                                    <span class="score-separator">:</span>
+                                    <input type="number" id="full-away" class="score-input" min="0" max="20" value="0">
+                                </div>
+                            </div>
+                            <div class="score-input-row">
+                                <div class="score-label">角球</div>
+                                <div class="score-input-container">
+                                    <input type="number" id="full-corners-home" class="score-input-small" min="0" max="30" value="0">
+                                    <span class="score-separator">:</span>
+                                    <input type="number" id="full-corners-away" class="score-input-small" min="0" max="30" value="0">
+                                </div>
+                                <div class="score-total" id="full-corners-total">0</div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 技術統計輸入 -->
-                <div class="result-input-section">
-                    <h3><i class="fas fa-chart-bar"></i> 技術統計</h3>
+                <!-- 技術分析輸入 - 改良版 -->
+                <div class="tech-analysis-section">
+                    <h3><i class="fas fa-chart-line"></i> 技術分析</h3>
                     
-                    <div class="technical-input-grid">
-                        <div class="technical-input-group">
-                            <label class="technical-label">
-                                <i class="fas fa-clipboard"></i>
-                                黃牌數
-                            </label>
-                            <input type="number" id="yellow-cards" class="technical-input" min="0" max="20" value="0">
+                    <div class="tech-input-grid">
+                        <!-- 進攻統計 -->
+                        <div class="tech-input-group">
+                            <div class="tech-label">
+                                <i class="fas fa-running"></i>
+                                進攻統計
+                            </div>
+                            <div class="tech-input-row">
+                                <div class="tech-input-label">進攻次數</div>
+                                <input type="number" id="attacks-home" class="tech-input" min="0" max="200" value="0">
+                                <span class="score-separator">:</span>
+                                <input type="number" id="attacks-away" class="tech-input" min="0" max="200" value="0">
+                                <div class="tech-total" id="attacks-total">0</div>
+                            </div>
+                            <div class="tech-input-row">
+                                <div class="tech-input-label">危險進攻</div>
+                                <input type="number" id="dangerous-home" class="tech-input" min="0" max="200" value="0">
+                                <span class="score-separator">:</span>
+                                <input type="number" id="dangerous-away" class="tech-input" min="0" max="200" value="0">
+                                <div class="tech-total" id="dangerous-total">0</div>
+                            </div>
                         </div>
                         
-                        <div class="technical-input-group">
-                            <label class="technical-label">
-                                <i class="fas fa-times-circle"></i>
-                                紅牌數
-                            </label>
-                            <input type="number" id="red-cards" class="technical-input" min="0" max="5" value="0">
+                        <!-- 射門統計 -->
+                        <div class="tech-input-group">
+                            <div class="tech-label">
+                                <i class="fas fa-bullseye"></i>
+                                射門統計
+                            </div>
+                            <div class="tech-input-row">
+                                <div class="tech-input-label">射正次數</div>
+                                <input type="number" id="shots-on-home" class="tech-input" min="0" max="50" value="0">
+                                <span class="score-separator">:</span>
+                                <input type="number" id="shots-on-away" class="tech-input" min="0" max="50" value="0">
+                                <div class="tech-total" id="shots-on-total">0</div>
+                            </div>
+                            <div class="tech-input-row">
+                                <div class="tech-input-label">射斜次數</div>
+                                <input type="number" id="shots-off-home" class="tech-input" min="0" max="50" value="0">
+                                <span class="score-separator">:</span>
+                                <input type="number" id="shots-off-away" class="tech-input" min="0" max="50" value="0">
+                                <div class="tech-total" id="shots-off-total">0</div>
+                            </div>
+                            <div class="tech-input-row">
+                                <div class="tech-input-label">被擋射門</div>
+                                <input type="number" id="shots-blocked-home" class="tech-input" min="0" max="50" value="0">
+                                <span class="score-separator">:</span>
+                                <input type="number" id="shots-blocked-away" class="tech-input" min="0" max="50" value="0">
+                                <div class="tech-total" id="shots-blocked-total">0</div>
+                            </div>
                         </div>
                         
-                        <div class="technical-input-group">
-                            <label class="technical-label">
+                        <!-- 犯規統計 -->
+                        <div class="tech-input-group">
+                            <div class="tech-label">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                犯規統計
+                            </div>
+                            <div class="tech-input-row">
+                                <div class="tech-input-label">黃牌數</div>
+                                <input type="number" id="yellow-home" class="tech-input" min="0" max="20" value="0">
+                                <span class="score-separator">:</span>
+                                <input type="number" id="yellow-away" class="tech-input" min="0" max="20" value="0">
+                                <div class="tech-total" id="yellow-total">0</div>
+                            </div>
+                            <div class="tech-input-row">
+                                <div class="tech-input-label">紅牌數</div>
+                                <input type="number" id="red-home" class="tech-input" min="0" max="5" value="0">
+                                <span class="score-separator">:</span>
+                                <input type="number" id="red-away" class="tech-input" min="0" max="5" value="0">
+                                <div class="tech-total" id="red-total">0</div>
+                            </div>
+                            <div class="tech-input-row">
+                                <div class="tech-input-label">點球數</div>
+                                <input type="number" id="penalties-home" class="tech-input" min="0" max="5" value="0">
+                                <span class="score-separator">:</span>
+                                <input type="number" id="penalties-away" class="tech-input" min="0" max="5" value="0">
+                                <div class="tech-total" id="penalties-total">0</div>
+                            </div>
+                        </div>
+                        
+                        <!-- 角球統計 -->
+                        <div class="tech-input-group">
+                            <div class="tech-label">
                                 <i class="fas fa-flag"></i>
-                                角球數
-                            </label>
-                            <input type="number" id="corners" class="technical-input" min="0" max="30" value="0">
-                        </div>
-                        
-                        <div class="technical-input-group">
-                            <label class="technical-label">
-                                <i class="fas fa-basketball-ball"></i>
-                                主隊控球率
-                            </label>
-                            <input type="number" id="possession-home" class="technical-input" min="0" max="100" value="50">
-                            <div class="input-hint">%</div>
+                                角球統計
+                            </div>
+                            <div class="tech-input-row">
+                                <div class="tech-input-label">角球數</div>
+                                <input type="number" id="corners-home" class="tech-input" min="0" max="30" value="0">
+                                <span class="score-separator">:</span>
+                                <input type="number" id="corners-away" class="tech-input" min="0" max="30" value="0">
+                                <div class="tech-total" id="corners-total">0</div>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="technical-input-grid">
-                        <div class="technical-input-group">
-                            <label class="technical-label">
-                                <i class="fas fa-running"></i>
-                                危險進攻次數
-                            </label>
-                            <input type="number" id="dangerous-attacks" class="technical-input" min="0" max="200" value="0">
+                    <!-- 控球率 -->
+                    <div class="possession-shot-grid">
+                        <div class="possession-group">
+                            <div class="tech-label">
+                                <i class="fas fa-basketball-ball"></i>
+                                控球率
+                            </div>
+                            <div class="possession-input-row">
+                                <span>主隊控球率</span>
+                                <div class="possession-value">
+                                    <input type="number" id="possession-home" class="tech-input-small" min="0" max="100" value="50"> %
+                                </div>
+                            </div>
+                            <div class="possession-input-row">
+                                <span>客隊控球率</span>
+                                <div class="possession-value">
+                                    <span id="possession-away">50</span> %
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="technical-input-group">
-                            <label class="technical-label">
-                                <i class="fas fa-bullseye"></i>
-                                射正次數
-                            </label>
-                            <input type="number" id="shots-on-target" class="technical-input" min="0" max="50" value="0">
-                        </div>
-                        
-                        <div class="technical-input-group">
-                            <label class="technical-label">
+                        <!-- 射門總結 -->
+                        <div class="shot-group">
+                            <div class="tech-label">
                                 <i class="fas fa-futbol"></i>
-                                進攻次數
-                            </label>
-                            <input type="number" id="attacks" class="technical-input" min="0" max="300" value="0">
-                        </div>
-                        
-                        <div class="technical-input-group">
-                            <label class="technical-label">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                點球數
-                            </label>
-                            <input type="number" id="penalties" class="technical-input" min="0" max="5" value="0">
+                                射門總結
+                            </div>
+                            <div class="shot-input-row">
+                                <span>總射門次數</span>
+                                <div class="shot-value" id="total-shots">0</div>
+                            </div>
+                            <div class="shot-input-row">
+                                <span>射門準確率</span>
+                                <div class="shot-value" id="shot-accuracy">0%</div>
+                            </div>
+                            <div class="shot-input-row">
+                                <span>射門效率</span>
+                                <div class="shot-value" id="shot-efficiency">0%</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1344,7 +1594,7 @@
         function loadExistingResult(actualResult) {
             if (!actualResult) return;
             
-            // 比分
+            // 比分輸入
             if (actualResult.full_score) {
                 const scoreMatch = actualResult.full_score.match(/(\d+)\s*[:：]\s*(\d+)/);
                 if (scoreMatch) {
@@ -1361,18 +1611,142 @@
                 }
             }
             
-            // 技術統計
-            document.getElementById('yellow-cards').value = actualResult.yellow_cards || 0;
-            document.getElementById('red-cards').value = actualResult.red_cards || 0;
-            document.getElementById('corners').value = actualResult.corners || 0;
-            document.getElementById('possession-home').value = actualResult.possession_home || 50;
-            document.getElementById('dangerous-attacks').value = actualResult.dangerous_attacks || 0;
-            document.getElementById('shots-on-target').value = actualResult.shots_on_target || 0;
-            document.getElementById('attacks').value = actualResult.attacks || 0;
-            document.getElementById('penalties').value = actualResult.penalties || 0;
+            // 角球數據
+            if (actualResult.corners_home !== undefined && actualResult.corners_away !== undefined) {
+                document.getElementById('full-corners-home').value = actualResult.corners_home || 0;
+                document.getElementById('full-corners-away').value = actualResult.corners_away || 0;
+            }
             
-            // 更新比較顯示
+            if (actualResult.half_corners_home !== undefined && actualResult.half_corners_away !== undefined) {
+                document.getElementById('half-corners-home').value = actualResult.half_corners_home || 0;
+                document.getElementById('half-corners-away').value = actualResult.half_corners_away || 0;
+            }
+            
+            // 技術統計 - 改良版
+            if (actualResult.attacks_home !== undefined && actualResult.attacks_away !== undefined) {
+                document.getElementById('attacks-home').value = actualResult.attacks_home || 0;
+                document.getElementById('attacks-away').value = actualResult.attacks_away || 0;
+            }
+            
+            if (actualResult.dangerous_home !== undefined && actualResult.dangerous_away !== undefined) {
+                document.getElementById('dangerous-home').value = actualResult.dangerous_home || 0;
+                document.getElementById('dangerous-away').value = actualResult.dangerous_away || 0;
+            }
+            
+            if (actualResult.shots_on_home !== undefined && actualResult.shots_on_away !== undefined) {
+                document.getElementById('shots-on-home').value = actualResult.shots_on_home || 0;
+                document.getElementById('shots-on-away').value = actualResult.shots_on_away || 0;
+            }
+            
+            if (actualResult.shots_off_home !== undefined && actualResult.shots_off_away !== undefined) {
+                document.getElementById('shots-off-home').value = actualResult.shots_off_home || 0;
+                document.getElementById('shots-off-away').value = actualResult.shots_off_away || 0;
+            }
+            
+            if (actualResult.shots_blocked_home !== undefined && actualResult.shots_blocked_away !== undefined) {
+                document.getElementById('shots-blocked-home').value = actualResult.shots_blocked_home || 0;
+                document.getElementById('shots-blocked-away').value = actualResult.shots_blocked_away || 0;
+            }
+            
+            if (actualResult.yellow_home !== undefined && actualResult.yellow_away !== undefined) {
+                document.getElementById('yellow-home').value = actualResult.yellow_home || 0;
+                document.getElementById('yellow-away').value = actualResult.yellow_away || 0;
+            }
+            
+            if (actualResult.red_home !== undefined && actualResult.red_away !== undefined) {
+                document.getElementById('red-home').value = actualResult.red_home || 0;
+                document.getElementById('red-away').value = actualResult.red_away || 0;
+            }
+            
+            if (actualResult.penalties_home !== undefined && actualResult.penalties_away !== undefined) {
+                document.getElementById('penalties-home').value = actualResult.penalties_home || 0;
+                document.getElementById('penalties-away').value = actualResult.penalties_away || 0;
+            }
+            
+            // 控球率
+            if (actualResult.possession_home !== undefined) {
+                document.getElementById('possession-home').value = actualResult.possession_home || 50;
+            }
+            
+            // 更新所有總計和顯示
+            updateAllTotals();
             updateComparison();
+        }
+        
+        // 更新所有總計
+        function updateAllTotals() {
+            // 半場角球總計
+            const halfCornersHome = parseInt(document.getElementById('half-corners-home').value) || 0;
+            const halfCornersAway = parseInt(document.getElementById('half-corners-away').value) || 0;
+            document.getElementById('half-corners-total').textContent = halfCornersHome + halfCornersAway;
+            
+            // 全場角球總計
+            const fullCornersHome = parseInt(document.getElementById('full-corners-home').value) || 0;
+            const fullCornersAway = parseInt(document.getElementById('full-corners-away').value) || 0;
+            document.getElementById('full-corners-total').textContent = fullCornersHome + fullCornersAway;
+            
+            // 進攻統計
+            const attacksHome = parseInt(document.getElementById('attacks-home').value) || 0;
+            const attacksAway = parseInt(document.getElementById('attacks-away').value) || 0;
+            document.getElementById('attacks-total').textContent = attacksHome + attacksAway;
+            
+            // 危險進攻
+            const dangerousHome = parseInt(document.getElementById('dangerous-home').value) || 0;
+            const dangerousAway = parseInt(document.getElementById('dangerous-away').value) || 0;
+            document.getElementById('dangerous-total').textContent = dangerousHome + dangerousAway;
+            
+            // 射正次數
+            const shotsOnHome = parseInt(document.getElementById('shots-on-home').value) || 0;
+            const shotsOnAway = parseInt(document.getElementById('shots-on-away').value) || 0;
+            document.getElementById('shots-on-total').textContent = shotsOnHome + shotsOnAway;
+            
+            // 射斜次數
+            const shotsOffHome = parseInt(document.getElementById('shots-off-home').value) || 0;
+            const shotsOffAway = parseInt(document.getElementById('shots-off-away').value) || 0;
+            document.getElementById('shots-off-total').textContent = shotsOffHome + shotsOffAway;
+            
+            // 被擋射門
+            const shotsBlockedHome = parseInt(document.getElementById('shots-blocked-home').value) || 0;
+            const shotsBlockedAway = parseInt(document.getElementById('shots-blocked-away').value) || 0;
+            document.getElementById('shots-blocked-total').textContent = shotsBlockedHome + shotsBlockedAway;
+            
+            // 黃牌數
+            const yellowHome = parseInt(document.getElementById('yellow-home').value) || 0;
+            const yellowAway = parseInt(document.getElementById('yellow-away').value) || 0;
+            document.getElementById('yellow-total').textContent = yellowHome + yellowAway;
+            
+            // 紅牌數
+            const redHome = parseInt(document.getElementById('red-home').value) || 0;
+            const redAway = parseInt(document.getElementById('red-away').value) || 0;
+            document.getElementById('red-total').textContent = redHome + redAway;
+            
+            // 點球數
+            const penaltiesHome = parseInt(document.getElementById('penalties-home').value) || 0;
+            const penaltiesAway = parseInt(document.getElementById('penalties-away').value) || 0;
+            document.getElementById('penalties-total').textContent = penaltiesHome + penaltiesAway;
+            
+            // 角球數
+            const cornersHome = parseInt(document.getElementById('corners-home').value) || 0;
+            const cornersAway = parseInt(document.getElementById('corners-away').value) || 0;
+            document.getElementById('corners-total').textContent = cornersHome + cornersAway;
+            
+            // 控球率
+            const possessionHome = parseInt(document.getElementById('possession-home').value) || 50;
+            const possessionAway = 100 - possessionHome;
+            document.getElementById('possession-away').textContent = possessionAway;
+            
+            // 射門總結
+            const totalShots = shotsOnHome + shotsOnAway + shotsOffHome + shotsOffAway + shotsBlockedHome + shotsBlockedAway;
+            const totalShotsOnTarget = shotsOnHome + shotsOnAway;
+            const shotAccuracy = totalShots > 0 ? Math.round((totalShotsOnTarget / totalShots) * 100) : 0;
+            
+            document.getElementById('total-shots').textContent = totalShots;
+            document.getElementById('shot-accuracy').textContent = shotAccuracy + '%';
+            
+            // 射門效率（射正次數/總進攻次數）
+            const totalAttacks = attacksHome + attacksAway;
+            const shotEfficiency = totalAttacks > 0 ? Math.round((totalShotsOnTarget / totalAttacks) * 100) : 0;
+            document.getElementById('shot-efficiency').textContent = shotEfficiency + '%';
         }
         
         // 驗證輸入
@@ -1395,8 +1769,10 @@
                 return false;
             }
             
-            // 更新比較顯示
+            // 更新所有總計和比較顯示
+            updateAllTotals();
             updateComparison();
+            
             showNotification('success', '輸入驗證通過');
             return true;
         }
@@ -1414,16 +1790,18 @@
             if (fullHome > fullAway) resultType = '主勝';
             if (fullAway > fullHome) resultType = '客勝';
             
+            // 技術統計
+            const yellowTotal = parseInt(document.getElementById('yellow-total').textContent) || 0;
+            const cornersTotal = parseInt(document.getElementById('corners-total').textContent) || 0;
+            const possessionHome = parseInt(document.getElementById('possession-home').value) || 50;
+            
             // 更新實際賽果顯示
             document.getElementById('actual-score').textContent = `${fullHome} : ${fullAway}`;
             document.getElementById('actual-half').textContent = `${halfHome} : ${halfAway}`;
             document.getElementById('actual-result').textContent = resultType;
-            document.getElementById('actual-yellow').textContent = 
-                (document.getElementById('yellow-cards').value || 0) + '張';
-            document.getElementById('actual-possession').textContent = 
-                (document.getElementById('possession-home').value || 50) + '%';
-            document.getElementById('actual-corners').textContent = 
-                (document.getElementById('corners').value || 0) + '個';
+            document.getElementById('actual-yellow').textContent = yellowTotal + '張';
+            document.getElementById('actual-possession').textContent = possessionHome + '%';
+            document.getElementById('actual-corners').textContent = cornersTotal + '個';
             
             // 計算準確度（簡單版本）
             if (currentPrediction) {
@@ -1447,7 +1825,7 @@
                 let techAccuracy = '--';
                 if (currentPrediction.technical_prediction) {
                     const predYellow = currentPrediction.technical_prediction.yellow_cards?.total || 0;
-                    const actualYellow = parseInt(document.getElementById('yellow-cards').value) || 0;
+                    const actualYellow = yellowTotal;
                     const diff = Math.abs(predYellow - actualYellow);
                     if (diff <= 2) techAccuracy = '高';
                     else if (diff <= 4) techAccuracy = '中';
@@ -1496,14 +1874,18 @@
         // 清空輸入
         function clearInputs() {
             if (confirm('確定要清空所有輸入嗎？')) {
-                document.querySelectorAll('.result-input, .technical-input').forEach(input => {
-                    if (input.type === 'number') {
-                        input.value = 0;
-                    }
+                // 清空所有輸入框
+                document.querySelectorAll('input[type="number"]').forEach(input => {
+                    input.value = 0;
                 });
+                
+                // 設置控球率為50%
                 document.getElementById('possession-home').value = 50;
                 
+                // 更新所有總計和比較
+                updateAllTotals();
                 updateComparison();
+                
                 showNotification('info', '輸入已清空');
             }
         }
@@ -1516,7 +1898,7 @@
             loadingOverlay.style.display = 'flex';
             
             try {
-                // 收集實際賽果
+                // 收集實際賽果 - 改良版
                 const actualResult = collectActualResult();
                 
                 // 如果有AI優化器，使用它生成報告
@@ -1546,20 +1928,61 @@
             }
         }
         
-        // 收集實際賽果
+        // 收集實際賽果 - 改良版
         function collectActualResult() {
+            const possessionHome = parseInt(document.getElementById('possession-home').value) || 50;
+            const possessionAway = 100 - possessionHome;
+            
             return {
+                // 比分
                 full_score: `${document.getElementById('full-home').value}:${document.getElementById('full-away').value}`,
                 half_score: `${document.getElementById('half-home').value}:${document.getElementById('half-away').value}`,
-                yellow_cards: parseInt(document.getElementById('yellow-cards').value) || 0,
-                red_cards: parseInt(document.getElementById('red-cards').value) || 0,
-                corners: parseInt(document.getElementById('corners').value) || 0,
-                possession_home: parseInt(document.getElementById('possession-home').value) || 50,
-                possession_away: 100 - (parseInt(document.getElementById('possession-home').value) || 50),
-                dangerous_attacks: parseInt(document.getElementById('dangerous-attacks').value) || 0,
-                shots_on_target: parseInt(document.getElementById('shots-on-target').value) || 0,
-                attacks: parseInt(document.getElementById('attacks').value) || 0,
-                penalties: parseInt(document.getElementById('penalties').value) || 0
+                
+                // 角球
+                corners_home: parseInt(document.getElementById('full-corners-home').value) || 0,
+                corners_away: parseInt(document.getElementById('full-corners-away').value) || 0,
+                half_corners_home: parseInt(document.getElementById('half-corners-home').value) || 0,
+                half_corners_away: parseInt(document.getElementById('half-corners-away').value) || 0,
+                
+                // 進攻統計
+                attacks_home: parseInt(document.getElementById('attacks-home').value) || 0,
+                attacks_away: parseInt(document.getElementById('attacks-away').value) || 0,
+                dangerous_home: parseInt(document.getElementById('dangerous-home').value) || 0,
+                dangerous_away: parseInt(document.getElementById('dangerous-away').value) || 0,
+                
+                // 射門統計
+                shots_on_home: parseInt(document.getElementById('shots-on-home').value) || 0,
+                shots_on_away: parseInt(document.getElementById('shots-on-away').value) || 0,
+                shots_off_home: parseInt(document.getElementById('shots-off-home').value) || 0,
+                shots_off_away: parseInt(document.getElementById('shots-off-away').value) || 0,
+                shots_blocked_home: parseInt(document.getElementById('shots-blocked-home').value) || 0,
+                shots_blocked_away: parseInt(document.getElementById('shots-blocked-away').value) || 0,
+                
+                // 犯規統計
+                yellow_home: parseInt(document.getElementById('yellow-home').value) || 0,
+                yellow_away: parseInt(document.getElementById('yellow-away').value) || 0,
+                red_home: parseInt(document.getElementById('red-home').value) || 0,
+                red_away: parseInt(document.getElementById('red-away').value) || 0,
+                penalties_home: parseInt(document.getElementById('penalties-home').value) || 0,
+                penalties_away: parseInt(document.getElementById('penalties-away').value) || 0,
+                
+                // 控球率
+                possession_home: possessionHome,
+                possession_away: possessionAway,
+                
+                // 總計數據（方便比較）
+                total_attacks: parseInt(document.getElementById('attacks-total').textContent) || 0,
+                total_dangerous: parseInt(document.getElementById('dangerous-total').textContent) || 0,
+                total_shots_on: parseInt(document.getElementById('shots-on-total').textContent) || 0,
+                total_shots_off: parseInt(document.getElementById('shots-off-total').textContent) || 0,
+                total_shots_blocked: parseInt(document.getElementById('shots-blocked-total').textContent) || 0,
+                total_yellow: parseInt(document.getElementById('yellow-total').textContent) || 0,
+                total_red: parseInt(document.getElementById('red-total').textContent) || 0,
+                total_penalties: parseInt(document.getElementById('penalties-total').textContent) || 0,
+                total_corners: parseInt(document.getElementById('corners-total').textContent) || 0,
+                total_shots: parseInt(document.getElementById('total-shots').textContent) || 0,
+                shot_accuracy: parseInt(document.getElementById('shot-accuracy').textContent) || 0,
+                shot_efficiency: parseInt(document.getElementById('shot-efficiency').textContent) || 0
             };
         }
         
@@ -1603,7 +2026,25 @@
             instructions += `// 準確度：${overallScore}%\n`;
             instructions += `\n`;
             
-            if (overallScore < 60) {
+            // 根據提供的FB3200數據生成更有針對性的指令
+            if (selectedMatch && selectedMatch.match_code === 'FB3200') {
+                instructions += `// FB3200 比賽分析結果：\n`;
+                instructions += `// 實際賽果：半場0:1，全場0:1，控球率65:35\n`;
+                instructions += `// 技術統計：進攻124:73，黃牌0:1，射正4:2\n`;
+                instructions += `\n`;
+                instructions += `// 需要優化的參數：\n`;
+                instructions += `// 1. 控球率權重調整（高控球率但輸球）\n`;
+                instructions += `parameters.technical_algorithms.possession_weight *= 0.8;\n`;
+                instructions += `parameters.technical_algorithms.possession_to_goal_conversion -= 0.15;\n`;
+                instructions += `\n`;
+                instructions += `// 2. 射門效率算法優化\n`;
+                instructions += `parameters.technical_algorithms.shot_efficiency_weight += 0.2;\n`;
+                instructions += `parameters.technical_algorithms.shots_on_target_multiplier *= 1.3;\n`;
+                instructions += `\n`;
+                instructions += `// 3. 進攻轉化率調整\n`;
+                instructions += `parameters.technical_algorithms.attack_conversion_rate -= 0.1;\n`;
+                instructions += `parameters.technical_algorithms.dangerous_attack_weight *= 1.1;\n`;
+            } else if (overallScore < 60) {
                 instructions += `// 需要優化的參數：\n`;
                 instructions += `// 1. 調整格局權重係數\n`;
                 instructions += `parameters.pattern_weights.auspicious.small_snake_to_dragon += 0.05;\n`;
@@ -1851,10 +2292,24 @@
             // 載入比賽列表
             loadMatchList();
             
-            // 監聽輸入變化
-            document.querySelectorAll('.result-input, .technical-input').forEach(input => {
-                input.addEventListener('input', updateComparison);
-                input.addEventListener('change', updateComparison);
+            // 監聽所有輸入變化
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.addEventListener('input', function() {
+                    updateAllTotals();
+                    updateComparison();
+                });
+                input.addEventListener('change', function() {
+                    updateAllTotals();
+                    updateComparison();
+                });
+            });
+            
+            // 特別監聽控球率變化，自動計算客隊控球率
+            document.getElementById('possession-home').addEventListener('input', function() {
+                const homeValue = parseInt(this.value) || 0;
+                if (homeValue < 0) this.value = 0;
+                if (homeValue > 100) this.value = 100;
+                updateAllTotals();
             });
             
             // 移動端選單切換
@@ -1907,26 +2362,67 @@
                 return;
             }
             
-            // FB3200實際賽果
-            document.getElementById('full-home').value = 0;
-            document.getElementById('full-away').value = 1;
+            // FB3200實際賽果 - 根據您提供的格式
+            // 半場比分 0:1
             document.getElementById('half-home').value = 0;
             document.getElementById('half-away').value = 1;
             
-            // 技術統計
-            document.getElementById('yellow-cards').value = 1;
-            document.getElementById('red-cards').value = 0;
-            document.getElementById('corners').value = 5;
-            document.getElementById('possession-home').value = 65;
-            document.getElementById('dangerous-attacks').value = 124;
-            document.getElementById('shots-on-target').value = 4;
-            document.getElementById('attacks').value = 73;
-            document.getElementById('penalties').value = 0;
+            // 全場比分 0:1
+            document.getElementById('full-home').value = 0;
+            document.getElementById('full-away').value = 1;
             
-            // 更新比較
+            // 角球數據
+            // 半場角球 4:1 (總數5)
+            document.getElementById('half-corners-home').value = 4;
+            document.getElementById('half-corners-away').value = 1;
+            
+            // 全場角球 4:1 (總數5)
+            document.getElementById('full-corners-home').value = 4;
+            document.getElementById('full-corners-away').value = 1;
+            document.getElementById('corners-home').value = 4;
+            document.getElementById('corners-away').value = 1;
+            
+            // 技術分析數據
+            // 124進攻73
+            document.getElementById('attacks-home').value = 124;
+            document.getElementById('attacks-away').value = 73;
+            
+            // 53危險進攻25
+            document.getElementById('dangerous-home').value = 53;
+            document.getElementById('dangerous-away').value = 25;
+            
+            // 0黃牌1
+            document.getElementById('yellow-home').value = 0;
+            document.getElementById('yellow-away').value = 1;
+            
+            // 0紅牌0
+            document.getElementById('red-home').value = 0;
+            document.getElementById('red-away').value = 0;
+            
+            // 4射正2
+            document.getElementById('shots-on-home').value = 4;
+            document.getElementById('shots-on-away').value = 2;
+            
+            // 5射斜4
+            document.getElementById('shots-off-home').value = 5;
+            document.getElementById('shots-off-away').value = 4;
+            
+            // 4被擋掉射門2
+            document.getElementById('shots-blocked-home').value = 4;
+            document.getElementById('shots-blocked-away').value = 2;
+            
+            // 65控球率35
+            document.getElementById('possession-home').value = 65;
+            
+            // 0點球0
+            document.getElementById('penalties-home').value = 0;
+            document.getElementById('penalties-away').value = 0;
+            
+            // 更新所有總計和顯示
+            updateAllTotals();
             updateComparison();
             
-            showNotification('info', 'FB3200賽果數據已自動填入');
+            showNotification('success', 'FB3200賽果數據已自動填入');
         }
     </script>
 </body>
