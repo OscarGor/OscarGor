@@ -8,335 +8,191 @@
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 格局庫專用樣式 */
+        /* 格局庫專用樣式（維持原有，略作擴充） */
         .library-header {
             background: linear-gradient(135deg, #8e44ad, #9b59b6);
             color: white;
             padding: 30px;
             border-radius: 15px;
             margin-bottom: 30px;
-            box-shadow: 0 10px 30px rgba(142, 68, 173, 0.3);
+            box-shadow: 0 10px 30px rgba(142,68,173,0.3);
         }
-        
-        .library-title {
-            font-size: 2.2em;
-            margin-bottom: 10px;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-        }
-        
-        .library-subtitle {
-            font-size: 1.2em;
-            opacity: 0.9;
-            margin-bottom: 20px;
-        }
-        
+        .library-title { font-size: 2.2em; margin-bottom: 10px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .library-subtitle { font-size: 1.2em; opacity: 0.9; margin-bottom: 20px; }
         .library-filters {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border: 3px solid #9b59b6;
+            background: white; border-radius: 12px; padding: 25px; margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); border: 3px solid #9b59b6;
         }
-        
         .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 20px;
             margin-bottom: 20px;
         }
-        
-        .filter-group {
-            margin-bottom: 15px;
-        }
-        
+        .filter-group { margin-bottom: 15px; }
         .filter-label {
-            display: block;
+            display: flex; align-items: center; gap: 8px; font-weight: 600; color: #2c3e50;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: #2c3e50;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
-        
         .filter-select {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #bdc3c7;
-            border-radius: 8px;
-            font-size: 1em;
-            color: #2c3e50;
-            background: white;
+            width: 100%; padding: 12px; border: 2px solid #bdc3c7; border-radius: 8px;
+            font-size: 1em; color: #2c3e50; background: white;
             transition: all 0.3s ease;
         }
-        
         .filter-select:focus {
-            border-color: #9b59b6;
-            box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
-            outline: none;
+            border-color: #9b59b6; box-shadow: 0 0 0 3px rgba(155,89,182,0.2); outline: none;
         }
-        
         .search-box {
-            position: relative;
-            margin-bottom: 20px;
+            position: relative; margin-bottom: 20px;
         }
-        
         .search-input {
-            width: 100%;
-            padding: 15px 20px 15px 50px;
-            border: 2px solid #bdc3c7;
-            border-radius: 10px;
-            font-size: 1.1em;
-            color: #2c3e50;
-            transition: all 0.3s ease;
+            width: 100%; padding: 15px 20px 15px 50px; border: 2px solid #bdc3c7;
+            border-radius: 10px; font-size: 1.1em; color: #2c3e50;
         }
-        
         .search-input:focus {
-            border-color: #9b59b6;
-            box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
-            outline: none;
+            border-color: #9b59b6; box-shadow: 0 0 0 3px rgba(155,89,182,0.2); outline: none;
         }
-        
         .search-icon {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #7f8c8d;
-            font-size: 1.2em;
+            position: absolute; left: 20px; top: 50%; transform: translateY(-50%);
+            color: #7f8c8d; font-size: 1.2em;
         }
-        
         .pattern-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 20px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(350px,1fr)); gap: 20px;
             margin-bottom: 30px;
         }
-        
         .pattern-card {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border-top: 5px solid;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
+            background: white; border-radius: 12px; padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); border-top: 5px solid;
+            transition: all 0.3s ease; cursor: pointer;
         }
-        
-        .pattern-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        }
-        
-        .pattern-card.auspicious {
-            border-top-color: #2ecc71;
-        }
-        
-        .pattern-card.inauspicious {
-            border-top-color: #e74c3c;
-        }
-        
-        .pattern-card.neutral {
-            border-top-color: #f39c12;
-        }
-        
+        .pattern-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+        .pattern-card.auspicious { border-top-color: #2ecc71; }
+        .pattern-card.inauspicious { border-top-color: #e74c3c; }
+        .pattern-card.neutral { border-top-color: #f39c12; }
         .pattern-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px solid #f0f0f0;
         }
-        
-        .pattern-name {
-            font-size: 1.4em;
-            font-weight: 700;
-            color: #2c3e50;
-        }
-        
+        .pattern-name { font-size: 1.4em; font-weight: 700; color: #2c3e50; }
         .pattern-type {
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 700;
+            padding: 6px 15px; border-radius: 20px; font-size: 0.85em; font-weight: 700;
         }
-        
-        .pattern-type.auspicious {
-            background: rgba(46, 204, 113, 0.2);
-            color: #27ae60;
-        }
-        
-        .pattern-type.inauspicious {
-            background: rgba(231, 76, 60, 0.2);
-            color: #c0392b;
-        }
-        
-        .pattern-type.neutral {
-            background: rgba(243, 156, 18, 0.2);
-            color: #d68910;
-        }
-        
-        .pattern-description {
-            color: #7f8c8d;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-        
+        .pattern-type.auspicious { background: rgba(46,204,113,0.2); color: #27ae60; }
+        .pattern-type.inauspicious { background: rgba(231,76,60,0.2); color: #c0392b; }
+        .pattern-type.neutral { background: rgba(243,156,18,0.2); color: #d68910; }
+        .pattern-description { color: #7f8c8d; line-height: 1.6; margin-bottom: 20px; }
         .pattern-parameters {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
+            background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 15px;
         }
-        
         .parameter-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
+            display: flex; justify-content: space-between; padding: 8px 0;
             border-bottom: 1px solid #e0e0e0;
         }
-        
-        .parameter-item:last-child {
-            border-bottom: none;
-        }
-        
-        .parameter-label {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        
-        .parameter-value {
-            font-weight: 600;
-            color: #9b59b6;
-        }
-        
+        .parameter-item:last-child { border-bottom: none; }
+        .parameter-label { font-weight: 600; color: #2c3e50; }
+        .parameter-value { font-weight: 600; color: #9b59b6; }
         .pattern-meta {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 15px;
-            font-size: 0.9em;
-            color: #95a5a6;
+            display: flex; justify-content: space-between; margin-top: 15px;
+            font-size: 0.9em; color: #95a5a6;
         }
-        
         .pattern-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            padding-top: 15px;
+            display: flex; gap: 10px; margin-top: 20px; padding-top: 15px;
             border-top: 1px solid #f0f0f0;
         }
-        
         .stats-summary {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            border: 3px solid #3498db;
+            background: white; border-radius: 12px; padding: 25px; margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); border: 3px solid #3498db;
         }
-        
         .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 20px;
         }
-        
         .stat-item {
-            text-align: center;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 10px;
+            text-align: center; padding: 20px; background: #f8f9fa; border-radius: 10px;
         }
-        
-        .stat-value {
-            font-size: 2.5em;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            font-size: 0.95em;
-            color: #7f8c8d;
-        }
-        
+        .stat-value { font-size: 2.5em; font-weight: 700; color: #2c3e50; margin-bottom: 5px; }
+        .stat-label { font-size: 0.95em; color: #7f8c8d; }
         .empty-state {
-            text-align: center;
-            padding: 50px;
-            color: #7f8c8d;
-            font-size: 1.2em;
+            text-align: center; padding: 50px; color: #7f8c8d; font-size: 1.2em;
         }
-        
-        .empty-state i {
-            font-size: 3em;
-            margin-bottom: 20px;
-            color: #bdc3c7;
-        }
-        
+        .empty-state i { font-size: 3em; margin-bottom: 20px; color: #bdc3c7; }
         .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.9);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.9); display: flex; flex-direction: column;
+            align-items: center; justify-content: center; z-index: 9999;
         }
-        
-        .loading-spinner-large {
-            font-size: 3em;
-            color: #9b59b6;
-            margin-bottom: 20px;
+        .loading-spinner-large { font-size: 3em; color: #9b59b6; margin-bottom: 20px; }
+        .loading-text { font-size: 1.2em; color: #2c3e50; text-align: center; }
+        .qimen-ai-table th { background: linear-gradient(135deg, #3498db, #2980b9); }
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); justify-content: center; align-items: center; z-index: 10000;
         }
-        
-        .loading-text {
-            font-size: 1.2em;
-            color: #2c3e50;
-            text-align: center;
+        .modal-content {
+            background: white; border-radius: 12px; max-width: 600px; width: 90%;
+            max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
-        
-        .pattern-detail-modal {
-            display: none;
+        .modal-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px; border-bottom: 2px solid #f0f0f0;
         }
-        
-        .qimen-ai-table th {
-            background: linear-gradient(135deg, #3498db, #2980b9);
+        .modal-header h3 { margin: 0; color: #2c3e50; display: flex; align-items: center; gap: 10px; }
+        .modal-close {
+            background: none; border: none; font-size: 1.5em; cursor: pointer; color: #7f8c8d;
         }
-        
-        .integration-status {
-            background: linear-gradient(135deg, #9b59b6, #8e44ad);
-            color: white;
-            border-radius: 8px;
-            padding: 10px 15px;
-            margin-bottom: 15px;
+        .modal-body { padding: 20px; }
+        .modal-footer {
+            padding: 20px; border-top: 2px solid #f0f0f0; display: flex;
+            justify-content: flex-end; gap: 10px;
         }
-        
-        @media (max-width: 768px) {
-            .pattern-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .filter-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; margin-bottom: 5px; font-weight: 600; color: #2c3e50; }
+        .form-control {
+            width: 100%; padding: 10px; border: 2px solid #bdc3c7; border-radius: 6px;
+            font-size: 1em;
+        }
+        .form-control:focus { border-color: #9b59b6; outline: none; box-shadow: 0 0 0 3px rgba(155,89,182,0.1); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .required { color: #e74c3c; }
+        .form-help { font-size: 0.85em; color: #7f8c8d; margin-top: 5px; }
+        .btn {
+            padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer;
+            font-weight: 600; transition: all 0.3s ease; display: inline-flex;
+            align-items: center; gap: 8px;
+        }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
+        .btn-outline { background: transparent; border: 1px solid #667eea; color: #667eea; }
+        .btn-outline:hover { background: #667eea; color: white; }
+        .btn-success { background: linear-gradient(135deg, #4CAF50, #2E7D32); color: white; }
+        .btn-sm { padding: 6px 12px; font-size: 14px; }
+        .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+        .status-badge {
+            padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600;
+        }
+        .status-badge.info { background: rgba(52,152,219,0.2); color: #2980b9; }
+        .status-badge.warning { background: rgba(243,156,18,0.2); color: #d68910; }
+        .status-badge.success { background: rgba(46,204,113,0.2); color: #27ae60; }
+        .notification {
+            position: fixed; top: 20px; right: 20px; background: white; border-radius: 8px;
+            padding: 15px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex; align-items: center; justify-content: space-between;
+            min-width: 300px; max-width: 400px; z-index: 11000;
+            animation: slideIn 0.3s ease; border-left: 4px solid #4CAF50;
+        }
+        .notification.success { border-left-color: #4CAF50; }
+        .notification.error { border-left-color: #f44336; }
+        .notification.warning { border-left-color: #ff9800; }
+        .notification.info { border-left-color: #2196F3; }
+        .notification-content { display: flex; align-items: center; gap: 10px; }
+        .notification-content i { font-size: 20px; }
+        .notification-close { background: none; border: none; cursor: pointer; color: #666; padding: 5px; }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- 頂部導航 -->
+        <!-- 頂部導航（版本更新為 V5.3） -->
         <nav class="navbar">
             <div class="nav-brand">
                 <i class="fas fa-futbol"></i>
@@ -361,193 +217,69 @@
             <div class="loading-text">正在載入格局庫...</div>
         </div>
 
-        <!-- 主內容區 -->
         <main class="main-content">
             <!-- 格局庫標頭 -->
             <div class="library-header">
-                <div class="library-title">
-                    <i class="fas fa-book"></i>
-                    奇門格局庫
-                </div>
-                <div class="library-subtitle">
-                    瀏覽與管理陰盤奇門足球AI系統的格局資料庫
-                </div>
+                <div class="library-title"><i class="fas fa-book"></i> 奇門格局庫</div>
+                <div class="library-subtitle">瀏覽與管理陰盤奇門足球AI系統的格局資料庫（本地儲存）</div>
                 <div class="report-meta">
-                    <div class="meta-item">
-                        <i class="fas fa-layer-group"></i>
-                        <span>總格局數：</span>
-                        <strong id="total-patterns">--</strong>
-                    </div>
-                    <div class="meta-item">
-                        <i class="fas fa-thumbs-up"></i>
-                        <span>吉格數量：</span>
-                        <strong id="auspicious-count">--</strong>
-                    </div>
-                    <div class="meta-item">
-                        <i class="fas fa-thumbs-down"></i>
-                        <span>凶格數量：</span>
-                        <strong id="inauspicious-count">--</strong>
-                    </div>
-                    <div class="meta-item">
-                        <i class="fas fa-sync-alt"></i>
-                        <span>最後更新：</span>
-                        <strong id="last-updated">--</strong>
-                    </div>
+                    <div class="meta-item"><i class="fas fa-layer-group"></i> 總格局數：<strong id="total-patterns">--</strong></div>
+                    <div class="meta-item"><i class="fas fa-thumbs-up"></i> 吉格數量：<strong id="auspicious-count">--</strong></div>
+                    <div class="meta-item"><i class="fas fa-thumbs-down"></i> 凶格數量：<strong id="inauspicious-count">--</strong></div>
+                    <div class="meta-item"><i class="fas fa-sync-alt"></i> 最後更新：<strong id="last-updated">--</strong></div>
                 </div>
             </div>
 
-            <!-- 奇門-AI參數關聯 -->
+            <!-- 奇門-AI參數關聯（靜態範例，亦可動態載入） -->
             <div class="stats-summary" style="border-color: #3498db;">
                 <h3><i class="fas fa-link"></i> 奇門-AI參數關聯</h3>
                 <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-value" id="star-modifiers">6</div>
-                        <div class="stat-label">星宿影響參數</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="gate-modifiers">8</div>
-                        <div class="stat-label">八門影響參數</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="pattern-correlations">12</div>
-                        <div class="stat-label">格局關聯參數</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="ai-integration">V5.3</div>
-                        <div class="stat-label">整合版本</div>
-                    </div>
+                    <div class="stat-item"><div class="stat-value" id="star-modifiers">6</div><div class="stat-label">星宿影響參數</div></div>
+                    <div class="stat-item"><div class="stat-value" id="gate-modifiers">8</div><div class="stat-label">八門影響參數</div></div>
+                    <div class="stat-item"><div class="stat-value" id="pattern-correlations">12</div><div class="stat-label">格局關聯參數</div></div>
+                    <div class="stat-item"><div class="stat-value" id="ai-integration">V5.3</div><div class="stat-label">整合版本</div></div>
                 </div>
             </div>
 
-            <!-- 奇門-AI參數關聯表 -->
+            <!-- 奇門-AI關聯表格（固定展示） -->
             <div class="library-filters" style="border-color: #3498db;">
                 <h3><i class="fas fa-project-diagram"></i> 奇門格局對AI參數的影響</h3>
-                <div class="filter-grid">
-                    <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-star"></i>
-                            星宿影響
-                        </label>
-                        <select id="star-select" class="filter-select">
-                            <option value="">選擇星宿</option>
-                            <option value="天衝">天衝 (進攻×1.2)</option>
-                            <option value="天英">天英 (創意×1.15)</option>
-                            <option value="天柱">天柱 (防守×0.85)</option>
-                            <option value="天芮">天芮 (恢復×1.2)</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-door-open"></i>
-                            八門影響
-                        </label>
-                        <select id="gate-select" class="filter-select">
-                            <option value="">選擇八門</option>
-                            <option value="景門">景門 (進攻×1.15)</option>
-                            <option value="驚門">驚門 (風險×1.3)</option>
-                            <option value="傷門">傷門 (犯規×1.3)</option>
-                            <option value="休門">休門 (控球×1.1)</option>
-                        </select>
-                    </div>
-                    
-                    <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-cogs"></i>
-                            AI參數影響
-                        </label>
-                        <select id="ai-param-select" class="filter-select">
-                            <option value="">選擇AI參數</option>
-                            <option value="possession_weight">控球率權重</option>
-                            <option value="attack_efficiency">進攻效率</option>
-                            <option value="counter_attack">防守反擊</option>
-                            <option value="yellow_cards">黃牌預測</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-actions" style="margin-top: 20px;">
-                    <button type="button" class="btn btn-primary" onclick="showQimenAICorrelation()">
-                        <i class="fas fa-chart-network"></i> 顯示關聯分析
-                    </button>
-                    <button type="button" class="btn btn-success" onclick="exportQimenAICorrelation()">
-                        <i class="fas fa-file-export"></i> 導出關聯表
-                    </button>
-                </div>
-            </div>
-
-            <!-- 奇門-AI關聯表格 -->
-            <div class="chart-container">
-                <div class="chart-title">
-                    <i class="fas fa-table"></i>
-                    奇門-AI參數關聯表
-                </div>
-                <div class="table-responsive" style="margin-top: 20px;">
-                    <table class="matches-table qimen-ai-table" id="qimen-ai-table">
+                <div class="table-responsive">
+                    <table class="matches-table qimen-ai-table">
                         <thead>
                             <tr>
-                                <th>奇門元素</th>
-                                <th>類型</th>
-                                <th>影響的AI參數</th>
-                                <th>調整係數</th>
-                                <th>適用比賽階段</th>
-                                <th>驗證準確率</th>
+                                <th>奇門元素</th><th>類型</th><th>影響的AI參數</th><th>調整係數</th><th>適用比賽階段</th><th>驗證準確率</th>
                             </tr>
                         </thead>
                         <tbody id="qimen-ai-body">
-                            <tr>
-                                <td colspan="6" class="text-center">正在載入奇門-AI關聯數據...</td>
-                            </tr>
+                            <tr><td colspan="6" class="text-center">載入中...</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- 統計摘要 -->
+            <!-- 格局統計摘要 -->
             <div class="stats-summary">
                 <h3><i class="fas fa-chart-pie"></i> 格局統計摘要</h3>
                 <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-value" id="total-count">--</div>
-                        <div class="stat-label">總格局數</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="auspicious-stat">--</div>
-                        <div class="stat-label">吉格數量</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="inauspicious-stat">--</div>
-                        <div class="stat-label">凶格數量</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="avg-weight">--</div>
-                        <div class="stat-label">平均權重</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="used-count">--</div>
-                        <div class="stat-label">已使用次數</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="accuracy-rate">--%</div>
-                        <div class="stat-label">預測準確率</div>
-                    </div>
+                    <div class="stat-item"><div class="stat-value" id="total-count">--</div><div class="stat-label">總格局數</div></div>
+                    <div class="stat-item"><div class="stat-value" id="auspicious-stat">--</div><div class="stat-label">吉格數量</div></div>
+                    <div class="stat-item"><div class="stat-value" id="inauspicious-stat">--</div><div class="stat-label">凶格數量</div></div>
+                    <div class="stat-item"><div class="stat-value" id="avg-weight">--</div><div class="stat-label">平均權重</div></div>
+                    <div class="stat-item"><div class="stat-value" id="used-count">--</div><div class="stat-label">已使用次數</div></div>
+                    <div class="stat-item"><div class="stat-value" id="accuracy-rate">--%</div><div class="stat-label">預測準確率</div></div>
                 </div>
             </div>
 
-            <!-- 過濾器 -->
+            <!-- 過濾與操作工具列 -->
             <div class="library-filters">
                 <div class="search-box">
                     <i class="fas fa-search search-icon"></i>
-                    <input type="text" id="pattern-search" class="search-input" 
-                           placeholder="搜尋格局名稱、描述或關鍵字...">
+                    <input type="text" id="pattern-search" class="search-input" placeholder="搜尋格局名稱、描述或關鍵字...">
                 </div>
-                
                 <div class="filter-grid">
                     <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-filter"></i>
-                            格局類型
-                        </label>
+                        <label class="filter-label"><i class="fas fa-filter"></i> 格局類型</label>
                         <select id="type-filter" class="filter-select">
                             <option value="">所有類型</option>
                             <option value="auspicious">吉格</option>
@@ -555,12 +287,8 @@
                             <option value="neutral">中性格局</option>
                         </select>
                     </div>
-                    
                     <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-sort-amount-down"></i>
-                            排序方式
-                        </label>
+                        <label class="filter-label"><i class="fas fa-sort-amount-down"></i> 排序方式</label>
                         <select id="sort-filter" class="filter-select">
                             <option value="name_asc">名稱 (A-Z)</option>
                             <option value="name_desc">名稱 (Z-A)</option>
@@ -569,12 +297,8 @@
                             <option value="frequency_desc">使用頻率 (高到低)</option>
                         </select>
                     </div>
-                    
                     <div class="filter-group">
-                        <label class="filter-label">
-                            <i class="fas fa-weight"></i>
-                            權重範圍
-                        </label>
+                        <label class="filter-label"><i class="fas fa-weight"></i> 權重範圍</label>
                         <select id="weight-filter" class="filter-select">
                             <option value="">所有權重</option>
                             <option value="positive">正權重 (吉格)</option>
@@ -585,45 +309,21 @@
                         </select>
                     </div>
                 </div>
-                
-                <div class="form-actions" style="margin-top: 20px;">
-                    <button type="button" class="btn btn-outline" onclick="resetFilters()">
-                        <i class="fas fa-undo"></i> 重置過濾
-                    </button>
-                    <button type="button" class="btn btn-primary" onclick="applyFilters()">
-                        <i class="fas fa-filter"></i> 應用過濾
-                    </button>
-                    <button type="button" class="btn btn-success" onclick="addNewPattern()">
-                        <i class="fas fa-plus-circle"></i> 添加新格局
-                    </button>
+                <div class="form-actions" style="margin-top:20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-outline" onclick="resetFilters()"><i class="fas fa-undo"></i> 重置過濾</button>
+                    <button class="btn btn-primary" onclick="applyFilters()"><i class="fas fa-filter"></i> 應用過濾</button>
+                    <button class="btn btn-success" onclick="addNewPattern()"><i class="fas fa-plus-circle"></i> 添加新格局</button>
+                    <button class="btn btn-info" onclick="exportPatternLibrary()"><i class="fas fa-file-export"></i> 匯出格局庫</button>
+                    <button class="btn btn-warning" onclick="importPatternLibrary()"><i class="fas fa-file-import"></i> 匯入格局庫</button>
+                    <button class="btn btn-secondary" onclick="generateDeepSeekCommand()"><i class="fas fa-robot"></i> 生成DeepSeek指令包</button>
                 </div>
             </div>
 
-            <!-- 格局列表 -->
+            <!-- 格局卡片列表 -->
             <div id="pattern-container">
                 <div class="pattern-grid" id="pattern-list">
-                    <!-- 動態載入格局卡片 -->
-                    <div class="empty-state">
-                        <i class="fas fa-spinner fa-spin"></i>
-                        <p>正在載入格局庫...</p>
-                    </div>
+                    <div class="empty-state"><i class="fas fa-spinner fa-spin"></i><p>正在載入格局庫...</p></div>
                 </div>
-            </div>
-
-            <!-- 操作按鈕 -->
-            <div class="action-buttons">
-                <button type="button" class="btn btn-outline" onclick="refreshLibrary()">
-                    <i class="fas fa-sync-alt"></i> 刷新庫存
-                </button>
-                <button type="button" class="btn btn-outline" onclick="exportLibrary()">
-                    <i class="fas fa-file-export"></i> 導出格局庫
-                </button>
-                <button type="button" class="btn btn-primary" onclick="importLibrary()">
-                    <i class="fas fa-file-import"></i> 導入格局庫
-                </button>
-                <button type="button" class="btn btn-success" onclick="syncWithServer()">
-                    <i class="fas fa-cloud-upload-alt"></i> 同步到服務器
-                </button>
             </div>
         </main>
 
@@ -637,486 +337,185 @@
     <!-- 格局詳情模態框 -->
     <div id="pattern-modal" class="modal" style="display: none;">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-info-circle"></i> 格局詳細資訊</h3>
-                <button class="modal-close" onclick="closePatternModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div id="pattern-detail-content">
-                    正在載入格局詳情...
-                </div>
-            </div>
+            <div class="modal-header"><h3><i class="fas fa-info-circle"></i> 格局詳細資訊</h3><button class="modal-close" onclick="closePatternModal()">&times;</button></div>
+            <div class="modal-body" id="pattern-detail-content">載入中...</div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline" onclick="closePatternModal()">
-                    關閉
-                </button>
-                <button type="button" class="btn btn-primary" onclick="editPattern()">
-                    <i class="fas fa-edit"></i> 編輯格局
-                </button>
+                <button class="btn btn-outline" onclick="closePatternModal()">關閉</button>
+                <button class="btn btn-primary" onclick="editCurrentPattern()"><i class="fas fa-edit"></i> 編輯格局</button>
+                <button class="btn btn-success" onclick="generateSinglePatternCommand(currentPattern)"><i class="fas fa-robot"></i> 生成指令包</button>
             </div>
         </div>
     </div>
 
-    <!-- 添加/編輯格局模態框 -->
+    <!-- 編輯格局模態框 -->
     <div id="edit-pattern-modal" class="modal" style="display: none;">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3><i class="fas fa-edit"></i> 編輯格局</h3>
-                <button class="modal-close" onclick="closeEditModal()">&times;</button>
-            </div>
+            <div class="modal-header"><h3><i class="fas fa-edit"></i> 編輯格局</h3><button class="modal-close" onclick="closeEditModal()">&times;</button></div>
             <div class="modal-body">
                 <form id="pattern-form">
-                    <div class="form-group">
-                        <label class="form-label">格局名稱 <span class="required">*</span></label>
-                        <input type="text" id="edit-name" class="form-control" required>
-                    </div>
-                    
+                    <div class="form-group"><label class="form-label">格局名稱 <span class="required">*</span></label><input type="text" id="edit-name" class="form-control" required></div>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">格局類型 <span class="required">*</span></label>
-                            <select id="edit-type" class="form-control" required>
-                                <option value="auspicious">吉格</option>
-                                <option value="inauspicious">凶格</option>
-                                <option value="neutral">中性格局</option>
-                            </select>
+                        <div class="form-group"><label class="form-label">格局類型 <span class="required">*</span></label>
+                            <select id="edit-type" class="form-control" required><option value="auspicious">吉格</option><option value="inauspicious">凶格</option><option value="neutral">中性格局</option></select>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label">權重係數 <span class="required">*</span></label>
-                            <input type="number" id="edit-weight" class="form-control" step="0.01" required>
-                        </div>
+                        <div class="form-group"><label class="form-label">權重係數 <span class="required">*</span></label><input type="number" id="edit-weight" class="form-control" step="0.01" required></div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">格局描述</label>
-                        <textarea id="edit-description" class="form-control" rows="3"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">天干組合 (如：乙+辛)</label>
-                        <input type="text" id="edit-combination" class="form-control">
-                    </div>
-                    
+                    <div class="form-group"><label class="form-label">格局描述</label><textarea id="edit-description" class="form-control" rows="3"></textarea></div>
+                    <div class="form-group"><label class="form-label">天干組合 (如：乙+辛)</label><input type="text" id="edit-combination" class="form-control"></div>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label">八門影響</label>
-                            <input type="text" id="edit-door-effect" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">九星影響</label>
-                            <input type="text" id="edit-star-effect" class="form-control">
-                        </div>
+                        <div class="form-group"><label class="form-label">八門影響</label><input type="text" id="edit-door-effect" class="form-control"></div>
+                        <div class="form-group"><label class="form-label">九星影響</label><input type="text" id="edit-star-effect" class="form-control"></div>
                     </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">時間效應參數</label>
-                        <div class="form-help">
-                            <i class="fas fa-info-circle"></i> JSON格式：{"first_half": 0.3, "second_half": 0.1}
-                        </div>
-                        <textarea id="edit-time-effect" class="form-control" rows="2"></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">影響範圍</label>
-                        <div class="form-help">
-                            <i class="fas fa-info-circle"></i> 用逗號分隔，如：進攻失誤,防守漏洞,機會錯失
-                        </div>
-                        <input type="text" id="edit-affects" class="form-control">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">備註</label>
-                        <textarea id="edit-notes" class="form-control" rows="2"></textarea>
-                    </div>
+                    <div class="form-group"><label class="form-label">時間效應參數</label><div class="form-help"><i class="fas fa-info-circle"></i> JSON格式：{"first_half":0.3,"second_half":0.1}</div><textarea id="edit-time-effect" class="form-control" rows="2"></textarea></div>
+                    <div class="form-group"><label class="form-label">影響範圍</label><div class="form-help"><i class="fas fa-info-circle"></i> 用逗號分隔，如：進攻失誤,防守漏洞</div><input type="text" id="edit-affects" class="form-control"></div>
+                    <div class="form-group"><label class="form-label">備註</label><textarea id="edit-notes" class="form-control" rows="2"></textarea></div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline" onclick="closeEditModal()">
-                    取消
-                </button>
-                <button type="button" class="btn btn-danger" onclick="deletePattern()">
-                    <i class="fas fa-trash"></i> 刪除
-                </button>
-                <button type="button" class="btn btn-success" onclick="savePattern()">
-                    <i class="fas fa-save"></i> 保存格局
-                </button>
+                <button class="btn btn-outline" onclick="closeEditModal()">取消</button>
+                <button class="btn btn-danger" onclick="deletePattern()"><i class="fas fa-trash"></i> 刪除</button>
+                <button class="btn btn-success" onclick="savePattern()"><i class="fas fa-save"></i> 保存格局</button>
             </div>
         </div>
     </div>
 
-    <!-- 腳本 -->
-    <script src="js/supabase-client.js"></script>
-    <script src="js/qimen-engine.js"></script>
-    <script src="js/app.js"></script>
+    <!-- DeepSeek 指令包顯示模態框 -->
+    <div id="deepseek-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header"><h3><i class="fas fa-robot"></i> DeepSeek 懶人指令包</h3><button class="modal-close" onclick="closeDeepSeekModal()">&times;</button></div>
+            <div class="modal-body">
+                <p>複製以下 JSON 指令，提供給 DeepSeek 即可更新格局庫。</p>
+                <textarea id="deepseek-command" style="width:100%; height:300px; font-family: monospace; background: #f8f9fa; border: 1px solid #bdc3c7; border-radius: 6px; padding: 10px;" readonly></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeDeepSeekModal()">關閉</button>
+                <button class="btn btn-primary" onclick="copyDeepSeekCommand()"><i class="fas fa-copy"></i> 複製指令</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 全局變量
+        // ========== 全局變數 ==========
         let allPatterns = [];
         let filteredPatterns = [];
         let currentPattern = null;
-        
-        // 更新時間顯示
+
+        // ========== 初始化 ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPatternLibrary();
+            updateTime();
+            setInterval(updateTime, 1000);
+            // 綁定搜尋與過濾事件
+            document.getElementById('pattern-search').addEventListener('input', applyFilters);
+            document.getElementById('type-filter').addEventListener('change', applyFilters);
+            document.getElementById('weight-filter').addEventListener('change', applyFilters);
+            document.getElementById('sort-filter').addEventListener('change', applyFilters);
+            // 移動端選單
+            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+            const navMenu = document.querySelector('.nav-menu');
+            if (mobileMenuBtn) {
+                mobileMenuBtn.addEventListener('click', (e) => { e.stopPropagation(); navMenu.classList.toggle('active'); });
+                document.addEventListener('click', (e) => { if (!e.target.closest('.nav-menu') && !e.target.closest('.mobile-menu-btn')) navMenu.classList.remove('active'); });
+            }
+            // 模態框點擊背景關閉
+            document.getElementById('pattern-modal')?.addEventListener('click', (e) => { if (e.target === document.getElementById('pattern-modal')) closePatternModal(); });
+            document.getElementById('edit-pattern-modal')?.addEventListener('click', (e) => { if (e.target === document.getElementById('edit-pattern-modal')) closeEditModal(); });
+            document.getElementById('deepseek-modal')?.addEventListener('click', (e) => { if (e.target === document.getElementById('deepseek-modal')) closeDeepSeekModal(); });
+        });
+
+        // 更新時間
         function updateTime() {
             const now = new Date();
-            document.getElementById('current-time').textContent = 
-                now.toLocaleString('zh-TW', { 
-                    year: 'numeric', 
-                    month: '2-digit', 
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
-        }
-        
-        setInterval(updateTime, 1000);
-        updateTime();
-        
-        // 載入格局庫
-        async function loadPatternLibrary() {
-            const loadingOverlay = document.getElementById('loading-overlay');
-            loadingOverlay.style.display = 'flex';
-            
-            try {
-                // 從AI引擎載入格局庫
-                if (window.qimenEngine && window.qimenEngine.patternLibrary) {
-                    allPatterns = window.qimenEngine.patternLibrary;
-                } else {
-                    // 從本地存儲載入
-                    await loadLocalPatternLibrary();
-                }
-                
-                // 更新統計
-                updateStatistics();
-                
-                // 顯示格局
-                displayPatterns(allPatterns);
-                
-                // 更新最後更新時間
-                document.getElementById('last-updated').textContent = 
-                    new Date().toLocaleDateString('zh-TW');
-                
-                // 檢查奇門-AI整合參數
-                checkQimenAIIntegration();
-                
-                // 載入奇門-AI關聯表
-                showQimenAICorrelation();
-                
-            } catch (error) {
-                console.error('載入格局庫失敗:', error);
-                showError('載入格局庫失敗：' + error.message);
-                
-                // 使用示例格局
-                loadExamplePatterns();
-            } finally {
-                loadingOverlay.style.display = 'none';
-            }
-        }
-        
-        // 檢查奇門-AI整合參數
-        function checkQimenAIIntegration() {
-            if (window.qimenEngine && window.qimenEngine.parameters) {
-                const params = window.qimenEngine.parameters;
-                
-                if (params.qimen_ai_integration) {
-                    const stars = Object.keys(params.qimen_ai_integration.star_modifiers || {}).length;
-                    const gates = Object.keys(params.qimen_ai_integration.gate_modifiers || {}).length;
-                    const patterns = Object.keys(params.qimen_ai_integration.pattern_ai_correlations || {}).length;
-                    
-                    document.getElementById('star-modifiers').textContent = stars;
-                    document.getElementById('gate-modifiers').textContent = gates;
-                    document.getElementById('pattern-correlations').textContent = patterns;
-                    document.getElementById('ai-integration').textContent = `V${params.version || '5.3'}`;
-                }
-            }
-        }
-        
-        // 顯示奇門-AI關聯分析
-        function showQimenAICorrelation() {
-            const qimenAiBody = document.getElementById('qimen-ai-body');
-            
-            const correlationData = [
-                {
-                    element: "天衝",
-                    type: "九星",
-                    affected_params: "進攻效率、侵略性",
-                    adjustment: "×1.20",
-                    phase: "全場，特別是上半場",
-                    accuracy: "72%"
-                },
-                {
-                    element: "天英",
-                    type: "九星",
-                    affected_params: "進攻效率、創造力",
-                    adjustment: "×1.15",
-                    phase: "下半場",
-                    accuracy: "68%"
-                },
-                {
-                    element: "天柱",
-                    type: "九星",
-                    affected_params: "防守穩定性、紀律性",
-                    adjustment: "×0.85, ×1.10",
-                    phase: "全場",
-                    accuracy: "75%"
-                },
-                {
-                    element: "景門",
-                    type: "八門",
-                    affected_params: "進攻效率、創造力",
-                    adjustment: "×1.15, ×1.20",
-                    phase: "進攻階段",
-                    accuracy: "70%"
-                },
-                {
-                    element: "驚門",
-                    type: "八門",
-                    affected_params: "風險係數、失誤概率",
-                    adjustment: "×1.30, ×1.25",
-                    phase: "關鍵時刻",
-                    accuracy: "65%"
-                },
-                {
-                    element: "休門",
-                    type: "八門",
-                    affected_params: "控球權重、耐心係數",
-                    adjustment: "×1.10, ×1.15",
-                    phase: "控球階段",
-                    accuracy: "78%"
-                },
-                {
-                    element: "青龍逃走",
-                    type: "格局",
-                    affected_params: "失誤概率、防守反擊效率",
-                    adjustment: "×1.30, ×1.40",
-                    phase: "下半場轉折點",
-                    accuracy: "80%"
-                },
-                {
-                    element: "小蛇化龍",
-                    type: "格局",
-                    affected_params: "下半場權重、逆轉概率",
-                    adjustment: "×1.25, ×1.30",
-                    phase: "下半場",
-                    accuracy: "85%"
-                }
-            ];
-            
-            qimenAiBody.innerHTML = correlationData.map(item => `
-                <tr>
-                    <td><strong>${item.element}</strong></td>
-                    <td><span class="status-badge ${item.type === '九星' ? 'info' : item.type === '八門' ? 'warning' : 'success'}">${item.type}</span></td>
-                    <td>${item.affected_params}</td>
-                    <td><span class="parameter-value">${item.adjustment}</span></td>
-                    <td>${item.phase}</td>
-                    <td>${item.accuracy}</td>
-                </tr>
-            `).join('');
-            
-            // 更新統計
-            document.getElementById('star-modifiers').textContent = '4';
-            document.getElementById('gate-modifiers').textContent = '4';
-            document.getElementById('pattern-correlations').textContent = '5';
-            document.getElementById('ai-integration').textContent = 'V5.3';
-            
-            showNotification('success', '奇門-AI參數關聯表已載入');
+            document.getElementById('current-time').textContent = now.toLocaleString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
         }
 
-        // 導出奇門-AI關聯表
-        function exportQimenAICorrelation() {
+        // ========== 格局庫載入 ==========
+        function loadPatternLibrary() {
+            showLoading(true);
             try {
-                const exportData = {
-                    version: 'V5.3',
-                    export_time: new Date().toISOString(),
-                    qimen_ai_correlations: [
-                        {
-                            element: "天衝",
-                            type: "star",
-                            ai_parameters: ["attack_mod", "aggression_mod"],
-                            adjustments: [1.2, 1.1],
-                            description: "增加進攻效率和侵略性"
-                        },
-                        {
-                            element: "景門",
-                            type: "gate",
-                            ai_parameters: ["attack_mod", "creativity_mod"],
-                            adjustments: [1.15, 1.2],
-                            description: "提升進攻和創造力"
-                        },
-                        {
-                            element: "青龍逃走",
-                            type: "pattern",
-                            ai_parameters: ["mistake_mod", "counter_attack_mod"],
-                            adjustments: [1.3, 1.4],
-                            description: "增加失誤概率和防守反擊效率"
-                        }
-                    ]
-                };
-                
-                const jsonStr = JSON.stringify(exportData, null, 2);
-                const blob = new Blob([jsonStr], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `qimen-ai-correlations-${new Date().toISOString().slice(0, 10)}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                showNotification('success', '奇門-AI關聯表已導出');
-                
-            } catch (error) {
-                console.error('導出關聯表失敗:', error);
-                showNotification('error', '導出失敗：' + error.message);
-            }
-        }
-        
-        // 從本地存儲載入格局庫
-        async function loadLocalPatternLibrary() {
-            try {
-                // 從localStorage載入
-                const localPatterns = localStorage.getItem('pattern_library');
-                
-                if (localPatterns) {
-                    allPatterns = JSON.parse(localPatterns);
+                const stored = localStorage.getItem('qimen_pattern_library');
+                if (stored) {
+                    allPatterns = JSON.parse(stored);
                 } else {
-                    // 從檔案載入
-                    const response = await fetch('data/pattern_library.json');
-                    if (response.ok) {
-                        allPatterns = await response.json();
-                        // 保存到本地存儲
-                        localStorage.setItem('pattern_library', JSON.stringify(allPatterns));
-                    } else {
-                        throw new Error('格局庫檔案不存在');
-                    }
+                    // 若無，載入內建範例格局
+                    allPatterns = getDefaultPatterns();
+                    localStorage.setItem('qimen_pattern_library', JSON.stringify(allPatterns));
                 }
-            } catch (error) {
-                throw error;
+                filteredPatterns = [...allPatterns];
+                updateStatistics();
+                displayPatterns(allPatterns);
+                document.getElementById('last-updated').textContent = new Date().toLocaleDateString('zh-TW');
+                // 載入奇門-AI關聯表格（靜態）
+                loadQimenAITable();
+            } catch (e) {
+                console.error(e);
+                showNotification('error', '載入格局庫失敗，使用預設資料');
+                allPatterns = getDefaultPatterns();
+                filteredPatterns = [...allPatterns];
+                updateStatistics();
+                displayPatterns(allPatterns);
+            } finally {
+                showLoading(false);
             }
         }
-        
-        // 載入示例格局
-        function loadExamplePatterns() {
-            allPatterns = [
-                {
-                    pattern_name: "青龍逃走",
-                    pattern_type: "凶格",
-                    description: "乙+辛組合，主變動、失誤、錯失機會",
-                    parameters: {
-                        weight: -0.70,
-                        time_effect: { first_half: 1.0, second_half: 0.5 },
-                        affects: ["進攻失誤", "防守漏洞", "機會錯失"]
-                    },
-                    occurrence_count: 5,
-                    success_rate: 60.0
-                },
-                {
-                    pattern_name: "小蛇化龍",
-                    pattern_type: "吉格",
-                    description: "壬+戊組合，主轉折、成長、逆轉機會",
-                    parameters: {
-                        weight: 0.25,
-                        time_effect: { first_half: 0.4, second_half: 0.6 },
-                        affects: ["下半場轉折", "逆轉可能", "機會把握"]
-                    },
-                    occurrence_count: 3,
-                    success_rate: 75.0
-                },
-                {
-                    pattern_name: "日奇被刑",
-                    pattern_type: "凶格",
-                    description: "乙+庚組合，主意外、訴訟、飛來橫禍",
-                    parameters: {
-                        weight: -0.15,
-                        time_effect: { first_half: 0.6, second_half: 0.4 },
-                        affects: ["意外事件", "黃牌紅牌", "爭議判罰"]
-                    },
-                    occurrence_count: 2,
-                    success_rate: 50.0
-                },
-                {
-                    pattern_name: "天乙飛宮",
-                    pattern_type: "吉格",
-                    description: "戊+庚組合，主動盪、位置變化、快速反擊",
-                    parameters: {
-                        weight: 0.20,
-                        time_effect: { first_half: 0.8, second_half: 0.2 },
-                        affects: ["快速反擊", "位置變化", "突然得分"]
-                    },
-                    occurrence_count: 4,
-                    success_rate: 80.0
-                },
-                {
-                    pattern_name: "星奇入墓",
-                    pattern_type: "凶格",
-                    description: "丁+己組合，主隱藏、受制、效率低下",
-                    parameters: {
-                        weight: -0.18,
-                        time_effect: { first_half: 0.7, second_half: 0.3 },
-                        affects: ["進攻受限", "效率低下", "機會浪費"]
-                    },
-                    occurrence_count: 3,
-                    success_rate: 40.0
-                },
-                {
-                    pattern_name: "九天吉神",
-                    pattern_type: "吉格",
-                    description: "九天臨宮，主進攻、擴張、優勢擴大",
-                    parameters: {
-                        weight: 0.50,
-                        time_effect: { first_half: 0.3, second_half: 0.7 },
-                        affects: ["進攻增強", "優勢擴大", "得分機會"]
-                    },
-                    occurrence_count: 6,
-                    success_rate: 85.0
-                }
+
+        // 預設格局
+        function getDefaultPatterns() {
+            return [
+                { pattern_name: "青龍逃走", pattern_type: "凶格", description: "乙+辛組合，主變動、失誤、錯失機會", parameters: { weight: -0.70, time_effect: { first_half: 1.0, second_half: 0.5 }, affects: ["進攻失誤","防守漏洞","機會錯失"] }, occurrence_count: 5, success_rate: 60 },
+                { pattern_name: "小蛇化龍", pattern_type: "吉格", description: "壬+戊組合，主轉折、成長、逆轉機會", parameters: { weight: 0.25, time_effect: { first_half: 0.4, second_half: 0.6 }, affects: ["下半場轉折","逆轉可能","機會把握"] }, occurrence_count: 3, success_rate: 75 },
+                { pattern_name: "日奇被刑", pattern_type: "凶格", description: "乙+庚組合，主意外、訴訟、飛來橫禍", parameters: { weight: -0.15, time_effect: { first_half: 0.6, second_half: 0.4 }, affects: ["意外事件","黃牌紅牌","爭議判罰"] }, occurrence_count: 2, success_rate: 50 },
+                { pattern_name: "天乙飛宮", pattern_type: "吉格", description: "戊+庚組合，主動盪、位置變化、快速反擊", parameters: { weight: 0.20, time_effect: { first_half: 0.8, second_half: 0.2 }, affects: ["快速反擊","位置變化","突然得分"] }, occurrence_count: 4, success_rate: 80 },
+                { pattern_name: "星奇入墓", pattern_type: "凶格", description: "丁+己組合，主隱藏、受制、效率低下", parameters: { weight: -0.18, time_effect: { first_half: 0.7, second_half: 0.3 }, affects: ["進攻受限","效率低下","機會浪費"] }, occurrence_count: 3, success_rate: 40 },
+                { pattern_name: "九天吉神", pattern_type: "吉格", description: "九天臨宮，主進攻、擴張、優勢擴大", parameters: { weight: 0.50, time_effect: { first_half: 0.3, second_half: 0.7 }, affects: ["進攻增強","優勢擴大","得分機會"] }, occurrence_count: 6, success_rate: 85 }
             ];
-            
-            updateStatistics();
-            displayPatterns(allPatterns);
-            showNotification('info', '使用示例格局庫');
         }
-        
-        // 更新統計
+
+        // 載入奇門-AI關聯表（固定資料）
+        function loadQimenAITable() {
+            const data = [
+                { element: "天衝", type: "九星", params: "進攻效率、侵略性", adj: "×1.20", phase: "全場，特別是上半場", acc: "72%" },
+                { element: "天英", type: "九星", params: "進攻效率、創造力", adj: "×1.15", phase: "下半場", acc: "68%" },
+                { element: "天柱", type: "九星", params: "防守穩定性、紀律性", adj: "×0.85, ×1.10", phase: "全場", acc: "75%" },
+                { element: "景門", type: "八門", params: "進攻效率、創造力", adj: "×1.15, ×1.20", phase: "進攻階段", acc: "70%" },
+                { element: "驚門", type: "八門", params: "風險係數、失誤概率", adj: "×1.30, ×1.25", phase: "關鍵時刻", acc: "65%" },
+                { element: "休門", type: "八門", params: "控球權重、耐心係數", adj: "×1.10, ×1.15", phase: "控球階段", acc: "78%" },
+                { element: "青龍逃走", type: "格局", params: "失誤概率、防守反擊效率", adj: "×1.30, ×1.40", phase: "下半場轉折點", acc: "80%" },
+                { element: "小蛇化龍", type: "格局", params: "下半場權重、逆轉概率", adj: "×1.25, ×1.30", phase: "下半場", acc: "85%" }
+            ];
+            const tbody = document.getElementById('qimen-ai-body');
+            tbody.innerHTML = data.map(item => `<tr>
+                <td><strong>${item.element}</strong></td>
+                <td><span class="status-badge ${item.type==='九星'?'info':item.type==='八門'?'warning':'success'}">${item.type}</span></td>
+                <td>${item.params}</td>
+                <td><span class="parameter-value">${item.adj}</span></td>
+                <td>${item.phase}</td>
+                <td>${item.acc}</td>
+            </tr>`).join('');
+        }
+
+        // 顯示/隱藏載入遮罩
+        function showLoading(show) {
+            document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
+        }
+
+        // ========== 統計更新 ==========
         function updateStatistics() {
             const total = allPatterns.length;
             const auspicious = allPatterns.filter(p => p.pattern_type === '吉格').length;
             const inauspicious = allPatterns.filter(p => p.pattern_type === '凶格').length;
-            const neutral = total - auspicious - inauspicious;
-            
-            // 計算平均權重
-            let totalWeight = 0;
-            let weightCount = 0;
-            allPatterns.forEach(pattern => {
-                if (pattern.parameters && pattern.parameters.weight) {
-                    totalWeight += Math.abs(pattern.parameters.weight);
-                    weightCount++;
-                }
+            let totalWeight = 0, weightCount = 0, totalOccurrences = 0, totalSuccess = 0, successCount = 0;
+            allPatterns.forEach(p => {
+                if (p.parameters?.weight) { totalWeight += Math.abs(p.parameters.weight); weightCount++; }
+                totalOccurrences += p.occurrence_count || 0;
+                if (p.success_rate) { totalSuccess += p.success_rate; successCount++; }
             });
-            const avgWeight = weightCount > 0 ? (totalWeight / weightCount).toFixed(2) : '0.00';
-            
-            // 計算總使用次數
-            let totalOccurrences = 0;
-            allPatterns.forEach(pattern => {
-                totalOccurrences += pattern.occurrence_count || 0;
-            });
-            
-            // 計算平均準確率
-            let totalSuccess = 0;
-            let successCount = 0;
-            allPatterns.forEach(pattern => {
-                if (pattern.success_rate) {
-                    totalSuccess += pattern.success_rate;
-                    successCount++;
-                }
-            });
-            const avgSuccess = successCount > 0 ? Math.round(totalSuccess / successCount) : 0;
-            
-            // 更新顯示
+            const avgWeight = weightCount ? (totalWeight/weightCount).toFixed(2) : '0.00';
+            const avgSuccess = successCount ? Math.round(totalSuccess/successCount) : 0;
+
             document.getElementById('total-patterns').textContent = total;
             document.getElementById('auspicious-count').textContent = auspicious;
             document.getElementById('inauspicious-count').textContent = inauspicious;
-            
             document.getElementById('total-count').textContent = total;
             document.getElementById('auspicious-stat').textContent = auspicious;
             document.getElementById('inauspicious-stat').textContent = inauspicious;
@@ -1124,691 +523,327 @@
             document.getElementById('used-count').textContent = totalOccurrences;
             document.getElementById('accuracy-rate').textContent = avgSuccess + '%';
         }
-        
-        // 顯示格局
+
+        // ========== 顯示格局卡片 ==========
         function displayPatterns(patterns) {
-            const patternList = document.getElementById('pattern-list');
-            
+            const container = document.getElementById('pattern-list');
             if (!patterns || patterns.length === 0) {
-                patternList.innerHTML = `
-                    <div class="empty-state">
-                        <i class="fas fa-search"></i>
-                        <p>找不到符合條件的格局</p>
-                        <p style="font-size: 0.9em; margin-top: 10px;">
-                            嘗試調整過濾條件或添加新格局
-                        </p>
-                    </div>
-                `;
+                container.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><p>找不到符合條件的格局</p></div>';
                 return;
             }
-            
-            let patternHTML = '';
-            
-            patterns.forEach(pattern => {
-                const typeClass = pattern.pattern_type === '吉格' ? 'auspicious' : 
-                                pattern.pattern_type === '凶格' ? 'inauspicious' : 'neutral';
-                
-                const weight = pattern.parameters?.weight || 0;
-                const timeEffect = pattern.parameters?.time_effect || {};
-                const affects = pattern.parameters?.affects || [];
-                
-                patternHTML += `
-                    <div class="pattern-card ${typeClass}" onclick="showPatternDetail('${pattern.pattern_name}')">
-                        <div class="pattern-header">
-                            <div class="pattern-name">${pattern.pattern_name}</div>
-                            <div class="pattern-type ${typeClass}">${pattern.pattern_type}</div>
-                        </div>
-                        
-                        <div class="pattern-description">
-                            ${pattern.description || '暫無描述'}
-                        </div>
-                        
-                        <div class="pattern-parameters">
-                            <div class="parameter-item">
-                                <span class="parameter-label">權重係數</span>
-                                <span class="parameter-value">${weight > 0 ? '+' : ''}${weight.toFixed(2)}</span>
-                            </div>
-                            <div class="parameter-item">
-                                <span class="parameter-label">上半場影響</span>
-                                <span class="parameter-value">${timeEffect.first_half ? timeEffect.first_half.toFixed(1) : '--'}</span>
-                            </div>
-                            <div class="parameter-item">
-                                <span class="parameter-label">下半場影響</span>
-                                <span class="parameter-value">${timeEffect.second_half ? timeEffect.second_half.toFixed(1) : '--'}</span>
-                            </div>
-                        </div>
-                        
-                        ${affects.length > 0 ? `
-                            <div class="pattern-description" style="font-size: 0.9em;">
-                                <strong>影響：</strong>${affects.join('、')}
-                            </div>
-                        ` : ''}
-                        
-                        <div class="pattern-meta">
-                            <span>使用次數：${pattern.occurrence_count || 0}</span>
-                            <span>準確率：${pattern.success_rate || '--'}%</span>
-                        </div>
-                        
-                        <div class="pattern-actions">
-                            <button type="button" class="btn btn-sm btn-outline" 
-                                    onclick="event.stopPropagation(); quickEdit('${pattern.pattern_name}')">
-                                <i class="fas fa-edit"></i> 編輯
-                            </button>
-                            <button type="button" class="btn btn-sm btn-primary" 
-                                    onclick="event.stopPropagation(); analyzePattern('${pattern.pattern_name}')">
-                                <i class="fas fa-chart-line"></i> 分析
-                            </button>
-                            <button type="button" class="btn btn-sm btn-success" 
-                                    onclick="event.stopPropagation(); testPattern('${pattern.pattern_name}')">
-                                <i class="fas fa-flask"></i> 測試
-                            </button>
-                        </div>
+            let html = '';
+            patterns.forEach(p => {
+                const typeClass = p.pattern_type === '吉格' ? 'auspicious' : p.pattern_type === '凶格' ? 'inauspicious' : 'neutral';
+                const weight = p.parameters?.weight || 0;
+                const time = p.parameters?.time_effect || {};
+                const affects = p.parameters?.affects || [];
+                html += `<div class="pattern-card ${typeClass}" onclick="showPatternDetail('${p.pattern_name}')">
+                    <div class="pattern-header"><div class="pattern-name">${p.pattern_name}</div><div class="pattern-type ${typeClass}">${p.pattern_type}</div></div>
+                    <div class="pattern-description">${p.description || '暫無描述'}</div>
+                    <div class="pattern-parameters">
+                        <div class="parameter-item"><span class="parameter-label">權重係數</span><span class="parameter-value">${weight>0?'+':''}${weight.toFixed(2)}</span></div>
+                        <div class="parameter-item"><span class="parameter-label">上半場影響</span><span class="parameter-value">${time.first_half?.toFixed(1) || '--'}</span></div>
+                        <div class="parameter-item"><span class="parameter-label">下半場影響</span><span class="parameter-value">${time.second_half?.toFixed(1) || '--'}</span></div>
                     </div>
-                `;
+                    ${affects.length ? `<div class="pattern-description" style="font-size:0.9em;"><strong>影響：</strong>${affects.join('、')}</div>` : ''}
+                    <div class="pattern-meta"><span>使用次數：${p.occurrence_count || 0}</span><span>準確率：${p.success_rate || '--'}%</span></div>
+                    <div class="pattern-actions">
+                        <button class="btn btn-sm btn-outline" onclick="event.stopPropagation();quickEdit('${p.pattern_name}')"><i class="fas fa-edit"></i> 編輯</button>
+                        <button class="btn btn-sm btn-primary" onclick="event.stopPropagation();analyzePattern('${p.pattern_name}')"><i class="fas fa-chart-line"></i> 分析</button>
+                        <button class="btn btn-sm btn-success" onclick="event.stopPropagation();generateSinglePatternCommand(p)"><i class="fas fa-robot"></i> 指令包</button>
+                    </div>
+                </div>`;
             });
-            
-            patternList.innerHTML = patternHTML;
+            container.innerHTML = html;
         }
-        
-        // 顯示格局詳情
-        function showPatternDetail(patternName) {
-            const pattern = allPatterns.find(p => p.pattern_name === patternName);
-            if (!pattern) return;
-            
-            currentPattern = pattern;
-            
-            const typeClass = pattern.pattern_type === '吉格' ? 'auspicious' : 
-                            pattern.pattern_type === '凶格' ? 'inauspicious' : 'neutral';
-            const typeColor = pattern.pattern_type === '吉格' ? '#27ae60' : 
-                            pattern.pattern_type === '凶格' ? '#e74c3c' : '#f39c12';
-            
-            const weight = pattern.parameters?.weight || 0;
-            const timeEffect = pattern.parameters?.time_effect || {};
-            const affects = pattern.parameters?.affects || [];
-            
-            let detailHTML = `
-                <div style="padding: 20px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2 style="color: ${typeColor}; margin: 0;">${pattern.pattern_name}</h2>
-                        <span class="pattern-type ${typeClass}" style="font-size: 1.1em;">
-                            ${pattern.pattern_type}
-                        </span>
-                    </div>
-                    
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                        <h3 style="color: #2c3e50; margin-bottom: 10px;">格局描述</h3>
-                        <p style="color: #7f8c8d; line-height: 1.6;">${pattern.description || '暫無描述'}</p>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 20px;">
-                        <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
-                            <h4 style="color: #2c3e50; margin-bottom: 10px;">基本參數</h4>
-                            <div style="color: #7f8c8d;">
-                                <div style="margin-bottom: 8px;">
-                                    <strong>權重係數：</strong>
-                                    <span style="color: #9b59b6; font-weight: bold;">
-                                        ${weight > 0 ? '+' : ''}${weight.toFixed(2)}
-                                    </span>
-                                </div>
-                                <div style="margin-bottom: 8px;">
-                                    <strong>使用次數：</strong>
-                                    <span>${pattern.occurrence_count || 0}</span>
-                                </div>
-                                <div style="margin-bottom: 8px;">
-                                    <strong>準確率：</strong>
-                                    <span>${pattern.success_rate || '--'}%</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.1);">
-                            <h4 style="color: #2c3e50; margin-bottom: 10px;">時間效應</h4>
-                            <div style="color: #7f8c8d;">
-                                <div style="margin-bottom: 8px;">
-                                    <strong>上半場影響：</strong>
-                                    <span>${timeEffect.first_half ? timeEffect.first_half.toFixed(2) : '--'}</span>
-                                </div>
-                                <div style="margin-bottom: 8px;">
-                                    <strong>下半場影響：</strong>
-                                    <span>${timeEffect.second_half ? timeEffect.second_half.toFixed(2) : '--'}</span>
-                                </div>
-                                <div style="margin-bottom: 8px;">
-                                    <strong>衰減比例：</strong>
-                                    <span>${timeEffect.decay ? (timeEffect.decay * 100).toFixed(0) + '%' : '--'}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    ${affects.length > 0 ? `
-                        <div style="background: white; padding: 15px; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); margin-bottom: 20px;">
-                            <h4 style="color: #2c3e50; margin-bottom: 10px;">影響範圍</h4>
-                            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-                                ${affects.map(affect => `
-                                    <span style="background: #e8f4fc; color: #2980b9; padding: 5px 12px; border-radius: 15px; font-size: 0.9em;">
-                                        ${affect}
-                                    </span>
-                                `).join('')}
-                            </div>
-                        </div>
-                    ` : ''}
-                    
-                    <div style="background: #fef9e7; padding: 15px; border-radius: 8px; border-left: 4px solid #f39c12;">
-                        <h4 style="color: #d68910; margin-bottom: 10px;">AI解讀</h4>
-                        <p style="color: #8e6c1f; line-height: 1.6;">
-                            此格局${pattern.pattern_type === '吉格' ? '通常對進攻方有利' : 
-                                   pattern.pattern_type === '凶格' ? '可能導致失誤或不利情況' : 
-                                   '影響較為中性'}，權重係數${Math.abs(weight) > 0.3 ? '較高，影響顯著' : 
-                                   Math.abs(weight) > 0.1 ? '中等，需結合其他因素' : '較低，影響有限'}。
-                            ${timeEffect.first_half > timeEffect.second_half ? '主要影響集中在上半場。' : 
-                              timeEffect.first_half < timeEffect.second_half ? '主要影響集中在下半場。' : 
-                              '影響在比賽中相對均衡。'}
-                        </p>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('pattern-detail-content').innerHTML = detailHTML;
+
+        // ========== 格局詳情 ==========
+        function showPatternDetail(name) {
+            const p = allPatterns.find(x => x.pattern_name === name);
+            if (!p) return;
+            currentPattern = p;
+            const typeClass = p.pattern_type === '吉格' ? 'auspicious' : p.pattern_type === '凶格' ? 'inauspicious' : 'neutral';
+            const typeColor = p.pattern_type === '吉格' ? '#27ae60' : p.pattern_type === '凶格' ? '#e74c3c' : '#f39c12';
+            const weight = p.parameters?.weight || 0;
+            const time = p.parameters?.time_effect || {};
+            const affects = p.parameters?.affects || [];
+            let html = `<div style="padding:20px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                <h2 style="color:${typeColor};margin:0;">${p.pattern_name}</h2><span class="pattern-type ${typeClass}" style="font-size:1.1em;">${p.pattern_type}</span>
+                </div><div style="background:#f8f9fa;padding:20px;border-radius:10px;margin-bottom:20px;">
+                <h3 style="color:#2c3e50;margin-bottom:10px;">格局描述</h3><p style="color:#7f8c8d;line-height:1.6;">${p.description || '暫無描述'}</p></div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;margin-bottom:20px;">
+                <div style="background:white;padding:15px;border-radius:8px;box-shadow:0 3px 10px rgba(0,0,0,0.1);">
+                <h4 style="color:#2c3e50;margin-bottom:10px;">基本參數</h4>
+                <div style="color:#7f8c8d;"><div style="margin-bottom:8px;"><strong>權重係數：</strong><span style="color:#9b59b6;font-weight:bold;">${weight>0?'+':''}${weight.toFixed(2)}</span></div>
+                <div style="margin-bottom:8px;"><strong>使用次數：</strong><span>${p.occurrence_count||0}</span></div>
+                <div style="margin-bottom:8px;"><strong>準確率：</strong><span>${p.success_rate||'--'}%</span></div></div></div>
+                <div style="background:white;padding:15px;border-radius:8px;box-shadow:0 3px 10px rgba(0,0,0,0.1);">
+                <h4 style="color:#2c3e50;margin-bottom:10px;">時間效應</h4>
+                <div style="color:#7f8c8d;"><div style="margin-bottom:8px;"><strong>上半場影響：</strong><span>${time.first_half?.toFixed(2)||'--'}</span></div>
+                <div style="margin-bottom:8px;"><strong>下半場影響：</strong><span>${time.second_half?.toFixed(2)||'--'}</span></div>
+                <div style="margin-bottom:8px;"><strong>衰減比例：</strong><span>${time.decay?(time.decay*100).toFixed(0)+'%':'--'}</span></div></div></div></div>`;
+            if (affects.length) {
+                html += `<div style="background:white;padding:15px;border-radius:8px;box-shadow:0 3px 10px rgba(0,0,0,0.1);margin-bottom:20px;">
+                    <h4 style="color:#2c3e50;margin-bottom:10px;">影響範圍</h4>
+                    <div style="display:flex;flex-wrap:wrap;gap:10px;">${affects.map(a => `<span style="background:#e8f4fc;color:#2980b9;padding:5px 12px;border-radius:15px;font-size:0.9em;">${a}</span>`).join('')}</div></div>`;
+            }
+            html += `<div style="background:#fef9e7;padding:15px;border-radius:8px;border-left:4px solid #f39c12;">
+                <h4 style="color:#d68910;margin-bottom:10px;">AI解讀</h4><p style="color:#8e6c1f;line-height:1.6;">
+                此格局${p.pattern_type==='吉格'?'通常對進攻方有利':p.pattern_type==='凶格'?'可能導致失誤或不利情況':'影響較為中性'}，
+                權重係數${Math.abs(weight)>0.3?'較高，影響顯著':Math.abs(weight)>0.1?'中等，需結合其他因素':'較低，影響有限'}。
+                ${time.first_half>time.second_half?'主要影響集中在上半場。':time.first_half<time.second_half?'主要影響集中在下半場。':'影響在比賽中相對均衡。'}</p></div></div>`;
+            document.getElementById('pattern-detail-content').innerHTML = html;
             document.getElementById('pattern-modal').style.display = 'flex';
         }
-        
-        // 關閉格局詳情模態框
-        function closePatternModal() {
-            document.getElementById('pattern-modal').style.display = 'none';
-        }
-        
-        // 應用過濾
-        function applyFilters() {
-            const searchTerm = document.getElementById('pattern-search').value.toLowerCase();
-            const typeFilter = document.getElementById('type-filter').value;
-            const weightFilter = document.getElementById('weight-filter').value;
-            const sortFilter = document.getElementById('sort-filter').value;
-            
-            filteredPatterns = allPatterns.filter(pattern => {
-                // 搜尋過濾
-                if (searchTerm) {
-                    const searchText = pattern.pattern_name.toLowerCase() + 
-                                     (pattern.description || '').toLowerCase() +
-                                     (pattern.pattern_type || '').toLowerCase();
-                    if (!searchText.includes(searchTerm)) {
-                        return false;
-                    }
-                }
-                
-                // 類型過濾
-                if (typeFilter) {
-                    const patternType = pattern.pattern_type === '吉格' ? 'auspicious' :
-                                      pattern.pattern_type === '凶格' ? 'inauspicious' : 'neutral';
-                    if (patternType !== typeFilter) {
-                        return false;
-                    }
-                }
-                
-                // 權重過濾
-                if (weightFilter && pattern.parameters?.weight !== undefined) {
-                    const weight = pattern.parameters.weight;
-                    
-                    switch (weightFilter) {
-                        case 'positive':
-                            if (weight <= 0) return false;
-                            break;
-                        case 'negative':
-                            if (weight >= 0) return false;
-                            break;
-                        case 'high':
-                            if (Math.abs(weight) <= 0.5) return false;
-                            break;
-                        case 'medium':
-                            if (Math.abs(weight) < 0.1 || Math.abs(weight) > 0.5) return false;
-                            break;
-                        case 'low':
-                            if (Math.abs(weight) >= 0.1) return false;
-                            break;
-                    }
-                }
-                
-                return true;
-            });
-            
-            // 排序
-            switch (sortFilter) {
-                case 'name_asc':
-                    filteredPatterns.sort((a, b) => a.pattern_name.localeCompare(b.pattern_name, 'zh-TW'));
-                    break;
-                case 'name_desc':
-                    filteredPatterns.sort((a, b) => b.pattern_name.localeCompare(a.pattern_name, 'zh-TW'));
-                    break;
-                case 'weight_asc':
-                    filteredPatterns.sort((a, b) => {
-                        const weightA = Math.abs(a.parameters?.weight || 0);
-                        const weightB = Math.abs(b.parameters?.weight || 0);
-                        return weightA - weightB;
-                    });
-                    break;
-                case 'weight_desc':
-                    filteredPatterns.sort((a, b) => {
-                        const weightA = Math.abs(a.parameters?.weight || 0);
-                        const weightB = Math.abs(b.parameters?.weight || 0);
-                        return weightB - weightA;
-                    });
-                    break;
-                case 'frequency_desc':
-                    filteredPatterns.sort((a, b) => {
-                        const freqA = a.occurrence_count || 0;
-                        const freqB = b.occurrence_count || 0;
-                        return freqB - freqA;
-                    });
-                    break;
-            }
-            
-            // 顯示過濾後的格局
-            displayPatterns(filteredPatterns);
-            
-            // 更新計數
-            document.getElementById('total-patterns').textContent = filteredPatterns.length;
-        }
-        
-        // 重置過濾
-        function resetFilters() {
-            document.getElementById('pattern-search').value = '';
-            document.getElementById('type-filter').value = '';
-            document.getElementById('weight-filter').value = '';
-            document.getElementById('sort-filter').value = 'name_asc';
-            
-            filteredPatterns = [...allPatterns];
-            displayPatterns(allPatterns);
-            document.getElementById('total-patterns').textContent = allPatterns.length;
-            
-            showNotification('info', '過濾條件已重置');
-        }
-        
-        // 快速編輯
-        function quickEdit(patternName) {
-            const pattern = allPatterns.find(p => p.pattern_name === patternName);
-            if (!pattern) return;
-            
-            currentPattern = pattern;
+        function closePatternModal() { document.getElementById('pattern-modal').style.display = 'none'; }
+
+        // ========== 編輯操作 ==========
+        function quickEdit(name) {
+            currentPattern = allPatterns.find(p => p.pattern_name === name);
             openEditModal();
         }
-        
-        // 打開編輯模態框
+        function editCurrentPattern() { openEditModal(); }
         function openEditModal() {
-            if (!currentPattern) {
-                // 添加新格局
-                document.getElementById('edit-name').value = '';
-                document.getElementById('edit-type').value = 'auspicious';
-                document.getElementById('edit-weight').value = '0.10';
-                document.getElementById('edit-description').value = '';
-                document.getElementById('edit-combination').value = '';
-                document.getElementById('edit-door-effect').value = '';
-                document.getElementById('edit-star-effect').value = '';
-                document.getElementById('edit-time-effect').value = '{"first_half": 0.5, "second_half": 0.5}';
-                document.getElementById('edit-affects').value = '';
-                document.getElementById('edit-notes').value = '';
-            } else {
-                // 編輯現有格局
-                document.getElementById('edit-name').value = currentPattern.pattern_name;
-                document.getElementById('edit-type').value = 
-                    currentPattern.pattern_type === '吉格' ? 'auspicious' :
-                    currentPattern.pattern_type === '凶格' ? 'inauspicious' : 'neutral';
-                document.getElementById('edit-weight').value = currentPattern.parameters?.weight || 0;
-                document.getElementById('edit-description').value = currentPattern.description || '';
-                document.getElementById('edit-combination').value = currentPattern.combination || '';
-                document.getElementById('edit-door-effect').value = currentPattern.door_effect || '';
-                document.getElementById('edit-star-effect').value = currentPattern.star_effect || '';
-                document.getElementById('edit-time-effect').value = 
-                    currentPattern.parameters?.time_effect ? 
-                    JSON.stringify(currentPattern.parameters.time_effect) : 
-                    '{"first_half": 0.5, "second_half": 0.5}';
-                document.getElementById('edit-affects').value = 
-                    currentPattern.parameters?.affects ? currentPattern.parameters.affects.join(', ') : '';
-                document.getElementById('edit-notes').value = currentPattern.notes || '';
-            }
-            
+            const p = currentPattern;
+            document.getElementById('edit-name').value = p?.pattern_name || '';
+            document.getElementById('edit-type').value = p ? (p.pattern_type === '吉格' ? 'auspicious' : p.pattern_type === '凶格' ? 'inauspicious' : 'neutral') : 'auspicious';
+            document.getElementById('edit-weight').value = p?.parameters?.weight || 0.1;
+            document.getElementById('edit-description').value = p?.description || '';
+            document.getElementById('edit-combination').value = p?.combination || '';
+            document.getElementById('edit-door-effect').value = p?.door_effect || '';
+            document.getElementById('edit-star-effect').value = p?.star_effect || '';
+            document.getElementById('edit-time-effect').value = p?.parameters?.time_effect ? JSON.stringify(p.parameters.time_effect) : '{"first_half":0.5,"second_half":0.5}';
+            document.getElementById('edit-affects').value = p?.parameters?.affects ? p.parameters.affects.join(', ') : '';
+            document.getElementById('edit-notes').value = p?.notes || '';
             document.getElementById('edit-pattern-modal').style.display = 'flex';
         }
-        
-        // 關閉編輯模態框
-        function closeEditModal() {
-            document.getElementById('edit-pattern-modal').style.display = 'none';
-            currentPattern = null;
-        }
-        
-        // 添加新格局
-        function addNewPattern() {
-            currentPattern = null;
-            openEditModal();
-        }
-        
-        // 保存格局
+        function closeEditModal() { document.getElementById('edit-pattern-modal').style.display = 'none'; currentPattern = null; }
+        function addNewPattern() { currentPattern = null; openEditModal(); }
+
+        // 儲存格局
         function savePattern() {
             const form = document.getElementById('pattern-form');
-            if (!form.checkValidity()) {
-                showNotification('error', '請填寫所有必填欄位');
-                return;
-            }
-            
+            if (!form.checkValidity()) { showNotification('error', '請填寫所有必填欄位'); return; }
             try {
-                const patternName = document.getElementById('edit-name').value.trim();
-                const patternType = document.getElementById('edit-type').value;
+                const name = document.getElementById('edit-name').value.trim();
+                const type = document.getElementById('edit-type').value;
                 const weight = parseFloat(document.getElementById('edit-weight').value);
-                const description = document.getElementById('edit-description').value.trim();
-                const combination = document.getElementById('edit-combination').value.trim();
-                const doorEffect = document.getElementById('edit-door-effect').value.trim();
-                const starEffect = document.getElementById('edit-star-effect').value.trim();
-                const timeEffect = document.getElementById('edit-time-effect').value.trim();
-                const affects = document.getElementById('edit-affects').value.split(',').map(a => a.trim()).filter(a => a);
+                const desc = document.getElementById('edit-description').value.trim();
+                const comb = document.getElementById('edit-combination').value.trim();
+                const door = document.getElementById('edit-door-effect').value.trim();
+                const star = document.getElementById('edit-star-effect').value.trim();
+                const timeEff = document.getElementById('edit-time-effect').value.trim();
+                const affects = document.getElementById('edit-affects').value.split(',').map(s => s.trim()).filter(s => s);
                 const notes = document.getElementById('edit-notes').value.trim();
-                
-                // 檢查格局名稱是否重複
-                if (!currentPattern) {
-                    const existingPattern = allPatterns.find(p => p.pattern_name === patternName);
-                    if (existingPattern) {
-                        showNotification('error', '格局名稱已存在，請使用其他名稱');
-                        return;
-                    }
+                if (!currentPattern && allPatterns.some(p => p.pattern_name === name)) {
+                    showNotification('error', '格局名稱已存在'); return;
                 }
-                
-                // 構建格局對象
-                const patternTypeText = patternType === 'auspicious' ? '吉格' :
-                                      patternType === 'inauspicious' ? '凶格' : '中性格局';
-                
+                const patternTypeText = type === 'auspicious' ? '吉格' : type === 'inauspicious' ? '凶格' : '中性格局';
                 const newPattern = {
-                    pattern_name: patternName,
+                    pattern_name: name,
                     pattern_type: patternTypeText,
-                    description: description || '暫無描述',
-                    combination: combination || undefined,
-                    door_effect: doorEffect || undefined,
-                    star_effect: starEffect || undefined,
+                    description: desc || '暫無描述',
+                    combination: comb || undefined,
+                    door_effect: door || undefined,
+                    star_effect: star || undefined,
                     notes: notes || undefined,
                     parameters: {
                         weight: weight,
-                        time_effect: timeEffect ? JSON.parse(timeEffect) : { first_half: 0.5, second_half: 0.5 },
-                        affects: affects.length > 0 ? affects : undefined
+                        time_effect: timeEff ? JSON.parse(timeEff) : { first_half: 0.5, second_half: 0.5 },
+                        affects: affects.length ? affects : undefined
                     },
                     occurrence_count: currentPattern?.occurrence_count || 0,
                     success_rate: currentPattern?.success_rate || 0,
                     last_updated: new Date().toISOString()
                 };
-                
                 if (currentPattern) {
-                    // 更新現有格局
-                    const index = allPatterns.findIndex(p => p.pattern_name === currentPattern.pattern_name);
-                    if (index !== -1) {
-                        // 保留原有的一些數據
-                        newPattern.occurrence_count = currentPattern.occurrence_count || 0;
-                        newPattern.success_rate = currentPattern.success_rate || 0;
-                        allPatterns[index] = newPattern;
-                    }
+                    const idx = allPatterns.findIndex(p => p.pattern_name === currentPattern.pattern_name);
+                    if (idx !== -1) allPatterns[idx] = newPattern;
                 } else {
-                    // 添加新格局
                     allPatterns.push(newPattern);
                 }
-                
-                // 保存到本地存儲
-                localStorage.setItem('pattern_library', JSON.stringify(allPatterns));
-                
-                // 更新AI引擎的格局庫
-                if (window.qimenEngine) {
-                    window.qimenEngine.patternLibrary = allPatterns;
-                }
-                
-                // 更新顯示
+                localStorage.setItem('qimen_pattern_library', JSON.stringify(allPatterns));
+                if (window.qimenEngine) window.qimenEngine.patternLibrary = allPatterns;
                 updateStatistics();
                 displayPatterns(allPatterns);
-                
-                // 關閉模態框
                 closeEditModal();
-                
                 showNotification('success', currentPattern ? '格局更新成功' : '新格局添加成功');
-                
-            } catch (error) {
-                console.error('保存格局失敗:', error);
-                showNotification('error', '保存格局失敗：' + error.message);
+            } catch (e) {
+                console.error(e);
+                showNotification('error', '儲存失敗：' + e.message);
             }
         }
-        
+
         // 刪除格局
         function deletePattern() {
             if (!currentPattern) return;
-            
-            if (confirm(`確定要刪除格局「${currentPattern.pattern_name}」嗎？此操作無法恢復。`)) {
-                const index = allPatterns.findIndex(p => p.pattern_name === currentPattern.pattern_name);
-                if (index !== -1) {
-                    allPatterns.splice(index, 1);
-                    
-                    // 保存到本地存儲
-                    localStorage.setItem('pattern_library', JSON.stringify(allPatterns));
-                    
-                    // 更新AI引擎的格局庫
-                    if (window.qimenEngine) {
-                        window.qimenEngine.patternLibrary = allPatterns;
-                    }
-                    
-                    // 更新顯示
-                    updateStatistics();
-                    displayPatterns(allPatterns);
-                    
-                    // 關閉模態框
-                    closeEditModal();
-                    
-                    showNotification('success', '格局刪除成功');
+            if (!confirm(`確定刪除「${currentPattern.pattern_name}」？`)) return;
+            const idx = allPatterns.findIndex(p => p.pattern_name === currentPattern.pattern_name);
+            if (idx !== -1) {
+                allPatterns.splice(idx, 1);
+                localStorage.setItem('qimen_pattern_library', JSON.stringify(allPatterns));
+                if (window.qimenEngine) window.qimenEngine.patternLibrary = allPatterns;
+                updateStatistics();
+                displayPatterns(allPatterns);
+                closeEditModal();
+                showNotification('success', '格局已刪除');
+            }
+        }
+
+        // ========== 過濾與排序 ==========
+        function applyFilters() {
+            const search = document.getElementById('pattern-search').value.toLowerCase();
+            const typeFilter = document.getElementById('type-filter').value;
+            const weightFilter = document.getElementById('weight-filter').value;
+            const sort = document.getElementById('sort-filter').value;
+            filteredPatterns = allPatterns.filter(p => {
+                if (search && !(p.pattern_name.toLowerCase()+ (p.description||'').toLowerCase()+p.pattern_type).includes(search)) return false;
+                if (typeFilter) {
+                    const pt = p.pattern_type === '吉格' ? 'auspicious' : p.pattern_type === '凶格' ? 'inauspicious' : 'neutral';
+                    if (pt !== typeFilter) return false;
                 }
+                if (weightFilter && p.parameters?.weight !== undefined) {
+                    const w = p.parameters.weight;
+                    if (weightFilter === 'positive' && w <= 0) return false;
+                    if (weightFilter === 'negative' && w >= 0) return false;
+                    if (weightFilter === 'high' && Math.abs(w) <= 0.5) return false;
+                    if (weightFilter === 'medium' && (Math.abs(w) < 0.1 || Math.abs(w) > 0.5)) return false;
+                    if (weightFilter === 'low' && Math.abs(w) >= 0.1) return false;
+                }
+                return true;
+            });
+            // 排序
+            switch (sort) {
+                case 'name_asc': filteredPatterns.sort((a,b) => a.pattern_name.localeCompare(b.pattern_name,'zh-TW')); break;
+                case 'name_desc': filteredPatterns.sort((a,b) => b.pattern_name.localeCompare(a.pattern_name,'zh-TW')); break;
+                case 'weight_asc': filteredPatterns.sort((a,b) => Math.abs(a.parameters?.weight||0) - Math.abs(b.parameters?.weight||0)); break;
+                case 'weight_desc': filteredPatterns.sort((a,b) => Math.abs(b.parameters?.weight||0) - Math.abs(a.parameters?.weight||0)); break;
+                case 'frequency_desc': filteredPatterns.sort((a,b) => (b.occurrence_count||0) - (a.occurrence_count||0)); break;
             }
+            displayPatterns(filteredPatterns);
+            document.getElementById('total-patterns').textContent = filteredPatterns.length;
         }
-        
-        // 分析格局
-        function analyzePattern(patternName) {
-            const pattern = allPatterns.find(p => p.pattern_name === patternName);
-            if (!pattern) return;
-            
-            showNotification('info', `正在分析「${patternName}」的歷史表現...`);
-            
-            // 實際應用中可以顯示詳細分析圖表
-            setTimeout(() => {
-                showNotification('success', `分析完成：${patternName} 使用${pattern.occurrence_count || 0}次，準確率${pattern.success_rate || '--'}%`);
-            }, 1000);
+        function resetFilters() {
+            document.getElementById('pattern-search').value = '';
+            document.getElementById('type-filter').value = '';
+            document.getElementById('weight-filter').value = '';
+            document.getElementById('sort-filter').value = 'name_asc';
+            filteredPatterns = [...allPatterns];
+            displayPatterns(allPatterns);
+            document.getElementById('total-patterns').textContent = allPatterns.length;
+            showNotification('info', '過濾條件已重置');
         }
-        
-        // 測試格局
-        function testPattern(patternName) {
-            const pattern = allPatterns.find(p => p.pattern_name === patternName);
-            if (!pattern) return;
-            
-            showNotification('info', `開始測試「${patternName}」的影響力...`);
-            
-            // 實際應用中可以進行模擬測試
-            setTimeout(() => {
-                const weight = pattern.parameters?.weight || 0;
-                const effect = Math.abs(weight) > 0.3 ? '強烈' : Math.abs(weight) > 0.1 ? '中等' : '輕微';
-                showNotification('success', `測試完成：${patternName} 影響力${effect}，權重係數${weight > 0 ? '+' : ''}${weight.toFixed(2)}`);
-            }, 1500);
+
+        // ========== 分析/測試（模擬） ==========
+        function analyzePattern(name) {
+            const p = allPatterns.find(x => x.pattern_name === name);
+            showNotification('info', `分析「${name}」... 使用次數:${p?.occurrence_count||0} 準確率:${p?.success_rate||'--'}%`);
         }
-        
-        // 刷新庫存
-        function refreshLibrary() {
-            loadPatternLibrary();
-            showNotification('success', '格局庫已刷新');
+
+        // ========== 匯出/匯入格局庫 ==========
+        function exportPatternLibrary() {
+            const exportObj = {
+                version: 'V5.3',
+                export_time: new Date().toISOString(),
+                total: allPatterns.length,
+                patterns: allPatterns
+            };
+            const json = JSON.stringify(exportObj, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `pattern-library-${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showNotification('success', `已匯出 ${allPatterns.length} 個格局`);
         }
-        
-        // 導出格局庫
-        function exportLibrary() {
-            try {
-                const exportData = {
-                    version: 'V5.3',
-                    export_time: new Date().toISOString(),
-                    total_patterns: allPatterns.length,
-                    patterns: allPatterns
-                };
-                
-                const jsonStr = JSON.stringify(exportData, null, 2);
-                const blob = new Blob([jsonStr], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `pattern-library-export-${new Date().toISOString().slice(0, 10)}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                showNotification('success', `已導出 ${allPatterns.length} 個格局`);
-                
-            } catch (error) {
-                console.error('導出格局庫失敗:', error);
-                showNotification('error', '導出格局庫失敗');
-            }
-        }
-        
-        // 導入格局庫
-        function importLibrary() {
+        function importPatternLibrary() {
             const input = document.createElement('input');
             input.type = 'file';
             input.accept = '.json';
-            
-            input.onchange = function(e) {
+            input.onchange = e => {
                 const file = e.target.files[0];
                 if (!file) return;
-                
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = ev => {
                     try {
-                        const importData = JSON.parse(e.target.result);
-                        
-                        if (importData.patterns && Array.isArray(importData.patterns)) {
-                            // 合併格局庫
+                        const data = JSON.parse(ev.target.result);
+                        if (data.patterns && Array.isArray(data.patterns)) {
                             const existingNames = allPatterns.map(p => p.pattern_name);
-                            const newPatterns = importData.patterns.filter(p => !existingNames.includes(p.pattern_name));
-                            
+                            const newPatterns = data.patterns.filter(p => !existingNames.includes(p.pattern_name));
                             allPatterns = [...allPatterns, ...newPatterns];
-                            
-                            // 保存到本地存儲
-                            localStorage.setItem('pattern_library', JSON.stringify(allPatterns));
-                            
-                            // 更新AI引擎的格局庫
-                            if (window.qimenEngine) {
-                                window.qimenEngine.patternLibrary = allPatterns;
-                            }
-                            
-                            // 更新顯示
+                            localStorage.setItem('qimen_pattern_library', JSON.stringify(allPatterns));
+                            if (window.qimenEngine) window.qimenEngine.patternLibrary = allPatterns;
                             updateStatistics();
                             displayPatterns(allPatterns);
-                            
-                            showNotification('success', `已導入 ${newPatterns.length} 個新格局`);
-                        } else {
-                            throw new Error('檔案格式無效');
-                        }
-                    } catch (error) {
-                        console.error('導入格局庫失敗:', error);
-                        showNotification('error', '導入格局庫失敗：' + error.message);
+                            showNotification('success', `已匯入 ${newPatterns.length} 個新格局`);
+                        } else throw new Error('檔案格式錯誤');
+                    } catch (ex) {
+                        showNotification('error', '匯入失敗：' + ex.message);
                     }
                 };
-                
                 reader.readAsText(file);
             };
-            
             input.click();
         }
-        
-        // 同步到服務器
-        async function syncWithServer() {
-            try {
-                showNotification('info', '正在同步格局庫到服務器...');
-                
-                if (window.supabaseClient) {
-                    await window.supabaseClient.updatePatternLibrary(allPatterns);
-                    showNotification('success', '格局庫同步成功');
-                } else {
-                    throw new Error('Supabase客戶端未初始化');
-                }
-            } catch (error) {
-                console.error('同步到服務器失敗:', error);
-                showNotification('error', '同步失敗：' + error.message);
-            }
+
+        // ========== DeepSeek 懶人指令包 ==========
+        // 生成整個格局庫的指令包
+        function generateDeepSeekCommand() {
+            const command = {
+                version: 'V5.3',
+                type: 'pattern_library_update',
+                timestamp: new Date().toISOString(),
+                patterns: allPatterns.map(p => ({
+                    pattern_name: p.pattern_name,
+                    pattern_type: p.pattern_type,
+                    description: p.description,
+                    parameters: p.parameters,
+                    occurrence_count: p.occurrence_count || 0,
+                    success_rate: p.success_rate || 0
+                }))
+            };
+            document.getElementById('deepseek-command').value = JSON.stringify(command, null, 2);
+            document.getElementById('deepseek-modal').style.display = 'flex';
         }
-        
-        // 顯示錯誤
-        function showError(message) {
-            const patternList = document.getElementById('pattern-list');
-            patternList.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <p>載入失敗</p>
-                    <p style="font-size: 0.9em; color: #e74c3c;">${message}</p>
-                </div>
-            `;
+        // 生成單一格局的指令包（供按鈕調用）
+        function generateSinglePatternCommand(pattern) {
+            if (!pattern) return;
+            const command = {
+                version: 'V5.3',
+                type: 'single_pattern_update',
+                timestamp: new Date().toISOString(),
+                pattern: {
+                    pattern_name: pattern.pattern_name,
+                    pattern_type: pattern.pattern_type,
+                    description: pattern.description,
+                    parameters: pattern.parameters,
+                    occurrence_count: pattern.occurrence_count || 0,
+                    success_rate: pattern.success_rate || 0
+                }
+            };
+            document.getElementById('deepseek-command').value = JSON.stringify(command, null, 2);
+            document.getElementById('deepseek-modal').style.display = 'flex';
         }
-        
-        // 顯示通知
-        function showNotification(type, message) {
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <div class="notification-content">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : 
-                                   type === 'error' ? 'exclamation-circle' : 
-                                   type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
-                    <span>${message}</span>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            // 自動移除
-            setTimeout(() => {
-                if (notification.parentElement) {
-                    notification.remove();
-                }
-            }, 5000);
+        function closeDeepSeekModal() { document.getElementById('deepseek-modal').style.display = 'none'; }
+        function copyDeepSeekCommand() {
+            const ta = document.getElementById('deepseek-command');
+            ta.select();
+            document.execCommand('copy');
+            showNotification('success', '指令包已複製到剪貼板');
         }
-        
-        // 初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            // 載入格局庫
-            loadPatternLibrary();
-            
-            // 監聽搜尋輸入
-            document.getElementById('pattern-search').addEventListener('input', applyFilters);
-            
-            // 監聽過濾器變化
-            document.getElementById('type-filter').addEventListener('change', applyFilters);
-            document.getElementById('weight-filter').addEventListener('change', applyFilters);
-            document.getElementById('sort-filter').addEventListener('change', applyFilters);
-            
-            // 移動端選單切換
-            const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-            const navMenu = document.querySelector('.nav-menu');
-            
-            if (mobileMenuBtn) {
-                mobileMenuBtn.addEventListener('click', () => {
-                    navMenu.classList.toggle('active');
-                });
-            }
-            
-            // 點擊頁面其他地方關閉選單
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.nav-menu') && !e.target.closest('.mobile-menu-btn')) {
-                    navMenu.classList.remove('active');
-                }
-            });
-            
-            // 點擊模態框外部關閉
-            document.getElementById('pattern-modal')?.addEventListener('click', (e) => {
-                if (e.target === document.getElementById('pattern-modal')) {
-                    closePatternModal();
-                }
-            });
-            
-            document.getElementById('edit-pattern-modal')?.addEventListener('click', (e) => {
-                if (e.target === document.getElementById('edit-pattern-modal')) {
-                    closeEditModal();
-                }
-            });
-        });
+
+        // ========== 通知 ==========
+        function showNotification(type, message, duration = 5000) {
+            const existing = document.querySelectorAll('.notification');
+            existing.forEach(n => n.remove());
+            const noti = document.createElement('div');
+            noti.className = `notification ${type}`;
+            noti.innerHTML = `<div class="notification-content"><i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':type==='warning'?'exclamation-triangle':'info-circle'}"></i><span>${message}</span></div><button class="notification-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
+            document.body.appendChild(noti);
+            setTimeout(() => noti.remove(), duration);
+        }
     </script>
 </body>
 </html>
