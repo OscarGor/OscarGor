@@ -1,509 +1,882 @@
-// 续接之前的类，添加针对FB3200的解析方法
+// 陰盤奇門足球AI預測系統 - 奇門分析引擎
+// 版本: V5.2
+// 作者: AI玄學研究員
+// 日期: 2026-02-11
 
 class QimenEngine {
-  // ... 之前的方法 ...
-
-  // 解析FB3200格式的奇门数据
-  parseFB3200Format(rawText) {
-    const lines = rawText.split('\n');
-    const result = {
-      globalInfo: {},
-      palaces: {}
-    };
-    
-    // 解析全局信息
-    for (const line of lines) {
-      if (line.includes('阳遁')) {
-        result.globalInfo.dun = line.match(/阳遁(\d)局/)[1];
-      }
-      if (line.includes('值符：')) {
-        result.globalInfo.zhiFu = line.split('：')[1].trim();
-      }
-      if (line.includes('值使：')) {
-        result.globalInfo.zhiShi = line.split('：')[1].trim();
-      }
-      if (line.includes('问测者落宫为')) {
-        const match = line.match(/问测者落宫为(.*宫)/);
-        if (match) result.globalInfo.questionerPalace = match[1];
-      }
+    constructor() {
+        this.version = 'V5.2';
+        this.parameters = null;
+        this.patternLibrary = null;
+        this.init();
     }
     
-    // 解析各宫信息
-    let currentPalace = null;
-    for (const line of lines) {
-      // 检测新宫开始
-      const palaceMatch = line.match(/(.*宫)\(.*方\)/);
-      if (palaceMatch) {
-        const palaceName = palaceMatch[1];
-        currentPalace = this.mapPalaceName(palaceName);
-        result.palaces[currentPalace] = {
-          name: palaceName,
-          fourHarms: [],
-          stems: [],
-          stars: [],
-          gates: [],
-          gods: [],
-          patterns: [],
-          energy: 50
+    // 初始化引擎
+    async init() {
+        try {
+            // 載入參數
+            await this.loadParameters();
+            
+            // 載入格局庫
+            await this.loadPatternLibrary();
+            
+            console.log(`奇門分析引擎 ${this.version} 初始化成功`);
+        } catch (error) {
+            console.error('奇門分析引擎初始化失敗:', error);
+        }
+    }
+    
+    // 載入參數
+    async loadParameters() {
+        try {
+            // 先嘗試從Supabase獲取
+            if (window.supabaseClient) {
+                const params = await window.supabaseClient.getAIParameters(this.version);
+                if (params) {
+                    this.parameters = params.parameters;
+                    return;
+                }
+            }
+            
+            // 從本地檔案載入
+            const response = await fetch('data/parameters_v5.2.json');
+            if (response.ok) {
+                this.parameters = await response.json();
+            } else {
+                // 使用默認參數
+                this.parameters = this.getDefaultParameters();
+            }
+        } catch (error) {
+            console.error('載入參數失敗，使用默認參數:', error);
+            this.parameters = this.getDefaultParameters();
+        }
+    }
+    
+    // 載入格局庫
+    async loadPatternLibrary() {
+        try {
+            // 先嘗試從Supabase獲取
+            if (window.supabaseClient) {
+                const patterns = await window.supabaseClient.getPatternLibrary();
+                if (patterns && patterns.length > 0) {
+                    this.patternLibrary = patterns;
+                    return;
+                }
+            }
+            
+            // 從本地檔案載入
+            const response = await fetch('data/pattern_library.json');
+            if (response.ok) {
+                this.patternLibrary = await response.json();
+            } else {
+                // 使用默認格局庫
+                this.patternLibrary = this.getDefaultPatternLibrary();
+            }
+        } catch (error) {
+            console.error('載入格局庫失敗，使用默認格局庫:', error);
+            this.patternLibrary = this.getDefaultPatternLibrary();
+        }
+    }
+    
+    // 獲取默認參數
+    getDefaultParameters() {
+        return {
+            // 三維參數體系
+            three_dimensional: {
+                // 時限性參數
+                time_limit: {
+                    value_symbol: { first_half: 0.25, second_half: 0.08 },
+                    sky_yi_flying: { first_half: 0.35, second_half: 0.08 },
+                    bad_pattern: { first_half: 1.0, second_half: 0.5 },
+                    time_decay: 0.25, // 每15分鐘衰減25%
+                    time_peak: "45-60" // 能量峰值時間
+                },
+                // 時效性參數
+                time_effect: {
+                    four_harm: { first_half: -0.25, second_half: -0.08 },
+                    death_door: { first_half: -0.15, second_half: -0.06 },
+                    star_entombed: { first_half: -0.12, second_half: -0.04 },
+                    bad_snake: { first_half: -0.08, second_half: -0.03 },
+                    nine_sky: { first_half: 0.05, second_half: 0.40 }
+                },
+                // 能量轉換模型
+                energy_conversion: {
+                    conservation: true,
+                    conversion_coefficient: 0.70,
+                    extreme_conversion_prob: 0.18,
+                    reversal_prob: 0.18
+                }
+            },
+            
+            // 技術算法參數
+            technical_algorithms: {
+                // 黃牌算法
+                yellow_cards: {
+                    base_cards: 3,
+                    injury_door_effect: 2,
+                    shock_door_effect: 1,
+                    nine_sky_effect: 2,
+                    value_symbol_effect: 1
+                },
+                // 控球率算法
+                possession: {
+                    death_door_effect: -0.25,
+                    star_entombed_effect: -0.12,
+                    value_symbol_effect: 0.15
+                },
+                // 進攻數據算法
+                attack: {
+                    nine_sky_dangerous_attack: 0.50,
+                    sky_symbol_attack_count: 0.30
+                },
+                // 角球算法
+                corners: {
+                    rest_door_coefficient: 0.15
+                }
+            },
+            
+            // 格局權重參數
+            pattern_weights: {
+                // 吉格
+                auspicious: {
+                    small_snake_to_dragon: 0.25,
+                    sky_yi_meeting: 0.20,
+                    nine_sky_auspicious: 0.50
+                },
+                // 凶格
+                inauspicious: {
+                    green_dragon_escape: 0.70,
+                    day_odd_punishment: 0.15,
+                    day_odd_ground: 0.10,
+                    small_grid: 0.12,
+                    entangled_snake: 0.10,
+                    dry_combined_rebellion: 0.08,
+                    canopy_rebellion: 0.05,
+                    vermilion_bird_entombed: 0.08,
+                    disaster_gate: -0.08
+                },
+                // 四害影響
+                four_harm_effects: {
+                    door_break: -0.15,
+                    empty: -0.20,
+                    tomb: -0.12,
+                    penalty: -0.10
+                }
+            },
+            
+            // 預測閾值
+            prediction_thresholds: {
+                home_win_min: 0.30,
+                draw_min: 0.25,
+                away_win_min: 0.30,
+                confidence_high: 0.70,
+                confidence_medium: 0.50,
+                confidence_low: 0.30
+            }
         };
-      }
-      
-      if (!currentPalace) continue;
-      
-      // 解析四害
-      if (line.includes('四害：') && line.trim() !== '四害：') {
-        const harms = line.split('：')[1].trim();
-        if (harms) {
-          result.palaces[currentPalace].fourHarms = harms.split(' ');
+    }
+    
+    // 獲取默認格局庫
+    getDefaultPatternLibrary() {
+        return [
+            {
+                pattern_name: "青龍逃走",
+                pattern_type: "凶格",
+                description: "乙+辛組合，主變動、失誤、錯失機會",
+                parameters: {
+                    weight: -0.70,
+                    time_effect: { first_half: 1.0, second_half: 0.5 },
+                    affects: ["進攻失誤", "防守漏洞", "機會錯失"]
+                }
+            },
+            {
+                pattern_name: "小蛇化龍",
+                pattern_type: "吉格",
+                description: "壬+戊組合，主轉折、成長、逆轉機會",
+                parameters: {
+                    weight: 0.25,
+                    time_effect: { first_half: 0.4, second_half: 0.6 },
+                    affects: ["下半場轉折", "逆轉可能", "機會把握"]
+                }
+            },
+            {
+                pattern_name: "日奇被刑",
+                pattern_type: "凶格",
+                description: "乙+庚組合，主意外、訴訟、飛來橫禍",
+                parameters: {
+                    weight: -0.15,
+                    time_effect: { first_half: 0.6, second_half: 0.4 },
+                    affects: ["意外事件", "黃牌紅牌", "爭議判罰"]
+                }
+            }
+        ];
+    }
+    
+    // 分析比賽
+    async analyzeMatch(qimenData) {
+        try {
+            console.log('開始奇門分析...');
+            
+            // 1. 解析奇門數據
+            const parsedData = this.parseQimenData(qimenData);
+            
+            // 2. 識別格局
+            const patterns = this.identifyPatterns(parsedData);
+            
+            // 3. 計算宮位能量
+            const palaceEnergies = this.calculatePalaceEnergies(parsedData, patterns);
+            
+            // 4. 分配球隊能量
+            const teamEnergies = this.allocateTeamEnergies(parsedData, palaceEnergies);
+            
+            // 5. 應用三維參數
+            const timeAdjustedEnergies = this.applyTimeParameters(teamEnergies, parsedData);
+            
+            // 6. 計算預測概率
+            const prediction = this.calculatePrediction(timeAdjustedEnergies, patterns);
+            
+            // 7. 生成技術預測
+            const technicalPrediction = this.predictTechnicalStats(parsedData, patterns);
+            
+            // 8. 生成分析報告
+            const analysisReport = this.generateAnalysisReport(parsedData, patterns, prediction, technicalPrediction);
+            
+            return {
+                success: true,
+                prediction: prediction,
+                technical_prediction: technicalPrediction,
+                analysis_report: analysisReport,
+                patterns_found: patterns,
+                palace_energies: palaceEnergies,
+                team_energies: teamEnergies,
+                parameters_used: this.parameters
+            };
+            
+        } catch (error) {
+            console.error('奇門分析失敗:', error);
+            return {
+                success: false,
+                error: error.message,
+                prediction: null,
+                analysis_report: null
+            };
         }
-      }
-      
-      // 解析天干
-      if (line.includes('天干临：')) {
-        const stems = line.match(/[甲乙丙丁戊己庚辛壬癸]天干临/g);
-        if (stems) {
-          result.palaces[currentPalace].stems = stems.map(s => s[0]);
+    }
+    
+    // 解析奇門數據
+    parseQimenData(qimenData) {
+        // 解析全局資訊
+        const parsed = {
+            // 全局資訊
+            global: {
+                solar_date: qimenData.solar_date,
+                lunar_date: qimenData.lunar_date,
+                yang_dun: qimenData.yang_dun,
+                dun_number: qimenData.dun_number,
+                four_pillars: qimenData.four_pillars,
+                kong_wang: qimenData.kong_wang,
+                horse_star: qimenData.horse_star,
+                value_symbol: qimenData.value_symbol,
+                value_door: qimenData.value_door,
+                asker_palace: qimenData.asker_palace
+            },
+            
+            // 宮位資訊
+            palaces: {}
+        };
+        
+        // 解析各宮位資訊
+        if (qimenData.palaces) {
+            Object.keys(qimenData.palaces).forEach(palaceKey => {
+                const palace = qimenData.palaces[palaceKey];
+                parsed.palaces[palaceKey] = {
+                    name: palace.name,
+                    direction: palace.direction,
+                    four_harm: palace.four_harm,
+                    heavenly_stem: palace.heavenly_stem,
+                    sky_plate: palace.sky_plate,
+                    sky_plate_host: palace.sky_plate_host,
+                    ground_plate: palace.ground_plate,
+                    patterns: palace.patterns,
+                    eight_door: palace.eight_door,
+                    door_sky: palace.door_sky,
+                    nine_star: palace.nine_star,
+                    eight_god: palace.eight_god
+                };
+            });
         }
-      }
-      
-      // 解析天盘地盘
-      if (line.includes('天盘─')) {
-        result.palaces[currentPalace].tianPan = line.split('─')[1].trim();
-      }
-      if (line.includes('地盘─')) {
-        result.palaces[currentPalace].diPan = line.split('─')[1].trim();
-      }
-      
-      // 解析格局
-      if (line.includes('天盘＋地盘─') && line.includes('：')) {
-        const pattern = line.split('：')[1].trim();
-        if (pattern) {
-          result.palaces[currentPalace].patterns.push({
-            type: '天地组合',
-            pattern: pattern
-          });
+        
+        return parsed;
+    }
+    
+    // 識別格局
+    identifyPatterns(parsedData) {
+        const patterns = [];
+        
+        // 檢查各宮位的格局組合
+        Object.keys(parsedData.palaces).forEach(palaceKey => {
+            const palace = parsedData.palaces[palaceKey];
+            
+            if (palace.patterns) {
+                const patternText = palace.patterns.toLowerCase();
+                
+                // 檢查常見格局
+                if (patternText.includes('乙+辛') || patternText.includes('青龍逃走')) {
+                    patterns.push({
+                        palace: palaceKey,
+                        name: '青龍逃走',
+                        type: '凶格',
+                        description: '乙+辛組合，主變動、失誤',
+                        weight: this.parameters.pattern_weights.inauspicious.green_dragon_escape
+                    });
+                }
+                
+                if (patternText.includes('壬+戊') || patternText.includes('小蛇化龍')) {
+                    patterns.push({
+                        palace: palaceKey,
+                        name: '小蛇化龍',
+                        type: '吉格',
+                        description: '壬+戊組合，主轉折、成長',
+                        weight: this.parameters.pattern_weights.auspicious.small_snake_to_dragon
+                    });
+                }
+                
+                if (patternText.includes('乙+庚') || patternText.includes('日奇被刑')) {
+                    patterns.push({
+                        palace: palaceKey,
+                        name: '日奇被刑',
+                        type: '凶格',
+                        description: '乙+庚組合，主意外、訴訟',
+                        weight: this.parameters.pattern_weights.inauspicious.day_odd_punishment
+                    });
+                }
+                
+                if (patternText.includes('乙+壬') || patternText.includes('日奇入地')) {
+                    patterns.push({
+                        palace: palaceKey,
+                        name: '日奇入地',
+                        type: '凶格',
+                        description: '乙+壬組合，主隱藏、受制',
+                        weight: this.parameters.pattern_weights.inauspicious.day_odd_ground
+                    });
+                }
+                
+                if (patternText.includes('庚+壬') || patternText.includes('小格')) {
+                    patterns.push({
+                        palace: palaceKey,
+                        name: '小格',
+                        type: '凶格',
+                        description: '庚+壬組合，主動盪、移蕩',
+                        weight: this.parameters.pattern_weights.inauspicious.small_grid
+                    });
+                }
+                
+                if (patternText.includes('辛+丙') || patternText.includes('幹合悖師')) {
+                    patterns.push({
+                        palace: palaceKey,
+                        name: '幹合悖師',
+                        type: '凶格',
+                        description: '辛+丙組合，主矛盾、混亂',
+                        weight: this.parameters.pattern_weights.inauspicious.dry_combined_rebellion
+                    });
+                }
+                
+                if (patternText.includes('壬+辛') || patternText.includes('騰蛇相纏')) {
+                    patterns.push({
+                        palace: palaceKey,
+                        name: '騰蛇相纏',
+                        type: '凶格',
+                        description: '壬+辛組合，主糾纏、困擾',
+                        weight: this.parameters.pattern_weights.inauspicious.entangled_snake
+                    });
+                }
+                
+                if (patternText.includes('丙+癸') || patternText.includes('華蓋悖師')) {
+                    patterns.push({
+                        palace: palaceKey,
+                        name: '華蓋悖師',
+                        type: '凶格',
+                        description: '丙+癸組合，主障礙、受阻',
+                        weight: this.parameters.pattern_weights.inauspicious.canopy_rebellion
+                    });
+                }
+                
+                if (patternText.includes('己+丁') || patternText.includes('朱雀入墓')) {
+                    patterns.push({
+                        palace: palaceKey,
+                        name: '朱雀入墓',
+                        type: '凶格',
+                        description: '己+丁組合，主文書、爭議',
+                        weight: this.parameters.pattern_weights.inauspicious.vermilion_bird_entombed
+                    });
+                }
+            }
+            
+            // 檢查四害
+            if (palace.four_harm) {
+                const fourHarm = palace.four_harm.toLowerCase();
+                
+                if (fourHarm.includes('門迫')) {
+                    patterns.push({
+                        palace: palaceKey,
+                        name: '門迫',
+                        type: '四害',
+                        description: '八門門迫，主受阻、不順',
+                        weight: this.parameters.pattern_weights.four_harm_effects.door_break
+                    });
+                }
+                
+                if (fourHarm.includes('空亡')) {
+                    patterns.push({
+                        palace: palaceKey,
+                        name: '空亡',
+                        type: '四害',
+                        description: '宮位空亡，主不實、虛無',
+                        weight: this.parameters.pattern_weights.four_harm_effects.empty
+                    });
+                }
+            }
+            
+            // 檢查八門組合
+            if (palace.door_sky) {
+                const doorSky = palace.door_sky.toLowerCase();
+                
+                if (doorSky.includes('飛來橫禍') || doorSky.includes('訴訟')) {
+                    patterns.push({
+                        palace: palaceKey,
+                        name: '災門',
+                        type: '凶門',
+                        description: '杜門+乙，主意外、爭議',
+                        weight: this.parameters.pattern_weights.inauspicious.disaster_gate
+                    });
+                }
+            }
+        });
+        
+        return patterns;
+    }
+    
+    // 計算宮位能量
+    calculatePalaceEnergies(parsedData, patterns) {
+        const palaceEnergies = {};
+        
+        // 基礎能量分配
+        Object.keys(parsedData.palaces).forEach(palaceKey => {
+            const palace = parsedData.palaces[palaceKey];
+            let energy = 50; // 基礎能量值
+            
+            // 根據宮位特性調整
+            switch(palaceKey) {
+                case 'dui': // 兌宮
+                    energy += 10; // 問測者落宮，能量較強
+                    break;
+                case 'li': // 離宮
+                    energy += 5; // 南方火位
+                    break;
+                case 'kan': // 坎宮
+                    energy -= 5; // 北方水位
+                    break;
+            }
+            
+            // 應用格局影響
+            const palacePatterns = patterns.filter(p => p.palace === palaceKey);
+            palacePatterns.forEach(pattern => {
+                energy += pattern.weight * 10; // 按權重調整
+            });
+            
+            // 確保能量在合理範圍內
+            palaceEnergies[palaceKey] = Math.max(0, Math.min(100, Math.round(energy)));
+        });
+        
+        return palaceEnergies;
+    }
+    
+    // 分配球隊能量
+    allocateTeamEnergies(parsedData, palaceEnergies) {
+        // 簡化分配：主隊-左側宮位，客隊-右側宮位
+        const homePalaces = ['kan', 'gen', 'zhen']; // 坎、艮、震
+        const awayPalaces = ['li', 'kun', 'dui'];   // 離、坤、兌
+        const neutralPalaces = ['xun', 'qian'];     // 巽、乾
+        
+        let homeEnergy = 0;
+        let awayEnergy = 0;
+        let neutralEnergy = 0;
+        
+        // 計算各隊能量總和
+        homePalaces.forEach(palace => {
+            if (palaceEnergies[palace]) {
+                homeEnergy += palaceEnergies[palace];
+            }
+        });
+        
+        awayPalaces.forEach(palace => {
+            if (palaceEnergies[palace]) {
+                awayEnergy += palaceEnergies[palace];
+            }
+        });
+        
+        neutralPalaces.forEach(palace => {
+            if (palaceEnergies[palace]) {
+                neutralEnergy += palaceEnergies[palace];
+            }
+        });
+        
+        // 根據問測者落宮調整
+        if (parsedData.global.asker_palace && parsedData.global.asker_palace.includes('兌')) {
+            // 問測者在客隊宮位，客隊稍優
+            awayEnergy += 10;
         }
-      }
-      
-      // 解析八门
-      if (line.includes('八门─')) {
-        result.palaces[currentPalace].gates = [line.split('─')[1].trim()];
-      }
-      
-      // 解析九星
-      if (line.includes('九星─')) {
-        result.palaces[currentPalace].stars = [line.split('─')[1].trim()];
-      }
-      
-      // 解析八神
-      if (line.includes('八神─')) {
-        result.palaces[currentPalace].gods = [line.split('─')[1].trim()];
-      }
-    }
-    
-    return result;
-  }
-
-  mapPalaceName(chineseName) {
-    const mapping = {
-      '兑宫': 7,
-      '乾宫': 6,
-      '坎宫': 1,
-      '艮宫': 8,
-      '震宫': 3,
-      '巽宫': 4,
-      '离宫': 9,
-      '坤宫': 2
-    };
-    return mapping[chineseName] || 5; // 中宫为5
-  }
-
-  // 针对FB3200进行特殊分析
-  analyzeFB3200(qimenData) {
-    // 问测者落兑宫，主队为兑宫（7），客队为震宫（3）
-    const homePalace = 7; // 兑宫
-    const awayPalace = 3; // 震宫
-    
-    const palaces = this.parseFB3200Format(qimenData);
-    
-    // 计算各宫能量
-    Object.keys(palaces.palaces).forEach(palaceNum => {
-      const palace = palaces.palaces[palaceNum];
-      palace.energy = this.calculatePalaceEnergy(palace);
-    });
-    
-    // 计算主客队能量（考虑四害和特殊格局）
-    let homeEnergy = palaces.palaces[homePalace].energy;
-    let awayEnergy = palaces.palaces[awayPalace].energy;
-    
-    // 应用四害影响
-    const homeHarms = palaces.palaces[homePalace].fourHarms;
-    const awayHarms = palaces.palaces[awayPalace].fourHarms;
-    
-    if (homeHarms && homeHarms.length > 0) {
-      homeEnergy *= (1 - (homeHarms.length * 0.1));
-    }
-    if (awayHarms && awayHarms.length > 0) {
-      awayEnergy *= (1 - (awayHarms.length * 0.1));
-    }
-    
-    // 特殊格局影响
-    const homePatterns = palaces.palaces[homePalace].patterns;
-    const awayPatterns = palaces.palaces[awayPalace].patterns;
-    
-    homePatterns.forEach(pattern => {
-      const effect = this.getPatternEffect(pattern.pattern);
-      homeEnergy *= (1 + effect);
-    });
-    
-    awayPatterns.forEach(pattern => {
-      const effect = this.getPatternEffect(pattern.pattern);
-      awayEnergy *= (1 + effect);
-    });
-    
-    // 应用V5.1I时间参数
-    const firstHalfEnergy = this.applyTimeParameters(homeEnergy, awayEnergy, '上半场');
-    const secondHalfEnergy = this.applyTimeParameters(homeEnergy, awayEnergy, '下半场');
-    
-    return {
-      palaces,
-      energy: {
-        上半场: firstHalfEnergy,
-        下半场: secondHalfEnergy,
-        全场: {
-          主队: homeEnergy,
-          客队: awayEnergy
+        
+        // 計算總能量
+        const totalEnergy = homeEnergy + awayEnergy + neutralEnergy;
+        
+        // 計算概率
+        const homeProbability = Math.round((homeEnergy / totalEnergy) * 100);
+        const awayProbability = Math.round((awayEnergy / totalEnergy) * 100);
+        const drawProbability = Math.round((neutralEnergy / totalEnergy) * 100);
+        
+        // 能量守恆調整
+        const total = homeProbability + awayProbability + drawProbability;
+        if (total !== 100) {
+            const adjustment = 100 - total;
+            // 按比例調整
+            homeProbability += Math.round((homeProbability / total) * adjustment);
+            awayProbability += Math.round((awayProbability / total) * adjustment);
+            drawProbability += Math.round((drawProbability / total) * adjustment);
         }
-      },
-      预测: this.predictFromEnergy(firstHalfEnergy, secondHalfEnergy)
-    };
-  }
-
-  calculatePalaceEnergy(palace) {
-    let energy = 50;
-    
-    // 星门能量
-    const starWeight = this.parameters.starWeights[palace.stars[0]] || 0;
-    const gateWeight = this.parameters.gateWeights[palace.gates[0]] || 0;
-    
-    // 八神影响
-    const godEffect = palace.gods[0] ? this.parameters.godEffects[palace.gods[0]] || 1 : 1;
-    
-    // 天干影响
-    const stemEffect = palace.stems[0] ? this.parameters.stemEffects[palace.stems[0]] || 0 : 0;
-    
-    energy = (starWeight * 30 + gateWeight * 30 + stemEffect * 40) * godEffect;
-    
-    // 约束在0-100之间
-    return Math.max(0, Math.min(100, energy));
-  }
-
-  getPatternEffect(patternName) {
-    const patternEffects = {
-      '日奇被刑': -0.2,
-      '日奇入地': -0.15,
-      '小格（移荡格）': -0.1,
-      '腾蛇相缠': -0.15,
-      '干合悖师': -0.1,
-      '华盖悖师': -0.1,
-      '天乙会合': 0.15,
-      '贵人入狱': -0.1,
-      '朱雀入墓': -0.1,
-      '青龙逃走': -0.2,
-      '小蛇化龙': 0.25,
-      '白虎猖狂': -0.3
-    };
-    
-    return patternEffects[patternName] || 0;
-  }
-
-  applyTimeParameters(homeEnergy, awayEnergy, half) {
-    const params = this.parameters.timeBasedParameters[half];
-    
-    // 应用时间性参数
-    let adjustedHome = homeEnergy * (1 + params.值符增强);
-    let adjustedAway = awayEnergy * (1 + params.九天吉神);
-    
-    // 应用能量衰减
-    if (half === '下半场') {
-      adjustedHome *= (1 - params.能量衰减);
-      adjustedAway *= (1 - params.能量衰减);
+        
+        return {
+            home: {
+                energy: homeEnergy,
+                probability: Math.max(0, Math.min(100, homeProbability)),
+                palaces: homePalaces
+            },
+            away: {
+                energy: awayEnergy,
+                probability: Math.max(0, Math.min(100, awayProbability)),
+                palaces: awayPalaces
+            },
+            draw: {
+                energy: neutralEnergy,
+                probability: Math.max(0, Math.min(100, drawProbability)),
+                palaces: neutralPalaces
+            },
+            total_energy: totalEnergy
+        };
     }
     
-    return {
-      主队: adjustedHome,
-      客队: adjustedAway
-    };
-  }
-
-  predictFromEnergy(firstHalf, secondHalf) {
-    // 计算半场预测
-    const firstHalfDiff = firstHalf.主队 - firstHalf.客队;
-    const secondHalfDiff = secondHalf.主队 - secondHalf.客队;
-    
-    let firstHalfResult = '';
-    if (firstHalfDiff > 10) firstHalfResult = '主队领先';
-    else if (firstHalfDiff < -10) firstHalfResult = '客队领先';
-    else firstHalfResult = '平局';
-    
-    // 计算全场预测
-    const totalHome = (firstHalf.主队 + secondHalf.主队) / 2;
-    const totalAway = (firstHalf.客队 + secondHalf.客队) / 2;
-    const totalDiff = totalHome - totalAway;
-    
-    let fullTimeResult = '';
-    if (totalDiff > 8) fullTimeResult = '主队胜';
-    else if (totalDiff < -8) fullTimeResult = '客队胜';
-    else fullTimeResult = '平局';
-    
-    // 计算概率
-    const total = totalHome + totalAway;
-    const homeProb = Math.round((totalHome / total) * 100);
-    const drawProb = Math.round((1 - Math.abs(totalDiff) / total) * 100);
-    const awayProb = 100 - homeProb - drawProb;
-    
-    return {
-      半场预测: firstHalfResult,
-      全场预测: fullTimeResult,
-      概率: {
-        主胜: homeProb,
-        平局: drawProb,
-        客胜: awayProb
-      },
-      能量对比: {
-        半场主队: Math.round(firstHalf.主队),
-        半场客队: Math.round(firstHalf.客队),
-        全场主队: Math.round(totalHome),
-        全场客队: Math.round(totalAway)
-      }
-    };
-  }
-
-  // 技术预测（基于V5.1I算法）
-  generateTechnicalPredictionFB3200(palaces) {
-    const predictions = [];
-    
-    // 黄牌预测
-    const yellowCards = this.predictYellowCards(palaces);
-    predictions.push({
-      aspect: '黄牌',
-      prediction: `${yellowCards.total}张`,
-      details: yellowCards.details
-    });
-    
-    // 控球率预测
-    const possession = this.predictPossession(palaces);
-    predictions.push({
-      aspect: '控球率',
-      prediction: `${possession.home}% : ${possession.away}%`,
-      details: possession.details
-    });
-    
-    // 进攻数据预测
-    const attackData = this.predictAttackData(palaces);
-    predictions.push({
-      aspect: '危险进攻',
-      prediction: `${attackData.dangerHome}+ : ${attackData.dangerAway}+`,
-      details: attackData.details
-    });
-    
-    // 角球预测
-    const corners = this.predictCorners(palaces);
-    predictions.push({
-      aspect: '角球',
-      prediction: `${corners.total}个`,
-      details: corners.details
-    });
-    
-    // 射正预测
-    const shotsOnTarget = this.predictShotsOnTarget(palaces);
-    predictions.push({
-      aspect: '射正次数',
-      prediction: `${shotsOnTarget.home}-${shotsOnTarget.away}`,
-      details: shotsOnTarget.details
-    });
-    
-    return predictions;
-  }
-
-  predictYellowCards(palaces) {
-    let base = this.parameters.technicalPrediction.黄牌算法.基础黄牌;
-    
-    // 检查伤门和惊门
-    Object.values(palaces.palaces).forEach(palace => {
-      if (palace.gates.includes('伤门')) {
-        base += this.parameters.technicalPrediction.黄牌算法.伤门影响;
-      }
-      if (palace.gates.includes('惊门')) {
-        base += this.parameters.technicalPrediction.黄牌算法.惊门影响;
-      }
-    });
-    
-    // 九天吉神增加对抗
-    if (palaces.palaces[9] && palaces.palaces[9].gods.includes('九天')) {
-      base += this.parameters.technicalPrediction.黄牌算法.九天进攻增强黄牌;
+    // 應用時間參數
+    applyTimeParameters(teamEnergies, parsedData) {
+        const adjusted = JSON.parse(JSON.stringify(teamEnergies));
+        
+        // 應用時限性參數
+        const timeParams = this.parameters.three_dimensional.time_limit;
+        
+        // 上半場調整
+        adjusted.home.first_half = Math.round(teamEnergies.home.probability * (1 + timeParams.value_symbol.first_half));
+        adjusted.away.first_half = Math.round(teamEnergies.away.probability * (1 + timeParams.value_symbol.first_half));
+        adjusted.draw.first_half = Math.round(teamEnergies.draw.probability * (1 - timeParams.value_symbol.first_half * 0.5));
+        
+        // 下半場調整
+        adjusted.home.second_half = Math.round(teamEnergies.home.probability * (1 + timeParams.value_symbol.second_half));
+        adjusted.away.second_half = Math.round(teamEnergies.away.probability * (1 + timeParams.value_symbol.second_half));
+        adjusted.draw.second_half = Math.round(teamEnergies.draw.probability * (1 - timeParams.value_symbol.second_half * 0.5));
+        
+        // 確保概率在合理範圍內
+        Object.keys(adjusted).forEach(key => {
+            if (typeof adjusted[key] === 'object' && adjusted[key].first_half !== undefined) {
+                adjusted[key].first_half = Math.max(0, Math.min(100, adjusted[key].first_half));
+                adjusted[key].second_half = Math.max(0, Math.min(100, adjusted[key].second_half));
+            }
+        });
+        
+        return adjusted;
     }
     
-    // 值符激烈程度
-    if (palaces.globalInfo.zhiFu === '天辅星') {
-      base += this.parameters.technicalPrediction.黄牌算法.值符激烈程度黄牌;
+    // 計算預測概率
+    calculatePrediction(timeAdjustedEnergies, patterns) {
+        // 基礎概率
+        let homeProb = timeAdjustedEnergies.home.probability;
+        let awayProb = timeAdjustedEnergies.away.probability;
+        let drawProb = timeAdjustedEnergies.draw.probability;
+        
+        // 根據格局調整
+        patterns.forEach(pattern => {
+            if (pattern.type === '吉格') {
+                // 吉格增加對應球隊概率
+                if (['small_snake_to_dragon', 'sky_yi_meeting'].includes(pattern.name)) {
+                    // 利客的吉格
+                    awayProb += pattern.weight * 5;
+                    homeProb -= pattern.weight * 2.5;
+                    drawProb -= pattern.weight * 2.5;
+                }
+            } else if (pattern.type === '凶格') {
+                // 凶格減少對應球隊概率
+                if (['green_dragon_escape', 'day_odd_punishment'].includes(pattern.name)) {
+                    // 利主的凶格（對客隊不利）
+                    homeProb += Math.abs(pattern.weight) * 3;
+                    awayProb -= Math.abs(pattern.weight) * 5;
+                }
+            }
+        });
+        
+        // 應用能量轉換模型
+        const conversionParams = this.parameters.three_dimensional.energy_conversion;
+        if (conversionParams.conservation) {
+            const total = homeProb + awayProb + drawProb;
+            if (total !== 100) {
+                const adjustment = 100 - total;
+                homeProb += (homeProb / total) * adjustment;
+                awayProb += (awayProb / total) * adjustment;
+                drawProb += (drawProb / total) * adjustment;
+            }
+        }
+        
+        // 四捨五入
+        homeProb = Math.round(homeProb);
+        awayProb = Math.round(awayProb);
+        drawProb = Math.round(drawProb);
+        
+        // 確保總和為100
+        const total = homeProb + awayProb + drawProb;
+        if (total !== 100) {
+            const diff = 100 - total;
+            // 調整最大概率項
+            if (homeProb >= awayProb && homeProb >= drawProb) {
+                homeProb += diff;
+            } else if (awayProb >= homeProb && awayProb >= drawProb) {
+                awayProb += diff;
+            } else {
+                drawProb += diff;
+            }
+        }
+        
+        // 確定推薦投注
+        let recommendedBet = '';
+        let confidence = 0;
+        
+        const thresholds = this.parameters.prediction_thresholds;
+        
+        if (homeProb >= thresholds.home_win_min && homeProb > awayProb && homeProb > drawProb) {
+            recommendedBet = '主勝';
+            confidence = homeProb / 100;
+        } else if (awayProb >= thresholds.away_win_min && awayProb > homeProb && awayProb > drawProb) {
+            recommendedBet = '客勝';
+            confidence = awayProb / 100;
+        } else if (drawProb >= thresholds.draw_min) {
+            recommendedBet = '和局';
+            confidence = drawProb / 100;
+        } else {
+            recommendedBet = '數據不足';
+            confidence = 0.3;
+        }
+        
+        // 確定信心等級
+        let confidenceLevel = '低';
+        if (confidence >= thresholds.confidence_high) {
+            confidenceLevel = '高';
+        } else if (confidence >= thresholds.confidence_medium) {
+            confidenceLevel = '中';
+        }
+        
+        return {
+            home_probability: homeProb,
+            away_probability: awayProb,
+            draw_probability: drawProb,
+            recommended_bet: recommendedBet,
+            confidence: Math.round(confidence * 100),
+            confidence_level: confidenceLevel,
+            first_half: {
+                home: timeAdjustedEnergies.home.first_half,
+                away: timeAdjustedEnergies.away.first_half,
+                draw: timeAdjustedEnergies.draw.first_half
+            },
+            second_half: {
+                home: timeAdjustedEnergies.home.second_half,
+                away: timeAdjustedEnergies.away.second_half,
+                draw: timeAdjustedEnergies.draw.second_half
+            }
+        };
     }
     
-    return {
-      total: Math.round(base),
-      details: '基于伤门、惊门、九天、值符的综合计算'
-    };
-  }
-
-  predictPossession(palaces) {
-    let homeAdvantage = 0;
-    let awayAdvantage = 0;
-    
-    // 主队（兑宫7）分析
-    const homePalace = palaces.palaces[7];
-    if (homePalace) {
-      if (homePalace.fourHarms && homePalace.fourHarms.includes('空亡')) {
-        homeAdvantage -= 15; // 空亡严重削弱
-      }
-      if (homePalace.stars.includes('天芮星')) {
-        homeAdvantage += 5; // 天芮星主静
-      }
+    // 預測技術統計
+    predictTechnicalStats(parsedData, patterns) {
+        const techParams = this.parameters.technical_algorithms;
+        
+        // 基礎值
+        let yellowCards = techParams.yellow_cards.base_cards;
+        let possessionHome = 50;
+        let possessionAway = 50;
+        let dangerousAttacks = 80;
+        let corners = 6;
+        
+        // 根據格局調整
+        patterns.forEach(pattern => {
+            if (pattern.name === '災門' || pattern.name === '門迫') {
+                // 增加黃牌
+                yellowCards += pattern.name === '災門' ? 3 : 1;
+            }
+            
+            if (pattern.name === '死門門迫') {
+                // 減少控球
+                possessionHome -= 15;
+                possessionAway += 15;
+            }
+            
+            if (pattern.name === '九天吉神') {
+                // 增加危險進攻
+                dangerousAttacks += 30;
+            }
+        });
+        
+        // 應用算法參數
+        yellowCards += techParams.yellow_cards.injury_door_effect;
+        yellowCards += techParams.yellow_cards.shock_door_effect;
+        yellowCards += techParams.yellow_cards.nine_sky_effect;
+        yellowCards += techParams.yellow_cards.value_symbol_effect;
+        
+        possessionHome += techParams.possession.death_door_effect * 10;
+        possessionHome += techParams.possession.star_entombed_effect * 10;
+        possessionHome += techParams.possession.value_symbol_effect * 10;
+        
+        dangerousAttacks += techParams.attack.nine_sky_dangerous_attack * 100;
+        
+        corners += techParams.corners.rest_door_coefficient * 10;
+        
+        // 確保合理範圍
+        yellowCards = Math.max(0, Math.min(15, Math.round(yellowCards)));
+        possessionHome = Math.max(20, Math.min(80, Math.round(possessionHome)));
+        possessionAway = 100 - possessionHome;
+        dangerousAttacks = Math.max(20, Math.min(200, Math.round(dangerousAttacks)));
+        corners = Math.max(0, Math.min(20, Math.round(corners)));
+        
+        return {
+            yellow_cards: {
+                total: yellowCards,
+                home: Math.round(yellowCards * 0.4),
+                away: Math.round(yellowCards * 0.6)
+            },
+            possession: {
+                home: possessionHome,
+                away: possessionAway
+            },
+            dangerous_attacks: {
+                total: dangerousAttacks,
+                home: Math.round(dangerousAttacks * 0.6),
+                away: Math.round(dangerousAttacks * 0.4)
+            },
+            corners: {
+                total: corners,
+                home: Math.round(corners * 0.7),
+                away: Math.round(corners * 0.3)
+            },
+            shots_on_target: {
+                total: Math.round(dangerousAttacks * 0.3),
+                home: Math.round(dangerousAttacks * 0.3 * 0.6),
+                away: Math.round(dangerousAttacks * 0.3 * 0.4)
+            }
+        };
     }
     
-    // 客队（震宫3）分析
-    const awayPalace = palaces.palaces[3];
-    if (awayPalace) {
-      if (awayPalace.fourHarms && awayPalace.fourHarms.includes('门迫')) {
-        awayAdvantage -= 10;
-      }
-      if (awayPalace.gods.includes('九地')) {
-        awayAdvantage += 5; // 九地主稳固
-      }
+    // 生成分析報告
+    generateAnalysisReport(parsedData, patterns, prediction, technicalPrediction) {
+        const report = {
+            summary: '',
+            key_patterns: [],
+            time_analysis: {},
+            energy_analysis: {},
+            recommendations: []
+        };
+        
+        // 生成摘要
+        const topPatterns = patterns.slice(0, 3);
+        const patternNames = topPatterns.map(p => p.name).join('、');
+        
+        report.summary = `本局奇門分析顯示，比賽格局呈現${patternNames}等特徵。`;
+        report.summary += ` 預測結果：主勝${prediction.home_probability}%，和局${prediction.draw_probability}%，客勝${prediction.away_probability}%。`;
+        report.summary += ` 推薦投注：${prediction.recommended_bet}，信心指數${prediction.confidence}%。`;
+        
+        // 關鍵格局
+        report.key_patterns = patterns.map(pattern => ({
+            name: pattern.name,
+            type: pattern.type,
+            palace: pattern.palace,
+            description: pattern.description,
+            impact: pattern.weight > 0 ? '正面' : '負面',
+            weight: Math.abs(pattern.weight)
+        }));
+        
+        // 時間分析
+        report.time_analysis = {
+            first_half: {
+                trend: prediction.first_half.home > prediction.first_half.away ? '主隊優勢' : '客隊優勢',
+                key_period: '15-30分鐘',
+                note: '時限性參數顯示上半場能量集中'
+            },
+            second_half: {
+                trend: prediction.second_half.home > prediction.second_half.away ? '主隊優勢' : '客隊優勢',
+                key_period: '60-75分鐘',
+                note: '時效性參數顯示下半場可能轉折'
+            }
+        };
+        
+        // 能量分析
+        report.energy_analysis = {
+            total_energy: '均衡',
+            home_strength: prediction.home_probability >= 40 ? '強' : '中',
+            away_strength: prediction.away_probability >= 40 ? '強' : '中',
+            conversion_possible: this.parameters.three_dimensional.energy_conversion.extreme_conversion_prob > 0.1
+        };
+        
+        // 投注建議
+        report.recommendations = [
+            {
+                type: '主要',
+                bet: prediction.recommended_bet,
+                confidence: prediction.confidence_level,
+                reasoning: '基於三維參數體系綜合分析'
+            }
+        ];
+        
+        // 添加技術投注建議
+        if (technicalPrediction.yellow_cards.total >= 8) {
+            report.recommendations.push({
+                type: '技術',
+                bet: '黃牌大',
+                confidence: '中',
+                reasoning: '格局顯示爭議較多'
+            });
+        }
+        
+        if (Math.abs(technicalPrediction.possession.home - 50) >= 15) {
+            report.recommendations.push({
+                type: '技術',
+                bet: '控球率單邊',
+                confidence: '中',
+                reasoning: '死門門迫影響控球分配'
+            });
+        }
+        
+        return report;
     }
     
-    // 全局值符影响
-    if (palaces.globalInfo.zhiFu === '天辅星') {
-      // 天辅星主文教，对控球有正面影响
-      homeAdvantage += 8;
-      awayAdvantage += 8;
+    // 分析FB3200特定模板
+    analyzeFB3200(qimenData) {
+        // FB3200特定分析邏輯
+        const analysis = this.analyzeMatch(qimenData);
+        
+        // 添加FB3200特定解讀
+        if (analysis.success) {
+            analysis.fb3200_specific = {
+                note: '根據FB3200模板，兌宮四害嚴重，客隊優勢明顯',
+                key_observation: '天芮星+太陰組合，利客不利主',
+                expected_score: '0-1或1-2'
+            };
+        }
+        
+        return analysis;
     }
-    
-    // 基础50:50，加上优劣势调整
-    let homePossession = 50 + homeAdvantage;
-    let awayPossession = 50 + awayAdvantage;
-    
-    // 归一化
-    const total = homePossession + awayPossession;
-    homePossession = Math.round((homePossession / total) * 100);
-    awayPossession = Math.round((awayPossession / total) * 100);
-    
-    return {
-      home: homePossession,
-      away: awayPossession,
-      details: `主队兑宫空亡削弱控球，客队震宫有九地稳固`
-    };
-  }
-
-  predictAttackData(palaces) {
-    let homeDanger = 60;
-    let awayDanger = 40;
-    
-    // 主队（兑宫7）进攻分析
-    const homePalace = palaces.palaces[7];
-    if (homePalace) {
-      // 杜门主闭塞，进攻受阻
-      if (homePalace.gates.includes('杜门')) {
-        homeDanger -= 20;
-      }
-      // 太阴主隐秘，可能偷袭
-      if (homePalace.gods.includes('太阴')) {
-        homeDanger += 10;
-      }
-    }
-    
-    // 客队（震宫3）进攻分析
-    const awayPalace = palaces.palaces[3];
-    if (awayPalace) {
-      // 开门主开放，进攻机会多
-      if (awayPalace.gates.includes('开门')) {
-        awayDanger += 15;
-      }
-      // 九天吉神大幅增强进攻
-      if (awayPalace.gods.includes('九天')) {
-        awayDanger += 25;
-      }
-    }
-    
-    // 全局天辅星影响
-    if (palaces.globalInfo.zhiFu === '天辅星') {
-      // 天辅星对技术型进攻有利
-      homeDanger += 10;
-      awayDanger += 10;
-    }
-    
-    return {
-      dangerHome: homeDanger,
-      dangerAway: awayDanger,
-      details: '客队九天+开门组合预示强势进攻，主队杜门限制进攻'
-    };
-  }
-
-  predictCorners(palaces) {
-    let baseCorners = 5;
-    
-    // 检查休门（限制角球）
-    let hasXiuMen = false;
-    Object.values(palaces.palaces).forEach(palace => {
-      if (palace.gates.includes('休门')) {
-        hasXiuMen = true;
-      }
-    });
-    
-    if (hasXiuMen) {
-      baseCorners -= 1;
-    }
-    
-    // 开门门迫减少角球
-    if (palaces.palaces[3] && palaces.palaces[3].fourHarms.includes('门迫')) {
-      baseCorners -= 1;
-    }
-    
-    // 景门门迫轻微减少
-    if (palaces.palaces[6] && palaces.palaces[6].fourHarms.includes('门迫')) {
-      baseCorners -= 0.5;
-    }
-    
-    return {
-      total: Math.round(baseCorners),
-      range: `${Math.max(3, Math.round(baseCorners - 1))}-${Math.round(baseCorners + 1)}`,
-      details: '休门限制角球，开门门迫减少机会'
-    };
-  }
-
-  predictShotsOnTarget(palaces) {
-    let homeShots = 4;
-    let awayShots = 3;
-    
-    // 主队杜门限制射正
-    if (palaces.palaces[7] && palaces.palaces[7].gates.includes('杜门')) {
-      homeShots -= 2;
-    }
-    
-    // 客队九天大幅增强射正
-    if (palaces.palaces[3] && palaces.palaces[3].gods.includes('九天')) {
-      awayShots += 2;
-    }
-    
-    // 值符天辅星提升技术精度
-    if (palaces.globalInfo.zhiFu === '天辅星') {
-      homeShots += 1;
-      awayShots += 1;
-    }
-    
-    return {
-      home: Math.max(0, homeShots),
-      away: awayShots,
-      details: '主队杜门限制，客队九天增强'
-    };
-  }
 }
+
+// 創建全局實例
+window.qimenEngine = new QimenEngine();

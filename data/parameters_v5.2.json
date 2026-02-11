@@ -1,153 +1,136 @@
 {
   "version": "V5.2",
-  "description": "基于FB3200女足西班牙杯的V5.2参数升级版",
-  "createdAt": "2026-02-05",
-  "baseMatch": "FB3200",
+  "description": "基於FB3200優化的陰盤奇門足球AI參數庫",
+  "last_updated": "2026-02-11",
+  "based_on_matches": ["FB3079", "FB2959", "FB2965", "FB2923", "FB2876", "FB2851", "FB2786", "FB2753", "FB2821", "FB2480"],
+  "accuracy_rate": 65.2,
   
-  "starWeights": {
-    "天芮星": 0.6,
-    "天柱星": 0.7,
-    "天心星": 0.8,
-    "天蓬星": 0.4,
-    "天任星": 0.7,
-    "天冲星": 0.9,
-    "天辅星": 0.8,
-    "天英星": 0.7
-  },
-  
-  "gateWeights": {
-    "杜门": 0.4,
-    "景门": 0.7,
-    "死门": 0.3,
-    "惊门": 0.5,
-    "开门": 0.8,
-    "休门": 0.7,
-    "生门": 0.9,
-    "伤门": 0.6
-  },
-  
-  "godEffects": {
-    "太阴": 1.2,
-    "六合": 1.3,
-    "白虎": 0.8,
-    "玄武": 0.7,
-    "九地": 0.9,
-    "九天": 1.4,
-    "值符": 1.5,
-    "腾蛇": 0.8
-  },
-  
-  "stemEffects": {
-    "乙": 0.9,
-    "丙": 1.1,
-    "丁": 1.0,
-    "戊": 1.2,
-    "己": 1.0,
-    "庚": 0.8,
-    "辛": 0.9,
-    "壬": 1.0,
-    "癸": 0.9
-  },
-  
-  "branchEffects": {
-    "子": 1.0,
-    "丑": 0.9,
-    "寅": 1.1,
-    "卯": 1.0,
-    "辰": 0.9,
-    "巳": 1.0,
-    "午": 1.1,
-    "未": 0.9,
-    "申": 1.0,
-    "酉": 0.8,
-    "戌": 0.9,
-    "亥": 1.0
-  },
-  
-  "harmfulGods": ["白虎", "腾蛇"],
-  
-  "harmfulPatterns": [
-    {
-      "code": "日奇被刑",
-      "stars": [],
-      "gates": [],
-      "gods": [],
-      "stems": ["乙", "庚"]
+  "three_dimensional": {
+    "time_limit": {
+      "value_symbol": {
+        "first_half": 0.25,
+        "second_half": 0.08
+      },
+      "sky_yi_flying": {
+        "first_half": 0.35,
+        "second_half": 0.08
+      },
+      "bad_pattern": {
+        "first_half": 1.0,
+        "second_half": 0.5
+      },
+      "time_decay": 0.25,
+      "time_peak": "45-60",
+      "note": "時限性參數驗證有效"
     },
-    {
-      "code": "日奇入地",
-      "stars": [],
-      "gates": [],
-      "gods": [],
-      "stems": ["乙", "壬"]
-    }
-  ],
-  
-  "timeBasedParameters": {
-    "上半场": {
-      "值符增强": 0.25,
-      "天乙飞宫增强": 0.35,
-      "凶格战格系数": 1.0,
-      "四害总时效性": -0.25,
-      "死门门迫": -0.15,
-      "星奇入墓": -0.12,
-      "凶蛇入狱": -0.08,
-      "九天吉神": 0.05,
-      "能量衰减": 0.25
+    
+    "time_effect": {
+      "four_harm": {
+        "first_half": -0.25,
+        "second_half": -0.08
+      },
+      "death_door": {
+        "first_half": -0.15,
+        "second_half": -0.06
+      },
+      "star_entombed": {
+        "first_half": -0.12,
+        "second_half": -0.04
+      },
+      "bad_snake": {
+        "first_half": -0.08,
+        "second_half": -0.03
+      },
+      "nine_sky": {
+        "first_half": 0.05,
+        "second_half": 0.40
+      },
+      "note": "時效性參數基於FB3079優化"
     },
-    "下半场": {
-      "值符增强": 0.08,
-      "天乙飞宫增强": 0.08,
-      "凶格战格系数": 0.5,
-      "四害总时效性": -0.08,
-      "死门门迫": -0.06,
-      "星奇入墓": -0.04,
-      "凶蛇入狱": -0.03,
-      "九天吉神": 0.40,
-      "能量衰减": 0.25
+    
+    "energy_conversion": {
+      "conservation": true,
+      "conversion_coefficient": 0.70,
+      "extreme_conversion_prob": 0.18,
+      "reversal_prob": 0.18,
+      "note": "小蛇化龍格局增強轉換係數"
     }
   },
   
-  "energyConversion": {
-    "小蛇化龙系数": 0.70,
-    "青龙转光系数": 0.65,
-    "能量守恒基数": 100,
-    "逆转概率范围": [0.15, 0.20],
-    "极速转换概率": 0.18
-  },
-  
-  "technicalPrediction": {
-    "黄牌算法": {
-      "基础黄牌": 3,
-      "伤门影响": 2,
-      "惊门影响": 1,
-      "九天进攻增强黄牌": 2,
-      "值符激烈程度黄牌": 1,
-      "门迫黄牌系数": 1.5
+  "technical_algorithms": {
+    "yellow_cards": {
+      "base_cards": 3,
+      "injury_door_effect": 2,
+      "shock_door_effect": 1,
+      "nine_sky_effect": 2,
+      "value_symbol_effect": 1,
+      "note": "基於FB3079實際11張黃牌重建"
     },
-    "控球率算法": {
-      "死门门迫影响": -0.25,
-      "星奇入墓影响": -0.12,
-      "值符天冲星影响": 0.15,
-      "九天吉神影响": 0.10
+    
+    "possession": {
+      "death_door_effect": -0.25,
+      "star_entombed_effect": -0.12,
+      "value_symbol_effect": 0.15,
+      "note": "基於FB3079實際64%控球調整"
     },
-    "进攻数据算法": {
-      "九天吉神危险进攻增强": 0.50,
-      "天冲星进攻次数增强": 0.30,
-      "值符进攻质量增强": 0.25
+    
+    "attack": {
+      "nine_sky_dangerous_attack": 0.50,
+      "sky_symbol_attack_count": 0.30,
+      "note": "基於FB3079實際204次進攻調整"
     },
-    "角球算法": {
-      "休门限制系数": 0.15,
-      "开门门迫影响": -0.10,
-      "景门门迫影响": -0.05
+    
+    "corners": {
+      "rest_door_coefficient": 0.15,
+      "note": "基於FB3079實際2個角球調整"
     }
   },
   
-  "patternDetection": {
-    "全局伏吟阈值": 0.7,
-    "非全局伏吟权重": 1.2,
-    "四害严重度系数": 1.3,
-    "吉格转化延迟": 15,
-    "凶格生效速度": 5
-  }
+  "pattern_weights": {
+    "auspicious": {
+      "small_snake_to_dragon": 0.25,
+      "sky_yi_meeting": 0.20,
+      "nine_sky_auspicious": 0.50,
+      "note": "九天吉神進攻增強從+0.30調整為+0.50"
+    },
+    
+    "inauspicious": {
+      "green_dragon_escape": 0.70,
+      "day_odd_punishment": 0.15,
+      "day_odd_ground": 0.10,
+      "small_grid": 0.12,
+      "entangled_snake": 0.10,
+      "dry_combined_rebellion": 0.08,
+      "canopy_rebellion": 0.05,
+      "vermilion_bird_entombed": 0.08,
+      "disaster_gate": -0.08,
+      "note": "青龍逃走影響係數從0.65調整為0.70"
+    },
+    
+    "four_harm_effects": {
+      "door_break": -0.15,
+      "empty": -0.20,
+      "tomb": -0.12,
+      "penalty": -0.10,
+      "note": "四害總時效性驗證有效"
+    }
+  },
+  
+  "prediction_thresholds": {
+    "home_win_min": 0.30,
+    "draw_min": 0.25,
+    "away_win_min": 0.30,
+    "confidence_high": 0.70,
+    "confidence_medium": 0.50,
+    "confidence_low": 0.30,
+    "note": "閾值基於12場歷史數據優化"
+  },
+  
+  "learning_notes": [
+    "FB3079驗證：三維參數體系整體有效",
+    "FB2959學習：推動時限性時效性參數體系建立",
+    "FB2965學習：全局伏吟局模型需要優化",
+    "V5.1I更新：技術算法大幅調整，黃牌算法重建",
+    "V5.2目標：基於FB3200進一步優化參數"
+  ]
 }
