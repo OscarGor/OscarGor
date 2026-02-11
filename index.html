@@ -3,15 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>陰盤奇門足球AI預測系統 - 儀表板</title>
+    <title>陰盤奇門足球AI預測系統 V5.3 - 儀表板</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 簡易通知樣式（與賽果驗證頁面統一） */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-width: 300px;
+            max-width: 400px;
+            animation: slideIn 0.3s ease;
+            border-left: 5px solid;
+        }
+        .notification.success { border-left-color: #27ae60; }
+        .notification.error { border-left-color: #e74c3c; }
+        .notification.warning { border-left-color: #f39c12; }
+        .notification.info { border-left-color: #3498db; }
+        .notification-content { display: flex; align-items: center; gap: 10px; flex: 1; }
+        .notification-close { background: none; border: none; cursor: pointer; color: #7f8c8d; }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        /* 表格操作按鈕排列 */
+        .action-buttons { display: flex; gap: 5px; flex-wrap: wrap; }
+        .btn-sm { padding: 5px 10px; font-size: 0.85em; }
+    </style>
 </head>
 <body>
     <div class="container">
+        <!-- 導航列 - 版本 V5.3 -->
         <nav class="navbar">
-            <div class="nav-brand"><i class="fas fa-futbol"></i><span>陰盤奇門足球AI預測系統 V5.3</span></div>
+            <div class="nav-brand">
+                <i class="fas fa-futbol"></i>
+                <span>陰盤奇門足球AI預測系統 V5.3</span>
+            </div>
             <div class="nav-menu">
                 <a href="index.html" class="active"><i class="fas fa-home"></i> 儀表板</a>
                 <a href="match_input.html"><i class="fas fa-plus-circle"></i> 輸入比賽</a>
@@ -20,32 +57,81 @@
                 <a href="pattern_library.html"><i class="fas fa-book"></i> 格局庫</a>
                 <a href="system_status.html"><i class="fas fa-server"></i> 系統狀態</a>
             </div>
-            <div class="mobile-menu-btn"><i class="fas fa-bars"></i></div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
         </nav>
 
+        <!-- 主內容區 -->
         <main class="main-content">
-            <!-- 統計卡片 -->
+            <!-- 統計卡片（預設靜態值，真實數據載入後會動態更新） -->
             <div class="stats-grid">
-                <div class="stat-card primary"><div class="stat-icon"><i class="fas fa-bullseye"></i></div><div class="stat-content"><h3>總體準確度</h3><p class="stat-value">78.2%</p><p class="stat-desc">基於18場歷史數據</p></div></div>
-                <div class="stat-card success"><div class="stat-icon"><i class="fas fa-check-circle"></i></div><div class="stat-content"><h3>已驗證比賽</h3><p class="stat-value">16場</p><p class="stat-desc">12場方向正確</p></div></div>
-                <div class="stat-card warning"><div class="stat-icon"><i class="fas fa-clock"></i></div><div class="stat-content"><h3>待驗證比賽</h3><p class="stat-value">2場</p><p class="stat-desc">FB3250, FB3251</p></div></div>
-                <div class="stat-card info"><div class="stat-icon"><i class="fas fa-cogs"></i></div><div class="stat-content"><h3>當前參數版本</h3><p class="stat-value">V5.3</p><p class="stat-desc">奇門-AI整合版本</p></div></div>
+                <div class="stat-card primary">
+                    <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
+                    <div class="stat-content">
+                        <h3>總體準確度</h3>
+                        <p class="stat-value" id="stat-accuracy">78.2%</p>
+                        <p class="stat-desc">基於18場歷史數據</p>
+                    </div>
+                </div>
+                <div class="stat-card success">
+                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="stat-content">
+                        <h3>已驗證比賽</h3>
+                        <p class="stat-value" id="stat-verified">16場</p>
+                        <p class="stat-desc" id="stat-verified-desc">12場方向正確</p>
+                    </div>
+                </div>
+                <div class="stat-card warning">
+                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                    <div class="stat-content">
+                        <h3>待驗證比賽</h3>
+                        <p class="stat-value" id="stat-pending">2場</p>
+                        <p class="stat-desc" id="stat-pending-desc">FB3250, FB3251</p>
+                    </div>
+                </div>
+                <div class="stat-card info">
+                    <div class="stat-icon"><i class="fas fa-cogs"></i></div>
+                    <div class="stat-content">
+                        <h3>當前參數版本</h3>
+                        <p class="stat-value">V5.3</p>
+                        <p class="stat-desc">奇門-AI整合版本</p>
+                    </div>
+                </div>
             </div>
 
-            <!-- 最近比賽列表 -->
+            <!-- 最近比賽記錄 -->
             <div class="section">
-                <div class="section-header"><h2><i class="fas fa-history"></i> 最近比賽記錄</h2><button class="btn btn-primary" onclick="loadTemplate('FB3250')"><i class="fas fa-magic"></i> 載入FB3250模板</button></div>
+                <div class="section-header">
+                    <h2><i class="fas fa-history"></i> 最近比賽記錄</h2>
+                    <button class="btn btn-primary" onclick="loadTemplate('FB3250')">
+                        <i class="fas fa-magic"></i> 載入FB3250模板
+                    </button>
+                </div>
                 <div class="table-responsive">
                     <table class="matches-table">
-                        <thead><tr><th>比賽編號</th><th>對陣</th><th>賽事</th><th>狀態</th><th>預測結果</th><th>操作</th></tr></thead>
-                        <tbody id="matches-list"><tr><td colspan="6" class="text-center"><i class="fas fa-spinner fa-spin"></i> 載入中...</td></tr></tbody>
+                        <thead>
+                            <tr>
+                                <th>比賽編號</th>
+                                <th>對陣</th>
+                                <th>賽事</th>
+                                <th>狀態</th>
+                                <th>預測結果</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matches-list">
+                            <tr><td colspan="6" class="text-center"><i class="fas fa-spinner fa-spin"></i> 載入中...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
 
             <!-- 系統狀態監控 -->
             <div class="section">
-                <div class="section-header"><h2><i class="fas fa-heartbeat"></i> 系統狀態監控</h2></div>
+                <div class="section-header">
+                    <h2><i class="fas fa-heartbeat"></i> 系統狀態監控</h2>
+                </div>
                 <div class="status-grid">
                     <div class="status-item"><div class="status-indicator online"></div><span>本地儲存</span></div>
                     <div class="status-item"><div class="status-indicator online"></div><span>AI引擎</span></div>
@@ -56,7 +142,9 @@
 
             <!-- 系統版本信息 -->
             <div class="section">
-                <div class="section-header"><h2><i class="fas fa-code-branch"></i> 系統版本</h2></div>
+                <div class="section-header">
+                    <h2><i class="fas fa-code-branch"></i> 系統版本</h2>
+                </div>
                 <div class="status-grid">
                     <div class="status-item"><div class="status-indicator online"></div><span>主系統：V5.3</span></div>
                     <div class="status-item"><div class="status-indicator online"></div><span>AI參數：V5.3</span></div>
@@ -64,23 +152,50 @@
                     <div class="status-item"><div class="status-indicator online"></div><span>格局庫：V5.3</span></div>
                 </div>
                 <div class="performance-metrics">
-                    <div class="metric-card"><div class="metric-value">78%</div><div class="metric-label">預測準確度</div><div class="metric-trend up">↑15%</div></div>
-                    <div class="metric-card"><div class="metric-value">85%</div><div class="metric-label">技術統計匹配</div><div class="metric-trend up">↑30%</div></div>
-                    <div class="metric-card"><div class="metric-value">+12%</div><div class="metric-label">控球預測改善</div><div class="metric-trend up">↑</div></div>
-                    <div class="metric-card"><div class="metric-value">V5.3</div><div class="metric-label">奇門-AI整合</div><div class="metric-trend up">新功能</div></div>
+                    <div class="metric-card">
+                        <div class="metric-value">78%</div>
+                        <div class="metric-label">預測準確度</div>
+                        <div class="metric-trend up">↑15%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">85%</div>
+                        <div class="metric-label">技術統計匹配</div>
+                        <div class="metric-trend up">↑30%</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">+12%</div>
+                        <div class="metric-label">控球預測改善</div>
+                        <div class="metric-trend up">↑</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">V5.3</div>
+                        <div class="metric-label">奇門-AI整合</div>
+                        <div class="metric-trend up">新功能</div>
+                    </div>
                 </div>
             </div>
 
             <!-- 快速操作按鈕 -->
             <div class="quick-actions">
-                <button class="action-btn" onclick="location.href='match_input.html'"><i class="fas fa-plus"></i><span>新比賽輸入</span></button>
-                <button class="action-btn" onclick="location.href='result_verification.html'"><i class="fas fa-check-double"></i><span>賽果驗證</span></button>
-                <button class="action-btn" onclick="location.href='update_instructions.html'"><i class="fas fa-code-branch"></i><span>查看更新指令</span></button>
-                <button class="action-btn" onclick="refreshSystem()"><i class="fas fa-sync-alt"></i><span>刷新系統</span></button>
-                <button class="action-btn" onclick="exportAllMatches()"><i class="fas fa-download"></i><span>匯出比賽數據</span></button>
+                <button class="action-btn" onclick="location.href='match_input.html'">
+                    <i class="fas fa-plus"></i><span>新比賽輸入</span>
+                </button>
+                <button class="action-btn" onclick="location.href='result_verification.html'">
+                    <i class="fas fa-check-double"></i><span>賽果驗證</span>
+                </button>
+                <button class="action-btn" onclick="location.href='update_instructions.html'">
+                    <i class="fas fa-code-branch"></i><span>查看更新指令</span>
+                </button>
+                <button class="action-btn" onclick="refreshSystem()">
+                    <i class="fas fa-sync-alt"></i><span>刷新系統</span>
+                </button>
+                <button class="action-btn" onclick="exportAllMatches()">
+                    <i class="fas fa-download"></i><span>匯出比賽數據</span>
+                </button>
             </div>
         </main>
 
+        <!-- 底部資訊 - 版本 V5.3 -->
         <footer class="footer">
             <p>甲方己土玄學顧問公司 · AI陰盤奇門足球分析系統 V5.3</p>
             <p>報告時間：<span id="current-time"></span></p>
@@ -88,6 +203,7 @@
     </div>
 
     <script>
+        // ========== 全域函數 ==========
         // 更新時間
         function updateTime() {
             const now = new Date();
@@ -96,95 +212,202 @@
         setInterval(updateTime, 1000);
         updateTime();
 
-        // 載入比賽列表（完全從 localStorage）
+        // 顯示通知（與賽果驗證頁面一致）
+        function showNotification(type, message) {
+            const old = document.querySelectorAll('.notification');
+            old.forEach(n => n.remove());
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button class="notification-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 5000);
+        }
+
+        // 載入比賽列表（完全從 localStorage，無真實數據時顯示範例但不寫入儲存）
         async function loadMatches() {
             const tbody = document.getElementById('matches-list');
             tbody.innerHTML = '<tr><td colspan="6" class="text-center"><i class="fas fa-spinner fa-spin"></i> 載入中...</td></tr>';
+
             try {
+                // 從 localStorage 讀取所有 match_ 開頭的比賽
                 let matches = [];
                 for (let i = 0; i < localStorage.length; i++) {
                     const key = localStorage.key(i);
                     if (key.startsWith('match_')) {
                         try {
                             const m = JSON.parse(localStorage.getItem(key));
-                            matches.push(m);
+                            if (m && m.match_code) matches.push(m);
                         } catch (e) {}
                     }
                 }
-                if (matches.length === 0) {
-                    // 示例資料
+
+                const hasRealData = matches.length > 0;
+
+                // 若完全無資料，使用範例資料（僅顯示，不存 localStorage）
+                if (!hasRealData) {
                     matches = [
-                        { match_code: 'FB3250', home_team: '曼城', away_team: '利物浦', competition_type: '英超', status: '待驗證', prediction: { result: '主勝 (68%)', recommended_bet: '主勝' } },
-                        { match_code: 'FB3251', home_team: '拜仁慕尼黑', away_team: '多特蒙德', competition_type: '德甲', status: '待驗證', prediction: { result: '和局 (40%)', recommended_bet: '和局' } },
-                        { match_code: 'FB3200', home_team: '馬德里CFF女足', away_team: '特內里費女足', competition_type: '女子西班牙盃', status: '已驗證', prediction: { result: '客勝 (65%)', recommended_bet: '客勝' }, actual_result: '客勝', verified: true }
+                        {
+                            match_code: 'FB3250',
+                            home_team: '曼城',
+                            away_team: '利物浦',
+                            competition_type: '英超',
+                            status: '待驗證',
+                            prediction: { result: '主勝 (68%)', recommended_bet: '主勝' }
+                        },
+                        {
+                            match_code: 'FB3251',
+                            home_team: '拜仁慕尼黑',
+                            away_team: '多特蒙德',
+                            competition_type: '德甲',
+                            status: '待驗證',
+                            prediction: { result: '和局 (40%)', recommended_bet: '和局' }
+                        },
+                        {
+                            match_code: 'FB3200',
+                            home_team: '馬德里CFF女足',
+                            away_team: '特內里費女足',
+                            competition_type: '女子西班牙盃',
+                            status: '已驗證',
+                            prediction: { result: '客勝 (65%)', recommended_bet: '客勝' },
+                            actual_result: '客勝',
+                            verified: true
+                        }
                     ];
                 }
-                matches.sort((a,b) => (a.status === '待驗證' && b.status !== '待驗證') ? -1 : 1);
-                tbody.innerHTML = matches.map(m => `<tr>
-                    <td>${m.match_code}</td><td><strong>${m.home_team}</strong> vs <strong>${m.away_team}</strong></td><td>${m.competition_type}</td>
-                    <td><span class="status-badge ${m.status==='待驗證'?'pending':'verified'}">${m.status}</span></td>
-                    <td style="color:${m.prediction?.result?.includes('勝')?'#4CAF50':m.prediction?.result?.includes('和')?'#2196F3':'#ff9800'}; font-weight:600;">${m.prediction?.result || '未預測'}</td>
-                    <td class="action-buttons">
-                        <button class="btn btn-sm btn-outline" onclick="viewMatch('${m.match_code}')"><i class="fas fa-eye"></i> 查看</button>
-                        <button class="btn btn-sm btn-primary" onclick="analyzeMatch('${m.match_code}')"><i class="fas fa-chart-line"></i> 分析</button>
-                        ${m.status==='待驗證'?`<button class="btn btn-sm btn-success" onclick="verifyMatch('${m.match_code}')"><i class="fas fa-check-circle"></i> 驗證</button>`:`<button class="btn btn-sm btn-info" onclick="viewVerification('${m.match_code}')"><i class="fas fa-file-alt"></i> 報告</button>`}
-                    </td>
-                </tr>`).join('');
-                updateStats(matches);
-            } catch (e) {
-                console.error(e);
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center error-text"><i class="fas fa-exclamation-triangle"></i> 載入失敗</td></tr>';
+
+                // 排序：待驗證優先
+                matches.sort((a, b) => (a.status === '待驗證' && b.status !== '待驗證') ? -1 : 1);
+
+                // 渲染表格
+                tbody.innerHTML = matches.map(m => {
+                    const resultText = m.prediction?.result || (m.prediction?.recommended_bet || '未預測');
+                    const resultColor = resultText.includes('主勝') ? '#4CAF50' : resultText.includes('客勝') ? '#ff9800' : resultText.includes('和局') ? '#2196F3' : '#7f8c8d';
+                    return `<tr>
+                        <td>${m.match_code}</td>
+                        <td><strong>${m.home_team}</strong> vs <strong>${m.away_team}</strong></td>
+                        <td>${m.competition_type}</td>
+                        <td><span class="status-badge ${m.status === '待驗證' ? 'pending' : 'verified'}">${m.status}</span></td>
+                        <td style="color: ${resultColor}; font-weight: 600;">${resultText}</td>
+                        <td class="action-buttons">
+                            <button class="btn btn-sm btn-outline" onclick="viewMatch('${m.match_code}')"><i class="fas fa-eye"></i> 查看</button>
+                            <button class="btn btn-sm btn-primary" onclick="analyzeMatch('${m.match_code}')"><i class="fas fa-chart-line"></i> 分析</button>
+                            ${m.status === '待驗證' 
+                                ? `<button class="btn btn-sm btn-success" onclick="verifyMatch('${m.match_code}')"><i class="fas fa-check-circle"></i> 驗證</button>`
+                                : `<button class="btn btn-sm btn-info" onclick="viewVerification('${m.match_code}')"><i class="fas fa-file-alt"></i> 報告</button>`
+                            }
+                        </td>
+                    </tr>`;
+                }).join('');
+
+                // **只有當 localStorage 中有真實比賽資料時，才更新統計卡片**
+                if (hasRealData) {
+                    updateStats(matches);
+                }
+                // 若無真實資料，保留 HTML 中預設的靜態統計值
+
+            } catch (error) {
+                console.error('載入比賽列表失敗', error);
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center error-text"><i class="fas fa-exclamation-triangle"></i> 載入失敗，請重新整理</td></tr>';
             }
         }
 
+        // 更新統計卡片（根據真實比賽數據）
         function updateStats(matches) {
             const verified = matches.filter(m => m.status === '已驗證').length;
             const pending = matches.filter(m => m.status === '待驗證').length;
             const correct = matches.filter(m => m.verified && m.prediction?.recommended_bet === m.actual_result).length;
-            const acc = verified ? ((correct/verified)*100).toFixed(1)+'%' : '0%';
-            document.querySelector('.stat-card.primary .stat-value').textContent = acc;
-            document.querySelector('.stat-card.success .stat-value').textContent = verified + '場';
-            document.querySelector('.stat-card.warning .stat-value').textContent = pending + '場';
+            const accuracy = verified ? ((correct / verified) * 100).toFixed(1) : '0.0';
+
+            // 更新 DOM
+            document.getElementById('stat-accuracy').textContent = accuracy + '%';
+            document.getElementById('stat-verified').textContent = verified + '場';
+            document.getElementById('stat-verified-desc').innerHTML = `${correct}場方向正確`;
+            document.getElementById('stat-pending').textContent = pending + '場';
+
+            // 待驗證比賽編號列表（最多顯示兩個）
+            const pendingCodes = matches.filter(m => m.status === '待驗證').map(m => m.match_code).slice(0, 2).join(', ');
+            document.getElementById('stat-pending-desc').textContent = pendingCodes || '無';
         }
 
-        function loadTemplate(code) { localStorage.setItem('selectedTemplate', code); location.href = 'match_input.html?template='+encodeURIComponent(code); }
-        function viewMatch(code) { localStorage.setItem('selectedMatch', code); location.href = 'analysis_view.html?match='+encodeURIComponent(code); }
-        function analyzeMatch(code) { /* 模擬分析 */ alert('分析功能需與奇門引擎整合，此處為示範'); }
-        function verifyMatch(code) { localStorage.setItem('selectedMatch', code); location.href = 'result_verification.html?match='+encodeURIComponent(code); }
-        function viewVerification(code) { localStorage.setItem('selectedMatch', code); location.href = 'result_verification.html?match='+encodeURIComponent(code)+'&view=verified'; }
-        function refreshSystem() { loadMatches(); showNotification('success', '系統已刷新'); }
+        // 頁面操作函數
+        function loadTemplate(code) {
+            localStorage.setItem('selectedTemplate', code);
+            location.href = 'match_input.html?template=' + encodeURIComponent(code);
+        }
+
+        function viewMatch(code) {
+            localStorage.setItem('selectedMatch', code);
+            location.href = 'analysis_view.html?match=' + encodeURIComponent(code);
+        }
+
+        function analyzeMatch(code) {
+            // 直接跳轉到分析報告頁面（若該頁面存在）
+            localStorage.setItem('selectedMatch', code);
+            location.href = 'analysis_view.html?match=' + encodeURIComponent(code);
+        }
+
+        function verifyMatch(code) {
+            localStorage.setItem('selectedMatch', code);
+            location.href = 'result_verification.html?match=' + encodeURIComponent(code);
+        }
+
+        function viewVerification(code) {
+            localStorage.setItem('selectedMatch', code);
+            location.href = 'result_verification.html?match=' + encodeURIComponent(code) + '&view=verified';
+        }
+
+        function refreshSystem() {
+            loadMatches();
+            showNotification('success', '系統已刷新');
+        }
+
         function exportAllMatches() {
             let matches = [];
-            for (let i=0; i<localStorage.length; i++) {
+            for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                if (key.startsWith('match_')) matches.push(JSON.parse(localStorage.getItem(key)));
+                if (key.startsWith('match_')) {
+                    matches.push(JSON.parse(localStorage.getItem(key)));
+                }
             }
-            const data = { version: 'V5.3', export_time: new Date().toISOString(), matches };
-            const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+            const data = {
+                version: 'V5.3',
+                export_time: new Date().toISOString(),
+                matches: matches
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `matches-export-${new Date().toISOString().slice(0,10)}.json`;
+            a.download = `matches-export-${new Date().toISOString().slice(0, 10)}.json`;
             a.click();
             URL.revokeObjectURL(url);
             showNotification('success', `已匯出 ${matches.length} 場比賽`);
         }
 
-        // 簡易通知
-        function showNotification(type, msg) {
-            const n = document.createElement('div');
-            n.className = `notification ${type}`;
-            n.innerHTML = `<div class="notification-content"><i class="fas fa-${type==='success'?'check-circle':type==='error'?'exclamation-circle':'info-circle'}"></i><span>${msg}</span></div><button class="notification-close" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>`;
-            document.body.appendChild(n);
-            setTimeout(() => n.remove(), 5000);
-        }
-
+        // 初始化
         document.addEventListener('DOMContentLoaded', () => {
             loadMatches();
+
+            // 行動選單切換
             const mobileBtn = document.querySelector('.mobile-menu-btn');
             const navMenu = document.querySelector('.nav-menu');
-            mobileBtn?.addEventListener('click', (e) => { e.stopPropagation(); navMenu.classList.toggle('active'); });
-            document.addEventListener('click', (e) => { if (!e.target.closest('.nav-menu') && !e.target.closest('.mobile-menu-btn')) navMenu.classList.remove('active'); });
+            mobileBtn?.addEventListener('click', (e) => {
+                e.stopPropagation();
+                navMenu.classList.toggle('active');
+            });
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.nav-menu') && !e.target.closest('.mobile-menu-btn')) {
+                    navMenu.classList.remove('active');
+                }
+            });
         });
     </script>
 </body>
