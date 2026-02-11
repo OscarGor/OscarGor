@@ -1,403 +1,221 @@
-{
-  "patterns": [
-    {
-      "code": "日奇被刑",
-      "name": "日奇被刑",
-      "type": "凶格",
-      "category": "乙庚组合",
-      "description": "乙+庚，日奇被刑，主夫妻怀私，各怀异心，夫妻不睦，财产争讼，合作不利。",
-      "effect": -0.2,
-      "timeInfluence": {
-        "上半场": -0.15,
-        "下半场": -0.05
+[
+  {
+    "pattern_id": "pattern_001",
+    "pattern_name": "青龍逃走",
+    "pattern_type": "inauspicious",
+    "description": "乙+辛組合，主變動、失誤、錯失機會",
+    "combination": "乙+辛",
+    "interpretation": "青龍逃走格局主變動不居，在足球比賽中可能表現為頻繁失誤、錯失得分機會、防守漏洞等。",
+    "parameters": {
+      "weight": -0.70,
+      "time_effect": {
+        "first_half": 1.0,
+        "second_half": 0.5,
+        "decay": 0.25
       },
-      "detectionRule": {
-        "tianPan": ["乙"],
-        "diPan": ["庚"]
-      },
-      "footballInterpretation": "主队内部不和，配合失误多，进攻组织混乱",
-      "exampleMatches": ["FB3200", "FB3079"]
+      "affects": ["進攻失誤", "防守漏洞", "機會錯失", "位置混亂"],
+      "intensity": "高"
     },
-    {
-      "code": "日奇入地",
-      "name": "日奇入地",
-      "type": "凶格",
-      "category": "乙壬组合",
-      "description": "乙+壬，日奇入地，尊卑悖乱，官讼是非，有人谋害，暗箭难防。",
-      "effect": -0.15,
-      "timeInfluence": {
-        "上半场": -0.10,
-        "下半场": -0.03
-      },
-      "detectionRule": {
-        "tianPan": ["乙"],
-        "diPan": ["壬"]
-      },
-      "footballInterpretation": "意外失球，防守失误，门将低级错误",
-      "exampleMatches": ["FB3200"]
+    "football_mapping": {
+      "offense": "進攻組織混亂，傳球失誤多",
+      "defense": "防守漏洞明顯，容易被反擊",
+      "opportunities": "錯失得分機會",
+      "cards": "可能導致黃牌"
     },
-    {
-      "code": "小格",
-      "name": "小格（移荡格）",
-      "type": "凶格",
-      "category": "庚壬组合",
-      "description": "庚+壬，小格，主远行迷失道路，求谋破财，疾病，音信阻隔。",
-      "effect": -0.1,
-      "timeInfluence": {
-        "上半场": -0.08,
-        "下半场": -0.02
-      },
-      "detectionRule": {
-        "tianPan": ["庚"],
-        "diPan": ["壬"]
-      },
-      "footballInterpretation": "进攻线路受阻，传球成功率低，球员跑位混乱",
-      "exampleMatches": ["FB3200"]
+    "validation_stats": {
+      "occurrence_count": 5,
+      "success_rate": 60.0,
+      "last_occurrence": "FB3079",
+      "accuracy_trend": "穩定"
     },
-    {
-      "code": "腾蛇相缠",
-      "name": "腾蛇相缠",
-      "type": "凶格",
-      "category": "壬辛组合",
-      "description": "壬+辛，腾蛇相缠，纵得吉门，亦不能安宁，若有谋望，被人欺瞒。",
-      "effect": -0.15,
-      "timeInfluence": {
-        "上半场": -0.10,
-        "下半场": -0.05
+    "created_at": "2026-01-15",
+    "last_updated": "2026-02-10"
+  },
+  {
+    "pattern_id": "pattern_002",
+    "pattern_name": "小蛇化龍",
+    "pattern_type": "auspicious",
+    "description": "壬+戊組合，主轉折、成長、逆轉機會",
+    "combination": "壬+戊",
+    "interpretation": "小蛇化龍格局主由弱轉強，在足球比賽中可能表現為下半場逆轉、突然爆發、關鍵時刻進球等。",
+    "parameters": {
+      "weight": 0.25,
+      "time_effect": {
+        "first_half": 0.4,
+        "second_half": 0.6,
+        "peak_time": "60-75"
       },
-      "detectionRule": {
-        "tianPan": ["壬"],
-        "diPan": ["辛"]
-      },
-      "footballInterpretation": "裁判误判，对手假摔，比赛过程争议多",
-      "exampleMatches": ["FB3200"]
+      "affects": ["下半場轉折", "逆轉可能", "機會把握", "突然爆發"],
+      "intensity": "中"
     },
-    {
-      "code": "干合悖师",
-      "name": "干合悖师",
-      "type": "凶格",
-      "category": "辛丙组合",
-      "description": "辛+丙，干合悖师，荧惑出现，占雨无，占晴旱，占事因财致讼。",
-      "effect": -0.1,
-      "timeInfluence": {
-        "上半场": -0.07,
-        "下半场": -0.03
-      },
-      "detectionRule": {
-        "tianPan": ["辛"],
-        "diPan": ["丙"]
-      },
-      "footballInterpretation": "因奖金分配问题影响士气，球员个人主义突出",
-      "exampleMatches": ["FB3200"]
+    "football_mapping": {
+      "offense": "下半場進攻增強",
+      "defense": "防守穩定性提高",
+      "opportunities": "關鍵機會把握能力強",
+      "momentum": "比賽勢頭轉換"
     },
-    {
-      "code": "华盖悖师",
-      "name": "华盖悖师",
-      "type": "凶格",
-      "category": "丙癸组合",
-      "description": "丙+癸，华盖悖师，阴人害事，灾祸频生，事多不利。",
-      "effect": -0.1,
-      "timeInfluence": {
-        "上半场": -0.06,
-        "下半场": -0.04
-      },
-      "detectionRule": {
-        "tianPan": ["丙"],
-        "diPan": ["癸"]
-      },
-      "footballInterpretation": "伤病困扰，替补球员表现不佳，战术被克制",
-      "exampleMatches": ["FB3200"]
+    "validation_stats": {
+      "occurrence_count": 3,
+      "success_rate": 75.0,
+      "last_occurrence": "FB3079",
+      "accuracy_trend": "上升"
     },
-    {
-      "code": "天乙会合",
-      "name": "天乙会合",
-      "type": "吉格",
-      "category": "癸戊组合",
-      "description": "癸+戊，天乙会合，吉门宜求财，婚姻喜美，吉人赞助成合。若门凶迫制，反祸官非。",
-      "effect": 0.15,
-      "timeInfluence": {
-        "上半场": 0.08,
-        "下半场": 0.07
+    "created_at": "2026-01-20",
+    "last_updated": "2026-02-10"
+  },
+  {
+    "pattern_id": "pattern_003",
+    "pattern_name": "日奇被刑",
+    "pattern_type": "inauspicious",
+    "description": "乙+庚組合，主意外、訴訟、飛來橫禍",
+    "combination": "乙+庚",
+    "interpretation": "日奇被刑格局主意外事件，在足球比賽中可能表現為意外失球、爭議判罰、球員受傷等。",
+    "parameters": {
+      "weight": -0.15,
+      "time_effect": {
+        "first_half": 0.6,
+        "second_half": 0.4
       },
-      "detectionRule": {
-        "tianPan": ["癸"],
-        "diPan": ["戊"]
-      },
-      "footballInterpretation": "团队配合默契，战术执行到位，关键传球成功",
-      "exampleMatches": ["FB3200"]
+      "affects": ["意外事件", "黃牌紅牌", "爭議判罰", "球員受傷"],
+      "intensity": "低"
     },
-    {
-      "code": "贵人入狱",
-      "name": "贵人入狱",
-      "type": "凶格",
-      "category": "戊己组合",
-      "description": "戊+己，贵人入狱，公私皆不利，图谋不遂。",
-      "effect": -0.1,
-      "timeInfluence": {
-        "上半场": -0.05,
-        "下半场": -0.05
-      },
-      "detectionRule": {
-        "tianPan": ["戊"],
-        "diPan": ["己"]
-      },
-      "footballInterpretation": "核心球员被盯死，明星球员发挥失常",
-      "exampleMatches": []
+    "football_mapping": {
+      "incidents": "意外失球或事件",
+      "discipline": "容易吃牌",
+      "controversy": "爭議判罰",
+      "injuries": "球員受傷風險"
     },
-    {
-      "code": "朱雀入墓",
-      "name": "朱雀入墓",
-      "type": "凶格",
-      "category": "己丁组合",
-      "description": "己+丁，朱雀入墓，文状词讼，先曲后直，文书迟滞。",
-      "effect": -0.1,
-      "timeInfluence": {
-        "上半场": -0.04,
-        "下半场": -0.06
-      },
-      "detectionRule": {
-        "tianPan": ["己"],
-        "diPan": ["丁"]
-      },
-      "footballInterpretation": "上半场表现低迷，下半场逐渐恢复，VAR介入改判",
-      "exampleMatches": ["FB3200"]
+    "validation_stats": {
+      "occurrence_count": 2,
+      "success_rate": 50.0,
+      "last_occurrence": "FB2959",
+      "accuracy_trend": "波動"
     },
-    {
-      "code": "青龙逃走",
-      "name": "青龙逃走",
-      "type": "凶格",
-      "category": "乙辛组合",
-      "description": "乙+辛，青龙逃走，人亡财破，奴仆拐带，六畜皆伤，测婚主女随人逃。",
-      "effect": -0.2,
-      "timeInfluence": {
-        "上半场": -0.15,
-        "下半场": -0.05
+    "created_at": "2026-01-25",
+    "last_updated": "2026-02-05"
+  },
+  {
+    "pattern_id": "pattern_004",
+    "pattern_name": "天乙飛宮",
+    "pattern_type": "auspicious",
+    "description": "戊+庚組合，主動盪、位置變化、快速反擊",
+    "combination": "戊+庚",
+    "interpretation": "天乙飛宮格局主動態變化，在足球比賽中可能表現為快速反擊、位置靈活調整、突然得分等。",
+    "parameters": {
+      "weight": 0.20,
+      "time_effect": {
+        "first_half": 0.8,
+        "second_half": 0.2
       },
-      "detectionRule": {
-        "tianPan": ["乙"],
-        "diPan": ["辛"]
-      },
-      "footballInterpretation": "错失绝佳机会，门将扑救脱手，乌龙球",
-      "exampleMatches": ["FB3079"]
+      "affects": ["快速反擊", "位置變化", "突然得分", "戰術靈活"],
+      "intensity": "中"
     },
-    {
-      "code": "小蛇化龙",
-      "name": "小蛇化龙",
-      "type": "吉格",
-      "category": "壬戊组合",
-      "description": "壬+戊，小蛇化龙，男人发达，女人产婴，凡人遇此主发达。",
-      "effect": 0.25,
-      "timeInfluence": {
-        "上半场": 0.10,
-        "下半场": 0.15
-      },
-      "detectionRule": {
-        "tianPan": ["壬"],
-        "diPan": ["戊"]
-      },
-      "footballInterpretation": "下半场逆转，年轻球员爆发，战术调整见效",
-      "exampleMatches": ["FB3079"]
+    "football_mapping": {
+      "counter_attack": "快速反擊能力強",
+      "positioning": "位置變化靈活",
+      "surprise": "突然得分能力",
+      "tactics": "戰術調整有效"
     },
-    {
-      "code": "白虎猖狂",
-      "name": "白虎猖狂",
-      "type": "凶格",
-      "category": "辛乙组合",
-      "description": "辛+乙，白虎猖狂，家败人亡，远行多殃，尊长不喜，车船俱伤。",
-      "effect": -0.3,
-      "timeInfluence": {
-        "上半场": -0.20,
-        "下半场": -0.10
-      },
-      "detectionRule": {
-        "tianPan": ["辛"],
-        "diPan": ["乙"]
-      },
-      "footballInterpretation": "红牌罚下，严重犯规，大规模冲突",
-      "exampleMatches": []
+    "validation_stats": {
+      "occurrence_count": 4,
+      "success_rate": 80.0,
+      "last_occurrence": "FB3079",
+      "accuracy_trend": "穩定"
     },
-    {
-      "code": "青龙转光",
-      "name": "青龙转光",
-      "type": "吉格",
-      "category": "乙丙组合",
-      "description": "乙+丙，青龙转光，贵人升迁，常人威旺，门吉事吉，门凶事凶。",
-      "effect": 0.2,
-      "timeInfluence": {
-        "上半场": 0.10,
-        "下半场": 0.10
+    "created_at": "2026-01-30",
+    "last_updated": "2026-02-10"
+  },
+  {
+    "pattern_id": "pattern_005",
+    "pattern_name": "星奇入墓",
+    "pattern_type": "inauspicious",
+    "description": "丁+己組合，主隱藏、受制、效率低下",
+    "combination": "丁+己",
+    "interpretation": "星奇入墓格局主受限壓制，在足球比賽中可能表現為進攻受限、效率低下、機會浪費等。",
+    "parameters": {
+      "weight": -0.18,
+      "time_effect": {
+        "first_half": 0.7,
+        "second_half": 0.3
       },
-      "detectionRule": {
-        "tianPan": ["乙"],
-        "diPan": ["丙"]
-      },
-      "footballInterpretation": "团队士气高涨，流畅进攻，多点开花",
-      "exampleMatches": ["FB2480", "FB2821"]
+      "affects": ["進攻受限", "效率低下", "機會浪費", "受制於人"],
+      "intensity": "中"
     },
-    {
-      "code": "太白逢星",
-      "name": "太白逢星",
-      "type": "凶格",
-      "category": "庚丁组合",
-      "description": "庚+丁，太白逢星，因私匿起官司，门吉有救，门凶事必凶。",
-      "effect": -0.15,
-      "timeInfluence": {
-        "上半场": -0.10,
-        "下半场": -0.05
-      },
-      "detectionRule": {
-        "tianPan": ["庚"],
-        "diPan": ["丁"]
-      },
-      "footballInterpretation": "球员纪律问题，场外因素干扰，点球争议",
-      "exampleMatches": ["FB2821"]
+    "football_mapping": {
+      "offense": "進攻組織困難",
+      "efficiency": "得分效率低",
+      "waste": "浪費得分機會",
+      "control": "被對手壓制"
     },
-    {
-      "code": "奇游禄位",
-      "name": "奇游禄位",
-      "type": "吉格",
-      "category": "乙戊组合",
-      "description": "乙+戊，奇游禄位，门宫相生，主富贵荣华，名利双收。",
-      "effect": 0.18,
-      "timeInfluence": {
-        "上半场": 0.09,
-        "下半场": 0.09
-      },
-      "detectionRule": {
-        "tianPan": ["乙"],
-        "diPan": ["戊"]
-      },
-      "footballInterpretation": "主场优势明显，球迷支持强大，场地适应好",
-      "exampleMatches": []
+    "validation_stats": {
+      "occurrence_count": 3,
+      "success_rate": 40.0,
+      "last_occurrence": "FB3079",
+      "accuracy_trend": "穩定"
     },
-    {
-      "code": "天乙飞宫",
-      "name": "天乙飞宫",
-      "type": "凶格",
-      "category": "戊庚组合",
-      "description": "戊+庚，天乙飞宫，吉事不吉，凶事更凶，求财无利，测病主凶。",
-      "effect": -0.2,
-      "timeInfluence": {
-        "上半场": -0.15,
-        "下半场": -0.05
+    "created_at": "2026-02-01",
+    "last_updated": "2026-02-10"
+  },
+  {
+    "pattern_id": "pattern_006",
+    "pattern_name": "九天吉神",
+    "pattern_type": "auspicious",
+    "description": "九天臨宮，主進攻、擴張、優勢擴大",
+    "combination": "九天",
+    "interpretation": "九天吉神格局主進攻擴張，在足球比賽中可能表現為進攻強勢、優勢擴大、得分機會多等。",
+    "parameters": {
+      "weight": 0.50,
+      "time_effect": {
+        "first_half": 0.3,
+        "second_half": 0.7
       },
-      "detectionRule": {
-        "tianPan": ["戊"],
-        "diPan": ["庚"]
-      },
-      "footballInterpretation": "客场虫现象，不适应场地，裁判尺度不利",
-      "exampleMatches": ["FB3079"]
+      "affects": ["進攻增強", "優勢擴大", "得分機會", "控制比賽"],
+      "intensity": "高"
     },
-    {
-      "code": "三奇入墓",
-      "name": "三奇入墓",
-      "type": "凶格",
-      "category": "乙丙丁墓",
-      "description": "乙奇临乾六宫，丙奇临艮八宫，丁奇临巽四宫，为三奇入墓，百事不宜，谋事尽休。",
-      "effect": -0.25,
-      "timeInfluence": {
-        "上半场": -0.18,
-        "下半场": -0.07
-      },
-      "detectionRule": {
-        "condition": "乙在乾宫 或 丙在艮宫 或 丁在巽宫"
-      },
-      "footballInterpretation": "核心球员状态低迷，关键位置发挥失常",
-      "exampleMatches": ["FB3079"]
+    "football_mapping": {
+      "offense": "進攻強勢有效",
+      "dominance": "比賽控制力強",
+      "opportunities": "創造大量機會",
+      "momentum": "比賽勢頭強勁"
     },
-    {
-      "code": "门迫",
-      "name": "八门门迫",
-      "type": "凶格",
-      "category": "门克宫",
-      "description": "八门克所落之宫，吉门克宫吉不就，凶门克宫事更凶。",
-      "effect": -0.15,
-      "timeInfluence": {
-        "上半场": -0.10,
-        "下半场": -0.05
-      },
-      "detectionRule": {
-        "condition": "门克宫五行"
-      },
-      "footballInterpretation": "战术被克制，比赛节奏失控，控制力下降",
-      "exampleMatches": ["FB3200"]
+    "validation_stats": {
+      "occurrence_count": 6,
+      "success_rate": 85.0,
+      "last_occurrence": "FB3079",
+      "accuracy_trend": "上升"
     },
-    {
-      "code": "击刑",
-      "name": "六仪击刑",
-      "type": "凶格",
-      "category": "天干击刑",
-      "description": "甲子戊落震三宫，甲戌己落坤二宫，甲申庚落艮八宫，甲午辛落离九宫，甲辰壬落巽四宫，甲寅癸落巽四宫。",
-      "effect": -0.18,
-      "timeInfluence": {
-        "上半场": -0.12,
-        "下半场": -0.06
+    "created_at": "2026-02-05",
+    "last_updated": "2026-02-10"
+  },
+  {
+    "pattern_id": "pattern_007",
+    "pattern_name": "朱雀入墓",
+    "pattern_type": "inauspicious",
+    "description": "己+丁組合，主文書錯誤、溝通不暢",
+    "combination": "己+丁",
+    "interpretation": "朱雀入墓格局主溝通問題，在足球比賽中可能表現為戰術執行錯誤、團隊配合不暢、傳球失誤等。",
+    "parameters": {
+      "weight": -0.12,
+      "time_effect": {
+        "first_half": 0.5,
+        "second_half": 0.5
       },
-      "detectionRule": {
-        "condition": "六仪落在击刑宫位"
-      },
-      "footballInterpretation": "球员带伤上场，关键位置缺人，战术调整受限",
-      "exampleMatches": ["FB3200"]
+      "affects": ["戰術錯誤", "配合不暢", "傳球失誤", "溝通問題"],
+      "intensity": "低"
     },
-    {
-      "code": "空亡",
-      "name": "旬空空亡",
-      "type": "凶格",
-      "category": "时空",
-      "description": "旬空之宫，遇吉不吉，遇凶更凶，主事情落空，求财不得。",
-      "effect": -0.25,
-      "timeInfluence": {
-        "上半场": -0.15,
-        "下半场": -0.10
-      },
-      "detectionRule": {
-        "condition": "宫位逢旬空"
-      },
-      "footballInterpretation": "机会把握不住，空门不进，关键判罚落空",
-      "exampleMatches": ["FB3200"]
+    "football_mapping": {
+      "tactics": "戰術執行有誤",
+      "teamwork": "團隊配合問題",
+      "passing": "傳球失誤多",
+      "communication": "場上溝通不暢"
     },
-    {
-      "code": "值符吉神",
-      "name": "值符临宫",
-      "type": "吉格",
-      "category": "八神",
-      "description": "值符为八神之首，所到之处，百恶消散，诸凶皆避。",
-      "effect": 0.25,
-      "timeInfluence": {
-        "上半场": 0.15,
-        "下半场": 0.10
-      },
-      "detectionRule": {
-        "condition": "值符落某宫"
-      },
-      "footballInterpretation": "团队领袖作用明显，关键时刻有球员站出来",
-      "exampleMatches": ["FB3200"]
+    "validation_stats": {
+      "occurrence_count": 2,
+      "success_rate": 55.0,
+      "last_occurrence": "FB3200",
+      "accuracy_trend": "新驗證"
     },
-    {
-      "code": "九天吉神",
-      "name": "九天临宫",
-      "type": "吉格",
-      "category": "八神",
-      "description": "九天为威悍之神，性刚好动，主扬兵布阵，行军出征。",
-      "effect": 0.30,
-      "timeInfluence": {
-        "上半场": 0.10,
-        "下半场": 0.20
-      },
-      "detectionRule": {
-        "condition": "九天落某宫"
-      },
-      "footballInterpretation": "攻势足球，高位逼抢，进攻欲望强烈",
-      "exampleMatches": ["FB3200", "FB3079"]
-    }
-  ],
-  
-  "statistics": {
-    "totalPatterns": 22,
-    "goodPatterns": 5,
-    "badPatterns": 17,
-    "mostFrequent": "门迫",
-    "highestAccuracy": "小蛇化龙",
-    "lastUpdated": "2026-02-05"
+    "created_at": "2026-02-11",
+    "last_updated": "2026-02-11"
   }
-}
+]

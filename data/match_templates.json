@@ -1,29 +1,234 @@
 {
-  "FB3200": {
-    "match_code": "FB3200",
-    "home_team": "马德里CFF女足",
-    "away_team": "特内里费女足",
-    "competition_type": "女子西班牙杯",
-    "match_time": "2026-02-05T02:00:00",
-    "qimen_data": "足球资料如下\n球赛编号：FB3200\n主队：马德里CFF女足\n客队：特内里费女足\n赛事类别：女子西班牙杯\n比赛时间为2026-02-05 02:00:00\n\n奇门遁甲信息如下（由师傅提供，不需要修改，注意网页一定要显示出奇门信息，AI会记录奇门格局库）\n（中宫寄值符，主客队定位方法\n问测者宫位为基点作主队\n对冲宫位为客队）\n公历：2026年2月5日2时0分\n农历：2025年12月18日 阳遁3局\n四柱：丙午 庚寅 庚戌 丁丑\n时空亡：甲戌旬  申酉空　马星：亥\n值符：天辅星  值使：杜门\n\n问测者落宫为兑宫(西方)\n四害：空亡（深挖到坎宫）\n乙天干临：绝 位\n庚天干临：帝旺 位\n天盘─ 乙\n天盘寄宫─ 庚\n地盘─ 壬\n天盘＋天盘寄宫─ 乙 + 庚：日奇被刑\n天盘＋地盘─ 乙 + 壬：日奇入地\n天盘寄宫＋地盘─ 庚 + 壬：小格（移荡格）\n八门─ 杜门\n八门+天盘─ 杜 + 乙：飞来横祸(诉讼)\n九星─ 天芮星\n八神─ 太阴\n\n乾宫(西北方)\n四害：景门门迫\n壬天干临：冠带 临官 马星位\n天盘─ 壬\n地盘─ 辛\n天盘＋地盘─ 壬 + 辛：腾蛇相缠\n八门─ 景门\n八门+天盘─ 景 + 壬：因贼牵连\n九星─ 天柱星\n八神─ 六合\n\n坎宫(北方)\n四害：死门门迫\n辛天干临：长生 位\n天盘─ 辛\n地盘─ 丙\n天盘＋地盘─ 辛 + 丙：干合悖师\n八门─ 死门\n八门+天盘─ 死 + 辛：盗贼猖狂，失物难回\n九星─ 天心星\n八神─ 白虎\n\n艮宫(东北方)\n丙天干临：长生 养 位\n天盘─ 丙\n地盘─ 癸\n天盘＋地盘─ 丙 + 癸：华盖悖师\n八门─ 惊门\n八门+天盘─ 惊 + 丙：文书弃约惊恐\n九星─ 天蓬星\n\n震宫(东方)\n四害：开门门迫 戊击刑\n癸天干临：长生 位\n天盘─ 癸\n地盘─ 戊\n天盘＋地盘─ 癸 + 戊：天乙会合\n八门─ 开门\n八门+天盘─ 开 + 癸：女性失财小凶\n九星─ 天任星\n八神─ 九地\n\n巽宫(东南方)\n戊天干临：冠带 临官 位\n天盘─ 戊\n地盘─ 己\n天盘＋地盘─ 戊 + 己：贵人入狱\n八门─ 休门\n八门+天盘─ 休 + 戊：财物可得\n九星─ 天冲星\n八神─ 九天\n\n离宫(南方)\n己天干临：临官 位\n天盘─ 己\n地盘─ 丁\n天盘＋地盘─ 己 + 丁：朱雀入墓\n八门─ 生门\n八门+天盘─ 生 + 己：主得贵人扶持\n九星─ 天辅星\n八神─ 值符",
-    "status": "pending",
-    "template_type": "女足杯赛"
+  "templates": {
+    "FB3200": {
+      "match_code": "FB3200",
+      "home_team": "馬德里CFF女足",
+      "away_team": "特內里費女足",
+      "competition_type": "女子西班牙盃",
+      "match_time": "2026-02-05 02:00:00",
+      "qimen_data": {
+        "global_info": {
+          "gregorian_date": "2026年2月5日2時0分",
+          "lunar_date": "2025年12月18日 陽遁3局",
+          "four_pillars": "丙午 庚寅 庚戌 丁丑",
+          "time_vacant": "甲戌旬 申酉空",
+          "horse_star": "亥",
+          "value_symbol": "天輔星",
+          "value_messenger": "杜門"
+        },
+        "palaces": {
+          "dui": {
+            "name": "兌宮",
+            "direction": "西方",
+            "four_harms": "空亡（深挖到坎宮）",
+            "heavenly_stems": {
+              "yi": "絕位",
+              "geng": "帝旺位"
+            },
+            "patterns": [
+              "天盤─ 乙",
+              "天盤寄宮─ 庚",
+              "地盤─ 壬",
+              "天盤＋天盤寄宮─ 乙 + 庚：日奇被刑",
+              "天盤＋地盤─ 乙 + 壬：日奇入地",
+              "天盤寄宮＋地盤─ 庚 + 壬：小格（移蕩格）",
+              "八門─ 杜門",
+              "八門+天盤─ 杜 + 乙：飛來橫禍(訴訟)",
+              "九星─ 天芮星",
+              "八神─ 太陰"
+            ]
+          },
+          "qian": {
+            "name": "乾宮",
+            "direction": "西北方",
+            "four_harms": "景門門迫",
+            "heavenly_stems": {
+              "ren": "冠帶 臨官 馬星位"
+            },
+            "patterns": [
+              "天盤─ 壬",
+              "地盤─ 辛",
+              "天盤＋地盤─ 壬 + 辛：騰蛇相纏",
+              "八門─ 景門",
+              "八門+天盤─ 景 + 壬：因賊牽連",
+              "九星─ 天柱星",
+              "八神─ 六合"
+            ]
+          },
+          "kan": {
+            "name": "坎宮",
+            "direction": "北方",
+            "four_harms": "死門門迫",
+            "heavenly_stems": {
+              "xin": "長生位"
+            },
+            "patterns": [
+              "天盤─ 辛",
+              "地盤─ 丙",
+              "天盤＋地盤─ 辛 + 丙：幹合悖師",
+              "八門─ 死門",
+              "八門+天盤─ 死 + 辛：盜賊猖狂，失物難回",
+              "九星─ 天心星",
+              "八神─ 白虎"
+            ]
+          },
+          "gen": {
+            "name": "艮宮",
+            "direction": "東北方",
+            "heavenly_stems": {
+              "bing": "長生 養位"
+            },
+            "patterns": [
+              "天盤─ 丙",
+              "地盤─ 癸",
+              "天盤＋地盤─ 丙 + 癸：華蓋悖師",
+              "八門─ 驚門",
+              "八門+天盤─ 驚 + 丙：文書棄約驚恐",
+              "九星─ 天蓬星"
+            ]
+          },
+          "zhen": {
+            "name": "震宮",
+            "direction": "東方",
+            "four_harms": "開門門迫 戊擊刑",
+            "heavenly_stems": {
+              "gui": "長生位"
+            },
+            "patterns": [
+              "天盤─ 癸",
+              "地盤─ 戊",
+              "天盤＋地盤─ 癸 + 戊：天乙會合",
+              "八門─ 開門",
+              "八門+天盤─ 開 + 癸：女性失財小凶",
+              "九星─ 天任星",
+              "八神─ 九地"
+            ]
+          },
+          "xun": {
+            "name": "巽宮",
+            "direction": "東南方",
+            "heavenly_stems": {
+              "wu": "冠帶 臨官位"
+            },
+            "patterns": [
+              "天盤─ 戊",
+              "地盤─ 己",
+              "天盤＋地盤─ 戊 + 己：貴人入獄",
+              "八門─ 休門",
+              "八門+天盤─ 休 + 戊：財物可得",
+              "九星─ 天沖星",
+              "八神─ 九天"
+            ]
+          },
+          "li": {
+            "name": "離宮",
+            "direction": "南方",
+            "heavenly_stems": {
+              "ji": "臨官位"
+            },
+            "patterns": [
+              "天盤─ 己",
+              "地盤─ 丁",
+              "天盤＋地盤─ 己 + 丁：朱雀入墓",
+              "八門─ 生門",
+              "八門+天盤─ 生 + 己：主得貴人扶持",
+              "九星─ 天輔星",
+              "八神─ 值符"
+            ]
+          }
+        },
+        "additional_notes": "問測者落宮為兌宮(西方)"
+      },
+      "actual_results": {
+        "scores": {
+          "half_time": "0:1",
+          "full_time": "0:1"
+        },
+        "technical_stats": {
+          "attacks": "124進攻73",
+          "yellow_cards": "0黃牌1",
+          "shots_on_target": "4射正2",
+          "red_cards": "0紅牌0",
+          "dangerous_attacks": "53危險進攻25",
+          "shots_off_target": "5射斜4",
+          "possession": "65控球率35",
+          "corners": "7角球3",
+          "penalties": "0點球0",
+          "blocked_shots": "4被擋掉射門2"
+        }
+      },
+      "analysis_notes": "FB3200比賽顯示兌宮空亡深挖到坎宮的特殊格局，結合實際賽果0:1，為參數優化提供了重要案例。",
+      "created_at": "2026-02-11",
+      "last_updated": "2026-02-11"
+    }
   },
   
-  "historical_templates": [
-    {
-      "code": "FB3079",
-      "description": "阿根廷甲组联赛 - 巴拉卡斯中央 vs 莱斯查",
-      "qimen_type": "非全局伏吟",
-      "result": "1-1",
-      "accuracy": 67.5
+  "template_categories": {
+    "spanish_cup": ["FB3200"],
+    "argentina_league": ["FB3079"],
+    "netherlands_league": ["FB2959"],
+    "germany_league": ["FB2965"],
+    "australia_league": ["FB2923", "FB2876"],
+    "uae_league": ["FB2851"],
+    "brazil_league": ["FB2786"],
+    "champions_league": ["FB2753"],
+    "saudi_league": ["FB2821", "FB2480"]
+  },
+  
+  "analysis_templates": {
+    "basic_analysis": {
+      "steps": [
+        "識別問測者落宮",
+        "分析各個宮位四害情況",
+        "識別重要格局組合",
+        "評估宮位能量強弱",
+        "確定主客隊對應關係"
+      ],
+      "output_format": {
+        "energy_analysis": "object",
+        "pattern_detection": "array",
+        "team_mapping": "object",
+        "initial_prediction": "string"
+      }
     },
-    {
-      "code": "FB2959",
-      "description": "荷兰甲组联赛 - 精英队 vs 阿积士",
-      "qimen_type": "全局伏吟",
-      "result": "2-2",
-      "accuracy": 50.0
+    "technical_prediction": {
+      "steps": [
+        "應用時限性參數",
+        "應用時效性參數",
+        "計算能量轉換",
+        "生成技術預測",
+        "計算概率分佈"
+      ],
+      "algorithms": [
+        "yellow_card_algorithm",
+        "possession_algorithm",
+        "attack_data_algorithm",
+        "corner_algorithm",
+        "score_prediction_algorithm"
+      ]
+    },
+    "verification_process": {
+      "steps": [
+        "收集實際賽果",
+        "計算預測準確度",
+        "分析誤差原因",
+        "優化參數設置",
+        "更新格局庫"
+      ],
+      "metrics": [
+        "overall_accuracy",
+        "score_prediction_accuracy",
+        "technical_prediction_accuracy",
+        "pattern_recognition_accuracy"
+      ]
     }
-  ]
+  },
+  
+  "system_config": {
+    "default_template": "FB3200",
+    "auto_load_templates": true,
+    "template_cache_duration": 86400000,
+    "max_templates": 100,
+    "backup_interval": 3600000
+  }
 }
