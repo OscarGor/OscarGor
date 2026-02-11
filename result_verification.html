@@ -1376,6 +1376,9 @@
                 
                 if (result.success) {
                     showNotification('success', `優化更新應用成功，新版本：${result.new_version}`);
+                    
+                    // 更新index.html中的狀態
+                    updateIndexPage();
                 } else {
                     throw new Error(result.error);
                 }
@@ -1384,6 +1387,18 @@
                 showNotification('error', '應用更新失敗：' + error.message);
             } finally {
                 loadingOverlay.style.display = 'none';
+            }
+        }
+        
+        // 更新index.html中的狀態
+        function updateIndexPage() {
+            // 更新本地存儲中的比賽狀態
+            if (selectedMatch) {
+                selectedMatch.status = 'verified';
+                selectedMatch.actual_result = collectActualResult();
+                localStorage.setItem(`match_${selectedMatch.match_code}`, JSON.stringify(selectedMatch));
+                
+                showNotification('info', '本地數據已更新，請刷新儀表板查看最新狀態');
             }
         }
         
@@ -1417,6 +1432,9 @@
                 setTimeout(() => {
                     loadMatchList();
                     document.getElementById('verify-btn').disabled = true;
+                    
+                    // 更新本地存儲
+                    updateIndexPage();
                 }, 1000);
                 
             } catch (error) {
@@ -1518,7 +1536,52 @@
                     navMenu.classList.remove('active');
                 }
             });
+            
+            // 預加載FB3200數據
+            preloadFB3200Data();
         });
+        
+        // 預加載FB3200數據
+        function preloadFB3200Data() {
+            // 檢查URL參數
+            const urlParams = new URLSearchParams(window.location.search);
+            const matchCode = urlParams.get('match');
+            
+            if (matchCode === 'FB3200') {
+                setTimeout(() => {
+                    selectMatch('FB3200');
+                    
+                    // 自動填入FB3200賽果數據
+                    setTimeout(() => {
+                        fillFB3200Result();
+                    }, 1000);
+                }, 1500);
+            }
+        }
+        
+        // 填入FB3200賽果數據
+        function fillFB3200Result() {
+            // FB3200實際賽果
+            document.getElementById('full-home').value = 0;
+            document.getElementById('full-away').value = 1;
+            document.getElementById('half-home').value = 0;
+            document.getElementById('half-away').value = 1;
+            
+            // 技術統計
+            document.getElementById('yellow-cards').value = 1;
+            document.getElementById('red-cards').value = 0;
+            document.getElementById('corners').value = 5;
+            document.getElementById('possession-home').value = 65;
+            document.getElementById('dangerous-attacks').value = 124;
+            document.getElementById('shots-on-target').value = 4;
+            document.getElementById('attacks').value = 73;
+            document.getElementById('penalties').value = 0;
+            
+            // 更新比較
+            updateComparison();
+            
+            showNotification('info', 'FB3200賽果數據已自動填入');
+        }
     </script>
 </body>
 </html>

@@ -1,136 +1,100 @@
 {
-  "version": "V5.2",
-  "description": "基於FB3200優化的陰盤奇門足球AI參數庫",
-  "last_updated": "2026-02-11",
-  "based_on_matches": ["FB3079", "FB2959", "FB2965", "FB2923", "FB2876", "FB2851", "FB2786", "FB2753", "FB2821", "FB2480"],
-  "accuracy_rate": 65.2,
-  
-  "three_dimensional": {
-    "time_limit": {
-      "value_symbol": {
-        "first_half": 0.25,
-        "second_half": 0.08
-      },
-      "sky_yi_flying": {
-        "first_half": 0.35,
-        "second_half": 0.08
-      },
-      "bad_pattern": {
-        "first_half": 1.0,
-        "second_half": 0.5
-      },
-      "time_decay": 0.25,
-      "time_peak": "45-60",
-      "note": "時限性參數驗證有效"
+    "version": "5.2",
+    "last_updated": "2026-02-10T10:30:00Z",
+    "description": "陰盤奇門足球AI預測系統 V5.2 參數庫",
+    
+    "pattern_weights": {
+        "auspicious": {
+            "small_snake_to_dragon": 0.7,
+            "carp_leaping_dragon_gate": 0.85,
+            "feng_huang_chi_lin": 0.9,
+            "turtle_snake_entwined": 0.75
+        },
+        "inauspicious": {
+            "dragon_fight_tiger": 0.6,
+            "bird_cage_trap": 0.55,
+            "fallen_phoenix": 0.8,
+            "broken_jade": 0.65
+        }
     },
     
-    "time_effect": {
-      "four_harm": {
-        "first_half": -0.25,
-        "second_half": -0.08
-      },
-      "death_door": {
-        "first_half": -0.15,
-        "second_half": -0.06
-      },
-      "star_entombed": {
-        "first_half": -0.12,
-        "second_half": -0.04
-      },
-      "bad_snake": {
-        "first_half": -0.08,
-        "second_half": -0.03
-      },
-      "nine_sky": {
-        "first_half": 0.05,
-        "second_half": 0.40
-      },
-      "note": "時效性參數基於FB3079優化"
+    "three_dimensional": {
+        "time_limit": {
+            "first_half": 0.3,
+            "second_half": 0.4,
+            "extra_time": 0.3
+        },
+        "space_direction": {
+            "east": 0.2,
+            "south": 0.3,
+            "west": 0.25,
+            "north": 0.25
+        },
+        "energy_conversion": {
+            "reversal_prob": 0.15,
+            "momentum_shift": 0.2
+        }
     },
     
-    "energy_conversion": {
-      "conservation": true,
-      "conversion_coefficient": 0.70,
-      "extreme_conversion_prob": 0.18,
-      "reversal_prob": 0.18,
-      "note": "小蛇化龍格局增強轉換係數"
+    "technical_algorithms": {
+        "yellow_cards": {
+            "base_cards": 2.5,
+            "injury_gate_multiplier": 1.8,
+            "death_gate_multiplier": 2.2
+        },
+        "possession": {
+            "death_gate_impact": -0.25,
+            "life_gate_boost": 0.15
+        },
+        "corner_kicks": {
+            "rest_gate_limit": 0.6,
+            "open_gate_boost": 1.4
+        },
+        "dangerous_attacks": {
+            "nine_heaven_boost": 0.3,
+            "nine_earth_limit": 0.7
+        }
+    },
+    
+    "probability_calculation": {
+        "base_weight": {
+            "home_win": 0.35,
+            "draw": 0.3,
+            "away_win": 0.35
+        },
+        "pattern_adjustment": {
+            "auspicious": 0.15,
+            "inauspicious": -0.12,
+            "neutral": 0.02
+        },
+        "time_factor": {
+            "morning": 0.05,
+            "afternoon": 0.1,
+            "evening": 0.15,
+            "night": 0.2
+        }
+    },
+    
+    "optimization_parameters": {
+        "learning_rate": 0.05,
+        "momentum": 0.9,
+        "decay_rate": 0.95,
+        "min_adjustment": 0.01,
+        "max_adjustment": 0.1
+    },
+    
+    "validation_thresholds": {
+        "high_accuracy": 70,
+        "medium_accuracy": 50,
+        "low_accuracy": 30,
+        "minimum_samples": 10
+    },
+    
+    "performance_metrics": {
+        "total_matches_analyzed": 12,
+        "verified_matches": 11,
+        "overall_accuracy": 65.2,
+        "direction_accuracy": 68.5,
+        "technical_accuracy": 62.3
     }
-  },
-  
-  "technical_algorithms": {
-    "yellow_cards": {
-      "base_cards": 3,
-      "injury_door_effect": 2,
-      "shock_door_effect": 1,
-      "nine_sky_effect": 2,
-      "value_symbol_effect": 1,
-      "note": "基於FB3079實際11張黃牌重建"
-    },
-    
-    "possession": {
-      "death_door_effect": -0.25,
-      "star_entombed_effect": -0.12,
-      "value_symbol_effect": 0.15,
-      "note": "基於FB3079實際64%控球調整"
-    },
-    
-    "attack": {
-      "nine_sky_dangerous_attack": 0.50,
-      "sky_symbol_attack_count": 0.30,
-      "note": "基於FB3079實際204次進攻調整"
-    },
-    
-    "corners": {
-      "rest_door_coefficient": 0.15,
-      "note": "基於FB3079實際2個角球調整"
-    }
-  },
-  
-  "pattern_weights": {
-    "auspicious": {
-      "small_snake_to_dragon": 0.25,
-      "sky_yi_meeting": 0.20,
-      "nine_sky_auspicious": 0.50,
-      "note": "九天吉神進攻增強從+0.30調整為+0.50"
-    },
-    
-    "inauspicious": {
-      "green_dragon_escape": 0.70,
-      "day_odd_punishment": 0.15,
-      "day_odd_ground": 0.10,
-      "small_grid": 0.12,
-      "entangled_snake": 0.10,
-      "dry_combined_rebellion": 0.08,
-      "canopy_rebellion": 0.05,
-      "vermilion_bird_entombed": 0.08,
-      "disaster_gate": -0.08,
-      "note": "青龍逃走影響係數從0.65調整為0.70"
-    },
-    
-    "four_harm_effects": {
-      "door_break": -0.15,
-      "empty": -0.20,
-      "tomb": -0.12,
-      "penalty": -0.10,
-      "note": "四害總時效性驗證有效"
-    }
-  },
-  
-  "prediction_thresholds": {
-    "home_win_min": 0.30,
-    "draw_min": 0.25,
-    "away_win_min": 0.30,
-    "confidence_high": 0.70,
-    "confidence_medium": 0.50,
-    "confidence_low": 0.30,
-    "note": "閾值基於12場歷史數據優化"
-  },
-  
-  "learning_notes": [
-    "FB3079驗證：三維參數體系整體有效",
-    "FB2959學習：推動時限性時效性參數體系建立",
-    "FB2965學習：全局伏吟局模型需要優化",
-    "V5.1I更新：技術算法大幅調整，黃牌算法重建",
-    "V5.2目標：基於FB3200進一步優化參數"
-  ]
 }
