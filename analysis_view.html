@@ -433,6 +433,18 @@
             background: rgba(231, 76, 60, 0.1);
             color: #c0392b;
         }
+        
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .quick-actions .btn {
+            flex: 1;
+            min-width: 200px;
+        }
     </style>
 </head>
 <body>
@@ -450,6 +462,7 @@
                 <a href="result_verification.html"><i class="fas fa-check-circle"></i> 賽果驗證</a>
                 <a href="pattern_library.html"><i class="fas fa-book"></i> 格局庫</a>
                 <a href="system_status.html"><i class="fas fa-server"></i> 系統狀態</a>
+                <a href="update_instructions.html"><i class="fas fa-code-branch"></i> 更新指令</a>
             </div>
             <div class="mobile-menu-btn">
                 <i class="fas fa-bars"></i>
@@ -699,6 +712,31 @@
                 <div class="raw-data-content" id="raw-data-content">
                     正在載入原始數據...
                 </div>
+                
+                <div class="quick-actions" style="margin-top: 20px;">
+                    <button type="button" class="btn btn-outline" onclick="copyRawData()">
+                        <i class="fas fa-copy"></i> 複製原始數據
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="saveRawData()">
+                        <i class="fas fa-save"></i> 保存原始數據
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="viewFullData()">
+                        <i class="fas fa-expand"></i> 查看完整數據
+                    </button>
+                </div>
+            </div>
+
+            <!-- 快速操作 -->
+            <div class="quick-actions" style="margin-top: 30px;">
+                <button class="btn btn-primary" onclick="goToVerification()">
+                    <i class="fas fa-check-circle"></i> 進行賽果驗證
+                </button>
+                <button class="btn btn-success" onclick="goToUpdateInstructions()">
+                    <i class="fas fa-code-branch"></i> 查看更新指令
+                </button>
+                <button class="btn btn-info" onclick="goToPatternLibrary()">
+                    <i class="fas fa-book"></i> 查看格局庫
+                </button>
             </div>
 
             <!-- 操作按鈕 -->
@@ -712,8 +750,8 @@
                 <button type="button" class="btn btn-primary" onclick="shareReport()">
                     <i class="fas fa-share-alt"></i> 分享報告
                 </button>
-                <button type="button" class="btn btn-success" onclick="goToVerification()">
-                    <i class="fas fa-check-circle"></i> 進行賽果驗證
+                <button type="button" class="btn btn-success" onclick="saveAnalysis()">
+                    <i class="fas fa-save"></i> 保存分析結果
                 </button>
             </div>
         </main>
@@ -745,14 +783,39 @@
         </div>
     </div>
 
+    <!-- 完整數據模態框 -->
+    <div id="full-data-modal" class="modal" style="display: none;">
+        <div class="modal-content" style="max-width: 90%; max-height: 90%;">
+            <div class="modal-header">
+                <h3><i class="fas fa-database"></i> 完整奇門數據</h3>
+                <button class="modal-close" onclick="closeFullDataModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <pre id="full-data-content" style="max-height: 70vh; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 0.9em; background: #2c3e50; color: #ecf0f1; padding: 20px; border-radius: 8px;">
+                    正在載入完整數據...
+                </pre>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" onclick="closeFullDataModal()">
+                    關閉
+                </button>
+                <button type="button" class="btn btn-primary" onclick="copyFullData()">
+                    <i class="fas fa-copy"></i> 複製完整數據
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- 腳本 -->
     <script src="js/supabase-client.js"></script>
     <script src="js/qimen-engine.js"></script>
+    <script src="js/ai-optimizer.js"></script>
     <script src="js/app.js"></script>
     <script>
         // 全局變量
         let currentMatchData = null;
         let currentAnalysis = null;
+        let fullQimenData = null;
         
         // 更新時間顯示
         function updateTime() {
@@ -783,20 +846,18 @@
                 const previewMode = urlParams.get('preview') === 'true';
                 const rawMode = urlParams.get('raw') === 'true';
                 
-                if (previewMode) {
-                    // 預覽模式：從localStorage載入
-                    const previewData = localStorage.getItem('preview_data');
-                    if (previewData) {
-                        await loadPreviewData(JSON.parse(previewData));
-                    } else {
-                        throw new Error('預覽數據不存在');
-                    }
-                } else if (matchCode) {
-                    // 正常模式：從Supabase載入
-                    await loadMatchFromDatabase(matchCode, rawMode);
+                if (matchCode) {
+                    // 從localStorage載入比賽數據
+                    await loadMatchFromStorage(matchCode, previewMode);
                 } else {
-                    // 沒有指定比賽，顯示示例
-                    await loadExampleData();
+                    // 檢查是否有最近輸入的比賽
+                    const lastMatchCode = localStorage.getItem('last_match_code');
+                    if (lastMatchCode) {
+                        await loadMatchFromStorage(lastMatchCode, false);
+                    } else {
+                        // 顯示示例數據
+                        await loadExampleData();
+                    }
                 }
                 
                 // 顯示分析時間
@@ -806,29 +867,50 @@
             } catch (error) {
                 console.error('載入分析失敗:', error);
                 showError('載入分析失敗：' + error.message);
+                
+                // 嘗試載入示例數據
+                await loadExampleData();
             } finally {
                 loadingOverlay.style.display = 'none';
             }
         }
         
-        // 從數據庫載入比賽數據
-        async function loadMatchFromDatabase(matchCode, rawMode = false) {
+        // 從本地存儲載入比賽數據
+        async function loadMatchFromStorage(matchCode, previewMode = false) {
             try {
-                // 嘗試從Supabase載入
-                const matchData = await window.supabaseClient.getMatch(matchCode);
+                // 從localStorage載入
+                let matchData = null;
+                
+                if (previewMode) {
+                    const previewData = localStorage.getItem('preview_data');
+                    if (previewData) {
+                        matchData = JSON.parse(previewData);
+                    }
+                } else {
+                    const storedData = localStorage.getItem(`match_${matchCode}`);
+                    if (storedData) {
+                        matchData = JSON.parse(storedData);
+                    }
+                }
                 
                 if (matchData) {
                     currentMatchData = matchData;
+                    fullQimenData = matchData.qimen_data || matchData;
                     
                     // 設置標題
+                    const homeTeam = matchData.home_team || matchData.match_info?.home_team || '主隊';
+                    const awayTeam = matchData.away_team || matchData.match_info?.away_team || '客隊';
+                    
                     document.getElementById('report-title').textContent = 
-                        `${matchData.home_team} vs ${matchData.away_team}`;
-                    document.getElementById('match-code').textContent = matchCode;
+                        `${homeTeam} vs ${awayTeam}`;
+                    
+                    const matchCodeDisplay = matchData.match_code || matchCode || '--';
+                    document.getElementById('match-code').textContent = matchCodeDisplay;
                     
                     // 顯示原始數據
-                    displayRawData(matchData.qimen_data);
+                    displayRawData(fullQimenData);
                     
-                    if (!rawMode && matchData.prediction) {
+                    if (matchData.prediction) {
                         // 有預測結果，直接顯示
                         currentAnalysis = {
                             prediction: matchData.prediction,
@@ -837,69 +919,15 @@
                         displayAnalysisResults();
                     } else {
                         // 沒有預測結果，執行分析
-                        await performAnalysis(matchData.qimen_data);
+                        await performAnalysis(fullQimenData);
                     }
-                } else {
-                    throw new Error('比賽數據不存在');
-                }
-            } catch (dbError) {
-                console.warn('數據庫載入失敗，嘗試本地存儲:', dbError);
-                
-                // 嘗試從本地存儲載入
-                const localData = localStorage.getItem(`match_${matchCode}`);
-                if (localData) {
-                    currentMatchData = JSON.parse(localData);
-                    await performAnalysis(currentMatchData.qimen_data);
                 } else {
                     throw new Error('找不到比賽數據');
                 }
+            } catch (error) {
+                console.error('載入比賽數據失敗:', error);
+                throw error;
             }
-        }
-        
-        // 載入預覽數據
-        async function loadPreviewData(previewData) {
-            currentMatchData = {
-                match_code: previewData.match_code || 'PREVIEW',
-                home_team: previewData.home_team || '主隊',
-                away_team: previewData.away_team || '客隊',
-                competition_type: previewData.competition_type || '友誼賽',
-                qimen_data: {
-                    match_info: {
-                        match_code: previewData.match_code,
-                        home_team: previewData.home_team,
-                        away_team: previewData.away_team,
-                        competition_type: previewData.competition_type,
-                        match_time: previewData.match_time
-                    },
-                    raw_text: {
-                        global_info: previewData.qimen_global || '',
-                        additional_notes: previewData.additional_notes || ''
-                    },
-                    palaces: {}
-                }
-            };
-            
-            // 收集宮位數據
-            Object.keys(previewData).forEach(key => {
-                if (key.includes('_four_harm') || key.includes('_patterns')) {
-                    const [palace, type] = key.split('_');
-                    if (!currentMatchData.qimen_data.palaces[palace]) {
-                        currentMatchData.qimen_data.palaces[palace] = {};
-                    }
-                    currentMatchData.qimen_data.palaces[palace][type === 'four' ? 'four_harm' : 'patterns'] = previewData[key];
-                }
-            });
-            
-            // 設置標題
-            document.getElementById('report-title').textContent = 
-                `${previewData.home_team} vs ${previewData.away_team}`;
-            document.getElementById('match-code').textContent = previewData.match_code || '預覽模式';
-            
-            // 顯示原始數據
-            displayRawData(currentMatchData.qimen_data);
-            
-            // 執行分析
-            await performAnalysis(currentMatchData.qimen_data);
         }
         
         // 載入示例數據
@@ -940,10 +968,19 @@
 八門+天盤─ 杜 + 乙：飛來橫禍(訴訟)
 九星─ 天芮星
 八神─ 太陰`
+                    },
+                    kan: {
+                        name: '坎宮',
+                        direction: '北方',
+                        four_harm: '無四害',
+                        patterns: `天盤─ 戊
+地盤─ 癸
+天盤＋地盤─ 戊 + 癸：青龍華蓋`
                     }
                 }
             };
             
+            fullQimenData = exampleData;
             displayRawData(exampleData);
             await performAnalysis(exampleData);
         }
@@ -961,19 +998,14 @@
                     
                     // 保存分析結果
                     if (currentMatchData && currentMatchData.match_code !== 'EXAMPLE') {
-                        try {
-                            await window.supabaseClient.savePrediction(
-                                currentMatchData.match_code,
-                                analysisResult.prediction
-                            );
-                        } catch (saveError) {
-                            console.warn('保存分析結果失敗:', saveError);
-                            // 保存到本地存儲
-                            localStorage.setItem(
-                                `analysis_${currentMatchData.match_code}`,
-                                JSON.stringify(analysisResult)
-                            );
-                        }
+                        currentMatchData.prediction = analysisResult.prediction;
+                        currentMatchData.analysis_report = analysisResult.analysis_report;
+                        currentMatchData.analyzed_at = new Date().toISOString();
+                        
+                        // 保存到本地存儲
+                        const matchCode = currentMatchData.match_code || 'local_' + Date.now();
+                        localStorage.setItem(`match_${matchCode}`, JSON.stringify(currentMatchData));
+                        localStorage.setItem('last_match_code', matchCode);
                     }
                     
                     // 顯示分析結果
@@ -1160,8 +1192,16 @@
         function displayRawData(qimenData) {
             let rawText = '';
             
+            if (qimenData.match_info) {
+                rawText += '=== 比賽資訊 ===\n';
+                rawText += `主隊：${qimenData.match_info.home_team || '--'}\n`;
+                rawText += `客隊：${qimenData.match_info.away_team || '--'}\n`;
+                rawText += `賽事：${qimenData.match_info.competition_type || '--'}\n`;
+                rawText += `時間：${qimenData.match_info.match_time || '--'}\n\n`;
+            }
+            
             if (qimenData.raw_text && qimenData.raw_text.global_info) {
-                rawText += '=== 全局資訊 ===\n';
+                rawText += '=== 奇門全局資訊 ===\n';
                 rawText += qimenData.raw_text.global_info + '\n\n';
             }
             
@@ -1187,6 +1227,88 @@
             }
             
             document.getElementById('raw-data-content').textContent = rawText;
+        }
+        
+        // 顯示完整數據
+        function viewFullData() {
+            if (!fullQimenData) return;
+            
+            const modal = document.getElementById('full-data-modal');
+            const contentDiv = document.getElementById('full-data-content');
+            
+            contentDiv.textContent = JSON.stringify(fullQimenData, null, 2);
+            modal.style.display = 'flex';
+        }
+        
+        // 關閉完整數據模態框
+        function closeFullDataModal() {
+            document.getElementById('full-data-modal').style.display = 'none';
+        }
+        
+        // 複製完整數據
+        function copyFullData() {
+            const content = document.getElementById('full-data-content').textContent;
+            
+            navigator.clipboard.writeText(content)
+                .then(() => showNotification('success', '完整數據已複製到剪貼板'))
+                .catch(() => showNotification('error', '複製失敗，請手動複製'));
+        }
+        
+        // 複製原始數據
+        function copyRawData() {
+            const content = document.getElementById('raw-data-content').textContent;
+            
+            navigator.clipboard.writeText(content)
+                .then(() => showNotification('success', '原始數據已複製到剪貼板'))
+                .catch(() => showNotification('error', '複製失敗，請手動複製'));
+        }
+        
+        // 保存原始數據
+        function saveRawData() {
+            const content = document.getElementById('raw-data-content').textContent;
+            const matchCode = document.getElementById('match-code').textContent;
+            const filename = `奇門數據_${matchCode}_${new Date().toISOString().slice(0, 10)}.txt`;
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('success', `原始數據已保存為 ${filename}`);
+        }
+        
+        // 保存分析結果
+        function saveAnalysis() {
+            if (!currentMatchData) return;
+            
+            const analysisData = {
+                match_info: currentMatchData.match_info || {},
+                prediction: currentAnalysis?.prediction || {},
+                analysis_report: currentAnalysis?.analysis_report || {},
+                raw_data: fullQimenData || {}
+            };
+            
+            const matchCode = document.getElementById('match-code').textContent;
+            const filename = `分析報告_${matchCode}_${new Date().toISOString().slice(0, 10)}.json`;
+            
+            const blob = new Blob([JSON.stringify(analysisData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('success', `分析報告已保存為 ${filename}`);
         }
         
         // 切換格局詳情
@@ -1283,11 +1405,6 @@
         // 保存為PDF
         function saveAsPDF() {
             showNotification('info', 'PDF導出功能開發中...');
-            // 實際應用中可以使用jsPDF庫
-            // window.jsPDF = window.jspdf.jsPDF;
-            // const doc = new jsPDF();
-            // doc.text('奇門足球分析報告', 10, 10);
-            // doc.save('analysis-report.pdf');
         }
         
         // 分享報告
@@ -1311,7 +1428,35 @@
             if (currentMatchData && currentMatchData.match_code) {
                 window.location.href = `result_verification.html?match=${currentMatchData.match_code}`;
             } else {
-                showNotification('warning', '請先保存比賽數據');
+                const matchCode = document.getElementById('match-code').textContent;
+                if (matchCode && matchCode !== '--') {
+                    window.location.href = `result_verification.html?match=${matchCode}`;
+                } else {
+                    showNotification('warning', '請先保存比賽數據');
+                }
+            }
+        }
+        
+        // 前往更新指令
+        function goToUpdateInstructions() {
+            if (currentMatchData && currentMatchData.match_code) {
+                window.location.href = `update_instructions.html?match=${currentMatchData.match_code}`;
+            } else {
+                const matchCode = document.getElementById('match-code').textContent;
+                if (matchCode && matchCode !== '--') {
+                    window.location.href = `update_instructions.html?match=${matchCode}`;
+                } else {
+                    window.location.href = 'update_instructions.html';
+                }
+            }
+        }
+        
+        // 前往格局庫
+        function goToPatternLibrary() {
+            if (currentMatchData && currentMatchData.match_code) {
+                window.location.href = `pattern_library.html?match=${currentMatchData.match_code}`;
+            } else {
+                window.location.href = 'pattern_library.html';
             }
         }
         
@@ -1393,6 +1538,12 @@
             document.getElementById('technical-modal')?.addEventListener('click', (e) => {
                 if (e.target === document.getElementById('technical-modal')) {
                     closeTechnicalModal();
+                }
+            });
+            
+            document.getElementById('full-data-modal')?.addEventListener('click', (e) => {
+                if (e.target === document.getElementById('full-data-modal')) {
+                    closeFullDataModal();
                 }
             });
         });
