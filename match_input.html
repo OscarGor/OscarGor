@@ -7,6 +7,222 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 額外樣式 */
+        .qimen-input-section {
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        
+        .qimen-input-section:hover {
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+            border-color: #3498db;
+        }
+        
+        .palace-section {
+            background: linear-gradient(135deg, #f1f8ff 0%, #e3f2fd 100%);
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 3px 15px rgba(52, 152, 219, 0.1);
+        }
+        
+        .palace-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px dashed #3498db;
+        }
+        
+        .palace-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .palace-title i {
+            color: #3498db;
+        }
+        
+        .info-badge {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(52, 152, 219, 0.3);
+        }
+        
+        .text-input-large {
+            min-height: 150px;
+            font-family: 'Microsoft JhengHei', 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            font-size: 1.05em;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+        
+        .text-input-large:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        
+        .input-hint {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.9em;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+        
+        .character-counter {
+            text-align: right;
+            font-size: 0.85em;
+            color: #95a5a6;
+            margin-top: 5px;
+        }
+        
+        .template-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e8f4fc 100%);
+            border-radius: 12px;
+            border: 2px dashed #bdc3c7;
+        }
+        
+        .template-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+        }
+        
+        .template-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.3);
+            background: linear-gradient(135deg, #2980b9, #21618c);
+        }
+        
+        .template-btn.secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        }
+        
+        .template-btn.secondary:hover {
+            background: linear-gradient(135deg, #7f8c8d, #5d6d7e);
+        }
+        
+        .action-buttons {
+            position: sticky;
+            bottom: 0;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+            border-top: 2px solid #3498db;
+            z-index: 100;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .input-label i {
+            color: #3498db;
+        }
+        
+        .required-star {
+            color: #e74c3c;
+            margin-left: 5px;
+        }
+        
+        .format-example {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.95em;
+            color: #2c3e50;
+        }
+        
+        .format-example code {
+            background: #e3f2fd;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #2c3e50;
+        }
+        
+        .input-note {
+            background: #fff8e1;
+            border-left: 4px solid #f39c12;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9em;
+            color: #8e6c1f;
+        }
+        
+        @media (max-width: 768px) {
+            .qimen-input-section {
+                padding: 15px;
+            }
+            
+            .palace-section {
+                padding: 15px;
+            }
+            
+            .text-input-large {
+                min-height: 120px;
+            }
+            
+            .template-buttons {
+                flex-direction: column;
+            }
+            
+            .template-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -35,208 +251,318 @@
                 <div class="section-header">
                     <h2><i class="fas fa-plus-circle"></i> 比賽輸入</h2>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-primary" onclick="loadTemplate('FB3200')">
-                            <i class="fas fa-magic"></i> 載入FB3200模板
-                        </button>
-                        <button type="button" class="btn btn-success" onclick="saveAsTemplate()">
+                        <button type="button" class="btn btn-primary" onclick="saveAsTemplate()">
                             <i class="fas fa-save"></i> 保存為模板
                         </button>
+                        <button type="button" class="btn btn-success" onclick="previewAnalysis()">
+                            <i class="fas fa-eye"></i> 預覽分析
+                        </button>
                     </div>
+                </div>
+
+                <!-- 模板按鈕區域 -->
+                <div class="template-buttons">
+                    <button type="button" class="template-btn" onclick="loadTemplate('FB3200')">
+                        <i class="fas fa-magic"></i> 載入FB3200模板
+                    </button>
+                    <button type="button" class="template-btn secondary" onclick="loadTemplate('FB3079')">
+                        <i class="fas fa-history"></i> 載入FB3079模板
+                    </button>
+                    <button type="button" class="template-btn secondary" onclick="clearAllInputs()">
+                        <i class="fas fa-eraser"></i> 清空所有輸入
+                    </button>
+                    <button type="button" class="template-btn" onclick="showFormatHelp()">
+                        <i class="fas fa-question-circle"></i> 格式說明
+                    </button>
                 </div>
 
                 <!-- 表單 -->
                 <form id="match-form">
                     <!-- 比賽基本信息 -->
-                    <div class="form-section">
+                    <div class="qimen-input-section">
                         <h3><i class="fas fa-info-circle"></i> 比賽基本信息</h3>
+                        
+                        <div class="input-group">
+                            <label class="input-label">
+                                <i class="fas fa-hashtag"></i>
+                                比賽編號
+                                <span class="required-star">*</span>
+                            </label>
+                            <input type="text" id="match_code" name="match_code" class="form-control" 
+                                   required placeholder="例如：FB3200">
+                            <div class="input-hint">唯一識別碼，建議格式：FB+數字</div>
+                        </div>
+                        
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="match_code" class="form-label">比賽編號 <span class="required">*</span></label>
-                                <input type="text" id="match_code" name="match_code" class="form-control" required placeholder="例如：FB3200">
-                                <div class="form-help">
-                                    <i class="fas fa-info-circle"></i> 唯一識別碼，建議格式：FB+數字
-                                </div>
+                                <label class="input-label">
+                                    <i class="fas fa-flag"></i>
+                                    主隊名稱
+                                    <span class="required-star">*</span>
+                                </label>
+                                <input type="text" id="home_team" name="home_team" class="form-control" 
+                                       required placeholder="例如：馬德里CFF女足">
                             </div>
                             <div class="form-group">
-                                <label for="competition_type" class="form-label">賽事類別 <span class="required">*</span></label>
-                                <select id="competition_type" name="competition_type" class="form-control" required>
-                                    <option value="">請選擇賽事類別</option>
-                                    <option value="女子西班牙盃">女子西班牙盃</option>
-                                    <option value="阿根廷甲組聯賽">阿根廷甲組聯賽</option>
-                                    <option value="荷蘭甲組聯賽">荷蘭甲組聯賽</option>
-                                    <option value="德國乙組聯賽">德國乙組聯賽</option>
-                                    <option value="澳洲職業聯賽">澳洲職業聯賽</option>
-                                    <option value="阿聯酋職業聯賽">阿聯酋職業聯賽</option>
-                                    <option value="巴西甲組聯賽">巴西甲組聯賽</option>
-                                    <option value="歐洲聯賽冠軍盃">歐洲聯賽冠軍盃</option>
-                                    <option value="沙特職業聯賽">沙特職業聯賽</option>
-                                </select>
+                                <label class="input-label">
+                                    <i class="fas fa-flag"></i>
+                                    客隊名稱
+                                    <span class="required-star">*</span>
+                                </label>
+                                <input type="text" id="away_team" name="away_team" class="form-control" 
+                                       required placeholder="例如：特內里費女足">
                             </div>
                         </div>
+                        
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="home_team" class="form-label">主隊 <span class="required">*</span></label>
-                                <input type="text" id="home_team" name="home_team" class="form-control" required placeholder="例如：馬德里CFF女足">
+                                <label class="input-label">
+                                    <i class="fas fa-trophy"></i>
+                                    賽事類別
+                                    <span class="required-star">*</span>
+                                </label>
+                                <input type="text" id="competition_type" name="competition_type" class="form-control" 
+                                       required placeholder="例如：女子西班牙盃">
+                                <div class="input-hint">也可自行輸入其他賽事名稱</div>
                             </div>
                             <div class="form-group">
-                                <label for="away_team" class="form-label">客隊 <span class="required">*</span></label>
-                                <input type="text" id="away_team" name="away_team" class="form-control" required placeholder="例如：特內里費女足">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="match_time" class="form-label">比賽時間 <span class="required">*</span></label>
+                                <label class="input-label">
+                                    <i class="fas fa-clock"></i>
+                                    比賽時間
+                                    <span class="required-star">*</span>
+                                </label>
                                 <input type="datetime-local" id="match_time" name="match_time" class="form-control" required>
                             </div>
-                            <div class="form-group">
-                                <label for="timezone" class="form-label">時區</label>
-                                <select id="timezone" name="timezone" class="form-control">
-                                    <option value="UTC+8">UTC+8 (台灣/香港)</option>
-                                    <option value="UTC+1" selected>UTC+1 (西班牙)</option>
-                                    <option value="UTC+0">UTC+0 (英國)</option>
-                                    <option value="UTC-3">UTC-3 (阿根廷)</option>
-                                    <option value="UTC+10">UTC+10 (澳洲東部)</option>
-                                </select>
-                            </div>
+                        </div>
+                        
+                        <div class="input-note">
+                            <i class="fas fa-lightbulb"></i> 
+                            提示：比賽基本信息將用於生成報告標題和存檔
                         </div>
                     </div>
 
                     <!-- 奇門全局資訊 -->
-                    <div class="form-section">
+                    <div class="qimen-input-section">
                         <h3><i class="fas fa-yin-yang"></i> 奇門遁甲全局資訊</h3>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="solar_date" class="form-label">公曆</label>
-                                <input type="text" id="solar_date" name="solar_date" class="form-control" placeholder="例如：2026年2月5日2時0分">
-                            </div>
-                            <div class="form-group">
-                                <label for="lunar_date" class="form-label">農曆</label>
-                                <input type="text" id="lunar_date" name="lunar_date" class="form-control" placeholder="例如：2025年12月18日">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="yang_dun" class="form-label">陰陽遁</label>
-                                <select id="yang_dun" name="yang_dun" class="form-control">
-                                    <option value="陽遁">陽遁</option>
-                                    <option value="陰遁">陰遁</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="dun_number" class="form-label">遁局數</label>
-                                <input type="number" id="dun_number" name="dun_number" class="form-control" min="1" max="9" placeholder="1-9">
+                        <p class="input-hint">請完整輸入師傅提供的奇門全局資訊，格式不限</p>
+                        
+                        <div class="input-group">
+                            <label class="input-label">
+                                <i class="fas fa-globe"></i>
+                                奇門全局資訊
+                                <span class="required-star">*</span>
+                            </label>
+                            <textarea id="qimen_global" name="qimen_global" class="text-input-large" 
+                                      required placeholder="請在此處粘貼或輸入完整的奇門全局資訊...
+例如：
+公曆：2026年2月5日2時0分
+農曆：2025年12月18日 陽遁3局
+四柱：丙午 庚寅 庚戌 丁丑
+時空亡：甲戌旬  申酉空　馬星：亥
+值符：天輔星  值使：杜門
+問測者落宮為兌宮(西方)"></textarea>
+                            <div class="character-counter">
+                                <span id="global-counter">0</span> 字
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="four_pillars" class="form-label">四柱</label>
-                                <input type="text" id="four_pillars" name="four_pillars" class="form-control" placeholder="例如：丙午 庚寅 庚戌 丁丑">
-                            </div>
-                            <div class="form-group">
-                                <label for="kong_wang" class="form-label">時空亡</label>
-                                <input type="text" id="kong_wang" name="kong_wang" class="form-control" placeholder="例如：甲戌旬 申酉空">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="horse_star" class="form-label">馬星</label>
-                                <input type="text" id="horse_star" name="horse_star" class="form-control" placeholder="例如：亥">
-                            </div>
-                            <div class="form-group">
-                                <label for="value_symbol" class="form-label">值符</label>
-                                <input type="text" id="value_symbol" name="value_symbol" class="form-control" placeholder="例如：天輔星">
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="value_door" class="form-label">值使</label>
-                                <input type="text" id="value_door" name="value_door" class="form-control" placeholder="例如：杜門">
-                            </div>
-                            <div class="form-group">
-                                <label for="asker_palace" class="form-label">問測者落宮</label>
-                                <input type="text" id="asker_palace" name="asker_palace" class="form-control" placeholder="例如：兌宮(西方)">
-                            </div>
+                        
+                        <div class="format-example">
+                            <strong>建議格式：</strong>
+                            <code>公曆：YYYY年MM月DD日HH時MM分</code><br>
+                            <code>農曆：YYYY年MM月DD日 陰/陽遁N局</code><br>
+                            <code>四柱：XX XX XX XX</code><br>
+                            <code>時空亡：XX旬  XX空　馬星：X</code><br>
+                            <code>值符：天X星  值使：X門</code><br>
+                            <code>問測者落宮為X宮(方向)</code>
                         </div>
                     </div>
 
-                    <!-- 九宮詳細資訊 -->
-                    <div class="form-section">
+                    <!-- 各宮詳細資訊 -->
+                    <div class="qimen-input-section">
                         <h3><i class="fas fa-chess-board"></i> 九宮詳細資訊</h3>
+                        <p class="input-hint">請分別輸入九宮的詳細資訊，可自由增減內容</p>
                         
                         <!-- 兌宮 -->
                         <div class="palace-section">
-                            <h4>兌宮（西方）</h4>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">四害</label>
-                                    <input type="text" name="dui_four_harm" class="form-control" placeholder="例如：空亡（深挖到坎宮）">
+                            <div class="palace-header">
+                                <div class="palace-title">
+                                    <i class="fas fa-compass"></i>
+                                    兌宮（西方）
                                 </div>
-                                <div class="form-group">
-                                    <label class="form-label">天干臨位</label>
-                                    <input type="text" name="dui_heavenly_stem" class="form-control" placeholder="例如：乙天干臨：絕 位">
+                                <span class="info-badge">問測者落宮</span>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    四害資訊
+                                </label>
+                                <textarea name="dui_four_harm" class="text-input-large" 
+                                          placeholder="例如：四害：空亡（深挖到坎宮）"></textarea>
+                                <div class="character-counter">
+                                    <span id="dui-four-harm-counter">0</span> 字
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">天盤</label>
-                                    <input type="text" name="dui_sky_plate" class="form-control" placeholder="例如：乙">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">天盤寄宮</label>
-                                    <input type="text" name="dui_sky_plate_host" class="form-control" placeholder="例如：庚">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">地盤</label>
-                                    <input type="text" name="dui_ground_plate" class="form-control" placeholder="例如：壬">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">格局組合</label>
-                                    <textarea name="dui_patterns" class="form-control" rows="2" placeholder="例如：乙+庚：日奇被刑，乙+壬：日奇入地，庚+壬：小格（移蕩格）"></textarea>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">八門</label>
-                                    <input type="text" name="dui_eight_door" class="form-control" placeholder="例如：杜門">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">八門組合</label>
-                                    <input type="text" name="dui_door_sky" class="form-control" placeholder="例如：杜 + 乙：飛來橫禍(訴訟)">
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">九星</label>
-                                    <input type="text" name="dui_nine_star" class="form-control" placeholder="例如：天芮星">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">八神</label>
-                                    <input type="text" name="dui_eight_god" class="form-control" placeholder="例如：太陰">
+                            
+                            <div class="input-group">
+                                <label class="input-label">
+                                    <i class="fas fa-star"></i>
+                                    格局詳細資訊
+                                </label>
+                                <textarea name="dui_patterns" class="text-input-large" 
+                                          placeholder="請輸入兌宮的完整格局資訊...
+例如：
+乙天干臨：絕 位
+天盤─ 乙
+天盤寄宮─ 庚
+地盤─ 壬
+天盤＋天盤寄宮─ 乙 + 庚：日奇被刑
+天盤＋地盤─ 乙 + 壬：日奇入地
+天盤寄宮＋地盤─ 庚 + 壬：小格（移蕩格）
+八門─ 杜門
+八門+天盤─ 杜 + 乙：飛來橫禍(訴訟)
+九星─ 天芮星
+八神─ 太陰"></textarea>
+                                <div class="character-counter">
+                                    <span id="dui-patterns-counter">0</span> 字
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 其他宮位... (此處省略其他8宮的詳細代碼，結構相似) -->
-                        <!-- 實際應用中應包含乾、坎、艮、震、巽、離、坤、中宮 -->
+                        <!-- 乾宮 -->
+                        <div class="palace-section">
+                            <div class="palace-header">
+                                <div class="palace-title">
+                                    <i class="fas fa-compass"></i>
+                                    乾宮（西北方）
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    四害資訊
+                                </label>
+                                <textarea name="qian_four_harm" class="text-input-large" 
+                                          placeholder="例如：四害：景門門迫"></textarea>
+                                <div class="character-counter">
+                                    <span id="qian-four-harm-counter">0</span> 字
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">
+                                    <i class="fas fa-star"></i>
+                                    格局詳細資訊
+                                </label>
+                                <textarea name="qian_patterns" class="text-input-large" 
+                                          placeholder="請輸入乾宮的完整格局資訊...
+例如：
+壬天干臨：冠帶 臨官 馬星位
+天盤─ 壬
+地盤─ 辛
+天盤＋地盤─ 壬 + 辛：騰蛇相纏
+八門─ 景門
+八門+天盤─ 景 + 壬：因賊牽連
+九星─ 天柱星
+八神─ 六合"></textarea>
+                                <div class="character-counter">
+                                    <span id="qian-patterns-counter">0</span> 字
+                                </div>
+                            </div>
+                        </div>
 
-                        <div class="form-help">
-                            <i class="fas fa-lightbulb"></i> 提示：每個宮位需填寫完整資訊以確保分析準確性
+                        <!-- 坎宮 -->
+                        <div class="palace-section">
+                            <div class="palace-header">
+                                <div class="palace-title">
+                                    <i class="fas fa-compass"></i>
+                                    坎宮（北方）
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    四害資訊
+                                </label>
+                                <textarea name="kan_four_harm" class="text-input-large" 
+                                          placeholder="例如：四害：死門門迫"></textarea>
+                                <div class="character-counter">
+                                    <span id="kan-four-harm-counter">0</span> 字
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label class="input-label">
+                                    <i class="fas fa-star"></i>
+                                    格局詳細資訊
+                                </label>
+                                <textarea name="kan_patterns" class="text-input-large" 
+                                          placeholder="請輸入坎宮的完整格局資訊...
+例如：
+辛天干臨：長生 位
+天盤─ 辛
+地盤─ 丙
+天盤＋地盤─ 辛 + 丙：幹合悖師
+八門─ 死門
+八門+天盤─ 死 + 辛：盜賊猖狂，失物難回
+九星─ 天心星
+八神─ 白虎"></textarea>
+                                <div class="character-counter">
+                                    <span id="kan-patterns-counter">0</span> 字
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 其他宮位（可自行添加） -->
+                        <div class="input-group">
+                            <button type="button" class="btn btn-outline" onclick="addMorePalaces()">
+                                <i class="fas fa-plus-circle"></i> 添加更多宮位
+                            </button>
+                            <div class="input-hint">如需分析更多宮位，可點擊此按鈕添加</div>
+                        </div>
+                        
+                        <div class="input-note">
+                            <i class="fas fa-lightbulb"></i> 
+                            提示：每個宮位應包含天盤、地盤、八門、九星、八神及格局組合等完整資訊
+                        </div>
+                    </div>
+
+                    <!-- 其他補充資訊 -->
+                    <div class="qimen-input-section">
+                        <h3><i class="fas fa-sticky-note"></i> 其他補充資訊</h3>
+                        
+                        <div class="input-group">
+                            <label class="input-label">
+                                <i class="fas fa-comment-dots"></i>
+                                備註與說明
+                            </label>
+                            <textarea id="additional_notes" name="additional_notes" class="text-input-large" 
+                                      placeholder="可在此處添加其他補充資訊，例如：
+1. 特殊格局解讀
+2. 師傅特別提醒
+3. 比賽背景資訊
+4. 其他相關觀察"></textarea>
+                            <div class="character-counter">
+                                <span id="notes-counter">0</span> 字
+                            </div>
                         </div>
                     </div>
 
                     <!-- 表單操作 -->
-                    <div class="form-actions">
-                        <button type="button" class="btn btn-outline" onclick="resetForm()">
-                            <i class="fas fa-undo"></i> 重置
-                        </button>
-                        <button type="button" class="btn btn-warning" onclick="previewAnalysis()">
-                            <i class="fas fa-eye"></i> 預覽分析
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> 保存並分析
-                        </button>
+                    <div class="action-buttons">
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-outline" onclick="resetForm()">
+                                <i class="fas fa-undo"></i> 重置表單
+                            </button>
+                            <button type="button" class="btn btn-warning" onclick="validateForm()">
+                                <i class="fas fa-check-circle"></i> 驗證格式
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-rocket"></i> 開始AI分析
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -247,6 +573,74 @@
             <p>甲方己土玄學顧問公司 · AI陰盤奇門足球分析系統 V5.2</p>
             <p>報告時間：<span id="current-time"></span></p>
         </footer>
+    </div>
+
+    <!-- 格式說明模態框 -->
+    <div id="format-help-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-question-circle"></i> 輸入格式說明</h3>
+                <button class="modal-close" onclick="closeFormatHelp()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <div class="alert-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="alert-content">
+                        <h4 class="alert-title">自由輸入原則</h4>
+                        <p class="alert-message">本系統採用自由文本輸入，格式不限，AI會自動解析關鍵資訊</p>
+                    </div>
+                </div>
+                
+                <h4>建議的最佳格式：</h4>
+                <div class="format-example" style="margin: 15px 0;">
+                    <strong>全局資訊格式：</strong><br>
+                    <code>公曆：2026年2月5日2時0分</code><br>
+                    <code>農曆：2025年12月18日 陽遁3局</code><br>
+                    <code>四柱：丙午 庚寅 庚戌 丁丑</code><br>
+                    <code>時空亡：甲戌旬  申酉空　馬星：亥</code><br>
+                    <code>值符：天輔星  值使：杜門</code><br>
+                    <code>問測者落宮為兌宮(西方)</code>
+                </div>
+                
+                <div class="format-example" style="margin: 15px 0;">
+                    <strong>宮位資訊格式：</strong><br>
+                    <code>四害：空亡（深挖到坎宮）</code><br>
+                    <code>乙天干臨：絕 位</code><br>
+                    <code>天盤─ 乙</code><br>
+                    <code>天盤寄宮─ 庚</code><br>
+                    <code>地盤─ 壬</code><br>
+                    <code>天盤＋天盤寄宮─ 乙 + 庚：日奇被刑</code><br>
+                    <code>天盤＋地盤─ 乙 + 壬：日奇入地</code><br>
+                    <code>天盤寄宮＋地盤─ 庚 + 壬：小格（移蕩格）</code><br>
+                    <code>八門─ 杜門</code><br>
+                    <code>八門+天盤─ 杜 + 乙：飛來橫禍(訴訟)</code><br>
+                    <code>九星─ 天芮星</code><br>
+                    <code>八神─ 太陰</code>
+                </div>
+                
+                <div class="alert alert-warning">
+                    <div class="alert-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="alert-content">
+                        <h4 class="alert-title">重要提示</h4>
+                        <p class="alert-message">
+                            1. 盡量保持原始師傅提供的格式不變<br>
+                            2. 關鍵字如「天盤」、「地盤」、「八門」、「九星」、「八神」有助於AI識別<br>
+                            3. 格局組合如「乙+庚：日奇被刑」盡量保持原樣<br>
+                            4. 如果某些資訊缺失，可以不填寫，AI會根據現有資訊分析
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="closeFormatHelp()">
+                    我明白了
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- 腳本 -->
@@ -271,76 +665,334 @@
         setInterval(updateTime, 1000);
         updateTime();
         
+        // 字數統計
+        function setupCharacterCounters() {
+            const textareas = document.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                const counterId = textarea.name + '-counter';
+                const counterElement = document.getElementById(counterId);
+                
+                if (counterElement) {
+                    // 初始統計
+                    counterElement.textContent = textarea.value.length;
+                    
+                    // 監聽輸入變化
+                    textarea.addEventListener('input', function() {
+                        counterElement.textContent = this.value.length;
+                    });
+                }
+            });
+        }
+        
         // 載入模板
-        function loadTemplate(templateCode) {
-            fetch('data/match_templates.json')
-                .then(response => response.json())
-                .then(templates => {
-                    const template = templates[templateCode];
-                    if (template) {
-                        // 填充表單
-                        Object.keys(template).forEach(key => {
-                            const element = document.getElementById(key);
-                            if (element) {
-                                element.value = template[key];
-                            }
-                        });
-                        
-                        showNotification('success', `已載入${templateCode}模板`);
-                    } else {
-                        showNotification('error', '模板不存在');
-                    }
-                })
-                .catch(error => {
-                    console.error('載入模板失敗:', error);
-                    showNotification('error', '載入模板失敗');
-                });
+        async function loadTemplate(templateCode) {
+            try {
+                const response = await fetch('data/match_templates.json');
+                const templates = await response.json();
+                const template = templates[templateCode];
+                
+                if (template) {
+                    // 填充表單
+                    Object.keys(template).forEach(key => {
+                        const element = document.querySelector(`[name="${key}"]`) || document.getElementById(key);
+                        if (element) {
+                            element.value = template[key];
+                            
+                            // 觸發字數統計更新
+                            const event = new Event('input');
+                            element.dispatchEvent(event);
+                        }
+                    });
+                    
+                    showNotification('success', `已載入${templateCode}模板`);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    showNotification('error', '模板不存在，使用默認格式');
+                    loadDefaultFormat();
+                }
+            } catch (error) {
+                console.error('載入模板失敗:', error);
+                showNotification('error', '載入模板失敗，請檢查網路連接');
+            }
+        }
+        
+        // 載入默認格式
+        function loadDefaultFormat() {
+            const defaultGlobal = `公曆：2026年2月5日2時0分
+農曆：2025年12月18日 陽遁3局
+四柱：丙午 庚寅 庚戌 丁丑
+時空亡：甲戌旬  申酉空　馬星：亥
+值符：天輔星  值使：杜門
+問測者落宮為兌宮(西方)`;
+            
+            document.getElementById('qimen_global').value = defaultGlobal;
+            
+            // 觸發更新
+            const event = new Event('input');
+            document.getElementById('qimen_global').dispatchEvent(event);
         }
         
         // 保存為模板
         function saveAsTemplate() {
-            const templateName = prompt('請輸入模板名稱：');
-            if (templateName) {
-                const formData = collectFormData();
-                localStorage.setItem(`template_${templateName}`, JSON.stringify(formData));
-                showNotification('success', `模板「${templateName}」已保存`);
+            const templateName = prompt('請輸入模板名稱（如：女足西班牙盃模板）：');
+            if (!templateName) return;
+            
+            const formData = collectFormData();
+            
+            try {
+                // 獲取現有模板
+                let templates = JSON.parse(localStorage.getItem('match_templates') || '{}');
+                
+                // 添加新模板
+                templates[templateName] = formData;
+                
+                // 保存到本地存儲
+                localStorage.setItem('match_templates', JSON.stringify(templates));
+                
+                showNotification('success', `模板「${templateName}」已保存到本地`);
+                
+                // 更新模板按鈕
+                updateTemplateButtons();
+                
+            } catch (error) {
+                console.error('保存模板失敗:', error);
+                showNotification('error', '保存模板失敗');
             }
+        }
+        
+        // 更新模板按鈕
+        function updateTemplateButtons() {
+            try {
+                const templates = JSON.parse(localStorage.getItem('match_templates') || '{}');
+                const templateKeys = Object.keys(templates);
+                
+                if (templateKeys.length > 0) {
+                    // 在模板區域顯示本地模板按鈕
+                    const templateButtons = document.querySelector('.template-buttons');
+                    
+                    // 移除現有的本地模板按鈕
+                    document.querySelectorAll('.local-template-btn').forEach(btn => btn.remove());
+                    
+                    // 添加本地模板按鈕
+                    templateKeys.forEach(key => {
+                        const button = document.createElement('button');
+                        button.type = 'button';
+                        button.className = 'template-btn secondary local-template-btn';
+                        button.innerHTML = `<i class="fas fa-bookmark"></i> ${key}`;
+                        button.onclick = () => loadLocalTemplate(key);
+                        
+                        templateButtons.appendChild(button);
+                    });
+                }
+            } catch (error) {
+                console.error('更新模板按鈕失敗:', error);
+            }
+        }
+        
+        // 載入本地模板
+        function loadLocalTemplate(templateName) {
+            try {
+                const templates = JSON.parse(localStorage.getItem('match_templates') || '{}');
+                const template = templates[templateName];
+                
+                if (template) {
+                    // 填充表單
+                    Object.keys(template).forEach(key => {
+                        const element = document.querySelector(`[name="${key}"]`) || document.getElementById(key);
+                        if (element) {
+                            element.value = template[key];
+                            
+                            // 觸發字數統計更新
+                            const event = new Event('input');
+                            element.dispatchEvent(event);
+                        }
+                    });
+                    
+                    showNotification('success', `已載入本地模板「${templateName}」`);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } catch (error) {
+                console.error('載入本地模板失敗:', error);
+                showNotification('error', '載入本地模板失敗');
+            }
+        }
+        
+        // 清空所有輸入
+        function clearAllInputs() {
+            if (confirm('確定要清空所有輸入內容嗎？')) {
+                document.getElementById('match-form').reset();
+                
+                // 重置所有textarea
+                document.querySelectorAll('textarea').forEach(textarea => {
+                    textarea.value = '';
+                    
+                    // 觸發字數統計更新
+                    const event = new Event('input');
+                    textarea.dispatchEvent(event);
+                });
+                
+                showNotification('info', '所有輸入已清空');
+            }
+        }
+        
+        // 顯示格式說明
+        function showFormatHelp() {
+            document.getElementById('format-help-modal').style.display = 'flex';
+        }
+        
+        // 關閉格式說明
+        function closeFormatHelp() {
+            document.getElementById('format-help-modal').style.display = 'none';
+        }
+        
+        // 添加更多宮位
+        function addMorePalaces() {
+            const palaceSection = document.querySelector('.palace-section:last-of-type').cloneNode(true);
+            
+            // 更新宮位名稱
+            const palaceTitles = ['艮宮（東北方）', '震宮（東方）', '巽宮（東南方）', '離宮（南方）', '坤宮（西南方）', '中宮'];
+            const lastTitle = document.querySelector('.palace-title:last-of-type').textContent.trim();
+            
+            let nextIndex = 0;
+            for (let i = 0; i < palaceTitles.length; i++) {
+                if (palaceTitles[i] === lastTitle) {
+                    nextIndex = i + 1;
+                    break;
+                }
+            }
+            
+            if (nextIndex < palaceTitles.length) {
+                const newTitle = palaceTitles[nextIndex];
+                palaceSection.querySelector('.palace-title').innerHTML = `<i class="fas fa-compass"></i> ${newTitle}`;
+                
+                // 更新textarea名稱和計數器ID
+                const textareas = palaceSection.querySelectorAll('textarea');
+                textareas.forEach(textarea => {
+                    const oldName = textarea.name;
+                    const palacePrefix = newTitle.split('（')[0].toLowerCase();
+                    const newName = oldName.replace(/^(dui|qian|kan)/, palacePrefix);
+                    textarea.name = newName;
+                    textarea.value = '';
+                    
+                    // 更新計數器ID
+                    const counterId = oldName.replace(/_/g, '-') + '-counter';
+                    const newCounterId = newName.replace(/_/g, '-') + '-counter';
+                    const counterElement = palaceSection.querySelector(`[id="${counterId}"]`);
+                    if (counterElement) {
+                        counterElement.id = newCounterId;
+                        counterElement.textContent = '0';
+                    }
+                });
+                
+                // 插入到最後一個宮位之後
+                document.querySelector('.palace-section:last-of-type').after(palaceSection);
+                
+                // 重新設置字數統計
+                setupCharacterCounters();
+                
+                showNotification('success', `已添加${newTitle}`);
+            } else {
+                showNotification('info', '所有宮位已添加完畢');
+            }
+        }
+        
+        // 收集表單數據
+        function collectFormData() {
+            const formData = {};
+            
+            // 收集所有輸入
+            const formElements = document.getElementById('match-form').elements;
+            for (let element of formElements) {
+                if (element.name && element.value) {
+                    formData[element.name] = element.value.trim();
+                }
+            }
+            
+            // 收集所有textarea
+            document.querySelectorAll('textarea').forEach(textarea => {
+                if (textarea.name && textarea.value) {
+                    formData[textarea.name] = textarea.value.trim();
+                }
+            });
+            
+            return formData;
+        }
+        
+        // 驗證表單
+        function validateForm() {
+            const requiredFields = ['match_code', 'home_team', 'away_team', 'competition_type', 'match_time', 'qimen_global'];
+            let missingFields = [];
+            
+            requiredFields.forEach(field => {
+                const element = document.getElementById(field) || document.querySelector(`[name="${field}"]`);
+                if (!element || !element.value.trim()) {
+                    missingFields.push(field);
+                }
+            });
+            
+            if (missingFields.length > 0) {
+                showNotification('warning', `請填寫以下必填欄位：${missingFields.map(f => {
+                    const fieldNames = {
+                        'match_code': '比賽編號',
+                        'home_team': '主隊名稱',
+                        'away_team': '客隊名稱',
+                        'competition_type': '賽事類別',
+                        'match_time': '比賽時間',
+                        'qimen_global': '奇門全局資訊'
+                    };
+                    return fieldNames[f] || f;
+                }).join('、')}`);
+                return false;
+            }
+            
+            // 檢查全局資訊是否包含關鍵字
+            const globalInfo = document.getElementById('qimen_global').value;
+            const requiredKeywords = ['公曆', '農曆', '四柱', '值符', '值使'];
+            const missingKeywords = requiredKeywords.filter(keyword => !globalInfo.includes(keyword));
+            
+            if (missingKeywords.length > 0) {
+                showNotification('warning', `奇門全局資訊建議包含：${missingKeywords.join('、')}`);
+            }
+            
+            showNotification('success', '表單格式驗證通過！');
+            return true;
         }
         
         // 重置表單
         function resetForm() {
             if (confirm('確定要重置表單嗎？所有輸入的數據將會丟失。')) {
-                document.getElementById('match-form').reset();
+                clearAllInputs();
                 showNotification('info', '表單已重置');
             }
         }
         
         // 預覽分析
         function previewAnalysis() {
-            showNotification('info', '預覽功能開發中...');
-        }
-        
-        // 收集表單數據
-        function collectFormData() {
-            const formData = {};
-            const formElements = document.getElementById('match-form').elements;
+            if (!validateForm()) return;
             
-            for (let element of formElements) {
-                if (element.name) {
-                    formData[element.name] = element.value;
-                }
-            }
+            const formData = collectFormData();
             
-            return formData;
+            // 保存到localStorage供預覽頁使用
+            localStorage.setItem('preview_data', JSON.stringify(formData));
+            localStorage.setItem('preview_mode', 'true');
+            
+            showNotification('info', '正在生成預覽...');
+            
+            // 模擬分析過程
+            setTimeout(() => {
+                window.open('analysis_view.html?preview=true', '_blank');
+            }, 1000);
         }
         
         // 表單提交處理
         document.getElementById('match-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
+            if (!validateForm()) return;
+            
             const submitBtn = e.target.querySelector('button[type="submit"]');
             const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 保存中...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 分析中...';
             submitBtn.disabled = true;
             
             try {
@@ -348,34 +1000,61 @@
                 
                 // 構建奇門數據結構
                 const qimenData = {
-                    solar_date: formData.solar_date,
-                    lunar_date: formData.lunar_date,
-                    yang_dun: formData.yang_dun,
-                    dun_number: parseInt(formData.dun_number),
-                    four_pillars: formData.four_pillars,
-                    kong_wang: formData.kong_wang,
-                    horse_star: formData.horse_star,
-                    value_symbol: formData.value_symbol,
-                    value_door: formData.value_door,
-                    asker_palace: formData.asker_palace,
-                    palaces: {
-                        dui: {
-                            name: '兌宮',
-                            direction: '西方',
-                            four_harm: formData.dui_four_harm,
-                            heavenly_stem: formData.dui_heavenly_stem,
-                            sky_plate: formData.dui_sky_plate,
-                            sky_plate_host: formData.dui_sky_plate_host,
-                            ground_plate: formData.dui_ground_plate,
-                            patterns: formData.dui_patterns,
-                            eight_door: formData.dui_eight_door,
-                            door_sky: formData.dui_door_sky,
-                            nine_star: formData.dui_nine_star,
-                            eight_god: formData.dui_eight_god
-                        }
-                        // 其他宮位...
-                    }
+                    // 比賽基本信息
+                    match_info: {
+                        match_code: formData.match_code,
+                        home_team: formData.home_team,
+                        away_team: formData.away_team,
+                        competition_type: formData.competition_type,
+                        match_time: formData.match_time,
+                        timezone: 'UTC+8'
+                    },
+                    
+                    // 原始文本數據（保持原樣）
+                    raw_text: {
+                        global_info: formData.qimen_global,
+                        additional_notes: formData.additional_notes || ''
+                    },
+                    
+                    // 宮位數據
+                    palaces: {}
                 };
+                
+                // 收集所有宮位數據
+                const palaceFields = Object.keys(formData).filter(key => 
+                    key.includes('_four_harm') || key.includes('_patterns')
+                );
+                
+                // 按宮位分組
+                const palaceData = {};
+                palaceFields.forEach(field => {
+                    const [palace, type] = field.split('_');
+                    if (!palaceData[palace]) {
+                        palaceData[palace] = {};
+                    }
+                    palaceData[palace][type === 'four' ? 'four_harm' : 'patterns'] = formData[field];
+                });
+                
+                // 添加到qimenData
+                Object.keys(palaceData).forEach(palace => {
+                    const palaceNames = {
+                        'dui': { name: '兌宮', direction: '西方' },
+                        'qian': { name: '乾宮', direction: '西北方' },
+                        'kan': { name: '坎宮', direction: '北方' },
+                        'gen': { name: '艮宮', direction: '東北方' },
+                        'zhen': { name: '震宮', direction: '東方' },
+                        'xun': { name: '巽宮', direction: '東南方' },
+                        'li': { name: '離宮', direction: '南方' },
+                        'kun': { name: '坤宮', direction: '西南方' },
+                        'zhong': { name: '中宮', direction: '中央' }
+                    };
+                    
+                    qimenData.palaces[palace] = {
+                        name: palaceNames[palace]?.name || `${palace}宮`,
+                        direction: palaceNames[palace]?.direction || '',
+                        ...palaceData[palace]
+                    };
+                });
                 
                 // 構建比賽數據
                 const matchData = {
@@ -384,7 +1063,6 @@
                     away_team: formData.away_team,
                     competition_type: formData.competition_type,
                     match_time: formData.match_time,
-                    timezone: formData.timezone,
                     status: 'pending',
                     qimen_data: qimenData,
                     created_at: new Date().toISOString(),
@@ -392,22 +1070,54 @@
                 };
                 
                 // 保存到Supabase
-                const savedMatch = await window.supabaseClient.saveMatch(matchData);
+                let savedMatch;
+                try {
+                    savedMatch = await window.supabaseClient.saveMatch(matchData);
+                } catch (dbError) {
+                    console.warn('Supabase保存失敗，使用本地存儲:', dbError);
+                    // 使用本地存儲作為備用
+                    savedMatch = matchData;
+                    localStorage.setItem(`match_${formData.match_code}`, JSON.stringify(matchData));
+                }
                 
                 if (savedMatch) {
-                    showNotification('success', '比賽數據保存成功！');
+                    showNotification('success', '比賽數據保存成功！開始AI分析...');
                     
                     // 執行AI分析
-                    setTimeout(() => {
-                        window.location.href = `analysis_view.html?match=${formData.match_code}`;
-                    }, 1500);
+                    setTimeout(async () => {
+                        try {
+                            // 使用奇門引擎分析
+                            const analysisResult = await window.qimenEngine.analyzeMatch(qimenData);
+                            
+                            if (analysisResult.success) {
+                                // 保存分析結果
+                                matchData.prediction = analysisResult.prediction;
+                                matchData.analysis_report = analysisResult.analysis_report;
+                                
+                                await window.supabaseClient.savePrediction(formData.match_code, analysisResult.prediction);
+                                
+                                showNotification('success', 'AI分析完成！');
+                                
+                                // 跳轉到分析報告頁面
+                                window.location.href = `analysis_view.html?match=${formData.match_code}`;
+                            } else {
+                                throw new Error(analysisResult.error || '分析失敗');
+                            }
+                        } catch (analysisError) {
+                            console.error('AI分析失敗:', analysisError);
+                            showNotification('error', `AI分析失敗：${analysisError.message}`);
+                            
+                            // 仍然跳轉到分析頁面，但使用原始數據
+                            window.location.href = `analysis_view.html?match=${formData.match_code}&raw=true`;
+                        }
+                    }, 2000);
                 } else {
                     throw new Error('保存失敗');
                 }
                 
             } catch (error) {
-                console.error('保存失敗:', error);
-                showNotification('error', `保存失敗：${error.message}`);
+                console.error('處理失敗:', error);
+                showNotification('error', `處理失敗：${error.message}`);
             } finally {
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
@@ -416,11 +1126,16 @@
         
         // 顯示通知
         function showNotification(type, message) {
+            // 移除現有通知
+            document.querySelectorAll('.notification').forEach(n => n.remove());
+            
             const notification = document.createElement('div');
             notification.className = `notification ${type}`;
             notification.innerHTML = `
                 <div class="notification-content">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 
+                                   type === 'error' ? 'exclamation-circle' : 
+                                   type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
                     <span>${message}</span>
                 </div>
                 <button class="notification-close" onclick="this.parentElement.remove()">
@@ -445,6 +1160,12 @@
             const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
             document.getElementById('match_time').value = localDateTime;
             
+            // 設置字數統計
+            setupCharacterCounters();
+            
+            // 更新模板按鈕
+            updateTemplateButtons();
+            
             // 檢查URL參數
             const urlParams = new URLSearchParams(window.location.search);
             const template = urlParams.get('template');
@@ -461,6 +1182,22 @@
                     navMenu.classList.toggle('active');
                 });
             }
+            
+            // 點擊頁面其他地方關閉選單
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.nav-menu') && !e.target.closest('.mobile-menu-btn')) {
+                    navMenu.classList.remove('active');
+                }
+            });
+            
+            // 點擊模態框外部關閉
+            document.getElementById('format-help-modal')?.addEventListener('click', (e) => {
+                if (e.target === document.getElementById('format-help-modal')) {
+                    closeFormatHelp();
+                }
+            });
+            
+            console.log('比賽輸入頁面初始化完成');
         });
     </script>
 </body>
