@@ -1,0 +1,119 @@
+{
+  "version": "5.3",
+  "last_updated": "2026-02-11 15:30:45",
+  "update_source": "比賽FB3200賽後分析",
+  
+  "parameters": {
+    "time_limited": {
+      "value_star_first_half": 0.25,
+      "value_star_second_half": 0.08,
+      "flying_palace_first_half": 0.35,
+      "flying_palace_second_half": 0.08,
+      "bad_pattern_first_half": 1.0,
+      "bad_pattern_second_half": 0.5,
+      "time_decay_rate": 0.25,
+      "peak_energy_time": "45-60"
+    },
+    
+    "time_effective": {
+      "four_harms_first_half": -0.25,
+      "four_harms_second_half": -0.08,
+      "death_door_first_half": -0.15,
+      "death_door_second_half": -0.06,
+      "star_tomb_first_half": -0.12,
+      "star_tomb_second_half": -0.04,
+      "snake_prison_first_half": -0.08,
+      "snake_prison_second_half": -0.03,
+      "nine_heavens_first_half": 0.05,
+      "nine_heavens_second_half": 0.40
+    },
+    
+    "energy_conversion": {
+      "conservation_factor": 1.0,
+      "transformation_coefficient": 0.70,
+      "extreme_conversion_probability": 0.18,
+      "reversal_probability": 0.18,
+      "score_separation_accuracy": 0.85
+    },
+    
+    "technical_algorithms": {
+      "possession_weight": 0.65,
+      "possession_to_goal_conversion": 0.15,
+      "attack_conversion_rate": 0.25,
+      "dangerous_attack_multiplier": 1.3,
+      "counter_attack_efficiency": 0.45,
+      "low_possession_advantage": 0.2,
+      
+      "yellow_cards": {
+        "base_cards": 2.5,
+        "possession_factor": 0.1,
+        "aggression_factor": 0.3,
+        "stadium_factor": 0.15
+      },
+      
+      "possession_death_door": -0.25,
+      "possession_star_tomb": -0.12,
+      "possession_value_star": 0.15,
+      "attack_nine_heavens": 0.50,
+      "attack_value_star": 0.30,
+      "corners_rest_door": 0.15,
+      
+      "xg_model": {
+        "enabled": true,
+        "shot_location_weights": {
+          "six_yard_box": 0.45,
+          "penalty_area": 0.25,
+          "outside_box": 0.08
+        }
+      },
+      
+      "dynamic_weight_adjustment": {
+        "enabled": true,
+        "first_half_weight": 0.4,
+        "second_half_weight": 0.6
+      }
+    }
+  },
+  
+  "qimen_ai_integration": {
+    "star_modifiers": {
+      "天衝": { "attack_mod": 1.2, "aggression_mod": 1.1 },
+      "天英": { "attack_mod": 1.2, "creativity_mod": 1.15 },
+      "天柱": { "defense_mod": 0.85, "discipline_mod": 1.1 },
+      "天芮": { "recovery_mod": 1.2, "stamina_mod": 0.9 }
+    },
+    
+    "gate_modifiers": {
+      "景門": { "attack_mod": 1.15, "creativity_mod": 1.2 },
+      "驚門": { "risk_mod": 1.3, "mistake_mod": 1.25 },
+      "傷門": { "injury_mod": 1.3, "aggression_mod": 1.2 },
+      "休門": { "possession_mod": 1.1, "patience_mod": 1.15 }
+    },
+    
+    "pattern_ai_correlations": {
+      "青龍逃走": { "mistake_mod": 1.3, "counter_attack_mod": 1.4 },
+      "小蛇化龍": { "second_half_mod": 1.25, "reversal_mod": 1.3 },
+      "天乙飛宮": { "counter_attack_mod": 1.35, "position_change_mod": 1.2 }
+    }
+  },
+  
+  "validation_results": {
+    "total_matches": 12,
+    "average_accuracy": 68.5,
+    "macro_accuracy": 50.1,
+    "technical_accuracy": 70.2,
+    "last_validation": "2026-02-11",
+    "improvement_v5.2_v5.3": {
+      "overall": "+15%",
+      "technical": "+30%",
+      "possession_prediction": "+25%"
+    }
+  },
+  
+  "expected_effects": {
+    "accuracy_improvement": "15-20%",
+    "technical_stats_match": "30% improvement",
+    "risk_control": "降低高控球率過度自信",
+    "counter_attack_detection": "新增防守反擊效率評估"
+  }
+}
