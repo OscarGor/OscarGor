@@ -1,500 +1,614 @@
-/**
- * DeepSeek API 集成模块
- * 注意：在实际部署中，API密钥应该通过后端代理，避免在前端暴露
- */
+// ==========================================================================
+// DeepSeek API集成模塊
+// 陰盤奇門足球AI預測系統 V5.2
+// ==========================================================================
 
 class DeepSeekIntegration {
-  constructor() {
-    this.apiKey = null;
-    this.apiBase = 'https://api.deepseek.com';
-    this.model = 'deepseek-chat';
-    this.maxTokens = 2000;
-    this.temperature = 0.7;
-    
-    // 从环境变量或安全存储获取API密钥
-    this.loadAPIKey();
-  }
-
-  loadAPIKey() {
-    // 从localStorage或环境变量获取API密钥
-    // 注意：在生产环境中，应该通过后端代理调用API
-    this.apiKey = localStorage.getItem('DEEPSEEK_API_KEY') || 
-                  process.env.DEEPSEEK_API_KEY;
-    
-    if (!this.apiKey) {
-      console.warn('DeepSeek API密钥未设置，某些功能将受限');
-    }
-  }
-
-  setAPIKey(apiKey) {
-    this.apiKey = apiKey;
-    localStorage.setItem('DEEPSEEK_API_KEY', apiKey);
-  }
-
-  // 分析预测偏差
-  async analyzeDeviation(deviationData) {
-    if (!this.apiKey) {
-      return this.getFallbackAnalysis(deviationData);
-    }
-
-    const prompt = this.createAnalysisPrompt(deviationData);
-    
-    try {
-      const response = await fetch(`${this.apiBase}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.apiKey}`
-        },
-        body: JSON.stringify({
-          model: this.model,
-          messages: [
-            {
-              role: 'system',
-              content: this.getSystemPrompt()
-            },
-            {
-              role: 'user',
-              content: prompt
-            }
-          ],
-          temperature: this.temperature,
-          max_tokens: this.maxTokens,
-          stream: false
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`DeepSeek API请求失败: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return this.parseAnalysisResponse(data.choices[0].message.content);
-      
-    } catch (error) {
-      console.error('DeepSeek分析失败:', error);
-      return this.getFallbackAnalysis(deviationData);
-    }
-  }
-
-  getSystemPrompt() {
-    return `你是一位精通阴盘奇门遁甲的足球预测AI优化专家。请根据提供的预测偏差数据，分析问题并提出具体的优化建议。
-
-你的任务包括：
-1. 分析预测偏差的根本原因
-2. 评估奇门格局识别的准确性
-3. 提出AI参数调整的具体建议
-4. 推荐算法改进方案
-5. 提供下一次预测的注意事项
-
-请以专业、严谨的态度进行分析，确保建议具体可操作。`;
-  }
-
-  createAnalysisPrompt(deviationData) {
-    return `请分析以下阴盘奇门足球预测系统的预测偏差数据，并提出优化建议：
-
-## 比赛信息
-- 比赛编号: ${deviationData.matchCode}
-- 分析时间: ${new Date(deviationData.timestamp).toLocaleString('zh-CN')}
-
-## 预测偏差概况
-${JSON.stringify(deviationData.overallDeviation, null, 2)}
-
-## 详细偏差数据
-${JSON.stringify({
-  赛果偏差: deviationData.resultDeviation,
-  技术指标偏差: deviationData.technicalDeviations,
-  比分偏差: deviationData.scoreDeviation,
-  格局准确率: deviationData.patternAccuracy
-}, null, 2)}
-
-请从以下方面进行分析：
-1. 主要偏差来源和原因分析
-2. 奇门格局识别是否存在问题
-3. AI参数调整的具体建议（包括调整幅度）
-4. 算法改进的建议
-5. 对下次类似比赛的预测建议
-
-请用JSON格式返回分析结果，包含以下字段：
-- analysisSummary: 分析总结
-- rootCauses: 根本原因分析（数组）
-- parameterSuggestions: 参数调整建议（数组，包含参数名、调整方向、理由）
-- algorithmImprovements: 算法改进建议（数组）
-- nextSteps: 下一步行动建议（数组）
-- confidence: 分析置信度（0-100）`;
-  }
-
-  parseAnalysisResponse(responseText) {
-    try {
-      // 尝试提取JSON部分
-      const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/) || 
-                       responseText.match(/{[\s\S]*?}/);
-      
-      if (jsonMatch) {
-        const jsonStr = jsonMatch[1] || jsonMatch[0];
-        const parsed = JSON.parse(jsonStr);
-        return {
-          success: true,
-          ...parsed,
-          rawResponse: responseText
-        };
-      } else {
-        // 如果不是JSON，返回文本分析
-        return {
-          success: true,
-          analysisSummary: responseText,
-          rootCauses: [],
-          parameterSuggestions: [],
-          algorithmImprovements: [],
-          nextSteps: [],
-          confidence: 70,
-          rawResponse: responseText
-        };
-      }
-    } catch (error) {
-      console.error('解析DeepSeek响应失败:', error);
-      return this.getFallbackAnalysis();
-    }
-  }
-
-  getFallbackAnalysis(deviationData) {
-    // 当API不可用时，提供基于规则的默认分析
-    const analysis = {
-      success: false,
-      analysisSummary: '基于规则的分析（DeepSeek API不可用）',
-      rootCauses: [],
-      parameterSuggestions: [],
-      algorithmImprovements: [],
-      nextSteps: [
-        '检查API连接设置',
-        '验证API密钥有效性',
-        '考虑使用本地分析规则'
-      ],
-      confidence: 60,
-      isFallback: true
-    };
-
-    if (deviationData) {
-      // 基于偏差数据生成简单分析
-      if (deviationData.overallDeviation.score < 70) {
-        analysis.rootCauses.push('预测模型可能存在过拟合或欠拟合问题');
+    constructor() {
+        this.apiKey = null;
+        this.baseURL = 'https://api.deepseek.com/v1';
+        this.model = 'deepseek-chat';
+        this.maxTokens = 4000;
+        this.temperature = 0.7;
+        this.initialized = false;
         
-        if (deviationData.resultDeviation && !deviationData.resultDeviation.isCorrect) {
-          analysis.parameterSuggestions.push({
-            parameter: '能量权重系数',
-            adjustment: '降低5-10%',
-            reason: '赛果预测方向错误，需要调整能量计算'
-          });
+        // 從環境變量或localStorage加載API密鑰
+        this.loadAPIKey();
+    }
+    
+    // 加載API密鑰
+    loadAPIKey() {
+        try {
+            // 從localStorage加載
+            const savedKey = localStorage.getItem('deepseek_api_key');
+            if (savedKey) {
+                this.apiKey = savedKey;
+                this.initialized = true;
+                console.log('DeepSeek API密鑰已加載');
+            } else {
+                console.warn('DeepSeek API密鑰未設置，請在系統設置中配置');
+            }
+        } catch (error) {
+            console.error('加載API密鑰失敗:', error);
         }
-
-        const poorTech = deviationData.technicalDeviations
-          ?.filter(t => t.deviationScore < 60)
-          .map(t => t.metric);
+    }
+    
+    // 設置API密鑰
+    setAPIKey(apiKey) {
+        try {
+            this.apiKey = apiKey;
+            this.initialized = true;
+            
+            // 保存到localStorage
+            localStorage.setItem('deepseek_api_key', apiKey);
+            
+            console.log('DeepSeek API密鑰已設置');
+            return { success: true, message: 'API密鑰設置成功' };
+        } catch (error) {
+            console.error('設置API密鑰失敗:', error);
+            return { success: false, message: '設置API密鑰失敗: ' + error.message };
+        }
+    }
+    
+    // 測試API連接
+    async testConnection() {
+        if (!this.apiKey) {
+            return { 
+                success: false, 
+                message: 'API密鑰未設置',
+                connected: false 
+            };
+        }
         
-        if (poorTech && poorTech.length > 0) {
-          analysis.algorithmImprovements.push(
-            `优化${poorTech.join('、')}的技术预测算法`
-          );
-        }
-      }
-    }
-
-    return analysis;
-  }
-
-  // 生成优化代码建议
-  async generateCodeSuggestions(problemDescription) {
-    if (!this.apiKey) {
-      return this.getFallbackCodeSuggestions(problemDescription);
-    }
-
-    try {
-      const response = await fetch(`${this.apiBase}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.apiKey}`
-        },
-        body: JSON.stringify({
-          model: this.model,
-          messages: [
-            {
-              role: 'system',
-              content: `你是一位资深的JavaScript开发专家，专门优化阴盘奇门足球预测系统的代码。
-请根据问题描述，提供具体的代码改进建议、修复方案或优化代码片段。`
-            },
-            {
-              role: 'user',
-              content: `问题描述：${problemDescription}
-
-请提供：
-1. 具体的代码修改建议
-2. 如果有bug，提供修复方案
-3. 优化代码片段（如果需要）
-4. 测试建议
-
-请用JSON格式返回，包含：
-- problemAnalysis: 问题分析
-- codeChanges: 代码修改建议数组
-- fixedCode: 修复后的代码（如果有）
-- testSuggestions: 测试建议数组`
+        try {
+            const response = await this.sendRequest('/models', 'GET');
+            
+            if (response && response.data) {
+                return {
+                    success: true,
+                    message: 'API連接正常',
+                    connected: true,
+                    models: response.data
+                };
+            } else {
+                return {
+                    success: false,
+                    message: 'API響應格式錯誤',
+                    connected: false
+                };
             }
-          ],
-          temperature: 0.5,
-          max_tokens: this.maxTokens
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`API请求失败: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return this.parseCodeResponse(data.choices[0].message.content);
-      
-    } catch (error) {
-      console.error('生成代码建议失败:', error);
-      return this.getFallbackCodeSuggestions(problemDescription);
-    }
-  }
-
-  parseCodeResponse(responseText) {
-    try {
-      const jsonMatch = responseText.match(/```json\s*([\s\S]*?)\s*```/) ||
-                       responseText.match(/{[\s\S]*?}/);
-      
-      if (jsonMatch) {
-        const jsonStr = jsonMatch[1] || jsonMatch[0];
-        return {
-          success: true,
-          ...JSON.parse(jsonStr),
-          rawResponse: responseText
-        };
-      }
-      
-      return {
-        success: true,
-        problemAnalysis: responseText,
-        codeChanges: [],
-        fixedCode: null,
-        testSuggestions: [],
-        rawResponse: responseText
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: '解析失败',
-        rawResponse: responseText
-      };
-    }
-  }
-
-  getFallbackCodeSuggestions(problemDescription) {
-    return {
-      success: false,
-      problemAnalysis: '无法连接到DeepSeek API，请检查网络和API设置',
-      codeChanges: [
-        '建议手动检查相关代码逻辑',
-        '查看控制台错误日志',
-        '验证数据输入格式'
-      ],
-      fixedCode: null,
-      testSuggestions: [
-        '编写单元测试验证修复',
-        '进行集成测试确保功能正常'
-      ],
-      isFallback: true
-    };
-  }
-
-  // 分析奇门格局规律
-  async analyzePatternPatterns(patternData, matchResults) {
-    if (!this.apiKey) {
-      return this.getFallbackPatternAnalysis();
-    }
-
-    const prompt = `分析以下奇门格局数据与比赛结果的关系：
-
-## 奇门格局数据
-${JSON.stringify(patternData, null, 2)}
-
-## 比赛结果
-${JSON.stringify(matchResults, null, 2)}
-
-请分析：
-1. 哪些格局组合对比赛结果有显著影响
-2. 格局的时间效应（上下半场影响差异）
-3. 推荐新增的格局检测规则
-4. 格局权重调整建议
-
-请用JSON格式返回分析结果。`;
-
-    try {
-      const response = await fetch(`${this.apiBase}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${this.apiKey}`
-        },
-        body: JSON.stringify({
-          model: this.model,
-          messages: [
-            {
-              role: 'system',
-              content: '你是一位奇门遁甲专家，专门分析格局与足球比赛结果的关联规律。'
-            },
-            {
-              role: 'user',
-              content: prompt
-            }
-          ],
-          temperature: 0.6,
-          max_tokens: this.maxTokens
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`API请求失败: ${response.status}`);
-      }
-
-      const data = await response.json();
-      return this.parseAnalysisResponse(data.choices[0].message.content);
-      
-    } catch (error) {
-      console.error('分析格局规律失败:', error);
-      return this.getFallbackPatternAnalysis();
-    }
-  }
-
-  getFallbackPatternAnalysis() {
-    return {
-      success: false,
-      analysis: '无法进行深度格局分析，建议手动分析历史数据',
-      suggestions: [
-        '收集更多比赛数据进行统计分析',
-        '手动验证格局与赛果的关联性',
-        '考虑常见格局组合的影响'
-      ],
-      isFallback: true
-    };
-  }
-
-  // 批量处理分析请求
-  async batchAnalyze(requests) {
-    const results = [];
-    
-    for (const request of requests) {
-      try {
-        const result = await this.analyzeDeviation(request.deviationData);
-        results.push({
-          requestId: request.id,
-          success: true,
-          result
-        });
-      } catch (error) {
-        results.push({
-          requestId: request.id,
-          success: false,
-          error: error.message
-        });
-      }
-      
-      // 避免请求过快
-      await new Promise(resolve => setTimeout(resolve, 1000));
-    }
-    
-    return results;
-  }
-
-  // 获取API状态
-  async checkAPIStatus() {
-    if (!this.apiKey) {
-      return {
-        available: false,
-        reason: 'API密钥未设置'
-      };
-    }
-
-    try {
-      const response = await fetch(`${this.apiBase}/models`, {
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`
+        } catch (error) {
+            console.error('API連接測試失敗:', error);
+            return {
+                success: false,
+                message: 'API連接失敗: ' + error.message,
+                connected: false
+            };
         }
-      });
-
-      return {
-        available: response.ok,
-        status: response.status,
-        statusText: response.statusText
-      };
-    } catch (error) {
-      return {
-        available: false,
-        reason: error.message
-      };
     }
-  }
-
-  // 清理API密钥
-  clearAPIKey() {
-    this.apiKey = null;
-    localStorage.removeItem('DEEPSEEK_API_KEY');
-  }
-
-  // 测试API连接
-  async testConnection() {
-    const status = await this.checkAPIStatus();
     
-    if (status.available) {
-      // 发送一个简单的测试请求
-      try {
-        const response = await fetch(`${this.apiBase}/chat/completions`, {
-          method: 'POST',
-          headers: {
+    // 發送請求
+    async sendRequest(endpoint, method = 'GET', data = null) {
+        if (!this.apiKey) {
+            throw new Error('API密鑰未設置');
+        }
+        
+        const url = `${this.baseURL}${endpoint}`;
+        const headers = {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${this.apiKey}`
-          },
-          body: JSON.stringify({
-            model: this.model,
-            messages: [{ role: 'user', content: '测试连接，请回复"连接正常"' }],
-            max_tokens: 10
-          })
-        });
-
-        return {
-          connected: response.ok,
-          message: response.ok ? 'API连接正常' : `连接失败: ${response.status}`
         };
-      } catch (error) {
-        return {
-          connected: false,
-          message: `连接异常: ${error.message}`
+        
+        const options = {
+            method: method,
+            headers: headers,
+            timeout: 30000 // 30秒超時
         };
-      }
+        
+        if (data && (method === 'POST' || method === 'PUT')) {
+            options.body = JSON.stringify(data);
+        }
+        
+        try {
+            const response = await fetch(url, options);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                throw new Error(`API請求失敗: ${response.status} ${response.statusText} - ${errorText}`);
+            }
+            
+            return await response.json();
+        } catch (error) {
+            console.error(`DeepSeek API請求失敗 (${endpoint}):`, error);
+            throw error;
+        }
     }
     
-    return {
-      connected: false,
-      message: status.reason
-    };
-  }
+    // 發送聊天請求
+    async chat(messages, options = {}) {
+        if (!this.initialized) {
+            throw new Error('DeepSeek API未初始化，請先設置API密鑰');
+        }
+        
+        const chatOptions = {
+            model: options.model || this.model,
+            messages: messages,
+            max_tokens: options.maxTokens || this.maxTokens,
+            temperature: options.temperature || this.temperature,
+            stream: options.stream || false
+        };
+        
+        try {
+            const response = await this.sendRequest('/chat/completions', 'POST', chatOptions);
+            
+            if (response && response.choices && response.choices.length > 0) {
+                return {
+                    success: true,
+                    message: response.choices[0].message.content,
+                    usage: response.usage,
+                    finish_reason: response.choices[0].finish_reason
+                };
+            } else {
+                throw new Error('API響應格式錯誤');
+            }
+        } catch (error) {
+            console.error('DeepSeek聊天請求失敗:', error);
+            throw error;
+        }
+    }
+    
+    // 優化奇門參數
+    async optimizeQimenParameters(currentParameters, matchData, actualResults) {
+        const prompt = this.buildOptimizationPrompt(currentParameters, matchData, actualResults);
+        
+        const messages = [
+            {
+                role: 'system',
+                content: '你是一個專業的玄學AI研究員，專門研究陰盤奇門遁甲在足球預測中的應用。請基於實際比賽數據，提供專業的參數優化建議。'
+            },
+            {
+                role: 'user',
+                content: prompt
+            }
+        ];
+        
+        try {
+            const response = await this.chat(messages, { temperature: 0.3 });
+            
+            if (response.success) {
+                return this.parseOptimizationResponse(response.message);
+            } else {
+                throw new Error('參數優化失敗');
+            }
+        } catch (error) {
+            console.error('奇門參數優化失敗:', error);
+            throw error;
+        }
+    }
+    
+    // 構建優化提示詞
+    buildOptimizationPrompt(currentParameters, matchData, actualResults) {
+        return `
+請作為AI玄學研究員分析以下足球比賽數據，並提供陰盤奇門參數優化建議：
+
+【比賽信息】
+球賽編號：${matchData.match_code || '未知'}
+對陣：${matchData.home_team || '未知'} vs ${matchData.away_team || '未知'}
+賽事：${matchData.competition_type || '未知'}
+比賽時間：${matchData.match_time || '未知'}
+
+【實際賽果】
+半場比數：${actualResults.half_time_score || '未知'}
+全場比數：${actualResults.full_time_score || '未知'}
+技術數據：${JSON.stringify(actualResults.technical_stats || {})}
+
+【當前奇門參數】（V${currentParameters.version || '5.2'}）
+${JSON.stringify(currentParameters, null, 2)}
+
+【分析要求】
+1. 請分析實際賽果與當前參數預測的差異
+2. 識別需要調整的參數（時限性、時效性、能量轉換等）
+3. 提供具體的參數調整建議，包括：
+   - 哪些參數需要增加/減少
+   - 調整幅度和理由
+   - 對未來預測的影響
+4. 建議新的參數值
+
+請以JSON格式返回優化建議，結構如下：
+{
+  "analysis_summary": "對比賽結果和參數表現的簡要分析",
+  "parameters_to_adjust": [
+    {
+      "parameter_name": "參數名稱",
+      "current_value": "當前值",
+      "suggested_value": "建議值",
+      "adjustment_reason": "調整理由",
+      "expected_impact": "預期影響"
+    }
+  ],
+  "recommended_new_values": {
+    "parameter_name": "新值"
+  },
+  "confidence_level": "高/中/低",
+  "additional_notes": "其他建議"
+}
+        `;
+    }
+    
+    // 解析優化響應
+    parseOptimizationResponse(responseText) {
+        try {
+            // 嘗試從響應中提取JSON
+            const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                return JSON.parse(jsonMatch[0]);
+            } else {
+                // 如果沒有JSON，返回原始文本
+                return {
+                    success: true,
+                    raw_response: responseText,
+                    parsed: false
+                };
+            }
+        } catch (error) {
+            console.error('解析優化響應失敗:', error);
+            return {
+                success: false,
+                raw_response: responseText,
+                error: error.message
+            };
+        }
+    }
+    
+    // 分析奇門格局
+    async analyzeQimenPatterns(palaceData, matchContext) {
+        const prompt = this.buildPatternAnalysisPrompt(palaceData, matchContext);
+        
+        const messages = [
+            {
+                role: 'system',
+                content: '你是一個專業的奇門遁甲分析師，擅長解讀足球比賽相關的奇門格局。請提供專業、準確的分析。'
+            },
+            {
+                role: 'user',
+                content: prompt
+            }
+        ];
+        
+        try {
+            const response = await this.chat(messages, { temperature: 0.4 });
+            
+            return {
+                success: true,
+                analysis: response.message,
+                usage: response.usage
+            };
+        } catch (error) {
+            console.error('奇門格局分析失敗:', error);
+            throw error;
+        }
+    }
+    
+    // 構建格局分析提示詞
+    buildPatternAnalysisPrompt(palaceData, matchContext) {
+        return `
+請分析以下陰盤奇門格局，並預測足球比賽結果：
+
+【比賽背景】
+${JSON.stringify(matchContext, null, 2)}
+
+【奇門格局信息】
+${JSON.stringify(palaceData, null, 2)}
+
+【分析要求】
+1. 宮位能量分析：分析各個宮位的能量強弱和影響
+2. 格局解讀：解讀重要格局（吉格、凶格）的含義
+3. 時效性分析：分析格局對上半場和下半場的不同影響
+4. 球隊對應：分析哪個宮位對應主隊，哪個對應客隊
+5. 比賽預測：預測半場和全場比分、關鍵事件（進球、黃牌、角球等）
+6. 能量轉換：分析比賽過程中可能發生的能量轉換
+
+請以專業的玄學分析師角度，提供詳細的分析報告。
+        `;
+    }
+    
+    // 生成比賽報告
+    async generateMatchReport(analysisData) {
+        const prompt = this.buildReportGenerationPrompt(analysisData);
+        
+        const messages = [
+            {
+                role: 'system',
+                content: '你是一個專業的足球比賽分析師，擅長結合玄學數據和技術分析生成專業報告。'
+            },
+            {
+                role: 'user',
+                content: prompt
+            }
+        ];
+        
+        try {
+            const response = await this.chat(messages, { temperature: 0.5 });
+            
+            return {
+                success: true,
+                report: response.message,
+                usage: response.usage
+            };
+        } catch (error) {
+            console.error('生成比賽報告失敗:', error);
+            throw error;
+        }
+    }
+    
+    // 構建報告生成提示詞
+    buildReportGenerationPrompt(analysisData) {
+        return `
+請基於以下分析數據，生成一份專業的足球比賽分析報告：
+
+【分析數據】
+${JSON.stringify(analysisData, null, 2)}
+
+【報告要求】
+1. 報告標題：吸引人的標題，包含比賽信息
+2. 執行摘要：簡要總結分析結果和主要預測
+3. 奇門分析：詳細的奇門格局解讀
+4. 技術分析：基於奇門數據的技術指標分析
+5. 預測結果：清晰的比分預測和概率
+6. 關鍵看點：比賽中需要關注的重點
+7. 風險提示：可能影響結果的不確定因素
+8. 建議：對觀賽或投注的建議
+
+請使用專業、客觀的語氣，確保報告結構清晰、內容完整。
+        `;
+    }
+    
+    // 批量處理比賽數據
+    async batchProcessMatches(matchesData, analysisType = 'full') {
+        const results = [];
+        
+        for (let i = 0; i < matchesData.length; i++) {
+            const match = matchesData[i];
+            
+            try {
+                console.log(`處理比賽 ${i + 1}/${matchesData.length}: ${match.match_code}`);
+                
+                let result;
+                if (analysisType === 'full') {
+                    result = await this.analyzeQimenPatterns(match.palace_data, match.context);
+                } else if (analysisType === 'optimization') {
+                    result = await this.optimizeQimenParameters(
+                        match.parameters, 
+                        match.match_data, 
+                        match.actual_results
+                    );
+                }
+                
+                results.push({
+                    match_code: match.match_code,
+                    success: true,
+                    result: result
+                });
+                
+                // 避免API速率限制
+                await this.delay(1000);
+                
+            } catch (error) {
+                console.error(`處理比賽 ${match.match_code} 失敗:`, error);
+                results.push({
+                    match_code: match.match_code,
+                    success: false,
+                    error: error.message
+                });
+            }
+        }
+        
+        return results;
+    }
+    
+    // 延遲函數
+    delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    // 獲取使用統計
+    async getUsageStatistics() {
+        try {
+            const usageData = localStorage.getItem('deepseek_usage_stats');
+            
+            if (usageData) {
+                return JSON.parse(usageData);
+            } else {
+                return {
+                    total_requests: 0,
+                    successful_requests: 0,
+                    failed_requests: 0,
+                    total_tokens_used: 0,
+                    last_reset: new Date().toISOString(),
+                    daily_usage: {}
+                };
+            }
+        } catch (error) {
+            console.error('獲取使用統計失敗:', error);
+            return null;
+        }
+    }
+    
+    // 更新使用統計
+    updateUsageStats(response, endpoint) {
+        try {
+            const now = new Date();
+            const today = now.toISOString().split('T')[0];
+            
+            let stats = localStorage.getItem('deepseek_usage_stats');
+            if (stats) {
+                stats = JSON.parse(stats);
+            } else {
+                stats = {
+                    total_requests: 0,
+                    successful_requests: 0,
+                    failed_requests: 0,
+                    total_tokens_used: 0,
+                    last_reset: now.toISOString(),
+                    daily_usage: {}
+                };
+            }
+            
+            // 更新統計
+            stats.total_requests++;
+            
+            if (response && response.success !== false) {
+                stats.successful_requests++;
+                
+                // 更新token使用量
+                if (response.usage) {
+                    stats.total_tokens_used += response.usage.total_tokens || 0;
+                }
+            } else {
+                stats.failed_requests++;
+            }
+            
+            // 更新日使用量
+            if (!stats.daily_usage[today]) {
+                stats.daily_usage[today] = {
+                    requests: 0,
+                    tokens: 0
+                };
+            }
+            stats.daily_usage[today].requests++;
+            if (response && response.usage) {
+                stats.daily_usage[today].tokens += response.usage.total_tokens || 0;
+            }
+            
+            // 保存統計
+            localStorage.setItem('deepseek_usage_stats', JSON.stringify(stats));
+            
+            return stats;
+        } catch (error) {
+            console.error('更新使用統計失敗:', error);
+            return null;
+        }
+    }
+    
+    // 清理舊的使用數據
+    cleanupOldStats(daysToKeep = 30) {
+        try {
+            let stats = localStorage.getItem('deepseek_usage_stats');
+            if (!stats) return;
+            
+            stats = JSON.parse(stats);
+            const cutoffDate = new Date();
+            cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
+            
+            const newDailyUsage = {};
+            for (const [date, data] of Object.entries(stats.daily_usage)) {
+                const dateObj = new Date(date);
+                if (dateObj >= cutoffDate) {
+                    newDailyUsage[date] = data;
+                }
+            }
+            
+            stats.daily_usage = newDailyUsage;
+            localStorage.setItem('deepseek_usage_stats', JSON.stringify(stats));
+            
+            console.log('已清理舊的使用統計數據');
+        } catch (error) {
+            console.error('清理使用統計失敗:', error);
+        }
+    }
+    
+    // 重置使用統計
+    resetUsageStats() {
+        try {
+            const now = new Date();
+            const stats = {
+                total_requests: 0,
+                successful_requests: 0,
+                failed_requests: 0,
+                total_tokens_used: 0,
+                last_reset: now.toISOString(),
+                daily_usage: {}
+            };
+            
+            localStorage.setItem('deepseek_usage_stats', JSON.stringify(stats));
+            console.log('使用統計已重置');
+            
+            return stats;
+        } catch (error) {
+            console.error('重置使用統計失敗:', error);
+            throw error;
+        }
+    }
+    
+    // 獲取模型列表
+    async getAvailableModels() {
+        try {
+            const response = await this.sendRequest('/models', 'GET');
+            return response.data || [];
+        } catch (error) {
+            console.error('獲取模型列表失敗:', error);
+            return [];
+        }
+    }
+    
+    // 設置模型
+    setModel(modelName) {
+        const validModels = ['deepseek-chat', 'deepseek-coder'];
+        
+        if (validModels.includes(modelName)) {
+            this.model = modelName;
+            localStorage.setItem('deepseek_model', modelName);
+            console.log(`DeepSeek模型已設置為: ${modelName}`);
+            return { success: true, message: `模型已設置為 ${modelName}` };
+        } else {
+            return { 
+                success: false, 
+                message: `無效的模型名稱。可用模型: ${validModels.join(', ')}` 
+            };
+        }
+    }
+    
+    // 獲取當前配置
+    getConfig() {
+        return {
+            initialized: this.initialized,
+            model: this.model,
+            maxTokens: this.maxTokens,
+            temperature: this.temperature,
+            baseURL: this.baseURL
+        };
+    }
+    
+    // 更新配置
+    updateConfig(config) {
+        try {
+            if (config.model) {
+                this.setModel(config.model);
+            }
+            
+            if (config.maxTokens) {
+                this.maxTokens = parseInt(config.maxTokens);
+                localStorage.setItem('deepseek_max_tokens', this.maxTokens);
+            }
+            
+            if (config.temperature) {
+                this.temperature = parseFloat(config.temperature);
+                localStorage.setItem('deepseek_temperature', this.temperature);
+            }
+            
+            console.log('DeepSeek配置已更新');
+            return { success: true, message: '配置更新成功' };
+        } catch (error) {
+            console.error('更新配置失敗:', error);
+            return { success: false, message: '更新配置失敗: ' + error.message };
+        }
+    }
 }
 
-// 创建全局实例
-const deepSeekIntegration = new DeepSeekIntegration();
+// 創建全局實例
+window.deepSeekIntegration = new DeepSeekIntegration();
 
-// 导出配置
-export const DeepSeekConfig = {
-  apiBase: 'https://api.deepseek.com',
-  model: 'deepseek-chat',
-  maxTokens: 2000,
-  temperature: 0.7
-};
-
-export default deepSeekIntegration;
-
-// 使用示例：
-// 1. 设置API密钥：deepSeekIntegration.setAPIKey('your-api-key')
-// 2. 分析偏差：const analysis = await deepSeekIntegration.analyzeDeviation(deviationData)
-// 3. 生成代码建议：const suggestions = await deepSeekIntegration.generateCodeSuggestions(problem)
-// 4. 检查状态：const status = await deepSeekIntegration.checkAPIStatus()
+// 導出模塊
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = DeepSeekIntegration;
+}
