@@ -1,414 +1,337 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>陰盤奇門足球AI預測系統 V5.3 - 儀表板</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* 簡易通知樣式（與賽果驗證頁面統一） */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            border-radius: 8px;
-            background: white;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            min-width: 300px;
-            max-width: 400px;
-            animation: slideIn 0.3s ease;
-            border-left: 5px solid;
-        }
-        .notification.success { border-left-color: #27ae60; }
-        .notification.error { border-left-color: #e74c3c; }
-        .notification.warning { border-left-color: #f39c12; }
-        .notification.info { border-left-color: #3498db; }
-        .notification-content { display: flex; align-items: center; gap: 10px; flex: 1; }
-        .notification-close { background: none; border: none; cursor: pointer; color: #7f8c8d; }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        /* 表格操作按鈕排列 */
-        .action-buttons { display: flex; gap: 5px; flex-wrap: wrap; }
-        .btn-sm { padding: 5px 10px; font-size: 0.85em; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oscar Lam · IT & web collaborator</title>
+  <!-- Bootstrap 5 + Icons (Bootstrap Icons + Font Awesome) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #f4f7fc;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+      scroll-behavior: smooth;
+    }
+    /* playful yet professional gradient header */
+    .profile-header {
+      background: linear-gradient(145deg, #1e2b5e 0%, #2c3e8f 40%, #4a5fa8 100%);
+      color: white;
+      padding: 3rem 0 5rem 0;
+      border-radius: 0 0 50px 50px;
+      box-shadow: 0 10px 25px rgba(0,20,40,0.2);
+      margin-bottom: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-header::after {
+      content: "⚡ 💻 🌐";
+      font-size: 5rem;
+      opacity: 0.1;
+      position: absolute;
+      bottom: -20px;
+      right: 20px;
+      transform: rotate(-5deg);
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    .profile-img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      border: 5px solid rgba(255,255,255,0.6);
+      box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+      font-size: 5rem;
+      color: #1e2b5e;
+    }
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 600;
+      margin-bottom: 2.5rem;
+      position: relative;
+      display: inline-block;
+    }
+    .section-title:after {
+      content: '';
+      display: block;
+      width: 70%;
+      height: 4px;
+      background: #2c3e8f;
+      border-radius: 4px;
+      margin-top: 8px;
+      transition: width 0.2s;
+    }
+    .skill-card {
+      background: white;
+      border-radius: 28px;
+      padding: 2rem 1.5rem;
+      height: 100%;
+      box-shadow: 0 12px 26px -8px rgba(30, 43, 94, 0.15);
+      transition: all 0.25s ease;
+      border: 1px solid rgba(255,255,255,0.5);
+      backdrop-filter: blur(2px);
+      text-align: center;
+    }
+    .skill-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 22px 35px -10px #1e2b5e66;
+    }
+    .skill-icon {
+      font-size: 3.2rem;
+      color: #2c3e8f;
+      margin-bottom: 1.3rem;
+    }
+    .exp-item {
+      background: white;
+      border-radius: 28px;
+      padding: 2rem;
+      margin-bottom: 1.8rem;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+      border-left: 8px solid #4a5fa8;
+      transition: 0.2s;
+    }
+    .exp-item:hover {
+      border-left-width: 12px;
+      background: #fefefe;
+    }
+    .badge {
+      font-size: 0.85rem;
+      padding: 0.5rem 0.9rem;
+      margin: 0.2rem;
+      border-radius: 30px;
+      font-weight: 500;
+    }
+    .btn-oscar {
+      background: #1e2b5e;
+      border: none;
+      color: white;
+      border-radius: 40px;
+      padding: 12px 38px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      box-shadow: 0 6px 12px rgba(30,43,94,0.25);
+      transition: all 0.15s;
+    }
+    .btn-oscar:hover {
+      background: #2c3e8f;
+      transform: scale(1.02);
+      color: white;
+    }
+    .footer {
+      background: #121b38;
+      color: #ccd9f0;
+      padding: 2rem 0;
+      margin-top: 4rem;
+      border-radius: 40px 40px 0 0;
+    }
+    .footer a {
+      color: #b4c4ff;
+    }
+    .quick-facts {
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(8px);
+      border-radius: 28px;
+      padding: 1.8rem;
+      border: 1px solid white;
+    }
+    .quick-facts i {
+      width: 26px;
+      color: #1e2b5e;
+    }
+    a {
+      text-decoration: none;
+      font-weight: 500;
+    }
+    hr {
+      opacity: 0.25;
+    }
+    /* small tweaks for mobile */
+    @media (max-width: 576px) {
+      .profile-header { padding: 2rem 0 3.5rem; }
+      .section-title { font-size: 1.9rem; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 導航列 - 版本 V5.3 -->
-        <nav class="navbar">
-            <div class="nav-brand">
-                <i class="fas fa-futbol"></i>
-                <span>陰盤奇門足球AI預測系統 V5.3</span>
-            </div>
-            <div class="nav-menu">
-                <a href="index.html" class="active"><i class="fas fa-home"></i> 儀表板</a>
-                <a href="match_input.html"><i class="fas fa-plus-circle"></i> 輸入比賽</a>
-                <a href="analysis_view.html"><i class="fas fa-chart-bar"></i> 分析報告</a>
-                <a href="result_verification.html"><i class="fas fa-check-circle"></i> 賽果驗證</a>
-                <a href="pattern_library.html"><i class="fas fa-book"></i> 格局庫</a>
-                <a href="system_status.html"><i class="fas fa-server"></i> 系統狀態</a>
-            </div>
-            <div class="mobile-menu-btn">
-                <i class="fas fa-bars"></i>
-            </div>
-        </nav>
 
-        <!-- 主內容區 -->
-        <main class="main-content">
-            <!-- 統計卡片（預設靜態值，真實數據載入後會動態更新） -->
-            <div class="stats-grid">
-                <div class="stat-card primary">
-                    <div class="stat-icon"><i class="fas fa-bullseye"></i></div>
-                    <div class="stat-content">
-                        <h3>總體準確度</h3>
-                        <p class="stat-value" id="stat-accuracy">78.2%</p>
-                        <p class="stat-desc">基於18場歷史數據</p>
-                    </div>
-                </div>
-                <div class="stat-card success">
-                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                    <div class="stat-content">
-                        <h3>已驗證比賽</h3>
-                        <p class="stat-value" id="stat-verified">16場</p>
-                        <p class="stat-desc" id="stat-verified-desc">12場方向正確</p>
-                    </div>
-                </div>
-                <div class="stat-card warning">
-                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                    <div class="stat-content">
-                        <h3>待驗證比賽</h3>
-                        <p class="stat-value" id="stat-pending">2場</p>
-                        <p class="stat-desc" id="stat-pending-desc">FB3250, FB3251</p>
-                    </div>
-                </div>
-                <div class="stat-card info">
-                    <div class="stat-icon"><i class="fas fa-cogs"></i></div>
-                    <div class="stat-content">
-                        <h3>當前參數版本</h3>
-                        <p class="stat-value">V5.3</p>
-                        <p class="stat-desc">奇門-AI整合版本</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 最近比賽記錄 -->
-            <div class="section">
-                <div class="section-header">
-                    <h2><i class="fas fa-history"></i> 最近比賽記錄</h2>
-                    <button class="btn btn-primary" onclick="loadTemplate('FB3250')">
-                        <i class="fas fa-magic"></i> 載入FB3250模板
-                    </button>
-                </div>
-                <div class="table-responsive">
-                    <table class="matches-table">
-                        <thead>
-                            <tr>
-                                <th>比賽編號</th>
-                                <th>對陣</th>
-                                <th>賽事</th>
-                                <th>狀態</th>
-                                <th>預測結果</th>
-                                <th>操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="matches-list">
-                            <tr><td colspan="6" class="text-center"><i class="fas fa-spinner fa-spin"></i> 載入中...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- 系統狀態監控 -->
-            <div class="section">
-                <div class="section-header">
-                    <h2><i class="fas fa-heartbeat"></i> 系統狀態監控</h2>
-                </div>
-                <div class="status-grid">
-                    <div class="status-item"><div class="status-indicator online"></div><span>本地儲存</span></div>
-                    <div class="status-item"><div class="status-indicator online"></div><span>AI引擎</span></div>
-                    <div class="status-item"><div class="status-indicator online"></div><span>參數庫</span></div>
-                    <div class="status-item"><div class="status-indicator warning"></div><span>待驗證數據</span></div>
-                </div>
-            </div>
-
-            <!-- 系統版本信息 -->
-            <div class="section">
-                <div class="section-header">
-                    <h2><i class="fas fa-code-branch"></i> 系統版本</h2>
-                </div>
-                <div class="status-grid">
-                    <div class="status-item"><div class="status-indicator online"></div><span>主系統：V5.3</span></div>
-                    <div class="status-item"><div class="status-indicator online"></div><span>AI參數：V5.3</span></div>
-                    <div class="status-item"><div class="status-indicator online"></div><span>奇門引擎：V5.3</span></div>
-                    <div class="status-item"><div class="status-indicator online"></div><span>格局庫：V5.3</span></div>
-                </div>
-                <div class="performance-metrics">
-                    <div class="metric-card">
-                        <div class="metric-value">78%</div>
-                        <div class="metric-label">預測準確度</div>
-                        <div class="metric-trend up">↑15%</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value">85%</div>
-                        <div class="metric-label">技術統計匹配</div>
-                        <div class="metric-trend up">↑30%</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value">+12%</div>
-                        <div class="metric-label">控球預測改善</div>
-                        <div class="metric-trend up">↑</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value">V5.3</div>
-                        <div class="metric-label">奇門-AI整合</div>
-                        <div class="metric-trend up">新功能</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 快速操作按鈕 -->
-            <div class="quick-actions">
-                <button class="action-btn" onclick="location.href='match_input.html'">
-                    <i class="fas fa-plus"></i><span>新比賽輸入</span>
-                </button>
-                <button class="action-btn" onclick="location.href='result_verification.html'">
-                    <i class="fas fa-check-double"></i><span>賽果驗證</span>
-                </button>
-                <button class="action-btn" onclick="location.href='update_instructions.html'">
-                    <i class="fas fa-code-branch"></i><span>查看更新指令</span>
-                </button>
-                <button class="action-btn" onclick="refreshSystem()">
-                    <i class="fas fa-sync-alt"></i><span>刷新系統</span>
-                </button>
-                <button class="action-btn" onclick="exportAllMatches()">
-                    <i class="fas fa-download"></i><span>匯出比賽數據</span>
-                </button>
-            </div>
-        </main>
-
-        <!-- 底部資訊 - 版本 V5.3 -->
-        <footer class="footer">
-            <p>甲方己土玄學顧問公司 · AI陰盤奇門足球分析系統 V5.3</p>
-            <p>報告時間：<span id="current-time"></span></p>
-        </footer>
+  <!-- HERO / HEADER (name, email, personality) -->
+  <div class="profile-header text-center">
+    <div class="container position-relative">
+      <div class="profile-img mx-auto">
+        <i class="fa-regular fa-face-smile-wink"></i>  <!-- friendly wink icon -->
+      </div>
+      <h1 class="display-3 fw-bold">Oscar Lam</h1>
+      <p class="fs-3 fw-light"><i class="bi bi-chevron-double-right"></i> IT generalist · web & app · network <i class="bi bi-chevron-double-left"></i></p>
+      <div class="d-flex flex-column flex-sm-row align-items-center justify-content-center gap-3 mt-3 fs-5">
+        <span><i class="bi bi-envelope-paper-fill me-2"></i> oscarlam1020@gmail.com</span>
+        <span class="d-none d-sm-block">|</span>
+        <span><i class="bi bi-emoji-sunglasses-fill me-2"></i> eager to learn · outgoing · collaborator</span>
+      </div>
+      <div class="mt-5">
+        <a href="#contact" class="btn btn-light btn-lg px-5 py-3 rounded-pill shadow-sm">
+          <i class="bi bi-chat-dots-fill me-2"></i>Let's team up
+        </a>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // ========== 全域函數 ==========
-        // 更新時間
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('current-time').textContent = now.toLocaleString('zh-TW', { hour12: false });
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
+  <div class="container">
 
-        // 顯示通知（與賽果驗證頁面一致）
-        function showNotification(type, message) {
-            const old = document.querySelectorAll('.notification');
-            old.forEach(n => n.remove());
-            const notification = document.createElement('div');
-            notification.className = `notification ${type}`;
-            notification.innerHTML = `
-                <div class="notification-content">
-                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-                    <span>${message}</span>
-                </div>
-                <button class="notification-close" onclick="this.parentElement.remove()">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 5000);
-        }
+    <!-- about + quick facts (bilingual friendly, but fully english) -->
+    <section id="about" class="mb-5">
+      <h2 class="section-title">👋 about me</h2>
+      <div class="row g-4 align-items-stretch">
+        <div class="col-lg-7">
+          <div class="bg-white p-4 p-xl-5 rounded-4 shadow h-100 d-flex flex-column justify-content-center">
+            <p class="fs-4 fw-light">I'm Oscar — an IT professional who loves blending creativity with solid tech. I'm naturally curious and outgoing, which makes collaboration exciting for me. Whether it's building a WordPress site, pulling network cables, or prototyping a Flutter app, I enjoy every step.</p>
+            <p class="fs-5 mt-3"><i class="bi bi-star-fill text-warning me-2"></i> Currently open for <strong>new projects & collaborations</strong> — let’s build something great together.</p>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="quick-facts h-100 d-flex flex-column justify-content-center">
+            <h4 class="fw-semibold mb-3"><i class="bi bi-lightning-charge-fill me-2" style="color:#1e2b5e;"></i> quick facts</h4>
+            <ul class="list-unstyled">
+              <li class="mb-3 fs-5"><i class="bi bi-check-circle-fill me-2" style="color:#2c3e8f;"></i> <strong>always learning</strong> (new frameworks, tools, best practices)</li>
+              <li class="mb-3 fs-5"><i class="bi bi-check-circle-fill me-2" style="color:#2c3e8f;"></i> <strong>outgoing & communicative</strong> — team player since forever</li>
+              <li class="mb-3 fs-5"><i class="bi bi-check-circle-fill me-2" style="color:#2c3e8f;"></i> <strong>end‑to‑end thinking</strong> : from cabling to frontend</li>
+              <li class="fs-5"><i class="bi bi-check-circle-fill me-2" style="color:#2c3e8f;"></i> <strong>board game geek & tech enthusiast</strong> 🎲</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
 
-        // 載入比賽列表（完全從 localStorage，無真實數據時顯示範例但不寫入儲存）
-        async function loadMatches() {
-            const tbody = document.getElementById('matches-list');
-            tbody.innerHTML = '<tr><td colspan="6" class="text-center"><i class="fas fa-spinner fa-spin"></i> 載入中...</td></tr>';
+    <!-- SKILLS grid (IT skills: wordpress, css3, html5, db, network, firewall, cabling, flutter, firebase) -->
+    <section id="skills" class="mb-5">
+      <h2 class="section-title">🛠️ IT SKILLS & tools</h2>
+      <div class="row g-4">
+        <div class="col-sm-6 col-lg-4">
+          <div class="skill-card"><div class="skill-icon"><i class="fa-brands fa-wordpress"></i></div><h4>WordPress</h4><p>themes, plugins, custom builds (like <strong>meepletree.com</strong>)</p></div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="skill-card"><div class="skill-icon"><i class="fa-brands fa-html5"></i> <i class="fa-brands fa-css3-alt"></i></div><h4>HTML5 & CSS3</h4><p>responsive, flex/grid, animations, modern layout</p></div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-database"></i></div><h4>Database</h4><p>MySQL, MariaDB, query tuning, db design</p></div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-shield-halved"></i></div><h4>Network & Firewall</h4><p>firewall rules, vlan, cisco/fortinet basics, security</p></div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-network-wired"></i></div><h4>Cabling / infrastructure</h4><p>cat5e/cat6, termination, rack layout, school networks</p></div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="skill-card"><div class="skill-icon"><i class="fa-brands fa-flutter"></i></div><h4>Flutter</h4><p>cross‑platform apps (iOS/Android) with Dart</p></div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-fire"></i></div><h4>Firebase</h4><p>auth, firestore, realtime db, cloud functions</p></div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="skill-card"><div class="skill-icon"><i class="fa-solid fa-wrench"></i></div><h4>Network admin</h4><p>switch config, monitoring, troubleshooting (schools)</p></div>
+        </div>
+        <div class="col-sm-6 col-lg-4">
+          <div class="skill-card"><div class="skill-icon"><i class="fa-regular fa-object-group"></i></div><h4>UI / prototyping</h4><p>from wireframe to flutter widget</p></div>
+        </div>
+      </div>
+    </section>
 
-            try {
-                // 從 localStorage 讀取所有 match_ 開頭的比賽
-                let matches = [];
-                for (let i = 0; i < localStorage.length; i++) {
-                    const key = localStorage.key(i);
-                    if (key.startsWith('match_')) {
-                        try {
-                            const m = JSON.parse(localStorage.getItem(key));
-                            if (m && m.match_code) matches.push(m);
-                        } catch (e) {}
-                    }
-                }
+    <!-- experience: school IT, meepletree, app dev -->
+    <section id="experience" class="mb-5">
+      <h2 class="section-title">📁 real‑world experience</h2>
 
-                const hasRealData = matches.length > 0;
+      <div class="exp-item">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h3 class="h4"><i class="fa-solid fa-school me-2" style="color:#1e2b5e;"></i> IT technician – school network management</h3>
+            <p class="text-secondary">primary & secondary schools (2019–2023)</p>
+            <p>Full responsibility for network infrastructure: <strong>cabling (Ethernet, patch panels), firewall configuration (pfSense, FortiGate),</strong> switch maintenance, and user support. Managed ~400 devices across two campuses.</p>
+          </div>
+          <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <span class="badge bg-primary">network</span>
+            <span class="badge bg-secondary">firewall</span>
+            <span class="badge bg-info">cabling</span>
+            <span class="badge bg-dark">IT support</span>
+          </div>
+        </div>
+      </div>
 
-                // 若完全無資料，使用範例資料（僅顯示，不存 localStorage）
-                if (!hasRealData) {
-                    matches = [
-                        {
-                            match_code: 'FB3250',
-                            home_team: '曼城',
-                            away_team: '利物浦',
-                            competition_type: '英超',
-                            status: '待驗證',
-                            prediction: { result: '主勝 (68%)', recommended_bet: '主勝' }
-                        },
-                        {
-                            match_code: 'FB3251',
-                            home_team: '拜仁慕尼黑',
-                            away_team: '多特蒙德',
-                            competition_type: '德甲',
-                            status: '待驗證',
-                            prediction: { result: '和局 (40%)', recommended_bet: '和局' }
-                        },
-                        {
-                            match_code: 'FB3200',
-                            home_team: '馬德里CFF女足',
-                            away_team: '特內里費女足',
-                            competition_type: '女子西班牙盃',
-                            status: '已驗證',
-                            prediction: { result: '客勝 (65%)', recommended_bet: '客勝' },
-                            actual_result: '客勝',
-                            verified: true
-                        }
-                    ];
-                }
+      <div class="exp-item">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h3 class="h4"><i class="fa-solid fa-dice-d6 me-2" style="color:#1e2b5e;"></i> Web designer for board game studio – Meeple Tree</h3>
+            <p class="text-secondary"><a href="https://www.meepletree.com/" target="_blank" class="text-decoration-underline fw-semibold">https://www.meepletree.com/</a> (still live)</p>
+            <p>Built a custom WordPress site with CSS3/HTML5 from scratch. The client (a board game company) uses it for community & news. Focus on clean UI, mobile responsiveness, and easy content updates.</p>
+          </div>
+          <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <span class="badge bg-warning text-dark">WordPress</span>
+            <span class="badge bg-danger">HTML5</span>
+            <span class="badge bg-success">CSS3</span>
+            <span class="badge bg-info">responsive</span>
+          </div>
+        </div>
+      </div>
 
-                // 排序：待驗證優先
-                matches.sort((a, b) => (a.status === '待驗證' && b.status !== '待驗證') ? -1 : 1);
+      <div class="exp-item">
+        <div class="row align-items-center">
+          <div class="col-md-8">
+            <h3 class="h4"><i class="fa-brands fa-flutter me-2" style="color:#1e2b5e;"></i> Mobile app – Flutter + Firebase</h3>
+            <p class="text-secondary">personal project / freelance</p>
+            <p>Designed and developed a cross‑platform app using <strong>Flutter</strong> and <strong>Google Firebase</strong> (Authentication, Cloud Firestore, Storage). Real‑time sync, clean UI, and smooth performance on both Android & iOS.</p>
+          </div>
+          <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <span class="badge bg-primary">Flutter</span>
+            <span class="badge bg-warning text-dark">Firebase</span>
+            <span class="badge bg-info">Dart</span>
+            <span class="badge bg-secondary">cross‑platform</span>
+          </div>
+        </div>
+      </div>
 
-                // 渲染表格
-                tbody.innerHTML = matches.map(m => {
-                    const resultText = m.prediction?.result || (m.prediction?.recommended_bet || '未預測');
-                    const resultColor = resultText.includes('主勝') ? '#4CAF50' : resultText.includes('客勝') ? '#ff9800' : resultText.includes('和局') ? '#2196F3' : '#7f8c8d';
-                    return `<tr>
-                        <td>${m.match_code}</td>
-                        <td><strong>${m.home_team}</strong> vs <strong>${m.away_team}</strong></td>
-                        <td>${m.competition_type}</td>
-                        <td><span class="status-badge ${m.status === '待驗證' ? 'pending' : 'verified'}">${m.status}</span></td>
-                        <td style="color: ${resultColor}; font-weight: 600;">${resultText}</td>
-                        <td class="action-buttons">
-                            <button class="btn btn-sm btn-outline" onclick="viewMatch('${m.match_code}')"><i class="fas fa-eye"></i> 查看</button>
-                            <button class="btn btn-sm btn-primary" onclick="analyzeMatch('${m.match_code}')"><i class="fas fa-chart-line"></i> 分析</button>
-                            ${m.status === '待驗證' 
-                                ? `<button class="btn btn-sm btn-success" onclick="verifyMatch('${m.match_code}')"><i class="fas fa-check-circle"></i> 驗證</button>`
-                                : `<button class="btn btn-sm btn-info" onclick="viewVerification('${m.match_code}')"><i class="fas fa-file-alt"></i> 報告</button>`
-                            }
-                        </td>
-                    </tr>`;
-                }).join('');
+      <!-- extra hint about database / cabling (already mentioned, but just for completeness) -->
+      <div class="mt-3 text-muted fst-italic">
+        <i class="bi bi-plus-circle"></i> plus: database administration (MySQL), firewall policies, structured cabling projects.
+      </div>
+    </section>
 
-                // **只有當 localStorage 中有真實比賽資料時，才更新統計卡片**
-                if (hasRealData) {
-                    updateStats(matches);
-                }
-                // 若無真實資料，保留 HTML 中預設的靜態統計值
+    <!-- contact & collaboration -->
+    <section id="contact" class="mb-5 text-center">
+      <h2 class="section-title">🤝 collaboration starts here</h2>
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <p class="fs-3 fw-light mb-4">Got a project, an idea, or just want to connect? I reply within hours.</p>
+          <p class="fs-4"><i class="bi bi-envelope-at me-2"></i> <a href="mailto:oscarlam1020@gmail.com" class="text-decoration-underline fw-semibold">oscarlam1020@gmail.com</a></p>
+          <div class="mt-5">
+            <a href="mailto:oscarlam1020@gmail.com?subject=Collaboration%20request%20from%20webpage" class="btn btn-oscar btn-lg"><i class="bi bi-send-fill me-2"></i>send a message</a>
+          </div>
+          <div class="mt-4 d-flex justify-content-center gap-4 fs-3 text-muted">
+            <i class="bi bi-laptop"></i> <i class="bi bi-phone"></i> <i class="bi bi-pc-display"></i> <!-- responsive vibes -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </div> <!-- end container -->
 
-            } catch (error) {
-                console.error('載入比賽列表失敗', error);
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center error-text"><i class="fas fa-exclamation-triangle"></i> 載入失敗，請重新整理</td></tr>';
-            }
-        }
+  <!-- footer with built with bootstrap note -->
+  <footer class="footer">
+    <div class="container text-center">
+      <p class="mb-2">© 2025 Oscar Lam – IT professional, network tamer & app builder</p>
+      <p class="small opacity-75"><i class="bi bi-bootstrap-fill me-1"></i> built with Bootstrap · responsive for mobile/tablet/PC <i class="bi bi-arrow-repeat ms-1"></i></p>
+      <p class="small mt-2"><i class="fa-regular fa-heart" style="color: #b4c4ff;"></i> eager to learn, ready to collaborate</p>
+    </div>
+  </footer>
 
-        // 更新統計卡片（根據真實比賽數據）
-        function updateStats(matches) {
-            const verified = matches.filter(m => m.status === '已驗證').length;
-            const pending = matches.filter(m => m.status === '待驗證').length;
-            const correct = matches.filter(m => m.verified && m.prediction?.recommended_bet === m.actual_result).length;
-            const accuracy = verified ? ((correct / verified) * 100).toFixed(1) : '0.0';
-
-            // 更新 DOM
-            document.getElementById('stat-accuracy').textContent = accuracy + '%';
-            document.getElementById('stat-verified').textContent = verified + '場';
-            document.getElementById('stat-verified-desc').innerHTML = `${correct}場方向正確`;
-            document.getElementById('stat-pending').textContent = pending + '場';
-
-            // 待驗證比賽編號列表（最多顯示兩個）
-            const pendingCodes = matches.filter(m => m.status === '待驗證').map(m => m.match_code).slice(0, 2).join(', ');
-            document.getElementById('stat-pending-desc').textContent = pendingCodes || '無';
-        }
-
-        // 頁面操作函數
-        function loadTemplate(code) {
-            localStorage.setItem('selectedTemplate', code);
-            location.href = 'match_input.html?template=' + encodeURIComponent(code);
-        }
-
-        function viewMatch(code) {
-            localStorage.setItem('selectedMatch', code);
-            location.href = 'analysis_view.html?match=' + encodeURIComponent(code);
-        }
-
-        function analyzeMatch(code) {
-            // 直接跳轉到分析報告頁面（若該頁面存在）
-            localStorage.setItem('selectedMatch', code);
-            location.href = 'analysis_view.html?match=' + encodeURIComponent(code);
-        }
-
-        function verifyMatch(code) {
-            localStorage.setItem('selectedMatch', code);
-            location.href = 'result_verification.html?match=' + encodeURIComponent(code);
-        }
-
-        function viewVerification(code) {
-            localStorage.setItem('selectedMatch', code);
-            location.href = 'result_verification.html?match=' + encodeURIComponent(code) + '&view=verified';
-        }
-
-        function refreshSystem() {
-            loadMatches();
-            showNotification('success', '系統已刷新');
-        }
-
-        function exportAllMatches() {
-            let matches = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('match_')) {
-                    matches.push(JSON.parse(localStorage.getItem(key)));
-                }
-            }
-            const data = {
-                version: 'V5.3',
-                export_time: new Date().toISOString(),
-                matches: matches
-            };
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `matches-export-${new Date().toISOString().slice(0, 10)}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showNotification('success', `已匯出 ${matches.length} 場比賽`);
-        }
-
-        // 初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            loadMatches();
-
-            // 行動選單切換
-            const mobileBtn = document.querySelector('.mobile-menu-btn');
-            const navMenu = document.querySelector('.nav-menu');
-            mobileBtn?.addEventListener('click', (e) => {
-                e.stopPropagation();
-                navMenu.classList.toggle('active');
-            });
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.nav-menu') && !e.target.closest('.mobile-menu-btn')) {
-                    navMenu.classList.remove('active');
-                }
-            });
-        });
-    </script>
+  <!-- bootstrap JS (for any toggles etc, not strictly needed) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
