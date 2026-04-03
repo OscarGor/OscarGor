@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>沙律·蕎麥麵 日報表 (自動同步檔案版)</title>
+    <title>沙律·蕎麥麵 日報表 (支援 GitHub Raw)</title>
     <style>
         * {
             margin: 0;
@@ -146,6 +146,26 @@
         .btn-file {
             background: #5d6b5a;
         }
+        .url-input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+            align-items: center;
+        }
+        .url-input-group input {
+            flex: 3;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            border: 1px solid #cbdcc6;
+            border-radius: 48px;
+            font-family: monospace;
+        }
+        .url-input-group button {
+            flex: 1;
+            padding: 12px 12px;
+            font-size: 0.85rem;
+        }
         .table-wrapper {
             overflow-x: auto;
             margin: 16px 0 20px;
@@ -190,12 +210,25 @@
             text-align: center;
             word-break: break-word;
         }
+        input[type="file"] { display: none; }
+        .file-input-label {
+            display: inline-block;
+            background: #5d6b5a;
+            color: white;
+            font-weight: bold;
+            padding: 14px 12px;
+            border-radius: 60px;
+            font-size: 1rem;
+            text-align: center;
+            flex: 1;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>🥗 沙律·蕎麥麵 <span style="font-size:1rem;">日報表</span></h1>
-    <div class="sub">📅 每日記錄 | 自動同步至 JSON 檔案</div>
+    <div class="sub">📅 每日記錄 | 支援 GitHub Raw 讀取 + 本地自動同步</div>
 
     <div class="form-card">
         <div class="date-custom">
@@ -209,26 +242,14 @@
 
         <div class="product-card">
             <div class="product-title"><span>🥗 沙律</span></div>
-            <div class="qty-item">
-                <label>製作數量</label>
-                <input type="number" id="saladMade" value="0" min="0" step="1">
-            </div>
-            <div class="qty-item">
-                <label>賣出數量</label>
-                <input type="number" id="saladSold" value="0" min="0" step="1">
-            </div>
+            <div class="qty-item"><label>製作數量</label><input type="number" id="saladMade" value="0" min="0" step="1"></div>
+            <div class="qty-item"><label>賣出數量</label><input type="number" id="saladSold" value="0" min="0" step="1"></div>
         </div>
 
         <div class="product-card">
             <div class="product-title"><span>🍜 蕎麥麵</span></div>
-            <div class="qty-item">
-                <label>製作數量</label>
-                <input type="number" id="sobaMade" value="0" min="0" step="1">
-            </div>
-            <div class="qty-item">
-                <label>賣出數量</label>
-                <input type="number" id="sobaSold" value="0" min="0" step="1">
-            </div>
+            <div class="qty-item"><label>製作數量</label><input type="number" id="sobaMade" value="0" min="0" step="1"></div>
+            <div class="qty-item"><label>賣出數量</label><input type="number" id="sobaSold" value="0" min="0" step="1"></div>
         </div>
 
         <div class="button-group">
@@ -237,32 +258,41 @@
         </div>
 
         <div class="button-group">
-            <button id="selectFileBtn" class="btn-file">📂 選擇 / 新增數據檔案</button>
+            <button id="selectFileBtn" class="btn-file">📂 選擇本地 JSON 檔案</button>
+            <button id="createBlankBtn" class="btn-file">📄 生成空白 JSON 檔案</button>
+            <label for="importBackupInput" class="file-input-label">📥 匯入備份 (JSON)</label>
+            <input type="file" id="importBackupInput" accept=".json,.txt">
+        </div>
+
+        <div class="url-input-group">
+            <input type="text" id="rawUrlInput" placeholder="貼上 GitHub Raw URL (例如 https://raw.githubusercontent.com/.../data.json)">
+            <button id="loadFromUrlBtn">🔗 從網址載入</button>
+        </div>
+
+        <div class="button-group">
             <button id="exportCsvBtn" class="btn-file">📎 匯出 CSV</button>
         </div>
-        <div id="fileStatus" class="status-msg">⚡ 尚未選擇數據檔案</div>
+        <div id="fileStatus" class="status-msg">⚡ 尚未選擇本地數據檔案 (自動同步用)</div>
     </div>
 
     <h3>📋 記錄列表</h3>
     <div class="table-wrapper">
-        <table class="record-table">
-            <thead><tr><th>日期</th><th>產品</th><th>製作</th><th>賣出</th><th>操作</th></tr></thead>
-            <tbody id="tableBody"><tr><td colspan="5">暫無記錄，請新增</td></tr></tbody>
-        </table>
+        <table class="record-table"><thead><tr><th>日期</th><th>產品</th><th>製作</th><th>賣出</th><th>操作</th></tr></thead>
+        <tbody id="tableBody"><tr><td colspan="5">暫無記錄，請新增</td></tr></tbody></table>
     </div>
     <div class="footer-note">
-        ✏️ 點擊「編輯」修改記錄 | 🗑️ 刪除單項<br>
-        📁 選擇一個 JSON 檔案後，每次儲存會自動更新該檔案，開網頁會自動讀取最新內容
+        ✏️ 編輯 / 刪除後會自動同步到本地檔案 (需先選擇本地檔案)<br>
+        📁 從 GitHub Raw 載入不會自動寫回 GitHub，需手動下載再上傳
     </div>
 </div>
 
 <script>
-    // ---------- 全域變數 ----------
-    let records = [];           // 儲存記錄 [{ id, date, product, made, sold }]
-    let fileHandle = null;     // FileSystemFileHandle
+    // ---------- 全域 ----------
+    let records = [];          // 主數據
+    let fileHandle = null;     // 用於自動同步的本地檔案 handle
     let fileName = "";
 
-    // DOM 元素
+    // DOM
     const yearSelect = document.getElementById('yearSelect');
     const monthSelect = document.getElementById('monthSelect');
     const daySelect = document.getElementById('daySelect');
@@ -274,259 +304,186 @@
     const clearFormBtn = document.getElementById('clearFormBtn');
     const tableBody = document.getElementById('tableBody');
     const selectFileBtn = document.getElementById('selectFileBtn');
+    const createBlankBtn = document.getElementById('createBlankBtn');
+    const importBackupInput = document.getElementById('importBackupInput');
+    const rawUrlInput = document.getElementById('rawUrlInput');
+    const loadFromUrlBtn = document.getElementById('loadFromUrlBtn');
     const exportCsvBtn = document.getElementById('exportCsvBtn');
     const fileStatus = document.getElementById('fileStatus');
 
     // ---------- 日期邏輯 ----------
     function populateYearOptions() {
         const currentYear = new Date().getFullYear();
-        for (let y = currentYear - 2; y <= currentYear + 2; y++) {
-            const option = document.createElement('option');
-            option.value = y;
-            option.textContent = y;
-            yearSelect.appendChild(option);
+        for (let y = currentYear-2; y<=currentYear+2; y++) {
+            let opt = document.createElement('option'); opt.value = y; opt.textContent = y;
+            yearSelect.appendChild(opt);
         }
         yearSelect.value = currentYear;
     }
     function populateMonthOptions() {
-        for (let m = 1; m <= 12; m++) {
-            const option = document.createElement('option');
-            option.value = m;
-            option.textContent = `${m}月`;
-            monthSelect.appendChild(option);
+        for (let m=1; m<=12; m++) {
+            let opt = document.createElement('option'); opt.value = m; opt.textContent = `${m}月`;
+            monthSelect.appendChild(opt);
         }
-        monthSelect.value = new Date().getMonth() + 1;
+        monthSelect.value = new Date().getMonth()+1;
     }
     function updateDays() {
         const year = parseInt(yearSelect.value);
         const month = parseInt(monthSelect.value);
         const lastDay = new Date(year, month, 0).getDate();
-        let currentDay = parseInt(daySelect.value);
-        if (isNaN(currentDay)) currentDay = 1;
+        let currentDay = parseInt(daySelect.value) || 1;
         daySelect.innerHTML = '';
-        for (let d = 1; d <= lastDay; d++) {
-            const option = document.createElement('option');
-            option.value = d;
-            option.textContent = `${d}日`;
-            daySelect.appendChild(option);
+        for (let d=1; d<=lastDay; d++) {
+            let opt = document.createElement('option'); opt.value = d; opt.textContent = `${d}日`;
+            daySelect.appendChild(opt);
         }
         if (currentDay > lastDay) currentDay = lastDay;
         daySelect.value = currentDay;
     }
     function getSelectedDate() {
-        const year = yearSelect.value;
-        const month = monthSelect.value.padStart(2, '0');
-        const day = daySelect.value.padStart(2, '0');
-        return `${year}-${month}-${day}`;
+        let y = yearSelect.value, m = monthSelect.value.padStart(2,'0'), d = daySelect.value.padStart(2,'0');
+        return `${y}-${m}-${d}`;
     }
     function setSelectedDate(dateStr) {
-        const [year, month, day] = dateStr.split('-');
-        if (year && month && day) {
-            yearSelect.value = year;
-            monthSelect.value = parseInt(month);
+        let [y,m,d] = dateStr.split('-');
+        if (y && m && d) {
+            yearSelect.value = y;
+            monthSelect.value = parseInt(m);
             updateDays();
-            daySelect.value = parseInt(day);
+            daySelect.value = parseInt(d);
         }
     }
     yearSelect.addEventListener('change', updateDays);
     monthSelect.addEventListener('change', updateDays);
     function setDefaultDate() {
-        const today = new Date();
+        let today = new Date();
         yearSelect.value = today.getFullYear();
-        monthSelect.value = today.getMonth() + 1;
+        monthSelect.value = today.getMonth()+1;
         updateDays();
         daySelect.value = today.getDate();
     }
 
-    // ---------- 記錄操作 (內存) ----------
-    function generateId() { return Date.now() + Math.random() * 10000; }
-
+    // ---------- 記錄操作 ----------
+    function generateId() { return Date.now() + Math.random()*10000; }
     function addOrReplaceRecord(newRecord) {
         records = records.filter(r => !(r.date === newRecord.date && r.product === newRecord.product));
-        const recordToAdd = { ...newRecord, id: generateId() };
-        records.push(recordToAdd);
+        records.push({ ...newRecord, id: generateId() });
         records.sort((a,b) => new Date(b.date) - new Date(a.date));
         renderTable();
     }
-
     function deleteRecordById(id) {
         records = records.filter(r => r.id !== id);
         renderTable();
     }
-
     function loadRecordToForm(record) {
         setSelectedDate(record.date);
         if (record.product === 'salad') {
-            saladMade.value = record.made;
-            saladSold.value = record.sold;
-            sobaMade.value = 0;
-            sobaSold.value = 0;
+            saladMade.value = record.made; saladSold.value = record.sold;
+            sobaMade.value = 0; sobaSold.value = 0;
         } else {
-            sobaMade.value = record.made;
-            sobaSold.value = record.sold;
-            saladMade.value = 0;
-            saladSold.value = 0;
+            sobaMade.value = record.made; sobaSold.value = record.sold;
+            saladMade.value = 0; saladSold.value = 0;
         }
         deleteRecordById(record.id);
-        showToast(`已載入 ${record.date} 的${record.product === 'salad' ? '沙律' : '蕎麥麵'}，修改後請按儲存`);
+        showToast(`已載入 ${record.date} 的${record.product==='salad'?'沙律':'蕎麥麵'}`);
     }
-
     function renderTable() {
-        if (records.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">暫無記錄，請新增</td></tr>';
+        if (records.length===0) {
+            tableBody.innerHTML = '<tr><td colspan="5">暫無記錄，請新增</td></tr>';
             return;
         }
         let html = '';
         for (let rec of records) {
-            const productName = rec.product === 'salad' ? '🥗 沙律' : '🍜 蕎麥麵';
+            let productName = rec.product==='salad' ? '🥗 沙律' : '🍜 蕎麥麵';
             html += `<tr>
                         <td>${rec.date}</td>
                         <td>${productName}</td>
                         <td>${rec.made}</td>
                         <td>${rec.sold}</td>
                         <td>
-                            <button class="edit-btn" data-id="${rec.id}" title="編輯">✏️</button>
-                            <button class="delete-btn" data-id="${rec.id}" title="刪除">🗑️</button>
+                            <button class="edit-btn" data-id="${rec.id}">✏️</button>
+                            <button class="delete-btn" data-id="${rec.id}">🗑️</button>
                         </td>
                      </tr>`;
         }
         tableBody.innerHTML = html;
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const id = Number(btn.dataset.id);
+                let id = Number(btn.dataset.id);
                 if (confirm('刪除此記錄？')) {
                     deleteRecordById(id);
-                    saveToFile(); // 刪除後自動同步到檔案
+                    saveToFileIfHandle(); // 刪除後自動同步
                 }
             });
         });
         document.querySelectorAll('.edit-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const id = Number(btn.dataset.id);
-                const record = records.find(r => r.id === id);
-                if (record) loadRecordToForm(record);
+                let id = Number(btn.dataset.id);
+                let rec = records.find(r => r.id === id);
+                if (rec) loadRecordToForm(rec);
             });
         });
     }
-
     function showToast(msg) {
         let toast = document.createElement('div');
         toast.innerText = msg;
-        toast.style.position = 'fixed';
-        toast.style.bottom = '70px';
-        toast.style.left = '50%';
-        toast.style.transform = 'translateX(-50%)';
-        toast.style.backgroundColor = '#2c5e2e';
-        toast.style.color = 'white';
-        toast.style.padding = '10px 20px';
-        toast.style.borderRadius = '50px';
-        toast.style.fontSize = '0.85rem';
-        toast.style.zIndex = '999';
-        toast.style.whiteSpace = 'normal';
-        toast.style.maxWidth = '90%';
-        toast.style.textAlign = 'center';
+        toast.style.cssText = 'position:fixed; bottom:70px; left:50%; transform:translateX(-50%); background:#2c5e2e; color:white; padding:10px 20px; border-radius:50px; font-size:0.85rem; z-index:999; max-width:90%; text-align:center;';
         document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2000);
+        setTimeout(()=>toast.remove(), 2000);
     }
 
-    // ---------- 檔案讀寫 (File System Access API) ----------
-    async function selectFile() {
+    // ---------- 本地檔案自動同步 (File System Access) ----------
+    async function selectLocalFile() {
         try {
-            // 打開檔案選擇器，可選 JSON 或 txt
             const [handle] = await window.showOpenFilePicker({
-                types: [{
-                    description: 'JSON 備份檔',
-                    accept: { 'application/json': ['.json', '.txt'] }
-                }],
+                types: [{ description: 'JSON 檔案', accept: { 'application/json': ['.json','.txt'] } }],
                 excludeAcceptAllOption: true,
                 multiple: false
             });
             fileHandle = handle;
             fileName = fileHandle.name;
-            fileStatus.innerText = `📁 已選擇檔案: ${fileName}`;
-            // 讀取檔案內容
+            fileStatus.innerText = `📁 已選擇本地檔案: ${fileName} (儲存時自動更新)`;
             const file = await fileHandle.getFile();
-            const contents = await file.text();
-            if (contents.trim()) {
+            const content = await file.text();
+            if (content.trim()) {
                 try {
-                    const loaded = JSON.parse(contents);
-                    if (Array.isArray(loaded)) {
-                        records = loaded;
-                        renderTable();
-                        showToast(`已載入 ${records.length} 筆記錄`);
-                    } else {
-                        throw new Error('格式錯誤');
-                    }
-                } catch(e) {
-                    showToast('檔案內容不是有效記錄，將以空白開始');
-                    records = [];
-                    renderTable();
-                }
-            } else {
-                records = [];
-                renderTable();
-            }
-            // 將檔案 handle 儲存到 sessionStorage (下次重新整理可嘗試恢復)
-            sessionStorage.setItem('fileHandleId', 'true'); // 只能標記，不能真正儲存 handle
-        } catch (err) {
-            console.log('取消選擇或錯誤', err);
-        }
+                    let data = JSON.parse(content);
+                    if (Array.isArray(data)) { records = data; renderTable(); showToast(`已載入 ${records.length} 筆記錄`); }
+                    else throw new Error();
+                } catch(e) { showToast('檔案格式錯誤，保持原有記錄'); }
+            } else { records = []; renderTable(); }
+        } catch(e) { console.log(e); showToast('未選擇檔案'); }
     }
-
-    async function saveToFile() {
-        if (!fileHandle) {
-            showToast('請先選擇數據檔案 (按「選擇/新增數據檔案」)');
-            return false;
-        }
+    async function saveToFileIfHandle() {
+        if (!fileHandle) { showToast('請先按「選擇本地 JSON 檔案」設定自動同步位置'); return false; }
         try {
             const writable = await fileHandle.createWritable();
-            const dataStr = JSON.stringify(records, null, 2);
-            await writable.write(dataStr);
+            await writable.write(JSON.stringify(records, null, 2));
             await writable.close();
             showToast(`✅ 已自動儲存至 ${fileName}`);
             return true;
-        } catch (err) {
-            console.error('寫入失敗', err);
-            showToast('寫入檔案失敗，可能權限已失效，請重新選擇檔案');
+        } catch(e) {
+            showToast('寫入失敗，請重新選擇檔案');
             fileHandle = null;
-            fileStatus.innerText = '⚡ 未選擇數據檔案';
+            fileStatus.innerText = '⚡ 未選擇本地數據檔案';
             return false;
         }
     }
-
-    // 儲存表單內容到 records，然後寫入檔案
+    // 儲存表單內容並同步檔案
     function saveCurrentFormAndSync() {
         const date = getSelectedDate();
-        if (!date) { alert('請選擇日期'); return; }
-        const saladMadeVal = parseInt(saladMade.value,10) || 0;
-        const saladSoldVal = parseInt(saladSold.value,10) || 0;
-        const sobaMadeVal = parseInt(sobaMade.value,10) || 0;
-        const sobaSoldVal = parseInt(sobaSold.value,10) || 0;
-
-        if (saladMadeVal !==0 || saladSoldVal !==0) {
-            addOrReplaceRecord({ date, product:'salad', made:saladMadeVal, sold:saladSoldVal });
-        } else {
-            records = records.filter(r => !(r.date === date && r.product === 'salad'));
-        }
-        if (sobaMadeVal !==0 || sobaSoldVal !==0) {
-            addOrReplaceRecord({ date, product:'soba', made:sobaMadeVal, sold:sobaSoldVal });
-        } else {
-            records = records.filter(r => !(r.date === date && r.product === 'soba'));
-        }
-
+        const saladMadeVal = parseInt(saladMade.value)||0, saladSoldVal = parseInt(saladSold.value)||0;
+        const sobaMadeVal = parseInt(sobaMade.value)||0, sobaSoldVal = parseInt(sobaSold.value)||0;
+        if (saladMadeVal!==0 || saladSoldVal!==0) addOrReplaceRecord({ date, product:'salad', made:saladMadeVal, sold:saladSoldVal });
+        else records = records.filter(r => !(r.date===date && r.product==='salad'));
+        if (sobaMadeVal!==0 || sobaSoldVal!==0) addOrReplaceRecord({ date, product:'soba', made:sobaMadeVal, sold:sobaSoldVal });
+        else records = records.filter(r => !(r.date===date && r.product==='soba'));
         // 清空表單
         saladMade.value = 0; saladSold.value = 0;
         sobaMade.value = 0; sobaSold.value = 0;
         renderTable();
-
-        // 同步到檔案
-        saveToFile().then(() => {
-            // 可選額外提示
-        });
+        saveToFileIfHandle();
     }
-
     function clearForm() {
         saladMade.value = 0; saladSold.value = 0;
         sobaMade.value = 0; sobaSold.value = 0;
@@ -534,52 +491,94 @@
         showToast('表單已清空');
     }
 
-    // 匯出 CSV (只匯出 records)
-    function exportCSV() {
-        if (records.length === 0) { alert('無記錄可匯出'); return; }
-        let csvRows = [["日期","產品","製作數量","賣出數量"]];
-        for (let rec of records) {
-            let productText = rec.product === 'salad' ? '沙律' : '蕎麥麵';
-            csvRows.push([rec.date, productText, rec.made, rec.sold]);
-        }
-        const csvContent = csvRows.map(row => row.join(",")).join("\n");
-        const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
-        const link = document.createElement("a");
+    // 生成空白 JSON 檔案下載
+    function downloadBlankJson() {
+        const blank = JSON.stringify([], null, 2);
+        const blob = new Blob([blank], {type: 'application/json'});
+        const a = document.createElement('a');
         const url = URL.createObjectURL(blob);
-        link.href = url;
-        link.setAttribute("download", `salad_soba_${new Date().toISOString().slice(0,10)}.csv`);
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        a.href = url;
+        a.download = 'records.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('已下載空白 records.json');
+    }
+
+    // 手動匯入備份 (JSON 檔案)
+    function importBackup(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                let data = JSON.parse(e.target.result);
+                if (Array.isArray(data)) {
+                    records = data;
+                    renderTable();
+                    showToast(`匯入成功，共 ${records.length} 筆記錄`);
+                    // 如果有已選擇的本地檔案，可選擇是否自動覆寫？先唔自動，等用戶下次儲存
+                } else throw new Error();
+            } catch(err) { showToast('檔案格式錯誤'); }
+        };
+        reader.readAsText(file);
+    }
+
+    // 從網址 (GitHub Raw) 載入 JSON
+    async function loadFromUrl() {
+        let url = rawUrlInput.value.trim();
+        if (!url) { showToast('請輸入網址'); return; }
+        try {
+            let response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            let text = await response.text();
+            let data = JSON.parse(text);
+            if (Array.isArray(data)) {
+                records = data;
+                renderTable();
+                showToast(`從網址載入成功，共 ${records.length} 筆記錄`);
+            } else throw new Error('不是陣列');
+        } catch(e) {
+            showToast('載入失敗，請確認網址正確且為公開 JSON');
+        }
+    }
+
+    // 匯出 CSV
+    function exportCSV() {
+        if (records.length===0) { alert('無記錄可匯出'); return; }
+        let rows = [["日期","產品","製作數量","賣出數量"]];
+        for (let rec of records) {
+            rows.push([rec.date, rec.product==='salad'?'沙律':'蕎麥麵', rec.made, rec.sold]);
+        }
+        let csv = rows.map(row => row.join(",")).join("\n");
+        let blob = new Blob(["\uFEFF"+csv], {type: "text/csv;charset=utf-8"});
+        let a = document.createElement('a');
+        let url = URL.createObjectURL(blob);
+        a.href = url;
+        a.download = `salad_soba_${new Date().toISOString().slice(0,10)}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
         URL.revokeObjectURL(url);
         showToast("已匯出 CSV");
     }
 
-    // 嘗試恢復上次的檔案 handle (不可行，需要重新授權，但提示用戶)
-    async function tryRestoreFileHandle() {
-        // File System Access API 不支援持久化 handle 到 localStorage，每次需重新選擇
-        // 但如果 sessionStorage 有標記，可以提醒用戶
-        if (sessionStorage.getItem('fileHandleId')) {
-            fileStatus.innerText = '📌 上次曾選擇檔案，請按「選擇/新增數據檔案」繼續使用';
-        }
-    }
-
-    // 初始化日期
+    // 初始化
     populateYearOptions();
     populateMonthOptions();
     updateDays();
     setDefaultDate();
 
-    // 綁定事件
     saveBtn.addEventListener('click', saveCurrentFormAndSync);
     clearFormBtn.addEventListener('click', clearForm);
-    selectFileBtn.addEventListener('click', selectFile);
+    selectFileBtn.addEventListener('click', selectLocalFile);
+    createBlankBtn.addEventListener('click', downloadBlankJson);
+    importBackupInput.addEventListener('change', (e) => { if(e.target.files[0]) importBackup(e.target.files[0]); e.target.value=''; });
+    loadFromUrlBtn.addEventListener('click', loadFromUrl);
     exportCsvBtn.addEventListener('click', exportCSV);
 
-    tryRestoreFileHandle();
-    // 初始記錄為空，等待用戶選擇檔案
     records = [];
     renderTable();
+    fileStatus.innerText = '⚡ 未選擇本地數據檔案 (按「選擇本地 JSON 檔案」啟用自動同步)';
 </script>
 </body>
 </html>
