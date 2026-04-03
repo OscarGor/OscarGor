@@ -3,582 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>沙律·蕎麥麵 日報表 (支援 GitHub Raw)</title>
+    <title>沙律·蕎麥麵 團隊記錄表</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-        body {
-            background: #eef5e9;
-            padding: 16px;
-            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 32px;
-            padding: 20px 16px 32px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            overflow-x: hidden;
-        }
-        h1 {
-            font-size: 1.6rem;
-            margin-bottom: 4px;
-            color: #2b5e2c;
-        }
-        .sub {
-            color: #4b6e4d;
-            border-left: 4px solid #6fbf4c;
-            padding-left: 12px;
-            margin: 8px 0 24px 0;
-            font-size: 0.85rem;
-        }
-        .form-card {
-            background: #fefcf5;
-            border-radius: 24px;
-            padding: 20px 16px;
-            margin-bottom: 28px;
-            border: 1px solid #dde9d6;
-        }
-        .date-custom {
-            margin-bottom: 24px;
-            width: 100%;
-        }
-        .date-custom label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #2d4a2f;
-            font-size: 0.95rem;
-        }
-        .date-selectors {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            width: 100%;
-        }
-        .date-selectors select {
-            flex: 1;
-            min-width: 90px;
-            padding: 14px 8px;
-            font-size: 1rem;
-            border: 1px solid #cbdcc6;
-            border-radius: 48px;
-            background: white;
-            font-family: inherit;
-            text-align: center;
-            cursor: pointer;
-        }
-        .product-card {
-            background: #f9fbf7;
-            border-radius: 24px;
-            padding: 16px;
-            margin-bottom: 24px;
-            border: 1px solid #e2ecdb;
-        }
-        .product-title {
-            font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .product-title span {
-            background: #e3f0dd;
-            padding: 6px 14px;
-            border-radius: 40px;
-        }
-        .qty-item {
-            margin-bottom: 16px;
-        }
-        .qty-item:last-child {
-            margin-bottom: 0;
-        }
-        .qty-item label {
-            display: block;
-            font-weight: 500;
-            color: #3a5c3c;
-            margin-bottom: 6px;
-            font-size: 0.9rem;
-        }
-        .qty-item input {
-            width: 100%;
-            max-width: 100%;
-            padding: 14px 16px;
-            font-size: 1rem;
-            border: 1px solid #cbdcc6;
-            border-radius: 48px;
-            text-align: center;
-            background: white;
-            box-sizing: border-box;
-        }
-        .button-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 20px;
-        }
-        button {
-            flex: 1;
-            background: #4c8b3c;
-            border: none;
-            color: white;
-            font-weight: bold;
-            padding: 14px 12px;
-            border-radius: 60px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.2s;
-            touch-action: manipulation;
-        }
-        button:active {
-            transform: scale(0.97);
-            background: #3b6e2e;
-        }
-        .btn-secondary {
-            background: #8ba888;
-        }
-        .btn-file {
-            background: #5d6b5a;
-        }
-        .url-input-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 12px;
-            align-items: center;
-        }
-        .url-input-group input {
-            flex: 3;
-            padding: 12px 16px;
-            font-size: 0.85rem;
-            border: 1px solid #cbdcc6;
-            border-radius: 48px;
-            font-family: monospace;
-        }
-        .url-input-group button {
-            flex: 1;
-            padding: 12px 12px;
-            font-size: 0.85rem;
-        }
-        .table-wrapper {
-            overflow-x: auto;
-            margin: 16px 0 20px;
-            border-radius: 20px;
-            border: 1px solid #e0ebd9;
-        }
-        .record-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-            min-width: 480px;
-        }
-        .record-table th, .record-table td {
-            padding: 12px 10px;
-            text-align: left;
-            border-bottom: 1px solid #e2ecdb;
-        }
-        .record-table th {
-            background: #eef5ea;
-        }
-        .delete-btn, .edit-btn {
-            background: none;
-            border: none;
-            font-size: 1.3rem;
-            cursor: pointer;
-            padding: 6px 8px;
-            margin: 0 2px;
-            box-shadow: none;
-        }
-        .delete-btn { color: #c25d5d; }
-        .edit-btn { color: #4c8b3c; }
-        .footer-note {
-            font-size: 0.7rem;
-            color: #7c8f79;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .status-msg {
-            font-size: 0.75rem;
-            color: #2c5e2e;
-            margin-top: 8px;
-            text-align: center;
-            word-break: break-word;
-        }
-        input[type="file"] { display: none; }
-        .file-input-label {
-            display: inline-block;
-            background: #5d6b5a;
-            color: white;
-            font-weight: bold;
-            padding: 14px 12px;
-            border-radius: 60px;
-            font-size: 1rem;
-            text-align: center;
-            flex: 1;
-            cursor: pointer;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+        body { background:#eef5e9; padding:16px; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+        .container { max-width:550px; margin:0 auto; background:white; border-radius:32px; padding:20px 16px 32px; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+        h1 { font-size:1.6rem; margin-bottom:4px; color:#2b5e2c; text-align:center; }
+        .sub { text-align:center; color:#4b6e4d; margin-bottom:24px; font-size:0.85rem; }
+        .form-card { background:#fefcf5; border-radius:24px; padding:20px 16px; margin-bottom:28px; border:1px solid #dde9d6; }
+        .date-row { margin-bottom:24px; }
+        .date-row label { font-weight:600; display:block; margin-bottom:8px; color:#2d4a2f; font-size:1rem; }
+        .date-row input { width:100%; padding:14px 16px; font-size:1rem; border:1px solid #cbdcc6; border-radius:48px; background:white; }
+        .product-card { background:#f9fbf7; border-radius:24px; padding:16px; margin-bottom:24px; border:1px solid #e2ecdb; }
+        .product-title { font-weight:bold; font-size:1.2rem; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+        .product-title span { background:#e3f0dd; padding:6px 14px; border-radius:40px; }
+        .qty-item { margin-bottom:16px; }
+        .qty-item:last-child { margin-bottom:0; }
+        .qty-item label { display:block; font-weight:500; color:#3a5c3c; margin-bottom:6px; font-size:0.9rem; }
+        .qty-item input { width:100%; padding:14px 16px; font-size:1rem; border:1px solid #cbdcc6; border-radius:48px; text-align:center; background:white; }
+        .button-group { display:flex; flex-wrap:wrap; gap:12px; margin-top:20px; }
+        button { flex:1; background:#4c8b3c; border:none; color:white; font-weight:bold; padding:14px 12px; border-radius:60px; font-size:1rem; cursor:pointer; transition:0.2s; touch-action:manipulation; }
+        button:active { transform:scale(0.97); background:#3b6e2e; }
+        .btn-secondary { background:#8ba888; }
+        .table-wrapper { overflow-x:auto; margin:16px 0 20px; border-radius:20px; border:1px solid #e0ebd9; }
+        .record-table { width:100%; border-collapse:collapse; font-size:0.85rem; min-width:420px; }
+        .record-table th, .record-table td { padding:12px 10px; text-align:left; border-bottom:1px solid #e2ecdb; }
+        .record-table th { background:#eef5ea; }
+        .delete-btn, .edit-btn { background:none; border:none; font-size:1.2rem; cursor:pointer; padding:4px 8px; margin:0 2px; }
+        .delete-btn { color:#c25d5d; }
+        .edit-btn { color:#4c8b3c; }
+        .footer-note { font-size:0.7rem; color:#7c8f79; text-align:center; margin-top:20px; }
+        .status { font-size:0.75rem; color:#2c5e2e; margin-top:8px; text-align:center; }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>🥗 沙律·蕎麥麵 <span style="font-size:1rem;">日報表</span></h1>
-    <div class="sub">📅 每日記錄 | 支援 GitHub Raw 讀取 + 本地自動同步</div>
+    <h1>🥗 沙律·蕎麥麵 <span style="font-size:1rem;">團隊記錄表</span></h1>
+    <div class="sub">📅 輸入後自動更新雲端數據</div>
 
     <div class="form-card">
-        <div class="date-custom">
-            <label>📆 揀日期</label>
-            <div class="date-selectors">
-                <select id="yearSelect"></select>
-                <select id="monthSelect"></select>
-                <select id="daySelect"></select>
-            </div>
+        <div class="date-row">
+            <label>📆 日期</label>
+            <input type="date" id="recordDate" value="">
         </div>
-
         <div class="product-card">
             <div class="product-title"><span>🥗 沙律</span></div>
             <div class="qty-item"><label>製作數量</label><input type="number" id="saladMade" value="0" min="0" step="1"></div>
             <div class="qty-item"><label>賣出數量</label><input type="number" id="saladSold" value="0" min="0" step="1"></div>
         </div>
-
         <div class="product-card">
             <div class="product-title"><span>🍜 蕎麥麵</span></div>
             <div class="qty-item"><label>製作數量</label><input type="number" id="sobaMade" value="0" min="0" step="1"></div>
             <div class="qty-item"><label>賣出數量</label><input type="number" id="sobaSold" value="0" min="0" step="1"></div>
         </div>
-
         <div class="button-group">
-            <button id="saveBtn">💾 儲存記錄 (自動寫入檔案)</button>
+            <button id="saveBtn">💾 儲存記錄 (自動雲端同步)</button>
             <button id="clearFormBtn" class="btn-secondary">🗑️ 清空表單</button>
         </div>
-
-        <div class="button-group">
-            <button id="selectFileBtn" class="btn-file">📂 選擇本地 JSON 檔案</button>
-            <button id="createBlankBtn" class="btn-file">📄 生成空白 JSON 檔案</button>
-            <label for="importBackupInput" class="file-input-label">📥 匯入備份 (JSON)</label>
-            <input type="file" id="importBackupInput" accept=".json,.txt">
-        </div>
-
-        <div class="url-input-group">
-            <input type="text" id="rawUrlInput" placeholder="貼上 GitHub Raw URL (例如 https://raw.githubusercontent.com/.../data.json)">
-            <button id="loadFromUrlBtn">🔗 從網址載入</button>
-        </div>
-
-        <div class="button-group">
-            <button id="exportCsvBtn" class="btn-file">📎 匯出 CSV</button>
-        </div>
-        <div id="fileStatus" class="status-msg">⚡ 尚未選擇本地數據檔案 (自動同步用)</div>
+        <div id="statusMsg" class="status"></div>
     </div>
 
-    <h3>📋 記錄列表</h3>
+    <h3>📋 已儲存嘅記錄</h3>
     <div class="table-wrapper">
         <table class="record-table"><thead><tr><th>日期</th><th>產品</th><th>製作</th><th>賣出</th><th>操作</th></tr></thead>
-        <tbody id="tableBody"><tr><td colspan="5">暫無記錄，請新增</td></tr></tbody></table>
+        <tbody id="tableBody"><tr><td colspan="5">載入中...</td></tr>
+        </tbody>
     </div>
     <div class="footer-note">
-        ✏️ 編輯 / 刪除後會自動同步到本地檔案 (需先選擇本地檔案)<br>
-        📁 從 GitHub Raw 載入不會自動寫回 GitHub，需手動下載再上傳
+        💡 所有記錄會即時同步到團隊雲端，唔使再手動匯出。<br>
+        ✏️ 可編輯或刪除，每次修改都會自動儲存。
     </div>
 </div>
 
 <script>
-    // ---------- 全域 ----------
-    let records = [];          // 主數據
-    let fileHandle = null;     // 用於自動同步的本地檔案 handle
-    let fileName = "";
+    // 已替你改好 Google Apps Script 網址
+    const API_URL = "https://script.google.com/macros/s/AKfycbz6N4kyV-uBy1vuOyvDOU6ZwcageNxnZbjUEuC-rns-L0bN6PRUB2b1-EoWyFquAhw-/exec";
 
-    // DOM
-    const yearSelect = document.getElementById('yearSelect');
-    const monthSelect = document.getElementById('monthSelect');
-    const daySelect = document.getElementById('daySelect');
-    const saladMade = document.getElementById('saladMade');
-    const saladSold = document.getElementById('saladSold');
-    const sobaMade = document.getElementById('sobaMade');
-    const sobaSold = document.getElementById('sobaSold');
-    const saveBtn = document.getElementById('saveBtn');
-    const clearFormBtn = document.getElementById('clearFormBtn');
-    const tableBody = document.getElementById('tableBody');
-    const selectFileBtn = document.getElementById('selectFileBtn');
-    const createBlankBtn = document.getElementById('createBlankBtn');
-    const importBackupInput = document.getElementById('importBackupInput');
-    const rawUrlInput = document.getElementById('rawUrlInput');
-    const loadFromUrlBtn = document.getElementById('loadFromUrlBtn');
-    const exportCsvBtn = document.getElementById('exportCsvBtn');
-    const fileStatus = document.getElementById('fileStatus');
+    let records = [];
+    const STORAGE_KEY = 'salad_soba_records';
 
-    // ---------- 日期邏輯 ----------
-    function populateYearOptions() {
-        const currentYear = new Date().getFullYear();
-        for (let y = currentYear-2; y<=currentYear+2; y++) {
-            let opt = document.createElement('option'); opt.value = y; opt.textContent = y;
-            yearSelect.appendChild(opt);
-        }
-        yearSelect.value = currentYear;
-    }
-    function populateMonthOptions() {
-        for (let m=1; m<=12; m++) {
-            let opt = document.createElement('option'); opt.value = m; opt.textContent = `${m}月`;
-            monthSelect.appendChild(opt);
-        }
-        monthSelect.value = new Date().getMonth()+1;
-    }
-    function updateDays() {
-        const year = parseInt(yearSelect.value);
-        const month = parseInt(monthSelect.value);
-        const lastDay = new Date(year, month, 0).getDate();
-        let currentDay = parseInt(daySelect.value) || 1;
-        daySelect.innerHTML = '';
-        for (let d=1; d<=lastDay; d++) {
-            let opt = document.createElement('option'); opt.value = d; opt.textContent = `${d}日`;
-            daySelect.appendChild(opt);
-        }
-        if (currentDay > lastDay) currentDay = lastDay;
-        daySelect.value = currentDay;
-    }
-    function getSelectedDate() {
-        let y = yearSelect.value, m = monthSelect.value.padStart(2,'0'), d = daySelect.value.padStart(2,'0');
-        return `${y}-${m}-${d}`;
-    }
-    function setSelectedDate(dateStr) {
-        let [y,m,d] = dateStr.split('-');
-        if (y && m && d) {
-            yearSelect.value = y;
-            monthSelect.value = parseInt(m);
-            updateDays();
-            daySelect.value = parseInt(d);
-        }
-    }
-    yearSelect.addEventListener('change', updateDays);
-    monthSelect.addEventListener('change', updateDays);
-    function setDefaultDate() {
-        let today = new Date();
-        yearSelect.value = today.getFullYear();
-        monthSelect.value = today.getMonth()+1;
-        updateDays();
-        daySelect.value = today.getDate();
+    function loadLocalRecords() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+            try { records = JSON.parse(stored); } catch(e) { records = []; }
+        } else { records = []; }
+        renderTable();
     }
 
-    // ---------- 記錄操作 ----------
-    function generateId() { return Date.now() + Math.random()*10000; }
+    function saveLocalRecords() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+    }
+
+    // 從雲端載入 (GET)
+    async function loadFromCloud() {
+        try {
+            const res = await fetch(API_URL + "?action=get");
+            if (res.ok) {
+                const data = await res.json();
+                if (Array.isArray(data)) {
+                    records = data;
+                    saveLocalRecords();
+                    renderTable();
+                    showStatus("✅ 已同步雲端最新記錄");
+                } else throw new Error();
+            } else throw new Error();
+        } catch(e) {
+            showStatus("⚠️ 無法連線雲端，使用本地暫存資料");
+            loadLocalRecords();
+        }
+    }
+
+    // 推送到雲端 (POST)
+    async function syncToCloud() {
+        showStatus("⏳ 同步到雲端中...");
+        try {
+            const res = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(records)
+            });
+            if (res.ok) {
+                showStatus("✅ 已成功同步到雲端 GitHub");
+            } else {
+                const err = await res.text();
+                showStatus("❌ 同步失敗：" + err);
+            }
+        } catch(e) {
+            showStatus("❌ 網絡錯誤，請稍後再試");
+        }
+    }
+
     function addOrReplaceRecord(newRecord) {
         records = records.filter(r => !(r.date === newRecord.date && r.product === newRecord.product));
-        records.push({ ...newRecord, id: generateId() });
+        const recordToAdd = { ...newRecord, id: Date.now() + Math.random() * 10000 };
+        records.push(recordToAdd);
         records.sort((a,b) => new Date(b.date) - new Date(a.date));
+        saveLocalRecords();
         renderTable();
+        syncToCloud();
     }
+
     function deleteRecordById(id) {
         records = records.filter(r => r.id !== id);
+        saveLocalRecords();
         renderTable();
+        syncToCloud();
     }
+
     function loadRecordToForm(record) {
-        setSelectedDate(record.date);
+        document.getElementById('recordDate').value = record.date;
         if (record.product === 'salad') {
-            saladMade.value = record.made; saladSold.value = record.sold;
-            sobaMade.value = 0; sobaSold.value = 0;
+            document.getElementById('saladMade').value = record.made;
+            document.getElementById('saladSold').value = record.sold;
+            document.getElementById('sobaMade').value = 0;
+            document.getElementById('sobaSold').value = 0;
         } else {
-            sobaMade.value = record.made; sobaSold.value = record.sold;
-            saladMade.value = 0; saladSold.value = 0;
+            document.getElementById('sobaMade').value = record.made;
+            document.getElementById('sobaSold').value = record.sold;
+            document.getElementById('saladMade').value = 0;
+            document.getElementById('saladSold').value = 0;
         }
         deleteRecordById(record.id);
-        showToast(`已載入 ${record.date} 的${record.product==='salad'?'沙律':'蕎麥麵'}`);
+        showStatus(`已載入 ${record.date} 的${record.product === 'salad' ? '沙律' : '蕎麥麵'}，修改後請按儲存`);
     }
+
     function renderTable() {
-        if (records.length===0) {
-            tableBody.innerHTML = '<tr><td colspan="5">暫無記錄，請新增</td></tr>';
+        const tbody = document.getElementById('tableBody');
+        if (records.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">暫無記錄，請新增</td></tr>';
             return;
         }
         let html = '';
         for (let rec of records) {
-            let productName = rec.product==='salad' ? '🥗 沙律' : '🍜 蕎麥麵';
-            html += `<tr>
-                        <td>${rec.date}</td>
-                        <td>${productName}</td>
-                        <td>${rec.made}</td>
-                        <td>${rec.sold}</td>
-                        <td>
-                            <button class="edit-btn" data-id="${rec.id}">✏️</button>
-                            <button class="delete-btn" data-id="${rec.id}">🗑️</button>
-                        </td>
-                     </tr>`;
+            const productName = rec.product === 'salad' ? '🥗 沙律' : '🍜 蕎麥麵';
+            html += `
+                <tr>
+                    <td>${rec.date}</td>
+                    <td>${productName}</td>
+                    <td>${rec.made}</td>
+                    <td>${rec.sold}</td>
+                    <td>
+                        <button class="edit-btn" data-id="${rec.id}">✏️</button>
+                        <button class="delete-btn" data-id="${rec.id}">🗑️</button>
+                    </td>
+                </tr>
+            `;
         }
-        tableBody.innerHTML = html;
+        tbody.innerHTML = html;
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                let id = Number(btn.dataset.id);
-                if (confirm('刪除此記錄？')) {
-                    deleteRecordById(id);
-                    saveToFileIfHandle(); // 刪除後自動同步
-                }
+                const id = Number(btn.dataset.id);
+                if (confirm('確定刪除？')) deleteRecordById(id);
             });
         });
         document.querySelectorAll('.edit-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                let id = Number(btn.dataset.id);
-                let rec = records.find(r => r.id === id);
+                const id = Number(btn.dataset.id);
+                const rec = records.find(r => r.id === id);
                 if (rec) loadRecordToForm(rec);
             });
         });
     }
-    function showToast(msg) {
-        let toast = document.createElement('div');
-        toast.innerText = msg;
-        toast.style.cssText = 'position:fixed; bottom:70px; left:50%; transform:translateX(-50%); background:#2c5e2e; color:white; padding:10px 20px; border-radius:50px; font-size:0.85rem; z-index:999; max-width:90%; text-align:center;';
-        document.body.appendChild(toast);
-        setTimeout(()=>toast.remove(), 2000);
+
+    function saveCurrentForm() {
+        const date = document.getElementById('recordDate').value;
+        if (!date) { alert('請選擇日期'); return; }
+        const saladMade = parseInt(document.getElementById('saladMade').value) || 0;
+        const saladSold = parseInt(document.getElementById('saladSold').value) || 0;
+        const sobaMade = parseInt(document.getElementById('sobaMade').value) || 0;
+        const sobaSold = parseInt(document.getElementById('sobaSold').value) || 0;
+
+        if (saladMade !== 0 || saladSold !== 0) {
+            addOrReplaceRecord({ date, product: 'salad', made: saladMade, sold: saladSold });
+        } else {
+            records = records.filter(r => !(r.date === date && r.product === 'salad'));
+            saveLocalRecords();
+            renderTable();
+            syncToCloud();
+        }
+        if (sobaMade !== 0 || sobaSold !== 0) {
+            addOrReplaceRecord({ date, product: 'soba', made: sobaMade, sold: sobaSold });
+        } else {
+            records = records.filter(r => !(r.date === date && r.product === 'soba'));
+            saveLocalRecords();
+            renderTable();
+            syncToCloud();
+        }
+        document.getElementById('saladMade').value = 0;
+        document.getElementById('saladSold').value = 0;
+        document.getElementById('sobaMade').value = 0;
+        document.getElementById('sobaSold').value = 0;
+        showStatus('已儲存並同步雲端');
     }
 
-    // ---------- 本地檔案自動同步 (File System Access) ----------
-    async function selectLocalFile() {
-        try {
-            const [handle] = await window.showOpenFilePicker({
-                types: [{ description: 'JSON 檔案', accept: { 'application/json': ['.json','.txt'] } }],
-                excludeAcceptAllOption: true,
-                multiple: false
-            });
-            fileHandle = handle;
-            fileName = fileHandle.name;
-            fileStatus.innerText = `📁 已選擇本地檔案: ${fileName} (儲存時自動更新)`;
-            const file = await fileHandle.getFile();
-            const content = await file.text();
-            if (content.trim()) {
-                try {
-                    let data = JSON.parse(content);
-                    if (Array.isArray(data)) { records = data; renderTable(); showToast(`已載入 ${records.length} 筆記錄`); }
-                    else throw new Error();
-                } catch(e) { showToast('檔案格式錯誤，保持原有記錄'); }
-            } else { records = []; renderTable(); }
-        } catch(e) { console.log(e); showToast('未選擇檔案'); }
-    }
-    async function saveToFileIfHandle() {
-        if (!fileHandle) { showToast('請先按「選擇本地 JSON 檔案」設定自動同步位置'); return false; }
-        try {
-            const writable = await fileHandle.createWritable();
-            await writable.write(JSON.stringify(records, null, 2));
-            await writable.close();
-            showToast(`✅ 已自動儲存至 ${fileName}`);
-            return true;
-        } catch(e) {
-            showToast('寫入失敗，請重新選擇檔案');
-            fileHandle = null;
-            fileStatus.innerText = '⚡ 未選擇本地數據檔案';
-            return false;
-        }
-    }
-    // 儲存表單內容並同步檔案
-    function saveCurrentFormAndSync() {
-        const date = getSelectedDate();
-        const saladMadeVal = parseInt(saladMade.value)||0, saladSoldVal = parseInt(saladSold.value)||0;
-        const sobaMadeVal = parseInt(sobaMade.value)||0, sobaSoldVal = parseInt(sobaSold.value)||0;
-        if (saladMadeVal!==0 || saladSoldVal!==0) addOrReplaceRecord({ date, product:'salad', made:saladMadeVal, sold:saladSoldVal });
-        else records = records.filter(r => !(r.date===date && r.product==='salad'));
-        if (sobaMadeVal!==0 || sobaSoldVal!==0) addOrReplaceRecord({ date, product:'soba', made:sobaMadeVal, sold:sobaSoldVal });
-        else records = records.filter(r => !(r.date===date && r.product==='soba'));
-        // 清空表單
-        saladMade.value = 0; saladSold.value = 0;
-        sobaMade.value = 0; sobaSold.value = 0;
-        renderTable();
-        saveToFileIfHandle();
-    }
     function clearForm() {
-        saladMade.value = 0; saladSold.value = 0;
-        sobaMade.value = 0; sobaSold.value = 0;
-        setDefaultDate();
-        showToast('表單已清空');
+        document.getElementById('saladMade').value = 0;
+        document.getElementById('saladSold').value = 0;
+        document.getElementById('sobaMade').value = 0;
+        document.getElementById('sobaSold').value = 0;
+        const today = new Date().toISOString().slice(0,10);
+        document.getElementById('recordDate').value = today;
+        showStatus('表單已清空');
     }
 
-    // 生成空白 JSON 檔案下載
-    function downloadBlankJson() {
-        const blank = JSON.stringify([], null, 2);
-        const blob = new Blob([blank], {type: 'application/json'});
-        const a = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        a.href = url;
-        a.download = 'records.json';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showToast('已下載空白 records.json');
+    function showStatus(msg) {
+        const div = document.getElementById('statusMsg');
+        div.innerText = msg;
+        setTimeout(() => { if (div.innerText === msg) div.innerText = ''; }, 3000);
     }
 
-    // 手動匯入備份 (JSON 檔案)
-    function importBackup(file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                let data = JSON.parse(e.target.result);
-                if (Array.isArray(data)) {
-                    records = data;
-                    renderTable();
-                    showToast(`匯入成功，共 ${records.length} 筆記錄`);
-                    // 如果有已選擇的本地檔案，可選擇是否自動覆寫？先唔自動，等用戶下次儲存
-                } else throw new Error();
-            } catch(err) { showToast('檔案格式錯誤'); }
-        };
-        reader.readAsText(file);
+    function setDefaultDate() {
+        const today = new Date().toISOString().slice(0,10);
+        document.getElementById('recordDate').value = today;
     }
 
-    // 從網址 (GitHub Raw) 載入 JSON
-    async function loadFromUrl() {
-        let url = rawUrlInput.value.trim();
-        if (!url) { showToast('請輸入網址'); return; }
-        try {
-            let response = await fetch(url);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            let text = await response.text();
-            let data = JSON.parse(text);
-            if (Array.isArray(data)) {
-                records = data;
-                renderTable();
-                showToast(`從網址載入成功，共 ${records.length} 筆記錄`);
-            } else throw new Error('不是陣列');
-        } catch(e) {
-            showToast('載入失敗，請確認網址正確且為公開 JSON');
-        }
-    }
+    document.getElementById('saveBtn').addEventListener('click', saveCurrentForm);
+    document.getElementById('clearFormBtn').addEventListener('click', clearForm);
 
-    // 匯出 CSV
-    function exportCSV() {
-        if (records.length===0) { alert('無記錄可匯出'); return; }
-        let rows = [["日期","產品","製作數量","賣出數量"]];
-        for (let rec of records) {
-            rows.push([rec.date, rec.product==='salad'?'沙律':'蕎麥麵', rec.made, rec.sold]);
-        }
-        let csv = rows.map(row => row.join(",")).join("\n");
-        let blob = new Blob(["\uFEFF"+csv], {type: "text/csv;charset=utf-8"});
-        let a = document.createElement('a');
-        let url = URL.createObjectURL(blob);
-        a.href = url;
-        a.download = `salad_soba_${new Date().toISOString().slice(0,10)}.csv`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        showToast("已匯出 CSV");
-    }
-
-    // 初始化
-    populateYearOptions();
-    populateMonthOptions();
-    updateDays();
     setDefaultDate();
-
-    saveBtn.addEventListener('click', saveCurrentFormAndSync);
-    clearFormBtn.addEventListener('click', clearForm);
-    selectFileBtn.addEventListener('click', selectLocalFile);
-    createBlankBtn.addEventListener('click', downloadBlankJson);
-    importBackupInput.addEventListener('change', (e) => { if(e.target.files[0]) importBackup(e.target.files[0]); e.target.value=''; });
-    loadFromUrlBtn.addEventListener('click', loadFromUrl);
-    exportCsvBtn.addEventListener('click', exportCSV);
-
-    records = [];
-    renderTable();
-    fileStatus.innerText = '⚡ 未選擇本地數據檔案 (按「選擇本地 JSON 檔案」啟用自動同步)';
+    loadFromCloud().catch(() => loadLocalRecords());
 </script>
 </body>
 </html>
