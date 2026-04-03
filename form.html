@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>沙律·蕎麥麵 手機日報表 (闊度修正)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            background: #eef5e9;
+            padding: 16px;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            padding: 20px 16px 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow-x: hidden;  /* 防止任何內容彈出 */
+        }
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 4px;
+            color: #2b5e2c;
+        }
+        .sub {
+            color: #4b6e4d;
+            border-left: 4px solid #6fbf4c;
+            padding-left: 12px;
+            margin: 8px 0 24px 0;
+            font-size: 0.85rem;
+        }
+        .form-card {
+            background: #fefcf5;
+            border-radius: 24px;
+            padding: 20px 16px;
+            margin-bottom: 28px;
+            border: 1px solid #dde9d6;
+        }
+        /* 每個輸入區塊：100% 闊度，唔會爆 */
+        .input-block {
+            margin-bottom: 24px;
+            width: 100%;
+        }
+        .input-block label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d4a2f;
+            font-size: 0.95rem;
+        }
+        .input-block input {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            padding: 14px 16px;
+            font-size: 1rem;
+            border: 1px solid #cbdcc6;
+            border-radius: 48px;
+            background: white;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        /* 產品卡片 */
+        .product-card {
+            background: #f9fbf7;
+            border-radius: 24px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px solid #e2ecdb;
+        }
+        .product-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .product-title span {
+            background: #e3f0dd;
+            padding: 6px 14px;
+            border-radius: 40px;
+        }
+        .qty-item {
+            margin-bottom: 16px;
+        }
+        .qty-item:last-child {
+            margin-bottom: 0;
+        }
+        .qty-item label {
+            display: block;
+            font-weight: 500;
+            color: #3a5c3c;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        .qty-item input {
+            width: 100%;
+            max-width: 100%;
+            padding: 14px 16px;
+            font-size: 1rem;
+            border: 1px solid #cbdcc6;
+            border-radius: 48px;
+            text-align: center;
+            background: white;
+            box-sizing: border-box;
+        }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        button {
+            flex: 1;
+            background: #4c8b3c;
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 14px 12px;
+            border-radius: 60px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            touch-action: manipulation;
+        }
+        button:active {
+            transform: scale(0.97);
+            background: #3b6e2e;
+        }
+        .btn-secondary {
+            background: #8ba888;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 16px 0 20px;
+            border-radius: 20px;
+            border: 1px solid #e0ebd9;
+        }
+        .record-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            min-width: 480px;
+        }
+        .record-table th, .record-table td {
+            padding: 12px 10px;
+            text-align: left;
+            border-bottom: 1px solid #e2ecdb;
+        }
+        .record-table th {
+            background: #eef5ea;
+        }
+        .delete-btn, .edit-btn {
+            background: none;
+            border: none;
+            font-size: 1.3rem;
+            cursor: pointer;
+            padding: 6px 8px;
+            margin: 0 2px;
+            box-shadow: none;
+        }
+        .delete-btn { color: #c25d5d; }
+        .edit-btn { color: #4c8b3c; }
+        .export-btn {
+            background: #5d6b5a;
+            width: 100%;
+            margin-top: 8px;
+        }
+        .footer-note {
+            font-size: 0.7rem;
+            color: #7c8f79;
+            text-align: center;
+            margin-top: 20px;
+        }
+        /* 強制日期輸入框唔會彈出嚟 */
+        input[type="date"] {
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            font-family: inherit;
+            color: #1a2e1a;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🥗 沙律·蕎麥麵 <span style="font-size:1rem;">日報表</span></h1>
+    <div class="sub">📅 每日記錄製作及賣出數量</div>
+
+    <div class="form-card">
+        <!-- 日期：修正闊度 -->
+        <div class="input-block">
+            <label>📆 揀日期</label>
+            <input type="date" id="recordDate" value="2026-04-03">
+        </div>
+
+        <!-- 沙律 -->
+        <div class="product-card">
+            <div class="product-title"><span>🥗 沙律</span></div>
+            <div class="qty-item">
+                <label>製作數量</label>
+                <input type="number" id="saladMade" value="0" min="0" step="1">
+            </div>
+            <div class="qty-item">
+                <label>賣出數量</label>
+                <input type="number" id="saladSold" value="0" min="0" step="1">
+            </div>
+        </div>
+
+        <!-- 蕎麥麵 -->
+        <div class="product-card">
+            <div class="product-title"><span>🍜 蕎麥麵</span></div>
+            <div class="qty-item">
+                <label>製作數量</label>
+                <input type="number" id="sobaMade" value="0" min="0" step="1">
+            </div>
+            <div class="qty-item">
+                <label>賣出數量</label>
+                <input type="number" id="sobaSold" value="0" min="0" step="1">
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button id="saveBtn">💾 儲存記錄</button>
+            <button id="clearFormBtn" class="btn-secondary">🗑️ 清空</button>
+        </div>
+    </div>
+
+    <h3>📋 記錄列表</h3>
+    <div class="table-wrapper">
+        <table class="record-table">
+            <thead>
+                <tr><th>日期</th><th>產品</th><th>製作</th><th>賣出</th><th>操作</th></tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr><td colspan="5" style="text-align:center;">暫無記錄，請新增</td></tr>
+            </tbody>
+        </table>
+    </div>
+    <button id="exportCsvBtn" class="export-btn">📎 匯出 CSV</button>
+    <div class="footer-note">✏️ 點擊「編輯」可修改記錄 | 🗑️ 刪除單項</div>
+</div>
+
+<script>
+    let records = [];
+    const dateInput = document.getElementById('recordDate');
+    const saladMade = document.getElementById('saladMade');
+    const saladSold = document.getElementById('saladSold');
+    const sobaMade = document.getElementById('sobaMade');
+    const sobaSold = document.getElementById('sobaSold');
+    const saveBtn = document.getElementById('saveBtn');
+    const clearFormBtn = document.getElementById('clearFormBtn');
+    const tableBody = document.getElementById('tableBody');
+    const exportBtn = document.getElementById('exportCsvBtn');
+
+    function loadFromStorage() {
+        const stored = localStorage.getItem('salad_soba_records');
+        if(stored) {
+            try { records = JSON.parse(stored); } catch(e) { records = []; }
+        } else { records = []; }
+        renderTable();
+    }
+    function saveToStorage() { localStorage.setItem('salad_soba_records', JSON.stringify(records)); }
+    function generateId() { return Date.now() + Math.random() * 10000; }
+
+    function addOrReplaceRecord(newRecord) {
+        records = records.filter(r => !(r.date === newRecord.date && r.product === newRecord.product));
+        const recordToAdd = { ...newRecord, id: generateId() };
+        records.push(recordToAdd);
+        records.sort((a,b) => new Date(b.date) - new Date(a.date));
+        saveToStorage();
+        renderTable();
+    }
+
+    function deleteRecordById(id) {
+        records = records.filter(r => r.id !== id);
+        saveToStorage();
+        renderTable();
+    }
+
+    function loadRecordToForm(record) {
+        dateInput.value = record.date;
+        if(record.product === 'salad') {
+            saladMade.value = record.made;
+            saladSold.value = record.sold;
+            sobaMade.value = 0;
+            sobaSold.value = 0;
+        } else {
+            sobaMade.value = record.made;
+            sobaSold.value = record.sold;
+            saladMade.value = 0;
+            saladSold.value = 0;
+        }
+        deleteRecordById(record.id);
+        showToast(`已載入 ${record.date} 的${record.product === 'salad' ? '沙律' : '蕎麥麵'}，修改後請按儲存`);
+    }
+
+    function showToast(msg) {
+        let toast = document.createElement('div');
+        toast.innerText = msg;
+        toast.style.position = 'fixed';
+        toast.style.bottom = '70px';
+        toast.style.left = '50%';
+        toast.style.transform = 'translateX(-50%)';
+        toast.style.backgroundColor = '#2c5e2e';
+        toast.style.color = 'white';
+        toast.style.padding = '10px 20px';
+        toast.style.borderRadius = '50px';
+        toast.style.fontSize = '0.85rem';
+        toast.style.zIndex = '999';
+        toast.style.whiteSpace = 'normal';
+        toast.style.maxWidth = '90%';
+        toast.style.textAlign = 'center';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    }
+
+    function saveCurrentForm() {
+        const date = dateInput.value;
+        if(!date) { alert('請選擇日期'); return; }
+        const saladMadeVal = parseInt(saladMade.value,10) || 0;
+        const saladSoldVal = parseInt(saladSold.value,10) || 0;
+        const sobaMadeVal = parseInt(sobaMade.value,10) || 0;
+        const sobaSoldVal = parseInt(sobaSold.value,10) || 0;
+
+        if(saladMadeVal !==0 || saladSoldVal !==0) {
+            addOrReplaceRecord({ date, product:'salad', made:saladMadeVal, sold:saladSoldVal });
+        } else {
+            const existing = records.find(r => r.date === date && r.product === 'salad');
+            if(existing) deleteRecordById(existing.id);
+        }
+        if(sobaMadeVal !==0 || sobaSoldVal !==0) {
+            addOrReplaceRecord({ date, product:'soba', made:sobaMadeVal, sold:sobaSoldVal });
+        } else {
+            const existing = records.find(r => r.date === date && r.product === 'soba');
+            if(existing) deleteRecordById(existing.id);
+        }
+        saladMade.value = 0; saladSold.value = 0;
+        sobaMade.value = 0; sobaSold.value = 0;
+        showToast('✅ 記錄已儲存');
+    }
+
+    function clearForm() {
+        saladMade.value = 0; saladSold.value = 0;
+        sobaMade.value = 0; sobaSold.value = 0;
+        const today = new Date().toISOString().slice(0,10);
+        dateInput.value = today;
+        showToast('表單已清空');
+    }
+
+    function renderTable() {
+        if(records.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center;">暫無記錄，請新增</td></tr>';
+            return;
+        }
+        let html = '';
+        for(let rec of records) {
+            const productName = rec.product === 'salad' ? '🥗 沙律' : '🍜 蕎麥麵';
+            html += `<tr>
+                        <td>${rec.date}</td>
+                        <td>${productName}</td>
+                        <td>${rec.made}</td>
+                        <td>${rec.sold}</td>
+                        <td>
+                            <button class="edit-btn" data-id="${rec.id}" title="編輯">✏️</button>
+                            <button class="delete-btn" data-id="${rec.id}" title="刪除">🗑️</button>
+                        </td>
+                      </tr>`;
+        }
+        tableBody.innerHTML = html;
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = Number(btn.dataset.id);
+                if(confirm('刪除此記錄？')) deleteRecordById(id);
+            });
+        });
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = Number(btn.dataset.id);
+                const record = records.find(r => r.id === id);
+                if(record) loadRecordToForm(record);
+            });
+        });
+    }
+
+    function exportToCSV() {
+        if(records.length === 0) { alert('無記錄可匯出'); return; }
+        let csvRows = [["日期","產品","製作數量","賣出數量"]];
+        for(let rec of records) {
+            let productText = rec.product === 'salad' ? '沙律' : '蕎麥麵';
+            csvRows.push([rec.date, productText, rec.made, rec.sold]);
+        }
+        const csvContent = csvRows.map(row => row.join(",")).join("\n");
+        const blob = new Blob(["\uFEFF" + csvContent], {type: "text/csv;charset=utf-8;"});
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.setAttribute("download", "salad_soba_records.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        showToast("已匯出 CSV");
+    }
+
+    saveBtn.addEventListener('click', saveCurrentForm);
+    clearFormBtn.addEventListener('click', clearForm);
+    exportBtn.addEventListener('click', exportToCSV);
+    const today = new Date().toISOString().slice(0,10);
+    dateInput.value = today;
+    loadFromStorage();
+</script>
+</body>
+</html>
