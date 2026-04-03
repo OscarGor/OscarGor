@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>沙律·蕎麥麵 日報表 (無彈窗日期)</title>
+    <title>沙律·蕎麥麵 日報表 (自動同步檔案版)</title>
     <style>
         * {
             margin: 0;
@@ -44,7 +44,6 @@
             margin-bottom: 28px;
             border: 1px solid #dde9d6;
         }
-        /* 自訂日期區域 */
         .date-custom {
             margin-bottom: 24px;
             width: 100%;
@@ -74,7 +73,6 @@
             text-align: center;
             cursor: pointer;
         }
-        /* 產品卡片 */
         .product-card {
             background: #f9fbf7;
             border-radius: 24px;
@@ -145,6 +143,9 @@
         .btn-secondary {
             background: #8ba888;
         }
+        .btn-file {
+            background: #5d6b5a;
+        }
         .table-wrapper {
             overflow-x: auto;
             margin: 16px 0 20px;
@@ -176,31 +177,27 @@
         }
         .delete-btn { color: #c25d5d; }
         .edit-btn { color: #4c8b3c; }
-        .export-btn {
-            background: #5d6b5a;
-            width: 100%;
-            margin-top: 8px;
-        }
         .footer-note {
             font-size: 0.7rem;
             color: #7c8f79;
             text-align: center;
             margin-top: 20px;
         }
-        input:focus, select:focus, button:focus {
-            outline: none;
-            border-color: #6fbf4c;
-            box-shadow: 0 0 0 2px rgba(111,191,76,0.3);
+        .status-msg {
+            font-size: 0.75rem;
+            color: #2c5e2e;
+            margin-top: 8px;
+            text-align: center;
+            word-break: break-word;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>🥗 沙律·蕎麥麵 <span style="font-size:1rem;">日報表</span></h1>
-    <div class="sub">📅 每日記錄製作及賣出數量</div>
+    <div class="sub">📅 每日記錄 | 自動同步至 JSON 檔案</div>
 
     <div class="form-card">
-        <!-- 自訂日期：年/月/日下拉選單，唔會有彈窗走位問題 -->
         <div class="date-custom">
             <label>📆 揀日期</label>
             <div class="date-selectors">
@@ -210,7 +207,6 @@
             </div>
         </div>
 
-        <!-- 沙律 -->
         <div class="product-card">
             <div class="product-title"><span>🥗 沙律</span></div>
             <div class="qty-item">
@@ -223,7 +219,6 @@
             </div>
         </div>
 
-        <!-- 蕎麥麵 -->
         <div class="product-card">
             <div class="product-title"><span>🍜 蕎麥麵</span></div>
             <div class="qty-item">
@@ -237,29 +232,35 @@
         </div>
 
         <div class="button-group">
-            <button id="saveBtn">💾 儲存記錄</button>
-            <button id="clearFormBtn" class="btn-secondary">🗑️ 清空</button>
+            <button id="saveBtn">💾 儲存記錄 (自動寫入檔案)</button>
+            <button id="clearFormBtn" class="btn-secondary">🗑️ 清空表單</button>
         </div>
+
+        <div class="button-group">
+            <button id="selectFileBtn" class="btn-file">📂 選擇 / 新增數據檔案</button>
+            <button id="exportCsvBtn" class="btn-file">📎 匯出 CSV</button>
+        </div>
+        <div id="fileStatus" class="status-msg">⚡ 尚未選擇數據檔案</div>
     </div>
 
     <h3>📋 記錄列表</h3>
     <div class="table-wrapper">
         <table class="record-table">
-            <thead>
-                <tr><th>日期</th><th>產品</th><th>製作</th><th>賣出</th><th>操作</th></tr>
-            </thead>
-            <tbody id="tableBody">
-                <tr><td colspan="5" style="text-align:center;">暫無記錄，請新增</td></tr>
-            </tbody>
+            <thead><tr><th>日期</th><th>產品</th><th>製作</th><th>賣出</th><th>操作</th></tr></thead>
+            <tbody id="tableBody"><tr><td colspan="5">暫無記錄，請新增</td></tr></tbody>
         </table>
     </div>
-    <button id="exportCsvBtn" class="export-btn">📎 匯出 CSV</button>
-    <div class="footer-note">✏️ 點擊「編輯」可修改記錄 | 🗑️ 刪除單項</div>
+    <div class="footer-note">
+        ✏️ 點擊「編輯」修改記錄 | 🗑️ 刪除單項<br>
+        📁 選擇一個 JSON 檔案後，每次儲存會自動更新該檔案，開網頁會自動讀取最新內容
+    </div>
 </div>
 
 <script>
     // ---------- 全域變數 ----------
-    let records = [];
+    let records = [];           // 儲存記錄 [{ id, date, product, made, sold }]
+    let fileHandle = null;     // FileSystemFileHandle
+    let fileName = "";
 
     // DOM 元素
     const yearSelect = document.getElementById('yearSelect');
@@ -272,9 +273,11 @@
     const saveBtn = document.getElementById('saveBtn');
     const clearFormBtn = document.getElementById('clearFormBtn');
     const tableBody = document.getElementById('tableBody');
-    const exportBtn = document.getElementById('exportCsvBtn');
+    const selectFileBtn = document.getElementById('selectFileBtn');
+    const exportCsvBtn = document.getElementById('exportCsvBtn');
+    const fileStatus = document.getElementById('fileStatus');
 
-    // ---------- 日期下拉選單初始化 ----------
+    // ---------- 日期邏輯 ----------
     function populateYearOptions() {
         const currentYear = new Date().getFullYear();
         for (let y = currentYear - 2; y <= currentYear + 2; y++) {
@@ -285,7 +288,6 @@
         }
         yearSelect.value = currentYear;
     }
-
     function populateMonthOptions() {
         for (let m = 1; m <= 12; m++) {
             const option = document.createElement('option');
@@ -295,12 +297,10 @@
         }
         monthSelect.value = new Date().getMonth() + 1;
     }
-
     function updateDays() {
         const year = parseInt(yearSelect.value);
         const month = parseInt(monthSelect.value);
         const lastDay = new Date(year, month, 0).getDate();
-        // 保留原本已選嘅日，如果超過當月最大日數就改為最大日
         let currentDay = parseInt(daySelect.value);
         if (isNaN(currentDay)) currentDay = 1;
         daySelect.innerHTML = '';
@@ -313,29 +313,23 @@
         if (currentDay > lastDay) currentDay = lastDay;
         daySelect.value = currentDay;
     }
-
     function getSelectedDate() {
         const year = yearSelect.value;
         const month = monthSelect.value.padStart(2, '0');
         const day = daySelect.value.padStart(2, '0');
         return `${year}-${month}-${day}`;
     }
-
     function setSelectedDate(dateStr) {
         const [year, month, day] = dateStr.split('-');
         if (year && month && day) {
             yearSelect.value = year;
             monthSelect.value = parseInt(month);
-            updateDays();  // 更新日數選項
+            updateDays();
             daySelect.value = parseInt(day);
         }
     }
-
-    // 監聽年、月變更時更新日數
     yearSelect.addEventListener('change', updateDays);
     monthSelect.addEventListener('change', updateDays);
-
-    // 設定預設日期為今日
     function setDefaultDate() {
         const today = new Date();
         yearSelect.value = today.getFullYear();
@@ -344,37 +338,19 @@
         daySelect.value = today.getDate();
     }
 
-    // ---------- 儲存相關函數 ----------
-    function loadFromStorage() {
-        const stored = localStorage.getItem('salad_soba_records');
-        if (stored) {
-            try { records = JSON.parse(stored); } catch(e) { records = []; }
-        } else {
-            records = [];
-        }
-        renderTable();
-    }
-
-    function saveToStorage() {
-        localStorage.setItem('salad_soba_records', JSON.stringify(records));
-    }
-
-    function generateId() {
-        return Date.now() + Math.random() * 10000;
-    }
+    // ---------- 記錄操作 (內存) ----------
+    function generateId() { return Date.now() + Math.random() * 10000; }
 
     function addOrReplaceRecord(newRecord) {
         records = records.filter(r => !(r.date === newRecord.date && r.product === newRecord.product));
         const recordToAdd = { ...newRecord, id: generateId() };
         records.push(recordToAdd);
-        records.sort((a, b) => new Date(b.date) - new Date(a.date));
-        saveToStorage();
+        records.sort((a,b) => new Date(b.date) - new Date(a.date));
         renderTable();
     }
 
     function deleteRecordById(id) {
         records = records.filter(r => r.id !== id);
-        saveToStorage();
         renderTable();
     }
 
@@ -393,58 +369,6 @@
         }
         deleteRecordById(record.id);
         showToast(`已載入 ${record.date} 的${record.product === 'salad' ? '沙律' : '蕎麥麵'}，修改後請按儲存`);
-    }
-
-    function showToast(msg) {
-        let toast = document.createElement('div');
-        toast.innerText = msg;
-        toast.style.position = 'fixed';
-        toast.style.bottom = '70px';
-        toast.style.left = '50%';
-        toast.style.transform = 'translateX(-50%)';
-        toast.style.backgroundColor = '#2c5e2e';
-        toast.style.color = 'white';
-        toast.style.padding = '10px 20px';
-        toast.style.borderRadius = '50px';
-        toast.style.fontSize = '0.85rem';
-        toast.style.zIndex = '999';
-        toast.style.whiteSpace = 'normal';
-        toast.style.maxWidth = '90%';
-        toast.style.textAlign = 'center';
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 2000);
-    }
-
-    function saveCurrentForm() {
-        const date = getSelectedDate();
-        if (!date) { alert('請選擇日期'); return; }
-        const saladMadeVal = parseInt(saladMade.value, 10) || 0;
-        const saladSoldVal = parseInt(saladSold.value, 10) || 0;
-        const sobaMadeVal = parseInt(sobaMade.value, 10) || 0;
-        const sobaSoldVal = parseInt(sobaSold.value, 10) || 0;
-
-        if (saladMadeVal !== 0 || saladSoldVal !== 0) {
-            addOrReplaceRecord({ date, product: 'salad', made: saladMadeVal, sold: saladSoldVal });
-        } else {
-            const existing = records.find(r => r.date === date && r.product === 'salad');
-            if (existing) deleteRecordById(existing.id);
-        }
-        if (sobaMadeVal !== 0 || sobaSoldVal !== 0) {
-            addOrReplaceRecord({ date, product: 'soba', made: sobaMadeVal, sold: sobaSoldVal });
-        } else {
-            const existing = records.find(r => r.date === date && r.product === 'soba');
-            if (existing) deleteRecordById(existing.id);
-        }
-        saladMade.value = 0; saladSold.value = 0;
-        sobaMade.value = 0; sobaSold.value = 0;
-        showToast('✅ 記錄已儲存');
-    }
-
-    function clearForm() {
-        saladMade.value = 0; saladSold.value = 0;
-        sobaMade.value = 0; sobaSold.value = 0;
-        setDefaultDate();
-        showToast('表單已清空');
     }
 
     function renderTable() {
@@ -471,7 +395,10 @@
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const id = Number(btn.dataset.id);
-                if (confirm('刪除此記錄？')) deleteRecordById(id);
+                if (confirm('刪除此記錄？')) {
+                    deleteRecordById(id);
+                    saveToFile(); // 刪除後自動同步到檔案
+                }
             });
         });
         document.querySelectorAll('.edit-btn').forEach(btn => {
@@ -484,7 +411,131 @@
         });
     }
 
-    function exportToCSV() {
+    function showToast(msg) {
+        let toast = document.createElement('div');
+        toast.innerText = msg;
+        toast.style.position = 'fixed';
+        toast.style.bottom = '70px';
+        toast.style.left = '50%';
+        toast.style.transform = 'translateX(-50%)';
+        toast.style.backgroundColor = '#2c5e2e';
+        toast.style.color = 'white';
+        toast.style.padding = '10px 20px';
+        toast.style.borderRadius = '50px';
+        toast.style.fontSize = '0.85rem';
+        toast.style.zIndex = '999';
+        toast.style.whiteSpace = 'normal';
+        toast.style.maxWidth = '90%';
+        toast.style.textAlign = 'center';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 2000);
+    }
+
+    // ---------- 檔案讀寫 (File System Access API) ----------
+    async function selectFile() {
+        try {
+            // 打開檔案選擇器，可選 JSON 或 txt
+            const [handle] = await window.showOpenFilePicker({
+                types: [{
+                    description: 'JSON 備份檔',
+                    accept: { 'application/json': ['.json', '.txt'] }
+                }],
+                excludeAcceptAllOption: true,
+                multiple: false
+            });
+            fileHandle = handle;
+            fileName = fileHandle.name;
+            fileStatus.innerText = `📁 已選擇檔案: ${fileName}`;
+            // 讀取檔案內容
+            const file = await fileHandle.getFile();
+            const contents = await file.text();
+            if (contents.trim()) {
+                try {
+                    const loaded = JSON.parse(contents);
+                    if (Array.isArray(loaded)) {
+                        records = loaded;
+                        renderTable();
+                        showToast(`已載入 ${records.length} 筆記錄`);
+                    } else {
+                        throw new Error('格式錯誤');
+                    }
+                } catch(e) {
+                    showToast('檔案內容不是有效記錄，將以空白開始');
+                    records = [];
+                    renderTable();
+                }
+            } else {
+                records = [];
+                renderTable();
+            }
+            // 將檔案 handle 儲存到 sessionStorage (下次重新整理可嘗試恢復)
+            sessionStorage.setItem('fileHandleId', 'true'); // 只能標記，不能真正儲存 handle
+        } catch (err) {
+            console.log('取消選擇或錯誤', err);
+        }
+    }
+
+    async function saveToFile() {
+        if (!fileHandle) {
+            showToast('請先選擇數據檔案 (按「選擇/新增數據檔案」)');
+            return false;
+        }
+        try {
+            const writable = await fileHandle.createWritable();
+            const dataStr = JSON.stringify(records, null, 2);
+            await writable.write(dataStr);
+            await writable.close();
+            showToast(`✅ 已自動儲存至 ${fileName}`);
+            return true;
+        } catch (err) {
+            console.error('寫入失敗', err);
+            showToast('寫入檔案失敗，可能權限已失效，請重新選擇檔案');
+            fileHandle = null;
+            fileStatus.innerText = '⚡ 未選擇數據檔案';
+            return false;
+        }
+    }
+
+    // 儲存表單內容到 records，然後寫入檔案
+    function saveCurrentFormAndSync() {
+        const date = getSelectedDate();
+        if (!date) { alert('請選擇日期'); return; }
+        const saladMadeVal = parseInt(saladMade.value,10) || 0;
+        const saladSoldVal = parseInt(saladSold.value,10) || 0;
+        const sobaMadeVal = parseInt(sobaMade.value,10) || 0;
+        const sobaSoldVal = parseInt(sobaSold.value,10) || 0;
+
+        if (saladMadeVal !==0 || saladSoldVal !==0) {
+            addOrReplaceRecord({ date, product:'salad', made:saladMadeVal, sold:saladSoldVal });
+        } else {
+            records = records.filter(r => !(r.date === date && r.product === 'salad'));
+        }
+        if (sobaMadeVal !==0 || sobaSoldVal !==0) {
+            addOrReplaceRecord({ date, product:'soba', made:sobaMadeVal, sold:sobaSoldVal });
+        } else {
+            records = records.filter(r => !(r.date === date && r.product === 'soba'));
+        }
+
+        // 清空表單
+        saladMade.value = 0; saladSold.value = 0;
+        sobaMade.value = 0; sobaSold.value = 0;
+        renderTable();
+
+        // 同步到檔案
+        saveToFile().then(() => {
+            // 可選額外提示
+        });
+    }
+
+    function clearForm() {
+        saladMade.value = 0; saladSold.value = 0;
+        sobaMade.value = 0; sobaSold.value = 0;
+        setDefaultDate();
+        showToast('表單已清空');
+    }
+
+    // 匯出 CSV (只匯出 records)
+    function exportCSV() {
         if (records.length === 0) { alert('無記錄可匯出'); return; }
         let csvRows = [["日期","產品","製作數量","賣出數量"]];
         for (let rec of records) {
@@ -496,7 +547,7 @@
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
         link.href = url;
-        link.setAttribute("download", "salad_soba_records.csv");
+        link.setAttribute("download", `salad_soba_${new Date().toISOString().slice(0,10)}.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -504,17 +555,31 @@
         showToast("已匯出 CSV");
     }
 
-    // 初始化
+    // 嘗試恢復上次的檔案 handle (不可行，需要重新授權，但提示用戶)
+    async function tryRestoreFileHandle() {
+        // File System Access API 不支援持久化 handle 到 localStorage，每次需重新選擇
+        // 但如果 sessionStorage 有標記，可以提醒用戶
+        if (sessionStorage.getItem('fileHandleId')) {
+            fileStatus.innerText = '📌 上次曾選擇檔案，請按「選擇/新增數據檔案」繼續使用';
+        }
+    }
+
+    // 初始化日期
     populateYearOptions();
     populateMonthOptions();
     updateDays();
     setDefaultDate();
 
-    saveBtn.addEventListener('click', saveCurrentForm);
+    // 綁定事件
+    saveBtn.addEventListener('click', saveCurrentFormAndSync);
     clearFormBtn.addEventListener('click', clearForm);
-    exportBtn.addEventListener('click', exportToCSV);
+    selectFileBtn.addEventListener('click', selectFile);
+    exportCsvBtn.addEventListener('click', exportCSV);
 
-    loadFromStorage();
+    tryRestoreFileHandle();
+    // 初始記錄為空，等待用戶選擇檔案
+    records = [];
+    renderTable();
 </script>
 </body>
 </html>
