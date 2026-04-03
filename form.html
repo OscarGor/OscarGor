@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>沙律·蕎麥麵 團隊記錄表 (Google Sheets)</title>
+    <title>沙律·蕎麥麵 團隊記錄表 (簡易請求版)</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         body { background:#eef5e9; padding:16px; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
@@ -77,7 +77,7 @@
 <\/div>
 
 <script>
-    // 已更新為你提供的最新 Google Apps Script 網址
+    // 請將此網址換成你部署後的 Google Apps Script 網址
     const API_URL = "https://script.google.com/macros/s/AKfycbyaVOkj-Cx5HGdCXisy2GNbvWbwM8_MVDdHQpcsozpUqAA0XNAiUnqqTQHvDjYfkIbp/exec";
 
     let records = [];
@@ -114,13 +114,14 @@
         }
     }
 
+    // 關鍵修改：將 Content-Type 改為 text/plain，避免預檢請求
     async function syncToCloud() {
         showStatus("⏳ 同步到雲端...");
         try {
             const res = await fetch(API_URL, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(records)
+                headers: { "Content-Type": "text/plain" },   // 改為 text/plain，變成簡單請求
+                body: JSON.stringify(records)               // 依然傳送 JSON 字串
             });
             const result = await res.json();
             if (res.ok && result.success) {
@@ -173,7 +174,7 @@
     function renderTable() {
         const tbody = document.getElementById('tableBody');
         if (records.length === 0) {
-            tbody.innerHTML = '<td><td colspan="5" style="text-align:center;">暫無記錄，請新增<\/td><\/tr>';
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">暫無記錄，請新增<\/td><\/tr>';
             return;
         }
         let html = '';
