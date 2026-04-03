@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>沙律·蕎麥麵 團隊記錄表</title>
+    <title>沙律·蕎麥麵 團隊記錄表 (下拉日期版)</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         body { background:#eef5e9; padding:16px; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
@@ -25,6 +25,7 @@
         .button-group { display:flex; flex-wrap:wrap; gap:12px; margin-top:20px; }
         button { flex:1; background:#4c8b3c; border:none; color:white; font-weight:bold; padding:14px 12px; border-radius:60px; font-size:1rem; cursor:pointer; transition:0.2s; touch-action:manipulation; }
         button:active { transform:scale(0.97); background:#3b6e2e; }
+        .btn-secondary { background:#8ba888; }
         .btn-export { background:#5d6b5a; }
         .table-wrapper { overflow-x:auto; margin:16px 0 20px; border-radius:20px; border:1px solid #e0ebd9; }
         .record-table { width:100%; border-collapse:collapse; font-size:0.85rem; min-width:420px; }
@@ -43,6 +44,7 @@
     <div class="sub">📅 下拉日期 · 自動同步 Google Sheets</div>
 
     <div class="form-card">
+        <!-- 自訂日期下拉選單 -->
         <div class="date-custom">
             <label>📆 日期</label>
             <div class="date-selectors">
@@ -81,8 +83,8 @@
 <\/div>
 
 <script>
-    // ========== 請將此網址換成你部署後的 Google Apps Script 網址 ==========
-    const API_URL = "https://script.google.com/macros/s/你的網址/exec";
+    // 請將此網址換成你部署後的 Google Apps Script 網址
+    const API_URL = "https://script.google.com/macros/s/AKfycbyaVOkj-Cx5HGdCXisy2GNbvWbwM8_MVDdHQpcsozpUqAA0XNAiUnqqTQHvDjYfkIbp/exec";
 
     let records = [];
     const STORAGE_KEY = 'salad_soba_records';
@@ -177,11 +179,7 @@
             if (res.ok) {
                 const data = await res.json();
                 if (Array.isArray(data)) {
-                    // 標準化日期：將任何 "2026-04-03T16:00:00.000Z" 轉為 "2026-04-03"
-                    records = data.map(rec => ({
-                        ...rec,
-                        date: rec.date ? rec.date.split('T')[0] : rec.date
-                    }));
+                    records = data;
                     saveLocalRecords();
                     renderTable();
                     showStatus("✅ 已同步最新記錄 (" + records.length + " 筆)");
@@ -193,6 +191,7 @@
         }
     }
 
+    // 使用 text/plain 避免 CORS 預檢
     async function syncToCloud() {
         showStatus("⏳ 同步到雲端...");
         try {
@@ -311,6 +310,7 @@
             renderTable();
             syncToCloud();
         }
+        // 清空表單中的數量欄位（日期保留不變）
         document.getElementById('saladMade').value = 0;
         document.getElementById('saladSold').value = 0;
         document.getElementById('sobaMade').value = 0;
@@ -318,6 +318,7 @@
         showStatus('已儲存並同步雲端');
     }
 
+    // 匯出 CSV 功能
     function exportToCSV() {
         if (records.length === 0) {
             alert('無記錄可匯出');
