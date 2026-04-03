@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>沙律·蕎麥麵 團隊共用記錄表</title>
+    <title>沙律·蕎麥麵 團隊記錄表 (Google Sheets)</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         body { background:#eef5e9; padding:16px; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
@@ -40,7 +40,7 @@
 <body>
 <div class="container">
     <h1>🥗 沙律·蕎麥麵 <span style="font-size:1rem;">團隊記錄表</span></h1>
-    <div class="sub">📅 同事輸入後自動同步，刪除亦會同步</div>
+    <div class="sub">📅 同事輸入後自動同步，所有人都睇到</div>
 
     <div class="form-card">
         <div class="date-row">
@@ -71,14 +71,14 @@
         <tbody id="tableBody"><tr><td colspan="5">載入中...<\/td><\/tr><\/tbody>
     <\/div>
     <div class="footer-note">
-        💡 編輯/刪除後會自動同步到雲端。<br>
-        🔄 如果刪除後未即時更新，可手按「重新整理」從雲端拉取最新資料。
+        💡 所有記錄儲存於 Google Sheets，同事之間自動同步。<br>
+        🔄 編輯/刪除後會即時更新。
     <\/div>
 <\/div>
 
 <script>
     // 已更新為你提供的最新 Google Apps Script 網址
-    const API_URL = "https://script.google.com/macros/s/AKfycbxRDS1QMCFjlKUwEfLJ2UtxXlFk92t9aZx0epLPcO7brEvL62HokJMzD37JPCqeAE8S/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyaVOkj-Cx5HGdCXisy2GNbvWbwM8_MVDdHQpcsozpUqAA0XNAiUnqqTQHvDjYfkIbp/exec";
 
     let records = [];
     const STORAGE_KEY = 'salad_soba_records';
@@ -98,7 +98,7 @@
     async function loadFromCloud() {
         showStatus("📡 讀取雲端資料...");
         try {
-            const res = await fetch(API_URL + "?action=get&t=" + Date.now());
+            const res = await fetch(API_URL + "?t=" + Date.now());
             if (res.ok) {
                 const data = await res.json();
                 if (Array.isArray(data)) {
@@ -124,7 +124,7 @@
             });
             const result = await res.json();
             if (res.ok && result.success) {
-                showStatus("✅ 已同步到雲端 GitHub");
+                showStatus("✅ 已同步到 Google Sheets");
             } else {
                 throw new Error(result.error || "同步失敗");
             }
@@ -173,7 +173,7 @@
     function renderTable() {
         const tbody = document.getElementById('tableBody');
         if (records.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">暫無記錄，請新增<\/td><\/tr>';
+            tbody.innerHTML = '<td><td colspan="5" style="text-align:center;">暫無記錄，請新增<\/td><\/tr>';
             return;
         }
         let html = '';
