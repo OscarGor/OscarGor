@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>沙律·蕎麥麵 團隊記錄表 (簡易請求版)</title>
+    <title>沙律·蕎麥麵 團隊記錄表 (下拉日期版)</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         body { background:#eef5e9; padding:16px; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
@@ -11,9 +11,10 @@
         h1 { font-size:1.6rem; margin-bottom:4px; color:#2b5e2c; text-align:center; }
         .sub { text-align:center; color:#4b6e4d; margin-bottom:24px; font-size:0.85rem; }
         .form-card { background:#fefcf5; border-radius:24px; padding:20px 16px; margin-bottom:28px; border:1px solid #dde9d6; }
-        .date-row { margin-bottom:24px; }
-        .date-row label { font-weight:600; display:block; margin-bottom:8px; color:#2d4a2f; font-size:1rem; }
-        .date-row input { width:100%; padding:14px 16px; font-size:1rem; border:1px solid #cbdcc6; border-radius:48px; background:white; }
+        .date-custom { margin-bottom:24px; width:100%; }
+        .date-custom label { font-weight:600; display:block; margin-bottom:8px; color:#2d4a2f; font-size:1rem; }
+        .date-selectors { display:flex; flex-wrap:wrap; gap:12px; width:100%; }
+        .date-selectors select { flex:1; min-width:90px; padding:14px 8px; font-size:1rem; border:1px solid #cbdcc6; border-radius:48px; background:white; text-align:center; cursor:pointer; }
         .product-card { background:#f9fbf7; border-radius:24px; padding:16px; margin-bottom:24px; border:1px solid #e2ecdb; }
         .product-title { font-weight:bold; font-size:1.2rem; margin-bottom:16px; display:flex; align-items:center; gap:8px; }
         .product-title span { background:#e3f0dd; padding:6px 14px; border-radius:40px; }
@@ -25,7 +26,7 @@
         button { flex:1; background:#4c8b3c; border:none; color:white; font-weight:bold; padding:14px 12px; border-radius:60px; font-size:1rem; cursor:pointer; transition:0.2s; touch-action:manipulation; }
         button:active { transform:scale(0.97); background:#3b6e2e; }
         .btn-secondary { background:#8ba888; }
-        .btn-refresh { background:#5d6b5a; }
+        .btn-export { background:#5d6b5a; }
         .table-wrapper { overflow-x:auto; margin:16px 0 20px; border-radius:20px; border:1px solid #e0ebd9; }
         .record-table { width:100%; border-collapse:collapse; font-size:0.85rem; min-width:420px; }
         .record-table th, .record-table td { padding:12px 10px; text-align:left; border-bottom:1px solid #e2ecdb; }
@@ -40,13 +41,19 @@
 <body>
 <div class="container">
     <h1>🥗 沙律·蕎麥麵 <span style="font-size:1rem;">團隊記錄表</span></h1>
-    <div class="sub">📅 同事輸入後自動同步，所有人都睇到</div>
+    <div class="sub">📅 下拉日期 · 自動同步 Google Sheets</div>
 
     <div class="form-card">
-        <div class="date-row">
+        <!-- 自訂日期下拉選單 -->
+        <div class="date-custom">
             <label>📆 日期</label>
-            <input type="date" id="recordDate" value="">
+            <div class="date-selectors">
+                <select id="yearSelect"></select>
+                <select id="monthSelect"></select>
+                <select id="daySelect"></select>
+            </div>
         </div>
+
         <div class="product-card">
             <div class="product-title"><span>🥗 沙律</span></div>
             <div class="qty-item"><label>製作數量</label><input type="number" id="saladMade" value="0" min="0" step="1"></div>
@@ -59,8 +66,7 @@
         </div>
         <div class="button-group">
             <button id="saveBtn">💾 儲存記錄</button>
-            <button id="clearFormBtn" class="btn-secondary">🗑️ 清空表單</button>
-            <button id="refreshBtn" class="btn-refresh">🔄 重新整理</button>
+            <button id="exportCsvBtn" class="btn-export">📎 匯出 CSV</button>
         </div>
         <div id="statusMsg" class="status"></div>
     </div>
@@ -72,7 +78,7 @@
     <\/div>
     <div class="footer-note">
         💡 所有記錄儲存於 Google Sheets，同事之間自動同步。<br>
-        🔄 編輯/刪除後會即時更新。
+        ✏️ 點擊編輯可修改，點擊刪除會移除記錄，所有變更會即時同步雲端。
     <\/div>
 <\/div>
 
@@ -83,6 +89,77 @@
     let records = [];
     const STORAGE_KEY = 'salad_soba_records';
 
+    // ---------- 日期下拉選單邏輯 ----------
+    const yearSelect = document.getElementById('yearSelect');
+    const monthSelect = document.getElementById('monthSelect');
+    const daySelect = document.getElementById('daySelect');
+
+    function populateYearOptions() {
+        const currentYear = new Date().getFullYear();
+        for (let y = currentYear - 2; y <= currentYear + 2; y++) {
+            const option = document.createElement('option');
+            option.value = y;
+            option.textContent = y;
+            yearSelect.appendChild(option);
+        }
+        yearSelect.value = currentYear;
+    }
+
+    function populateMonthOptions() {
+        for (let m = 1; m <= 12; m++) {
+            const option = document.createElement('option');
+            option.value = m;
+            option.textContent = `${m}月`;
+            monthSelect.appendChild(option);
+        }
+        monthSelect.value = new Date().getMonth() + 1;
+    }
+
+    function updateDays() {
+        const year = parseInt(yearSelect.value);
+        const month = parseInt(monthSelect.value);
+        const lastDay = new Date(year, month, 0).getDate();
+        let currentDay = parseInt(daySelect.value) || 1;
+        daySelect.innerHTML = '';
+        for (let d = 1; d <= lastDay; d++) {
+            const option = document.createElement('option');
+            option.value = d;
+            option.textContent = `${d}日`;
+            daySelect.appendChild(option);
+        }
+        if (currentDay > lastDay) currentDay = lastDay;
+        daySelect.value = currentDay;
+    }
+
+    function getSelectedDate() {
+        const year = yearSelect.value;
+        const month = monthSelect.value.padStart(2, '0');
+        const day = daySelect.value.padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function setSelectedDate(dateStr) {
+        const [year, month, day] = dateStr.split('-');
+        if (year && month && day) {
+            yearSelect.value = year;
+            monthSelect.value = parseInt(month);
+            updateDays();
+            daySelect.value = parseInt(day);
+        }
+    }
+
+    function setDefaultDate() {
+        const today = new Date();
+        yearSelect.value = today.getFullYear();
+        monthSelect.value = today.getMonth() + 1;
+        updateDays();
+        daySelect.value = today.getDate();
+    }
+
+    yearSelect.addEventListener('change', updateDays);
+    monthSelect.addEventListener('change', updateDays);
+
+    // ---------- 資料操作 ----------
     function loadLocalRecords() {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
@@ -114,14 +191,14 @@
         }
     }
 
-    // 關鍵修改：將 Content-Type 改為 text/plain，避免預檢請求
+    // 使用 text/plain 避免 CORS 預檢
     async function syncToCloud() {
         showStatus("⏳ 同步到雲端...");
         try {
             const res = await fetch(API_URL, {
                 method: "POST",
-                headers: { "Content-Type": "text/plain" },   // 改為 text/plain，變成簡單請求
-                body: JSON.stringify(records)               // 依然傳送 JSON 字串
+                headers: { "Content-Type": "text/plain" },
+                body: JSON.stringify(records)
             });
             const result = await res.json();
             if (res.ok && result.success) {
@@ -155,7 +232,7 @@
     }
 
     function loadRecordToForm(record) {
-        document.getElementById('recordDate').value = record.date;
+        setSelectedDate(record.date);
         if (record.product === 'salad') {
             document.getElementById('saladMade').value = record.made;
             document.getElementById('saladSold').value = record.sold;
@@ -210,7 +287,7 @@
     }
 
     function saveCurrentForm() {
-        const date = document.getElementById('recordDate').value;
+        const date = getSelectedDate();
         if (!date) { alert('請選擇日期'); return; }
         const saladMade = parseInt(document.getElementById('saladMade').value) || 0;
         const saladSold = parseInt(document.getElementById('saladSold').value) || 0;
@@ -233,6 +310,7 @@
             renderTable();
             syncToCloud();
         }
+        // 清空表單中的數量欄位（日期保留不變）
         document.getElementById('saladMade').value = 0;
         document.getElementById('saladSold').value = 0;
         document.getElementById('sobaMade').value = 0;
@@ -240,18 +318,29 @@
         showStatus('已儲存並同步雲端');
     }
 
-    function clearForm() {
-        document.getElementById('saladMade').value = 0;
-        document.getElementById('saladSold').value = 0;
-        document.getElementById('sobaMade').value = 0;
-        document.getElementById('sobaSold').value = 0;
+    // 匯出 CSV 功能
+    function exportToCSV() {
+        if (records.length === 0) {
+            alert('無記錄可匯出');
+            return;
+        }
+        const rows = [["日期", "產品", "製作數量", "賣出數量"]];
+        for (let rec of records) {
+            const productText = rec.product === 'salad' ? '沙律' : '蕎麥麵';
+            rows.push([rec.date, productText, rec.made, rec.sold]);
+        }
+        const csvContent = rows.map(row => row.join(",")).join("\n");
+        const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.href = url;
         const today = new Date().toISOString().slice(0,10);
-        document.getElementById('recordDate').value = today;
-        showStatus('表單已清空');
-    }
-
-    function refreshFromCloud() {
-        loadFromCloud();
+        link.setAttribute("download", `salad_soba_${today}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+        showStatus("📎 已匯出 CSV 檔案");
     }
 
     function showStatus(msg) {
@@ -260,16 +349,17 @@
         setTimeout(() => { if (div.innerText === msg) div.innerText = ''; }, 3000);
     }
 
-    function setDefaultDate() {
-        const today = new Date().toISOString().slice(0,10);
-        document.getElementById('recordDate').value = today;
-    }
-
-    document.getElementById('saveBtn').addEventListener('click', saveCurrentForm);
-    document.getElementById('clearFormBtn').addEventListener('click', clearForm);
-    document.getElementById('refreshBtn').addEventListener('click', refreshFromCloud);
-
+    // 初始化日期下拉選單
+    populateYearOptions();
+    populateMonthOptions();
+    updateDays();
     setDefaultDate();
+
+    // 綁定事件
+    document.getElementById('saveBtn').addEventListener('click', saveCurrentForm);
+    document.getElementById('exportCsvBtn').addEventListener('click', exportToCSV);
+
+    // 載入資料
     loadFromCloud().catch(() => loadLocalRecords());
 </script>
 </body>
