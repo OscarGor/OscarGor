@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>沙律·蕎麥麵 團隊記錄表</title>
+    <title>沙律·蕎麥麵 團隊共用記錄表</title>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
         body { background:#eef5e9; padding:16px; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
@@ -38,8 +38,8 @@
 </head>
 <body>
 <div class="container">
-    <h1>🥗 沙律·蕎麥麵 <span style="font-size:1rem;">團隊記錄表</span></h1>
-    <div class="sub">📅 輸入後自動更新雲端數據</div>
+    <h1>🥗 沙律·蕎麥麵 <span style="font-size:1rem;">團隊共用記錄表</span></h1>
+    <div class="sub">📅 同事輸入後自動同步，所有人都睇到</div>
 
     <div class="form-card">
         <div class="date-row">
@@ -66,18 +66,17 @@
     <h3>📋 已儲存嘅記錄</h3>
     <div class="table-wrapper">
         <table class="record-table"><thead><tr><th>日期</th><th>產品</th><th>製作</th><th>賣出</th><th>操作</th></tr></thead>
-        <tbody id="tableBody"><tr><td colspan="5">載入中...</td></tr>
-        </tbody>
-    </div>
+        <tbody id="tableBody"><tr><td colspan="5">載入中...<\/td><\/tr><\/tbody>
+    <\/div>
     <div class="footer-note">
-        💡 所有記錄會即時同步到團隊雲端，唔使再手動匯出。<br>
+        💡 所有記錄會即時同步到雲端，同事之間互相睇到最新數據。<br>
         ✏️ 可編輯或刪除，每次修改都會自動儲存。
-    </div>
-</div>
+    <\/div>
+<\/div>
 
 <script>
-    // 已替你改好 Google Apps Script 網址
-    const API_URL = "https://script.google.com/macros/s/AKfycbz6N4kyV-uBy1vuOyvDOU6ZwcageNxnZbjUEuC-rns-L0bN6PRUB2b1-EoWyFquAhw-/exec";
+    // ✅ 已更新為你提供的最新 Google Apps Script 網址
+    const API_URL = "https://script.google.com/macros/s/AKfycbzYfsqLCiCdXd3WrGPnJjlSMJahMcRo0DWtDTExGGcWtkgkpYfksNFz0NvLfTfsKGY/exec";
 
     let records = [];
     const STORAGE_KEY = 'salad_soba_records';
@@ -170,7 +169,7 @@
     function renderTable() {
         const tbody = document.getElementById('tableBody');
         if (records.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">暫無記錄，請新增</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">暫無記錄，請新增<\/td><\/tr>';
             return;
         }
         let html = '';
@@ -178,15 +177,15 @@
             const productName = rec.product === 'salad' ? '🥗 沙律' : '🍜 蕎麥麵';
             html += `
                 <tr>
-                    <td>${rec.date}</td>
-                    <td>${productName}</td>
-                    <td>${rec.made}</td>
-                    <td>${rec.sold}</td>
+                    <td>${rec.date}<\/td>
+                    <td>${productName}<\/td>
+                    <td>${rec.made}<\/td>
+                    <td>${rec.sold}<\/td>
                     <td>
-                        <button class="edit-btn" data-id="${rec.id}">✏️</button>
-                        <button class="delete-btn" data-id="${rec.id}">🗑️</button>
-                    </td>
-                </tr>
+                        <button class="edit-btn" data-id="${rec.id}">✏️<\/button>
+                        <button class="delete-btn" data-id="${rec.id}">🗑️<\/button>
+                     <\/td>
+                 <\/tr>
             `;
         }
         tbody.innerHTML = html;
