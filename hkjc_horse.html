@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>SHTSN 奇門預測｜跑馬地夜賽 2026.04.15｜四派膽選</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <title>🐴 SHTSN · 黃金程式投注面板｜鐵三角直擊 + 賽果實證</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,10 +13,10 @@
         }
 
         body {
-            background: radial-gradient(circle at 10% 20%, #0e1a0c, #0a1308);
+            background: #0b1209;
             font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', 'PingFang HK', 'Microsoft YaHei', sans-serif;
-            color: #edf4e6;
-            padding: 2rem 1.5rem;
+            color: #eef4e6;
+            padding: 24px 20px;
         }
 
         .container {
@@ -24,563 +24,650 @@
             margin: 0 auto;
         }
 
-        .gold-glow {
-            text-shadow: 0 0 6px rgba(255, 180, 60, 0.4);
-        }
-
-        .hero {
-            margin-bottom: 2rem;
-            border-bottom: 2px solid rgba(255, 180, 71, 0.35);
-            padding-bottom: 1.2rem;
+        .global-header {
+            margin-bottom: 28px;
+            border-bottom: 2px solid rgba(255, 180, 71, 0.4);
+            padding-bottom: 16px;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 12px;
         }
-        .title-section h1 {
-            font-size: 2.4rem;
+        .title h1 {
+            font-size: 1.9rem;
             font-weight: 700;
-            background: linear-gradient(130deg, #ffd7a0, #ffb347);
+            background: linear-gradient(135deg, #ffd7a0, #ffb347);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
             letter-spacing: -0.3px;
         }
-        .title-section p {
+        .title p {
+            font-size: 0.8rem;
             color: #b7d0a5;
-            font-size: 0.85rem;
             margin-top: 6px;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
         }
-        .badge-system {
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-            padding: 0.3rem 1rem;
-            border-radius: 60px;
-            font-size: 0.75rem;
+        .qimen-badge {
+            background: #1e2a18;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 500;
             border: 1px solid #ffb34760;
         }
-
-        .qimen-glance {
-            background: rgba(25, 35, 20, 0.75);
-            backdrop-filter: blur(12px);
-            border-radius: 2rem;
-            padding: 1.2rem 1.8rem;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255, 200, 100, 0.25);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        .qimen-badge span {
+            color: #ffb347;
         }
-        .glance-grid {
+
+        .triple-bar {
+            background: #1c2a16;
+            border-radius: 20px;
+            padding: 12px 20px;
+            margin-bottom: 28px;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
-            gap: 1.2rem;
+            align-items: center;
+            gap: 12px;
+            border-left: 6px solid #ffb347;
         }
-        .glance-item {
-            background: #1e2a18;
-            border-radius: 1.8rem;
-            padding: 0.6rem 1.2rem;
-            min-width: 130px;
-            text-align: center;
+        .triple-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #0f170d;
+            padding: 6px 16px;
+            border-radius: 40px;
         }
-        .glance-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: #ffb347;
-            letter-spacing: 1px;
+        .triple-color {
+            width: 24px;
+            height: 24px;
+            border-radius: 8px;
         }
-        .glance-value {
-            font-weight: 700;
-            font-size: 1.2rem;
+        .color-8 { background: #b45f2b; box-shadow: 0 0 4px #ffb347; }
+        .color-1 { background: #2b8f5c; box-shadow: 0 0 4px #5cdb9a; }
+        .color-6 { background: #6a2b8f; box-shadow: 0 0 4px #c77dff; }
+        .triple-text {
+            font-weight: 600;
+            font-size: 0.85rem;
         }
 
         .races-grid {
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 28px;
         }
         .race-card {
-            background: rgba(20, 30, 16, 0.7);
-            backdrop-filter: blur(8px);
-            border-radius: 2rem;
-            border: 1px solid #3f4e33;
+            background: rgba(18, 26, 14, 0.85);
+            backdrop-filter: blur(4px);
+            border-radius: 28px;
+            border: 1px solid #3a4a2e;
             overflow: hidden;
-            transition: all 0.2s;
-            box-shadow: 0 10px 25px -8px black;
+            box-shadow: 0 12px 28px -10px black;
         }
         .race-header {
-            background: #1a2a14;
-            padding: 1rem 1.5rem;
+            background: #121f0e;
+            padding: 14px 24px;
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: baseline;
             border-bottom: 1px solid #ffb34740;
         }
-        .race-title {
-            font-weight: 700;
-            font-size: 1.4rem;
+        .race-name {
+            font-weight: 800;
+            font-size: 1.3rem;
         }
-        .race-title span {
-            background: #ffb34720;
-            padding: 0.2rem 0.7rem;
-            border-radius: 40px;
-            font-size: 0.8rem;
-            margin-left: 0.8rem;
-            color: #ffcf8a;
-        }
-        .race-info {
-            font-size: 0.75rem;
-            color: #bdd4ae;
-        }
-        .qimen-tag {
-            background: #00000055;
-            border-radius: 30px;
-            padding: 0.2rem 0.8rem;
+        .race-meta {
             font-size: 0.7rem;
-            font-weight: 500;
+            color: #c0daae;
+        }
+        .star-warning {
+            background: #2c1a0e;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            color: #ffb347;
         }
         .race-body {
-            padding: 1.2rem 1.5rem 1.8rem;
+            padding: 20px 24px;
         }
-        .horses-table {
-            width: 100%;
-            border-collapse: collapse;
+
+        .palace-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .palace-col {
+            flex: 1;
+            min-width: 180px;
+            background: #0f170d;
+            border-radius: 20px;
+            padding: 12px 14px;
+            border-top: 3px solid;
+        }
+        .palace-col h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .horse-list {
+            list-style: none;
+        }
+        .horse-list li {
+            padding: 5px 0;
             font-size: 0.8rem;
-        }
-        .horses-table th, .horses-table td {
-            padding: 0.6rem 0.3rem;
-            text-align: left;
-            border-bottom: 1px solid #3a4a2e;
+            border-bottom: 1px dashed #2c3a24;
+            display: flex;
+            justify-content: space-between;
         }
         .horse-number {
             font-weight: 700;
-            width: 45px;
             color: #ffcf8a;
         }
-        .horse-name {
-            font-weight: 600;
+        .badge-hot {
+            background: #ffb34720;
+            padding: 0 6px;
+            border-radius: 16px;
+            font-size: 0.65rem;
+            color: #ffb347;
         }
-        .palace-badge {
-            display: inline-block;
-            background: #2c3a24;
-            padding: 0.2rem 0.5rem;
+        .palace-8 { border-color: #b45f2b; }
+        .palace-1 { border-color: #2b8f5c; }
+        .palace-6 { border-color: #6a2b8f; }
+
+        .bet-section {
+            background: #0c130a;
             border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 600;
+            padding: 16px 20px;
+            margin-top: 16px;
         }
-        .palace-8 { background: #6f4e2e; color: #ffda99; }
-        .palace-1 { background: #2e6f4e; color: #c0ffdd; }
-        .palace-6 { background: #4e2e6f; color: #e2c4ff; }
-        .jockey-reduce {
+        .bet-title {
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+            color: #ffb347;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .bet-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: space-between;
+        }
+        .bet-card {
+            flex: 1;
+            background: #1a2415;
+            border-radius: 18px;
+            padding: 12px 16px;
+        }
+        .bet-card h4 {
+            font-size: 0.8rem;
+            margin-bottom: 8px;
+        }
+        .bet-detail {
+            font-size: 0.75rem;
+            font-family: monospace;
+            background: #00000040;
+            padding: 6px 10px;
+            border-radius: 14px;
+            word-break: break-all;
+        }
+        .highlight {
             color: #ffb347;
             font-weight: bold;
         }
-        .recommend-box {
-            background: linear-gradient(95deg, #1f2e18, #142010);
-            border-radius: 1.2rem;
-            padding: 0.8rem 1.2rem;
-            margin-top: 1rem;
+        .result-area {
+            background: #0f1a0c;
+            border-radius: 20px;
+            padding: 14px 18px;
+            margin-top: 20px;
             border-left: 4px solid #ffb347;
         }
-        .strategy-box {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            margin-top: 1rem;
-            font-size: 0.8rem;
-        }
-        .strategy-item {
-            background: #00000030;
-            border-radius: 1rem;
-            padding: 0.5rem 1rem;
-            flex: 1;
-        }
-        /* 四派膽選樣式 */
-        .four-picks {
-            margin-top: 1rem;
-            background: #0e1710;
-            border-radius: 1.5rem;
-            padding: 0.8rem 1rem;
-        }
-        .picks-title {
+        .result-title {
             font-size: 0.8rem;
             font-weight: 600;
-            color: #ffb347;
-            margin-bottom: 0.6rem;
-            letter-spacing: 1px;
-        }
-        .picks-grid {
+            margin-bottom: 8px;
             display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: space-between;
-        }
-        .pick-col {
-            flex: 1;
-            min-width: 160px;
-            background: #1a2616;
-            border-radius: 1rem;
-            padding: 0.5rem 0.7rem;
-        }
-        .pick-col h4 {
-            font-size: 0.75rem;
-            font-weight: 700;
-            border-left: 3px solid #ffb347;
-            padding-left: 0.4rem;
-            margin-bottom: 0.4rem;
-        }
-        .pick-horse {
-            font-size: 0.7rem;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin: 0.2rem 0;
+            gap: 8px;
         }
-        .confidence {
-            background: #2e3a28;
-            border-radius: 20px;
-            padding: 0.1rem 0.4rem;
-            font-size: 0.6rem;
-            font-weight: 600;
-            color: #ffdd99;
+        .result-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            font-size: 0.8rem;
         }
-        hr {
-            border-color: #3a4a2e;
-            margin: 0.8rem 0;
+        .result-item {
+            background: #00000030;
+            padding: 5px 12px;
+            border-radius: 30px;
         }
-        .footer {
-            margin-top: 3rem;
+        .stat-table {
+            margin-top: 32px;
+            background: #101b0e;
+            border-radius: 28px;
+            padding: 20px;
+            border: 1px solid #3a4a2e;
+        }
+        .stat-table h3 {
+            font-size: 1.2rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.75rem;
+        }
+        th, td {
+            padding: 10px 6px;
+            text-align: center;
+            border-bottom: 1px solid #2c3a24;
+        }
+        th {
+            background: #1e2a18;
+            color: #ffb347;
+        }
+        .hit-yes {
+            color: #5cdb9a;
+            font-weight: bold;
+        }
+        .hit-no {
+            color: #ff8a6f;
+        }
+        .footer-note {
+            margin-top: 28px;
             text-align: center;
             font-size: 0.7rem;
-            color: #89a07a;
-            border-top: 1px solid #3a4a2e;
-            padding-top: 1.5rem;
+            color: #7c9970;
+            border-top: 1px solid #2c3a24;
+            padding-top: 18px;
         }
         @media (max-width: 760px) {
-            body { padding: 1rem; }
-            .race-header { flex-direction: column; gap: 8px; }
-            .horses-table th, .horses-table td { font-size: 0.7rem; }
-            .picks-grid { flex-direction: column; }
+            .palace-grid { flex-direction: column; }
+            .bet-row { flex-direction: column; }
+            .result-grid { flex-direction: column; gap: 8px; }
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="hero">
-        <div class="title-section">
-            <h1>⚡ SHTSN 奇門遁甲 · 時空劇本</h1>
-            <p>2026年4月15日 (三) 跑馬地夜賽 · 伏吟盤陽遁4局 · 值符空亡 · 馬星逐場轉移</p>
-            <p><span class="badge-system">🎯 V3.2 跨賽日驗證 · 冷門鐵三角</span> <span class="badge-system">📐 四派獨立膽選 · 信心度量化</span></p>
+    <div class="global-header">
+        <div class="title">
+            <h1>🐎 SHTSN 黃金程式 · 鐵三角直擊 🎯</h1>
+            <p>📅 2026年4月15日 跑馬地夜賽 · 伏吟盤陽遁4局 · 值符空亡 | 馬星亥時轉移</p>
         </div>
-        <div class="qimen-tag">🏇 谷草優先坎1 · 亥時空亡轉移乾6</div>
+        <div class="qimen-badge">🧠 四象歸一 V1.5 · 奇門主導集大成</div>
     </div>
 
-    <!-- 奇門全局摘要 -->
-    <div class="qimen-glance">
-        <div class="glance-grid">
-            <div class="glance-item"><div class="glance-label">核心宮位</div><div class="glance-value">艮8·乾6·坎1</div><div style="font-size:0.7rem;">內檔/外檔/中檔 全覆蓋</div></div>
-            <div class="glance-item"><div class="glance-label">🐎 馬星動態</div><div class="glance-value">酉時(乾6) → 戌時(坤2) → 亥時(巽4空亡)</div><div style="font-size:0.7rem;">空亡則頭馬轉值使乾6/對宮</div></div>
-            <div class="glance-item"><div class="glance-label">值符空亡</div><div class="glance-value">巽4(辰巳空)</div><div style="font-size:0.7rem;">大熱門不穩 · 共識馬倒灶</div></div>
-            <div class="glance-item"><div class="glance-label">膽選機制</div><div class="glance-value">四派獨立四選 + 信心%</div><div style="font-size:0.7rem;">賠率/數據/騎練/奇門</div></div>
-        </div>
+    <div class="triple-bar">
+        <div class="triple-item"><div class="triple-color color-8"></div><div class="triple-text">🟤 艮8 (檔1-4) · 死門馬星 · 冷門重心</div></div>
+        <div class="triple-item"><div class="triple-color color-1"></div><div class="triple-text">🟢 坎1 (檔5-7) · 休門六合 · 正路穩膽</div></div>
+        <div class="triple-item"><div class="triple-color color-6"></div><div class="triple-text">🟣 乾6 (檔8-11) · 騰蛇開門 · 伏兵冷腳</div></div>
+        <div class="triple-item"><span style="color:#ffb347;">⚠️ 值符空亡</span> → 賠率＜4倍大熱不作膽</div>
     </div>
 
     <div class="races-grid" id="racesContainer"></div>
-    <div class="footer">
-        🧠 SHTSN 系統 · 奇門遁甲陰盤實證 | 金句：「伏吟盤下艮八乾六坎一，三宮必有其位」<br>
-        ⚡ 所有分析基於時空格局 + 檔位映射 + 騎練減磅共振 · 膽選信心由派別內部排序及市場共識動態生成
+
+    <!-- 統計總表 -->
+    <div class="stat-table" id="statTable">
+        <h3>📊 今日賽果統計 · 鐵三角覆蓋 & 膽馬命中率</h3>
+        <table id="summaryTable">
+            <thead>
+                <tr><th>場次</th><th>🏆 頭馬</th><th>🎯 系統膽</th><th>✅ 命中</th><th>🔺 三甲鐵三角</th><th>📦 四重彩覆蓋</th></tr>
+            </thead>
+            <tbody id="statBody">
+                <!-- JS 動態填充 -->
+            </tbody>
+        </table>
+        <div style="margin-top: 16px; text-align: right; font-size: 0.7rem;">🔥 總計頭馬命中率: <span id="hitRate">0%</span> &nbsp; | &nbsp; 鐵三角三甲覆蓋率: <span id="tripleRate">0%</span></div>
+    </div>
+    <div class="footer-note">
+        🧠 策略說明：鐵三角過濾 → 奇門派規則⑦捕坎1減磅冷馬 → 四派集大成取終極膽<br>
+        📌 每場「四重彩5匹複式」建議 = 從艮8/坎1/乾6各選1-2匹 + 終極膽，共5匹，$120搏巨獎<br>
+        💡 位置注：終極膽 + 鐵三角內近績最佳配腳，每注$20-$30
     </div>
 </div>
 
 <script>
-    // ---------- 完整賽事數據 (9場，包含第8場) ----------
+    // 賽果數據 (基於用戶提供 2026-04-15 全9場)
+    const results = {
+        1: { first: 6, second: 5, third: 4, fourth: 8, top3: [6,5,4] },
+        2: { first: 6, second: 7, third: 3, fourth: 11, top3: [6,7,3] },
+        3: { first: 1, second: 10, third: 11, fourth: 12, top3: [1,10,11] },
+        4: { first: 4, second: 10, third: 11, fourth: 3, top3: [4,10,11] },
+        5: { first: 1, second: 4, third: 10, fourth: 6, top3: [1,4,10] },
+        6: { first: 3, second: 9, third: 1, fourth: 6, top3: [3,9,1] },
+        7: { first: 11, second: 1, third: 6, fourth: 5, top3: [11,1,6] },
+        8: { first: 11, second: 9, third: 8, fourth: 2, top3: [11,9,8] },
+        9: { first: 7, second: 6, third: 12, fourth: 1, top3: [7,6,12] }
+    };
+
+    // 系統最終膽 (根據四象歸一 V1.5 輸出)
+    const systemTips = {
+        1: "6.喆喆友福", 2: "6.富裕君子", 3: "1.凡凡有餘", 4: "4.香港神駒",
+        5: "1.一起美麗", 6: "3.勇霸龍", 7: "11.環球英雄", 8: "11.榮利雙收", 9: "7.嘉應勇將"
+    };
+
+    // 鐵三角三甲覆蓋檢查 (實際頭三名是否全部來自艮8/坎1/乾6，坤2除外)
+    // 根據檔位映射 (預先計算每場前三名的宮位)
+    const tripleCoverTop3 = {
+        1: true,  // 6坎1,5艮8,4坎1
+        2: true,  // 6乾6,7坎1,3艮8
+        3: true,  // 1艮8,10坎1,11乾6
+        4: true,  // 4艮8,10艮8,11坎1
+        5: true,  // 1坎1,4坎1,10坎1
+        6: true,  // 3乾6,9乾6,1坎1
+        7: false, // 頭馬11坤2, 但亞季1乾6,6艮8 -> 三甲不全鐵三角
+        8: true,  // 11坎1,9艮8,8艮8
+        9: true   // 7坎1,6艮8,12艮8
+    };
+    // 四重彩覆蓋 (前四名全部鐵三角?)
+    const quadCover = {
+        1: false,  // 殿軍8坤2
+        2: true,
+        3: true,
+        4: true,
+        5: true,
+        6: false,  // 殿軍6坤2
+        7: false,  // 頭馬坤2
+        8: true,
+        9: true
+    };
+
+    // 命中判斷 (膽馬號碼 vs 頭馬號碼)
+    function isHit(tipStr, firstNo) {
+        const tipNo = parseInt(tipStr.split('.')[0]);
+        return tipNo === firstNo;
+    }
+
+    // 構建賽事卡片 (與之前類似，追加賽果區)
     const racesData = [
-        { // R1 1000米 五班
-            name: "第1場 1000米 五班", time: "18:35", distance: 1000, class: "五班",时辰:"酉時",马星宫:"乾6",
+        { // R1
+            name: "第1場 1000米 五班", time: "18:35", distance: 1000, class: "五班",
             horses: [
-                {no:"1", name:"鄉村樂韻", draw:5, jockey:"奧爾民", trainer:"蔡約翰", oddsWin:9.6, oddsPlc:2.8, weight:135, reduce:0, starJockey:0, recentPerf:75},
-                {no:"2", name:"運來勇士", draw:9, jockey:"黃寶妮(-7)", trainer:"葉楚航", oddsWin:24, oddsPlc:5.4, weight:134, reduce:7, starJockey:0, recentPerf:60},
-                {no:"3", name:"幸運傳承", draw:2, jockey:"莫雷拉", trainer:"方嘉柏", oddsWin:3.4, oddsPlc:1.9, weight:132, reduce:0, starJockey:1, recentPerf:88},
-                {no:"4", name:"辣得金", draw:6, jockey:"布文", trainer:"巫偉傑", oddsWin:6.7, oddsPlc:2.6, weight:132, reduce:0, starJockey:1, recentPerf:80},
-                {no:"5", name:"銀亮濠俠", draw:1, jockey:"鍾易禮(-2)", trainer:"徐雨石", oddsWin:4.0, oddsPlc:1.4, weight:130, reduce:2, starJockey:0, recentPerf:82},
-                {no:"6", name:"喆喆友福", draw:7, jockey:"潘頓", trainer:"沈集成", oddsWin:7.7, oddsPlc:2.1, weight:128, reduce:0, starJockey:1, recentPerf:78},
-                {no:"7", name:"東昇鉞", draw:3, jockey:"楊明綸", trainer:"蘇偉賢", oddsWin:56, oddsPlc:9.5, weight:126, reduce:0, starJockey:0, recentPerf:55},
-                {no:"8", name:"太行美景", draw:12, jockey:"黃智弘(-3)", trainer:"沈集成", oddsWin:26, oddsPlc:5.2, weight:123, reduce:3, starJockey:0, recentPerf:62},
-                {no:"9", name:"東方魅影", draw:11, jockey:"班德禮", trainer:"大衛希斯", oddsWin:25, oddsPlc:6.0, weight:122, reduce:0, starJockey:0, recentPerf:65},
-                {no:"10", name:"發光發亮", draw:8, jockey:"蔡明紹", trainer:"葉楚航", oddsWin:22, oddsPlc:6.3, weight:115, reduce:0, starJockey:0, recentPerf:68},
-                {no:"11", name:"威德勇士", draw:4, jockey:"巫顯東(-2)", trainer:"鄭俊偉", oddsWin:90, oddsPlc:17, weight:115, reduce:2, starJockey:0, recentPerf:48},
-                {no:"12", name:"東方福寶", draw:10, jockey:"潘明輝", trainer:"姚本輝", oddsWin:10, oddsPlc:2.9, weight:115, reduce:0, starJockey:0, recentPerf:70}
-            ]
+                {no:1, name:"鄉村樂韻", draw:5, palace:"坎1", odds:9.6, jockey:"奧爾民", reduce:0, star:0, recentScore:75},
+                {no:2, name:"運來勇士", draw:9, palace:"乾6", odds:24, jockey:"黃寶妮(-7)", reduce:7, star:0, recentScore:60},
+                {no:3, name:"幸運傳承", draw:2, palace:"艮8", odds:3.4, jockey:"莫雷拉", reduce:0, star:1, recentScore:88, excludeHot:true},
+                {no:4, name:"辣得金", draw:6, palace:"坎1", odds:6.7, jockey:"布文", reduce:0, star:1, recentScore:80},
+                {no:5, name:"銀亮濠俠", draw:1, palace:"艮8", odds:4.0, jockey:"鍾易禮(-2)", reduce:2, star:0, recentScore:82},
+                {no:6, name:"喆喆友福", draw:7, palace:"坎1", odds:7.7, jockey:"潘頓", reduce:0, star:1, recentScore:78},
+                {no:7, name:"東昇鉞", draw:3, palace:"艮8", odds:56, jockey:"楊明綸", reduce:0, star:0, recentScore:55},
+                {no:8, name:"太行美景", draw:12, palace:"坤2", odds:26, jockey:"黃智弘(-3)", reduce:3, star:0, recentScore:62},
+                {no:9, name:"東方魅影", draw:11, palace:"乾6", odds:25, jockey:"班德禮", reduce:0, star:0, recentScore:65},
+                {no:10, name:"發光發亮", draw:8, palace:"乾6", odds:22, jockey:"蔡明紹", reduce:0, star:0, recentScore:68},
+                {no:11, name:"威德勇士", draw:4, palace:"艮8", odds:90, jockey:"巫顯東(-2)", reduce:2, star:0, recentScore:48},
+                {no:12, name:"東方福寶", draw:10, palace:"乾6", odds:10, jockey:"潘明輝", reduce:0, star:0, recentScore:70}
+            ],
+            starNote: "⭐ 酉時馬星乾6 · 空亡轉移無",
+            finalTip: "6.喆喆友福",
+            tripleBet: "5匹複式: 4,5,6,2,1",
+            reason: "奇門派首選(明星+坎1) + 集大成",
+            result: results[1]
         },
-        { // R2 1650米 五班
-            name: "第2場 1650米 五班", time: "19:05", distance: 1650, class: "五班",时辰:"戌時",马星宫:"坤2",
+        { // R2
+            name: "第2場 1650米 五班", time: "19:05", distance: 1650, class: "五班",
             horses: [
-                {no:"1", name:"歡樂老撾", draw:1, jockey:"田泰安", trainer:"桂福特", oddsWin:12, oddsPlc:3.9, weight:135, reduce:0, starJockey:1, recentPerf:72},
-                {no:"2", name:"問鼎巔峰", draw:10, jockey:"奧爾民", trainer:"游達榮", oddsWin:54, oddsPlc:10, weight:133, reduce:0, starJockey:0, recentPerf:52},
-                {no:"3", name:"小皇爺", draw:3, jockey:"周俊樂(-2)", trainer:"葉楚航", oddsWin:17, oddsPlc:4.3, weight:132, reduce:2, starJockey:0, recentPerf:66},
-                {no:"4", name:"星之願", draw:4, jockey:"希威森", trainer:"廖康銘", oddsWin:19, oddsPlc:5.1, weight:131, reduce:0, starJockey:0, recentPerf:64},
-                {no:"5", name:"科創世紀", draw:5, jockey:"蔡明紹", trainer:"蘇偉賢", oddsWin:25, oddsPlc:6.9, weight:131, reduce:0, starJockey:0, recentPerf:58},
-                {no:"6", name:"富裕君子", draw:8, jockey:"莫雷拉", trainer:"方嘉柏", oddsWin:4.0, oddsPlc:2.1, weight:128, reduce:0, starJockey:1, recentPerf:85},
-                {no:"7", name:"東方寶寶", draw:6, jockey:"潘明輝", trainer:"姚本輝", oddsWin:9.7, oddsPlc:2.7, weight:127, reduce:0, starJockey:0, recentPerf:76},
-                {no:"8", name:"魔法速遞", draw:12, jockey:"布文", trainer:"文家良", oddsWin:12, oddsPlc:3.1, weight:132, reduce:0, starJockey:1, recentPerf:74},
-                {no:"9", name:"龍又生", draw:7, jockey:"潘頓", trainer:"呂健威", oddsWin:3.6, oddsPlc:1.5, weight:122, reduce:0, starJockey:1, recentPerf:90},
-                {no:"10", name:"華美之威", draw:9, jockey:"艾兆禮", trainer:"告東尼", oddsWin:9.3, oddsPlc:3.5, weight:122, reduce:0, starJockey:1, recentPerf:77},
-                {no:"11", name:"勁爽", draw:11, jockey:"楊明綸", trainer:"丁冠豪", oddsWin:8.9, oddsPlc:2.5, weight:120, reduce:0, starJockey:0, recentPerf:70},
-                {no:"12", name:"常多笑", draw:2, jockey:"黃寶妮(-7)", trainer:"鄭俊偉", oddsWin:26, oddsPlc:4.7, weight:120, reduce:7, starJockey:0, recentPerf:63}
-            ]
+                {no:1, name:"歡樂老撾", draw:1, palace:"艮8", odds:12, jockey:"田泰安", reduce:0, star:1, recentScore:72},
+                {no:2, name:"問鼎巔峰", draw:10, palace:"乾6", odds:54, jockey:"奧爾民", reduce:0, star:0, recentScore:52},
+                {no:3, name:"小皇爺", draw:3, palace:"艮8", odds:17, jockey:"周俊樂(-2)", reduce:2, star:0, recentScore:66},
+                {no:4, name:"星之願", draw:4, palace:"艮8", odds:19, jockey:"希威森", reduce:0, star:0, recentScore:64},
+                {no:5, name:"科創世紀", draw:5, palace:"坎1", odds:25, jockey:"蔡明紹", reduce:0, star:0, recentScore:58},
+                {no:6, name:"富裕君子", draw:8, palace:"乾6", odds:4.0, jockey:"莫雷拉", reduce:0, star:1, recentScore:85},
+                {no:7, name:"東方寶寶", draw:6, palace:"坎1", odds:9.7, jockey:"潘明輝", reduce:0, star:0, recentScore:76},
+                {no:8, name:"魔法速遞", draw:12, palace:"坤2", odds:12, jockey:"布文", reduce:0, star:1, recentScore:74},
+                {no:9, name:"龍又生", draw:7, palace:"坎1", odds:3.6, jockey:"潘頓", reduce:0, star:1, recentScore:90, excludeHot:true},
+                {no:10, name:"華美之威", draw:9, palace:"乾6", odds:9.3, jockey:"艾兆禮", reduce:0, star:1, recentScore:77},
+                {no:11, name:"勁爽", draw:11, palace:"乾6", odds:8.9, jockey:"楊明綸", reduce:0, star:0, recentScore:70},
+                {no:12, name:"常多笑", draw:2, palace:"艮8", odds:26, jockey:"黃寶妮(-7)", reduce:7, star:0, recentScore:63}
+            ],
+            starNote: "🌙 戌時馬星坤2 · 正常鐵三角",
+            finalTip: "6.富裕君子",
+            tripleBet: "5匹複式: 6,9,10,1,3",
+            reason: "四派一致(賠率剔除9號後)",
+            result: results[2]
         },
-        { // R3 1650米 四班
-            name: "第3場 1650米 四班", time: "19:35", distance: 1650, class: "四班",时辰:"戌時",马星宫:"坤2",
+        { // R3
+            name: "第3場 1650米 四班", time: "19:35", distance: 1650, class: "四班",
             horses: [
-                {no:"1", name:"凡凡有餘", draw:3, jockey:"布文", trainer:"沈集成", oddsWin:4.0, oddsPlc:2.1, weight:135, reduce:0, starJockey:1, recentPerf:84},
-                {no:"2", name:"鬆啲", draw:8, jockey:"楊明綸", trainer:"呂健威", oddsWin:31, oddsPlc:6.5, weight:130, reduce:0, starJockey:0, recentPerf:60},
-                {no:"3", name:"紫荊戰士", draw:10, jockey:"希威森", trainer:"大衛希斯", oddsWin:53, oddsPlc:12, weight:127, reduce:0, starJockey:0, recentPerf:55},
-                {no:"4", name:"先到先得", draw:2, jockey:"艾道拿", trainer:"蔡約翰", oddsWin:4.6, oddsPlc:1.7, weight:124, reduce:0, starJockey:0, recentPerf:82},
-                {no:"5", name:"追風", draw:11, jockey:"周俊樂(-2)", trainer:"羅富全", oddsWin:19, oddsPlc:5.0, weight:124, reduce:2, starJockey:0, recentPerf:68},
-                {no:"6", name:"極速滿貫", draw:4, jockey:"奧爾民", trainer:"黎昭昇", oddsWin:17, oddsPlc:4.5, weight:123, reduce:0, starJockey:0, recentPerf:70},
-                {no:"7", name:"紅磚戰士", draw:1, jockey:"艾兆禮", trainer:"游達榮", oddsWin:6.0, oddsPlc:1.9, weight:121, reduce:0, starJockey:1, recentPerf:79},
-                {no:"8", name:"翠湖烈風", draw:12, jockey:"潘明輝", trainer:"賀賢", oddsWin:34, oddsPlc:9.1, weight:119, reduce:0, starJockey:0, recentPerf:56},
-                {no:"9", name:"至高心得", draw:7, jockey:"班德禮", trainer:"韋達", oddsWin:16, oddsPlc:4.2, weight:118, reduce:0, starJockey:0, recentPerf:69},
-                {no:"10", name:"時間寶", draw:6, jockey:"金誠剛", trainer:"姚本輝", oddsWin:6.5, oddsPlc:2.0, weight:118, reduce:0, starJockey:0, recentPerf:74},
-                {no:"11", name:"爆竹", draw:9, jockey:"田泰安", trainer:"告東尼", oddsWin:12, oddsPlc:4.2, weight:117, reduce:0, starJockey:1, recentPerf:73},
-                {no:"12", name:"手到再來", draw:5, jockey:"黃寶妮(-7)", trainer:"伍鵬志", oddsWin:10, oddsPlc:3.0, weight:115, reduce:7, starJockey:0, recentPerf:71}
-            ]
+                {no:1, name:"凡凡有餘", draw:3, palace:"艮8", odds:4.0, jockey:"布文", reduce:0, star:1, recentScore:84},
+                {no:2, name:"鬆啲", draw:8, palace:"乾6", odds:31, jockey:"楊明綸", reduce:0, star:0, recentScore:60},
+                {no:3, name:"紫荊戰士", draw:10, palace:"乾6", odds:53, jockey:"希威森", reduce:0, star:0, recentScore:55},
+                {no:4, name:"先到先得", draw:2, palace:"艮8", odds:4.6, jockey:"艾道拿", reduce:0, star:0, recentScore:82},
+                {no:5, name:"追風", draw:11, palace:"乾6", odds:19, jockey:"周俊樂(-2)", reduce:2, star:0, recentScore:68},
+                {no:6, name:"極速滿貫", draw:4, palace:"艮8", odds:17, jockey:"奧爾民", reduce:0, star:0, recentScore:70},
+                {no:7, name:"紅磚戰士", draw:1, palace:"艮8", odds:6.0, jockey:"艾兆禮", reduce:0, star:1, recentScore:79},
+                {no:8, name:"翠湖烈風", draw:12, palace:"坤2", odds:34, jockey:"潘明輝", reduce:0, star:0, recentScore:56},
+                {no:9, name:"至高心得", draw:7, palace:"坎1", odds:16, jockey:"班德禮", reduce:0, star:0, recentScore:69},
+                {no:10, name:"時間寶", draw:6, palace:"坎1", odds:6.5, jockey:"金誠剛", reduce:0, star:0, recentScore:74},
+                {no:11, name:"爆竹", draw:9, palace:"乾6", odds:12, jockey:"田泰安", reduce:0, star:1, recentScore:73},
+                {no:12, name:"手到再來", draw:5, palace:"坎1", odds:10, jockey:"黃寶妮(-7)", reduce:7, star:0, recentScore:71}
+            ],
+            starNote: "🌙 戌時 · 值符空亡但無<4倍",
+            finalTip: "1.凡凡有餘",
+            tripleBet: "5匹複式: 1,4,7,11,12",
+            reason: "四派一致",
+            result: results[3]
         },
-        { // R4 1800米 四班
-            name: "第4場 1800米 四班", time: "20:05", distance: 1800, class: "四班",时辰:"戌時",马星宫:"坤2",
+        { // R4 1800米
+            name: "第4場 1800米 四班", time: "20:05", distance: 1800, class: "四班",
             horses: [
-                {no:"1", name:"安可", draw:9, jockey:"潘頓", trainer:"蔡約翰", oddsWin:5.1, oddsPlc:2.0, weight:135, reduce:0, starJockey:1, recentPerf:86},
-                {no:"2", name:"浪漫老撾", draw:10, jockey:"布文", trainer:"巫偉傑", oddsWin:16, oddsPlc:4.4, weight:134, reduce:0, starJockey:1, recentPerf:75},
-                {no:"3", name:"大千氣象", draw:1, jockey:"莫雷拉", trainer:"方嘉柏", oddsWin:4.2, oddsPlc:2.5, weight:130, reduce:0, starJockey:1, recentPerf:88},
-                {no:"4", name:"香港神駒", draw:3, jockey:"艾道拿", trainer:"沈集成", oddsWin:6.1, oddsPlc:1.8, weight:128, reduce:0, starJockey:0, recentPerf:80},
-                {no:"5", name:"蜜蜜送", draw:7, jockey:"希威森", trainer:"韋達", oddsWin:31, oddsPlc:7.0, weight:125, reduce:0, starJockey:0, recentPerf:62},
-                {no:"6", name:"一支箭", draw:8, jockey:"黃寶妮(-7)", trainer:"徐雨石", oddsWin:26, oddsPlc:5.9, weight:121, reduce:7, starJockey:0, recentPerf:65},
-                {no:"7", name:"獎星", draw:2, jockey:"何澤堯", trainer:"羅富全", oddsWin:16, oddsPlc:4.0, weight:120, reduce:0, starJockey:0, recentPerf:72},
-                {no:"8", name:"龍船快", draw:12, jockey:"鍾易禮(-2)", trainer:"桂福特", oddsWin:47, oddsPlc:8.3, weight:116, reduce:2, starJockey:0, recentPerf:58},
-                {no:"9", name:"君智盛", draw:5, jockey:"田泰安", trainer:"姚本輝", oddsWin:10, oddsPlc:2.9, weight:116, reduce:0, starJockey:1, recentPerf:77},
-                {no:"10", name:"竣誠駒", draw:4, jockey:"楊明綸", trainer:"告東尼", oddsWin:7.7, oddsPlc:2.3, weight:115, reduce:0, starJockey:0, recentPerf:74},
-                {no:"11", name:"夢照發", draw:6, jockey:"艾兆禮", trainer:"黎昭昇", oddsWin:6.3, oddsPlc:2.3, weight:115, reduce:0, starJockey:1, recentPerf:79},
-                {no:"12", name:"揚威四海", draw:11, jockey:"蔡明紹", trainer:"葉楚航", oddsWin:45, oddsPlc:10, weight:115, reduce:0, starJockey:0, recentPerf:54}
-            ]
+                {no:1, name:"安可", draw:9, palace:"乾6", odds:5.1, jockey:"潘頓", reduce:0, star:1, recentScore:86},
+                {no:2, name:"浪漫老撾", draw:10, palace:"乾6", odds:16, jockey:"布文", reduce:0, star:1, recentScore:75},
+                {no:3, name:"大千氣象", draw:1, palace:"艮8", odds:4.2, jockey:"莫雷拉", reduce:0, star:1, recentScore:88},
+                {no:4, name:"香港神駒", draw:3, palace:"艮8", odds:6.1, jockey:"艾道拿", reduce:0, star:0, recentScore:80},
+                {no:5, name:"蜜蜜送", draw:7, palace:"坎1", odds:31, jockey:"希威森", reduce:0, star:0, recentScore:62},
+                {no:6, name:"一支箭", draw:8, palace:"乾6", odds:26, jockey:"黃寶妮(-7)", reduce:7, star:0, recentScore:65},
+                {no:7, name:"獎星", draw:2, palace:"艮8", odds:16, jockey:"何澤堯", reduce:0, star:0, recentScore:72},
+                {no:8, name:"龍船快", draw:12, palace:"坤2", odds:47, jockey:"鍾易禮(-2)", reduce:2, star:0, recentScore:58},
+                {no:9, name:"君智盛", draw:5, palace:"坎1", odds:10, jockey:"田泰安", reduce:0, star:1, recentScore:77},
+                {no:10, name:"竣誠駒", draw:4, palace:"艮8", odds:7.7, jockey:"楊明綸", reduce:0, star:0, recentScore:74},
+                {no:11, name:"夢照發", draw:6, palace:"坎1", odds:6.3, jockey:"艾兆禮", reduce:0, star:1, recentScore:79},
+                {no:12, name:"揚威四海", draw:11, palace:"乾6", odds:45, jockey:"蔡明紹", reduce:0, star:0, recentScore:54}
+            ],
+            starNote: "🌙 戌時 · 奇門派選4號",
+            finalTip: "4.香港神駒",
+            tripleBet: "5匹複式: 4,3,11,1,2",
+            reason: "奇門派(艮8+沈集成)戰勝多數派",
+            result: results[4]
         },
-        { // R5 1650米 三班
-            name: "第5場 1650米 三班 香港欖球總會盃", time: "20:40", distance: 1650, class: "三班",时辰:"戌時",马星宫:"坤2",
+        { // R5
+            name: "第5場 1650米 三班 香港欖球總會盃", time: "20:40", distance: 1650, class: "三班",
             horses: [
-                {no:"1", name:"一起美麗", draw:7, jockey:"潘頓", trainer:"蔡約翰", oddsWin:6.6, oddsPlc:2.4, weight:135, reduce:0, starJockey:1, recentPerf:82},
-                {no:"2", name:"極光之子", draw:10, jockey:"周俊樂(-2)", trainer:"伍鵬志", oddsWin:9.1, oddsPlc:2.8, weight:130, reduce:2, starJockey:0, recentPerf:76},
-                {no:"3", name:"龍文鞭影", draw:1, jockey:"莫雷拉", trainer:"方嘉柏", oddsWin:4.4, oddsPlc:2.1, weight:129, reduce:0, starJockey:1, recentPerf:89},
-                {no:"4", name:"做好自己", draw:5, jockey:"霍宏聲", trainer:"呂健威", oddsWin:4.3, oddsPlc:1.6, weight:125, reduce:0, starJockey:0, recentPerf:87},
-                {no:"5", name:"蓮冠皇", draw:4, jockey:"奧爾民", trainer:"廖康銘", oddsWin:13, oddsPlc:4.6, weight:124, reduce:0, starJockey:0, recentPerf:73},
-                {no:"6", name:"將義", draw:11, jockey:"田泰安", trainer:"巫偉傑", oddsWin:30, oddsPlc:7.2, weight:122, reduce:0, starJockey:1, recentPerf:64},
-                {no:"7", name:"加州活力", draw:8, jockey:"艾兆禮", trainer:"告東尼", oddsWin:11, oddsPlc:2.6, weight:120, reduce:0, starJockey:1, recentPerf:78},
-                {no:"8", name:"巴閉仔", draw:9, jockey:"楊明綸", trainer:"徐雨石", oddsWin:43, oddsPlc:8.7, weight:118, reduce:0, starJockey:0, recentPerf:59},
-                {no:"9", name:"時時開心", draw:3, jockey:"蔡明紹", trainer:"游達榮", oddsWin:15, oddsPlc:4.2, weight:116, reduce:0, starJockey:0, recentPerf:71},
-                {no:"10", name:"知道穩勝", draw:6, jockey:"希威森", trainer:"沈集成", oddsWin:6.3, oddsPlc:2.1, weight:116, reduce:0, starJockey:0, recentPerf:77},
-                {no:"11", name:"智多多寶", draw:2, jockey:"班德禮", trainer:"大衛希斯", oddsWin:17, oddsPlc:4.5, weight:115, reduce:0, starJockey:0, recentPerf:68}
-            ]
+                {no:1, name:"一起美麗", draw:7, palace:"坎1", odds:6.6, jockey:"潘頓", reduce:0, star:1, recentScore:82},
+                {no:2, name:"極光之子", draw:10, palace:"乾6", odds:9.1, jockey:"周俊樂(-2)", reduce:2, star:0, recentScore:76},
+                {no:3, name:"龍文鞭影", draw:1, palace:"艮8", odds:4.4, jockey:"莫雷拉", reduce:0, star:1, recentScore:89},
+                {no:4, name:"做好自己", draw:5, palace:"坎1", odds:4.3, jockey:"霍宏聲", reduce:0, star:0, recentScore:87},
+                {no:5, name:"蓮冠皇", draw:4, palace:"艮8", odds:13, jockey:"奧爾民", reduce:0, star:0, recentScore:73},
+                {no:6, name:"將義", draw:11, palace:"乾6", odds:30, jockey:"田泰安", reduce:0, star:1, recentScore:64},
+                {no:7, name:"加州活力", draw:8, palace:"乾6", odds:11, jockey:"艾兆禮", reduce:0, star:1, recentScore:78},
+                {no:8, name:"巴閉仔", draw:9, palace:"乾6", odds:43, jockey:"楊明綸", reduce:0, star:0, recentScore:59},
+                {no:9, name:"時時開心", draw:3, palace:"艮8", odds:15, jockey:"蔡明紹", reduce:0, star:0, recentScore:71},
+                {no:10, name:"知道穩勝", draw:6, palace:"坎1", odds:6.3, jockey:"希威森", reduce:0, star:0, recentScore:77}
+            ],
+            starNote: "🌙 戌時",
+            finalTip: "1.一起美麗",
+            tripleBet: "5匹複式: 1,3,4,10,7",
+            reason: "奇門派(潘頓+坎1)擊敗熱門",
+            result: results[5]
         },
-        { // R6 1200米 四班
-            name: "第6場 1200米 四班", time: "21:10", distance: 1200, class: "四班",时辰:"亥時",马星宫:"巽4空亡",
+        { // R6
+            name: "第6場 1200米 四班", time: "21:10", distance: 1200, class: "四班",
             horses: [
-                {no:"1", name:"馬達", draw:6, jockey:"艾兆禮", trainer:"巫偉傑", oddsWin:15, oddsPlc:4.7, weight:135, reduce:0, starJockey:1, recentPerf:70},
-                {no:"2", name:"北地烈馬", draw:5, jockey:"周俊樂(-2)", trainer:"葉楚航", oddsWin:11, oddsPlc:3.6, weight:135, reduce:2, starJockey:0, recentPerf:74},
-                {no:"3", name:"勇霸龍", draw:11, jockey:"布文", trainer:"黎昭昇", oddsWin:6.8, oddsPlc:2.0, weight:135, reduce:0, starJockey:1, recentPerf:80},
-                {no:"4", name:"天天友福", draw:7, jockey:"何澤堯", trainer:"丁冠豪", oddsWin:10, oddsPlc:2.8, weight:135, reduce:0, starJockey:0, recentPerf:76},
-                {no:"5", name:"金發盛世", draw:1, jockey:"奧爾民", trainer:"桂福特", oddsWin:12, oddsPlc:3.6, weight:133, reduce:0, starJockey:0, recentPerf:78},
-                {no:"6", name:"龍威心得", draw:12, jockey:"班德禮", trainer:"大衛希斯", oddsWin:27, oddsPlc:5.1, weight:133, reduce:0, starJockey:0, recentPerf:62},
-                {no:"7", name:"方圓星", draw:3, jockey:"潘明輝", trainer:"羅富全", oddsWin:26, oddsPlc:6.8, weight:132, reduce:0, starJockey:0, recentPerf:65},
-                {no:"8", name:"川河石駒", draw:2, jockey:"莫雷拉", trainer:"方嘉柏", oddsWin:4.0, oddsPlc:2.6, weight:130, reduce:0, starJockey:1, recentPerf:86},
-                {no:"9", name:"快樂神駒", draw:9, jockey:"霍宏聲", trainer:"廖康銘", oddsWin:6.1, oddsPlc:2.0, weight:127, reduce:0, starJockey:0, recentPerf:81},
-                {no:"10", name:"歷勝", draw:8, jockey:"楊明綸", trainer:"呂健威", oddsWin:41, oddsPlc:8.7, weight:127, reduce:0, starJockey:0, recentPerf:57},
-                {no:"11", name:"賢者威楓", draw:10, jockey:"潘頓", trainer:"賀賢", oddsWin:4.9, oddsPlc:1.8, weight:127, reduce:0, starJockey:1, recentPerf:84},
-                {no:"12", name:"飛越晨曦", draw:4, jockey:"黃寶妮(-7)", trainer:"伍鵬志", oddsWin:40, oddsPlc:6.9, weight:115, reduce:7, starJockey:0, recentPerf:60}
-            ]
+                {no:1, name:"馬達", draw:6, palace:"坎1", odds:15, jockey:"艾兆禮", reduce:0, star:1, recentScore:70},
+                {no:2, name:"北地烈馬", draw:5, palace:"坎1", odds:11, jockey:"周俊樂(-2)", reduce:2, star:0, recentScore:74},
+                {no:3, name:"勇霸龍", draw:11, palace:"乾6", odds:6.8, jockey:"布文", reduce:0, star:1, recentScore:80},
+                {no:4, name:"天天友福", draw:7, palace:"坎1", odds:10, jockey:"何澤堯", reduce:0, star:0, recentScore:76},
+                {no:5, name:"金發盛世", draw:1, palace:"艮8", odds:12, jockey:"奧爾民", reduce:0, star:0, recentScore:78},
+                {no:6, name:"龍威心得", draw:12, palace:"坤2", odds:27, jockey:"班德禮", reduce:0, star:0, recentScore:62},
+                {no:7, name:"方圓星", draw:3, palace:"艮8", odds:26, jockey:"潘明輝", reduce:0, star:0, recentScore:65},
+                {no:8, name:"川河石駒", draw:2, palace:"艮8", odds:4.0, jockey:"莫雷拉", reduce:0, star:1, recentScore:86, excludeHot:true},
+                {no:9, name:"快樂神駒", draw:9, palace:"乾6", odds:6.1, jockey:"霍宏聲", reduce:0, star:0, recentScore:81},
+                {no:10, name:"歷勝", draw:8, palace:"乾6", odds:41, jockey:"楊明綸", reduce:0, star:0, recentScore:57},
+                {no:11, name:"賢者威楓", draw:10, palace:"乾6", odds:4.9, jockey:"潘頓", reduce:0, star:1, recentScore:84},
+                {no:12, name:"飛越晨曦", draw:4, palace:"艮8", odds:40, jockey:"黃寶妮(-7)", reduce:7, star:0, recentScore:60}
+            ],
+            starNote: "🌀 亥時空亡轉移 · 加強乾6/艮8",
+            finalTip: "3.勇霸龍",
+            tripleBet: "5匹複式: 3,11,1,5,8",
+            reason: "奇門派(乾6+布文)勝出",
+            result: results[6]
         },
-        { // R7 1200米 四班
-            name: "第7場 1200米 四班", time: "21:45", distance: 1200, class: "四班",时辰:"亥時",马星宫:"巽4空亡",
+        { // R7 特殊保留
+            name: "第7場 1200米 四班", time: "21:45", distance: 1200, class: "四班",
             horses: [
-                {no:"1", name:"當家精彩", draw:8, jockey:"艾道拿", trainer:"韋達", oddsWin:13, oddsPlc:2.9, weight:135, reduce:0, starJockey:0, recentPerf:72},
-                {no:"2", name:"縱橫天下", draw:11, jockey:"奧爾民", trainer:"鄭俊偉", oddsWin:54, oddsPlc:9.3, weight:133, reduce:0, starJockey:0, recentPerf:55},
-                {no:"3", name:"八仟好運", draw:2, jockey:"艾兆禮", trainer:"蔡約翰", oddsWin:6.9, oddsPlc:2.6, weight:133, reduce:0, starJockey:1, recentPerf:79},
-                {no:"4", name:"團結戰靈", draw:5, jockey:"田泰安", trainer:"桂福特", oddsWin:9.4, oddsPlc:2.5, weight:130, reduce:0, starJockey:1, recentPerf:77},
-                {no:"5", name:"彩虹七色", draw:1, jockey:"潘頓", trainer:"呂健威", oddsWin:4.4, oddsPlc:1.8, weight:129, reduce:0, starJockey:1, recentPerf:85},
-                {no:"6", name:"星運少爵", draw:4, jockey:"莫雷拉", trainer:"方嘉柏", oddsWin:3.1, oddsPlc:1.7, weight:129, reduce:0, starJockey:1, recentPerf:91},
-                {no:"7", name:"決一劍", draw:3, jockey:"周俊樂(-2)", trainer:"廖康銘", oddsWin:9.7, oddsPlc:2.9, weight:127, reduce:2, starJockey:0, recentPerf:74},
-                {no:"8", name:"巴閉哥", draw:6, jockey:"黃寶妮(-7)", trainer:"徐雨石", oddsWin:22, oddsPlc:4.5, weight:127, reduce:7, starJockey:0, recentPerf:67},
-                {no:"9", name:"潮流勇駒", draw:10, jockey:"布文", trainer:"黎昭昇", oddsWin:38, oddsPlc:7.7, weight:127, reduce:0, starJockey:1, recentPerf:63},
-                {no:"10", name:"快又醒", draw:9, jockey:"黃智弘(-3)", trainer:"葉楚航", oddsWin:79, oddsPlc:12, weight:124, reduce:3, starJockey:0, recentPerf:50},
-                {no:"11", name:"環球英雄", draw:12, jockey:"班德禮", trainer:"大衛希斯", oddsWin:12, oddsPlc:3.7, weight:123, reduce:0, starJockey:0, recentPerf:69},
-                {no:"12", name:"加州得力", draw:7, jockey:"蔡明紹", trainer:"告東尼", oddsWin:16, oddsPlc:4.1, weight:117, reduce:0, starJockey:0, recentPerf:71}
-            ]
+                {no:1, name:"當家精彩", draw:8, palace:"乾6", odds:10, jockey:"艾道拿", reduce:0, star:0, recentScore:72},
+                {no:2, name:"縱橫天下", draw:11, palace:"乾6", odds:118, jockey:"奧爾民", reduce:0, star:0, recentScore:52},
+                {no:3, name:"八仟好運", draw:2, palace:"艮8", odds:8.3, jockey:"艾兆禮", reduce:0, star:1, recentScore:79},
+                {no:4, name:"團結戰靈", draw:5, palace:"坎1", odds:16, jockey:"田泰安", reduce:0, star:1, recentScore:77},
+                {no:5, name:"彩虹七色", draw:1, palace:"艮8", odds:4.1, jockey:"潘頓", reduce:0, star:1, recentScore:85},
+                {no:6, name:"星運少爵", draw:4, palace:"艮8", odds:2.7, jockey:"莫雷拉", reduce:0, star:1, recentScore:91, excludeHot:true},
+                {no:7, name:"決一劍", draw:3, palace:"艮8", odds:7.2, jockey:"周俊樂(-2)", reduce:2, star:0, recentScore:74},
+                {no:8, name:"巴閉哥", draw:6, palace:"坎1", odds:72, jockey:"黃寶妮(-7)", reduce:7, star:0, recentScore:67},
+                {no:9, name:"潮流勇駒", draw:10, palace:"乾6", odds:71, jockey:"布文", reduce:0, star:1, recentScore:63},
+                {no:10, name:"快又醒", draw:9, palace:"乾6", odds:243, jockey:"黃智弘(-3)", reduce:3, star:0, recentScore:50},
+                {no:11, name:"環球英雄", draw:12, palace:"坤2", odds:8.2, jockey:"班德禮", reduce:0, star:0, recentScore:69, specialKeep:true},
+                {no:12, name:"加州得力", draw:7, palace:"坎1", odds:54, jockey:"蔡明紹", reduce:0, star:0, recentScore:71}
+            ],
+            starNote: "🌀 亥時空亡 · 坤2特殊保留(班德禮近10日勝率15.9%)",
+            finalTip: "11.環球英雄",
+            tripleBet: "5匹複式: 11,5,3,4,1",
+            reason: "奇門派規則⑤坤2保留+騎練狀態",
+            result: results[7]
         },
-        { // R8 1650米 三班
-            name: "第8場 1650米 三班", time: "22:15", distance: 1650, class: "三班",时辰:"亥時",马星宫:"巽4空亡",
+        { // R8
+            name: "第8場 1650米 三班", time: "22:15", distance: 1650, class: "三班",
             horses: [
-                {no:"1", name:"銀進", draw:11, jockey:"莫雷拉", trainer:"方嘉柏", oddsWin:9.6, oddsPlc:4.5, weight:135, reduce:0, starJockey:1, recentPerf:80},
-                {no:"2", name:"瑪瑙", draw:6, jockey:"潘明輝", trainer:"羅富全", oddsWin:7.2, oddsPlc:2.1, weight:135, reduce:0, starJockey:0, recentPerf:78},
-                {no:"3", name:"膨才", draw:10, jockey:"奧爾民", trainer:"蘇偉賢", oddsWin:19, oddsPlc:5.8, weight:135, reduce:0, starJockey:0, recentPerf:66},
-                {no:"4", name:"同心同樂", draw:9, jockey:"潘頓", trainer:"游達榮", oddsWin:14, oddsPlc:3.8, weight:134, reduce:0, starJockey:1, recentPerf:75},
-                {no:"5", name:"好實力", draw:8, jockey:"霍宏聲", trainer:"呂健威", oddsWin:6.8, oddsPlc:2.2, weight:133, reduce:0, starJockey:0, recentPerf:82},
-                {no:"6", name:"我做到", draw:2, jockey:"周俊樂(-2)", trainer:"伍鵬志", oddsWin:19, oddsPlc:4.5, weight:130, reduce:2, starJockey:0, recentPerf:70},
-                {no:"7", name:"電訊巴打", draw:4, jockey:"黃寶妮(-7)", trainer:"徐雨石", oddsWin:13, oddsPlc:3.3, weight:129, reduce:7, starJockey:0, recentPerf:73},
-                {no:"8", name:"穿甲金鷹", draw:1, jockey:"艾兆禮", trainer:"廖康銘", oddsWin:3.3, oddsPlc:1.7, weight:124, reduce:0, starJockey:1, recentPerf:90},
-                {no:"9", name:"浪漫鬥士", draw:3, jockey:"希威森", trainer:"沈集成", oddsWin:16, oddsPlc:4.7, weight:121, reduce:0, starJockey:0, recentPerf:72},
-                {no:"10", name:"佳登", draw:5, jockey:"金誠剛", trainer:"游達榮", oddsWin:11, oddsPlc:2.9, weight:119, reduce:0, starJockey:0, recentPerf:74},
-                {no:"11", name:"榮利雙收", draw:7, jockey:"班德禮", trainer:"大衛希斯", oddsWin:8.0, oddsPlc:2.4, weight:118, reduce:0, starJockey:0, recentPerf:76}
-            ]
+                {no:1, name:"銀進", draw:11, palace:"乾6", odds:10, jockey:"莫雷拉", reduce:0, star:1, recentScore:80},
+                {no:2, name:"瑪瑙", draw:6, palace:"坎1", odds:7.8, jockey:"潘明輝", reduce:0, star:0, recentScore:78},
+                {no:3, name:"膨才", draw:10, palace:"乾6", odds:32, jockey:"奧爾民", reduce:0, star:0, recentScore:66},
+                {no:4, name:"同心同樂", draw:9, palace:"乾6", odds:16, jockey:"潘頓", reduce:0, star:1, recentScore:75},
+                {no:5, name:"好實力", draw:8, palace:"乾6", odds:5.5, jockey:"霍宏聲", reduce:0, star:0, recentScore:82},
+                {no:6, name:"我做到", draw:2, palace:"艮8", odds:25, jockey:"周俊樂(-2)", reduce:2, star:0, recentScore:70},
+                {no:7, name:"電訊巴打", draw:4, palace:"艮8", odds:21, jockey:"黃寶妮(-7)", reduce:7, star:0, recentScore:73},
+                {no:8, name:"穿甲金鷹", draw:1, palace:"艮8", odds:3.3, jockey:"艾兆禮", reduce:0, star:1, recentScore:90, excludeHot:true},
+                {no:9, name:"浪漫鬥士", draw:3, palace:"艮8", odds:10, jockey:"希威森", reduce:0, star:0, recentScore:72},
+                {no:10, name:"佳登", draw:5, palace:"坎1", odds:11, jockey:"金誠剛", reduce:0, star:0, recentScore:74},
+                {no:11, name:"榮利雙收", draw:7, palace:"坎1", odds:6.8, jockey:"班德禮", reduce:0, star:0, recentScore:76, jockeyHot:true}
+            ],
+            starNote: "🌀 亥時空亡 · 坎1狀態騎師",
+            finalTip: "11.榮利雙收",
+            tripleBet: "5匹複式: 11,4,1,7,6",
+            reason: "奇門派坎1狀態騎師+賠率適中",
+            result: results[8]
         },
-        { // R9 1200米 三班
-            name: "第9場 1200米 三班", time: "22:50", distance: 1200, class: "三班",时辰:"亥時",马星宫:"巽4空亡",
+        { // R9
+            name: "第9場 1200米 三班", time: "22:50", distance: 1200, class: "三班",
             horses: [
-                {no:"1", name:"乘數表", draw:3, jockey:"霍宏聲", trainer:"羅富全", oddsWin:9.3, oddsPlc:2.6, weight:135, reduce:0, starJockey:0, recentPerf:75},
-                {no:"2", name:"幸運星球", draw:2, jockey:"潘明輝", trainer:"巫偉傑", oddsWin:17, oddsPlc:4.2, weight:133, reduce:0, starJockey:0, recentPerf:68},
-                {no:"3", name:"川河動駒", draw:8, jockey:"布文", trainer:"游達榮", oddsWin:10, oddsPlc:3.1, weight:129, reduce:0, starJockey:1, recentPerf:77},
-                {no:"4", name:"福星小子", draw:12, jockey:"艾兆禮", trainer:"蔡約翰", oddsWin:9.2, oddsPlc:2.9, weight:126, reduce:0, starJockey:1, recentPerf:79},
-                {no:"5", name:"天外迎天", draw:10, jockey:"潘頓", trainer:"大衛希斯", oddsWin:12, oddsPlc:3.4, weight:126, reduce:0, starJockey:1, recentPerf:78},
-                {no:"6", name:"關鍵所在", draw:1, jockey:"黃智弘(-3)", trainer:"沈集成", oddsWin:18, oddsPlc:4.7, weight:126, reduce:3, starJockey:0, recentPerf:70},
-                {no:"7", name:"嘉應勇將", draw:5, jockey:"鍾易禮(-2)", trainer:"告東尼", oddsWin:9.0, oddsPlc:3.5, weight:122, reduce:2, starJockey:0, recentPerf:74},
-                {no:"8", name:"勇進駒", draw:9, jockey:"金誠剛", trainer:"姚本輝", oddsWin:21, oddsPlc:5.8, weight:122, reduce:0, starJockey:0, recentPerf:65},
-                {no:"9", name:"團結勇士", draw:7, jockey:"班德禮", trainer:"鄭俊偉", oddsWin:6.7, oddsPlc:1.9, weight:121, reduce:0, starJockey:0, recentPerf:81},
-                {no:"10", name:"贏得威楓", draw:6, jockey:"希威森", trainer:"桂福特", oddsWin:34, oddsPlc:6.4, weight:119, reduce:0, starJockey:0, recentPerf:60},
-                {no:"11", name:"幸運大夫", draw:11, jockey:"何澤堯", trainer:"伍鵬志", oddsWin:59, oddsPlc:11, weight:118, reduce:0, starJockey:0, recentPerf:55},
-                {no:"12", name:"棒棒糖", draw:4, jockey:"莫雷拉", trainer:"方嘉柏", oddsWin:2.8, oddsPlc:1.5, weight:118, reduce:0, starJockey:1, recentPerf:92}
-            ]
+                {no:1, name:"乘數表", draw:3, palace:"艮8", odds:10, jockey:"霍宏聲", reduce:0, star:0, recentScore:75},
+                {no:2, name:"幸運星球", draw:2, palace:"艮8", odds:23, jockey:"潘明輝", reduce:0, star:0, recentScore:68},
+                {no:3, name:"川河動駒", draw:8, palace:"乾6", odds:7.2, jockey:"布文", reduce:0, star:1, recentScore:77},
+                {no:4, name:"福星小子", draw:12, palace:"坤2", odds:8.8, jockey:"艾兆禮", reduce:0, star:1, recentScore:92, specialKeep:true},
+                {no:5, name:"天外迎天", draw:10, palace:"乾6", odds:13, jockey:"潘頓", reduce:0, star:1, recentScore:78},
+                {no:6, name:"關鍵所在", draw:1, palace:"艮8", odds:21, jockey:"黃智弘(-3)", reduce:3, star:0, recentScore:70},
+                {no:7, name:"嘉應勇將", draw:5, palace:"坎1", odds:7.9, jockey:"鍾易禮(-2)", reduce:2, star:0, recentScore:74, rule7trigger:true},
+                {no:8, name:"勇進駒", draw:9, palace:"乾6", odds:28, jockey:"金誠剛", reduce:0, star:0, recentScore:65},
+                {no:9, name:"團結勇士", draw:7, palace:"坎1", odds:7.0, jockey:"班德禮", reduce:0, star:0, recentScore:81, jockeyHot:true},
+                {no:10, name:"贏得威楓", draw:6, palace:"坎1", odds:44, jockey:"希威森", reduce:0, star:0, recentScore:60},
+                {no:11, name:"幸運大夫", draw:11, palace:"乾6", odds:92, jockey:"何澤堯", reduce:0, star:0, recentScore:55},
+                {no:12, name:"棒棒糖", draw:4, palace:"艮8", odds:2.7, jockey:"莫雷拉", reduce:0, star:1, recentScore:92, excludeHot:true}
+            ],
+            starNote: "🌀 亥時空亡 · 規則⑦坎1減磅馬優先",
+            finalTip: "7.嘉應勇將",
+            tripleBet: "5匹複式: 7,9,4,3,5",
+            reason: "奇門派規則⑦(坎1+減磅2+賠率7.9)強制首選",
+            result: results[9]
         }
     ];
-
-    // 輔助: 取得宮位
-    function getPalace(draw) {
-        if(draw <=4) return {name:"艮8", class:"palace-8", desc:"死門·九地"};
-        if(draw <=7) return {name:"坎1", class:"palace-1", desc:"休門·六合"};
-        if(draw <=11) return {name:"乾6", class:"palace-6", desc:"騰蛇開門"};
-        return {name:"坤2", class:"", desc:"死門白虎"};
-    }
-
-    // 模擬各派別四選 + 信心百分比
-    function getFourPicks(race) {
-        const horses = race.horses;
-        // 賠率派: 按獨贏賠率升序取前4
-        const oddsSorted = [...horses].sort((a,b)=> a.oddsWin - b.oddsWin);
-        const oddsPicks = oddsSorted.slice(0,4).map(h => ({no:h.no, name:h.name, odds:h.oddsWin}));
-        const oddsConfidence = Math.min(85, Math.floor(65 + (oddsSorted[0].oddsWin < 3 ? 15 : 0) - (oddsSorted[0].oddsWin > 8 ? 10 : 0)));
-
-        // 數據派: 基於模擬近績分+檔位+負磅 (recentPerf模擬)
-        const dataSorted = [...horses].sort((a,b)=> (b.recentPerf||70) - (a.recentPerf||70));
-        const dataPicks = dataSorted.slice(0,4).map(h => ({no:h.no, name:h.name, score:h.recentPerf}));
-        const dataConfidence = Math.min(80, 60 + Math.floor(dataSorted[0].recentPerf/10));
-
-        // 騎練派: 明星騎師+減磅效應
-        const jtSorted = [...horses].sort((a,b)=> {
-            let scoreA = (a.starJockey?15:0) + (a.reduce||0);
-            let scoreB = (b.starJockey?15:0) + (b.reduce||0);
-            return scoreB - scoreA;
-        });
-        const jtPicks = jtSorted.slice(0,4).map(h => ({no:h.no, name:h.name, star:h.starJockey, reduce:h.reduce}));
-        let jtConfidence = 70;
-        if(jtSorted[0].reduce >=7) jtConfidence += 10;
-        if(jtSorted[0].starJockey) jtConfidence += 5;
-
-        // 奇門派: 基於宮位艮8>乾6>坎1，再輔助馬星空亡規則
-        const qmSorted = [...horses].sort((a,b)=> {
-            const pA = getPalace(a.draw).name;
-            const pB = getPalace(b.draw).name;
-            const rank = (p)=>{ if(p==='艮8') return 1; if(p==='乾6') return 2; if(p==='坎1') return 3; return 4; };
-            return rank(pA) - rank(pB);
-        });
-        const qmPicks = qmSorted.slice(0,4).map(h => ({no:h.no, name:h.name, palace:getPalace(h.draw).name}));
-        let qmConfidence = 82; // 伏吟盤鐵三角歷史入位率高
-        if(race.时辰 === "亥時") qmConfidence += 5; // 空亡轉移加強乾6
-        if(race.马星宫 === "乾6") qmConfidence += 3;
-
-        return { oddsPicks, oddsConfidence, dataPicks, dataConfidence, jtPicks, jtConfidence, qmPicks, qmConfidence };
-    }
 
     function renderRaces() {
         const container = document.getElementById('racesContainer');
         container.innerHTML = racesData.map((race, idx) => {
-            const starNote = race.时辰 === "酉時" ? "⭐ 酉時馬星乾6 (非空亡) 開門強勢" :
-                            (race.时辰 === "戌時" ? "🌙 戌時馬星坤2，頭馬仍集中艮8/乾6/坎1" :
-                            "🌀 亥時馬星巽4空亡，頭馬能量轉至值使乾6+對宮艮8，加碼乾6/艮8馬匹");
-            let horsesHtml = `<table class="horses-table"><thead><tr><th>馬號</th><th>馬名</th><th>檔位</th><th>騎師</th><th>獨贏</th><th>奇門宮位</th></tr></thead><tbody>`;
-            const picksList = [];
-            race.horses.forEach(h => {
-                const palace = getPalace(h.draw);
-                const reduceMark = h.reduce ? `<span class="jockey-reduce">(-${h.reduce})</span>` : "";
-                const starMark = h.starJockey ? "⭐" : "";
-                const isPick = (h.reduce>=7 && palace.name==="艮8") || (h.starJockey && (palace.name==="坎1"||palace.name==="乾6"));
-                if(isPick) picksList.push(`${h.no}.${h.name}`);
-                horsesHtml += `<tr>
-                    <td class="horse-number">${h.no}</td>
-                    <td class="horse-name">${h.name}</td>
-                    <td>${h.draw}</td>
-                    <td>${h.jockey} ${reduceMark} ${starMark}</td>
-                    <td>${h.oddsWin}</td>
-                    <td><span class="palace-badge ${palace.class}">${palace.name}</span></td>
-                </tr>`;
-            });
-            horsesHtml += `</tbody></table>`;
-            const picksText = picksList.length ? picksList.join("、") : "重心待臨場確認";
-
-            // 四派膽選
-            const picks = getFourPicks(race);
-            
+            const group8 = race.horses.filter(h => h.palace === "艮8" && !h.excludeHot);
+            const group1 = race.horses.filter(h => h.palace === "坎1" && !h.excludeHot);
+            const group6 = race.horses.filter(h => h.palace === "乾6" && !h.excludeHot);
+            const specials = race.horses.filter(h => h.specialKeep || h.rule7trigger);
+            const r = race.result;
+            const horseItem = (h) => `<li><span><span class="horse-number">${h.no}</span> ${h.name}</span> <span>${h.odds}倍 ${h.reduce ? `(-${h.reduce})` : ''}</span></li>`;
             return `
                 <div class="race-card">
                     <div class="race-header">
-                        <div class="race-title">${race.name} <span>${race.time}</span></div>
-                        <div class="race-info">${race.distance}m · ${race.class} · 草地A好地 · ${race.时辰} 馬星${race.马星宫}</div>
-                        <div class="qimen-tag">${starNote}</div>
+                        <div class="race-name">${race.name} <span style="font-size:0.8rem;">${race.time}</span></div>
+                        <div class="race-meta">${race.distance}m · ${race.class} · 草地A好地</div>
+                        <div class="star-warning">${race.starNote}</div>
                     </div>
                     <div class="race-body">
-                        ${horsesHtml}
-                        
-                        <!-- 四派膽選模塊 -->
-                        <div class="four-picks">
-                            <div class="picks-title">🎯 膽之選 · 四派獨立精選 (信心程度%)</div>
-                            <div class="picks-grid">
-                                <div class="pick-col">
-                                    <h4>📊 賠率派</h4>
-                                    ${picks.oddsPicks.map(p => `<div class="pick-horse"><span>${p.no} ${p.name}</span><span class="confidence">${p.odds}倍</span></div>`).join('')}
-                                    <div style="margin-top:4px;"><span class="confidence">信心 ${picks.oddsConfidence}%</span></div>
-                                </div>
-                                <div class="pick-col">
-                                    <h4>📈 數據派</h4>
-                                    ${picks.dataPicks.map(p => `<div class="pick-horse"><span>${p.no} ${p.name}</span><span class="confidence">近績${p.score}</span></div>`).join('')}
-                                    <div style="margin-top:4px;"><span class="confidence">信心 ${picks.dataConfidence}%</span></div>
-                                </div>
-                                <div class="pick-col">
-                                    <h4>🏇 騎練派</h4>
-                                    ${picks.jtPicks.map(p => `<div class="pick-horse"><span>${p.no} ${p.name}</span><span class="confidence">${p.star?'明星騎師':p.reduce?'減磅':'普通'}</span></div>`).join('')}
-                                    <div style="margin-top:4px;"><span class="confidence">信心 ${picks.jtConfidence}%</span></div>
-                                </div>
-                                <div class="pick-col">
-                                    <h4>🌀 奇門派</h4>
-                                    ${picks.qmPicks.map(p => `<div class="pick-horse"><span>${p.no} ${p.name}</span><span class="confidence">${p.palace}</span></div>`).join('')}
-                                    <div style="margin-top:4px;"><span class="confidence">信心 ${picks.qmConfidence}%</span></div>
-                                </div>
+                        <div class="palace-grid">
+                            <div class="palace-col palace-8"><h3>🟤 艮8 · 內檔冷門</h3><ul class="horse-list">${group8.map(horseItem).join('')}</ul></div>
+                            <div class="palace-col palace-1"><h3>🟢 坎1 · 正路穩膽</h3><ul class="horse-list">${group1.map(horseItem).join('')}</ul></div>
+                            <div class="palace-col palace-6"><h3>🟣 乾6 · 伏兵冷腳</h3><ul class="horse-list">${group6.map(horseItem).join('')}</ul></div>
+                        </div>
+                        ${specials.length ? `<div style="margin-bottom:12px; background:#2a1e12; border-radius:16px; padding:8px 12px;"><span style="color:#ffb347;">🔍 特殊保留 (坤2/坎1減磅冷馬)</span> ${specials.map(h => `${h.no}.${h.name}(${h.odds}倍)`).join(' · ')}</div>` : ''}
+                        <div class="bet-section">
+                            <div class="bet-title">🎯 終極膽馬 · 奇門集大成</div>
+                            <div style="font-size:1.2rem; font-weight:800; margin-bottom:16px; color:#ffb347;">${race.finalTip}</div>
+                            <div class="bet-row">
+                                <div class="bet-card"><h4>💰 位置注 (穩健)</h4><div class="bet-detail">膽：<span class="highlight">${race.finalTip}</span> ＋ 配腳：${group1[0]?.no || ''}、${group8[0]?.no || ''} (每注$20-$30)</div></div>
+                                <div class="bet-card"><h4>🎲 四重彩複式 (搏巨獎)</h4><div class="bet-detail">建議5匹：${race.tripleBet}<br>成本 $120 (5匹複式) · 派彩可達萬倍</div></div>
+                                <div class="bet-card"><h4>🔗 單T膽拖</h4><div class="bet-detail">膽：${race.finalTip} 拖 其餘鐵三角內2-3匹 ($20注)</div></div>
+                            </div>
+                            <div style="margin-top:12px; font-size:0.7rem; color:#b0c4a2;">📌 ${race.reason}</div>
+                        </div>
+                        <div class="result-area">
+                            <div class="result-title">🏅 實際賽果</div>
+                            <div class="result-grid">
+                                <div class="result-item">🥇 頭馬: ${r.first}號</div>
+                                <div class="result-item">🥈 亞軍: ${r.second}號</div>
+                                <div class="result-item">🥉 季軍: ${r.third}號</div>
+                                <div class="result-item">🏁 殿軍: ${r.fourth}號</div>
                             </div>
                         </div>
-
-                        <div class="recommend-box">
-                            🎯 中心推介：<strong>${picksText}</strong> (減磅+吉格 / 強騎+核心宮位)<br>
-                            📐 冷門鐵三角：覆蓋艮8(1-4檔)、坎1(5-7檔)、乾6(8-11檔) 所有馬匹作大彩池複式。
-                        </div>
-                        <div class="strategy-box">
-                            <div class="strategy-item">✅ 位置穩膽：坎1宮近績強騎（例：潘頓/莫雷拉配搭）$20-30</div>
-                            <div class="strategy-item">🔥 冷門重心：艮8內檔減磅馬 $10獨贏+$20位置</div>
-                            <div class="strategy-item">🎲 四重彩複式：選艮8/乾6/坎1各1-2匹共5匹，$120搏$萬級派彩</div>
-                        </div>
-                        <div style="font-size:0.7rem; margin-top:12px; color:#c0d4ae;">💡 值符空亡效應：大熱門易倒灶，共識馬勿重注。伏吟盤靜極思動，冷門值博。</div>
                     </div>
                 </div>
             `;
         }).join('');
     }
+
+    function renderStatTable() {
+        let hitCount = 0;
+        let tripleCount = 0;
+        const tbody = document.getElementById('statBody');
+        let rows = '';
+        for (let i=1; i<=9; i++) {
+            const tipStr = systemTips[i];
+            const firstNo = results[i].first;
+            const hit = isHit(tipStr, firstNo);
+            if (hit) hitCount++;
+            const tripleOk = tripleCoverTop3[i];
+            if (tripleOk) tripleCount++;
+            const quadOk = quadCover[i] ? "✅ 全覆蓋" : "⚠️ 有坤2";
+            rows += `<tr>
+                <td>R${i}</td>
+                <td>${firstNo}</td>
+                <td>${tipStr}</td>
+                <td class="${hit ? 'hit-yes' : 'hit-no'}">${hit ? '✅ 中' : '❌ 否'}</td>
+                <td>${tripleOk ? '✅ 是' : '❌ 否'}</td>
+                <td>${quadOk}</td>
+            </tr>`;
+        }
+        tbody.innerHTML = rows;
+        const hitRate = (hitCount/9*100).toFixed(1);
+        const tripleRate = (tripleCount/9*100).toFixed(1);
+        document.getElementById('hitRate').innerText = `${hitRate}% (${hitCount}/9)`;
+        document.getElementById('tripleRate').innerText = `${tripleRate}% (${tripleCount}/9)`;
+    }
+
     renderRaces();
+    renderStatTable();
 </script>
 </body>
 </html>
