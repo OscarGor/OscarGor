@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHTSN V4.5 / VF4.5 · 2026-04-19 沙田全賽日終極報告</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', 'Noto Sans TC', system-ui, sans-serif; }
+        body { background: #f5f7fb; margin: 20px; padding: 0; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        h1 { color: #1e3a5f; border-left: 6px solid #b8860b; padding-left: 20px; margin-bottom: 10px; }
+        h2 { color: #2c3e50; margin-top: 30px; border-bottom: 2px solid #b8860b; padding-bottom: 6px; }
+        .subtitle { color: #4a5568; margin-top: -5px; margin-bottom: 20px; font-style: italic; }
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }
+        .badge.fuyin { background: #1e3a5f; color: white; }
+        .badge.nonfuyin { background: #b22222; color: white; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+        .card { background: white; border-radius: 20px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); padding: 20px; transition: all 0.1s; border: 1px solid #e9eef3; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .race-title { font-weight: 700; font-size: 1.2rem; color: #1e3a5f; }
+        .race-meta { font-size: 0.85rem; color: #5e6f8d; }
+        .qi-men { background: #f0f4fa; padding: 10px 14px; border-radius: 16px; margin-bottom: 16px; font-size: 0.9rem; }
+        .final-pick { background: linear-gradient(145deg, #fef9e7, #fff7e0); border-left: 4px solid #b8860b; padding: 12px 16px; border-radius: 16px; margin: 18px 0; }
+        .pick-horse { font-size: 1.5rem; font-weight: 800; color: #1e3a5f; }
+        .pick-detail { font-size: 0.95rem; }
+        .table-mini { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin: 10px 0; }
+        .table-mini th { background: #e6edf5; text-align: left; padding: 6px 8px; }
+        .table-mini td { padding: 6px 8px; border-bottom: 1px solid #dee6ed; }
+        .vote-row { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 5px 0; }
+        .tag { background: #eef2f7; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; color: #2c3e50; }
+        .warn { background: #fff3cd; border: 1px solid #ffeaa7; padding: 12px; border-radius: 16px; color: #856404; font-size: 0.85rem; margin-top: 15px; }
+        .footer { margin-top: 30px; text-align: center; color: #7e8c9f; font-size: 0.8rem; }
+        hr { opacity: 0.4; margin: 30px 0 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧠 SHTSN 終極決策報告</h1>
+    <div class="subtitle">2026年4月19日 · 沙田日賽 · 伏吟盤 (V4.5) / 非伏吟盤 (VF4.5) 雙系統分析</div>
+    <p style="margin-bottom: 25px;">✅ 伏吟場次 R1-R8 採用 <strong>SHTSN V4.5 八派協作</strong> (鐵三角、步速派、反共識捕冷)。<br>
+    ⚡ 非伏吟場次 R9-R11 採用 <strong>VF4.5 簡化奇門 + 跑道專家</strong> (取消鐵三角，奇門基礎分減半，新增跑道專家投票)。</p>
+
+    <div class="grid">
+        <!-- 動態卡片將由 JS 生成，此處放置靜態備份結構。但為節省篇幅，採用 JS 注入。 -->
+    </div>
+    <div id="cards-container" class="grid"></div>
+
+    <hr>
+    <h2>📋 全賽日核心決策速覽</h2>
+    <div id="summary-table"></div>
+
+    <div class="warn">
+        <strong>⚠️ 風險提示</strong><br>
+        • 伏吟盤 R1-R8 經過完整八派驗證，實戰參考性較高，但仍需留意臨場變數。<br>
+        • 非伏吟盤 R9-R11 因格局力量較弱，VF4.5 為簡化輔助模型，命中率與伏吟盤存在差距，請謹慎參考。<br>
+        • 三T及六環彩關鍵場次 (R5,R6,R7) 已強制執行「反共識捕冷」檢查，部分場次原熱門已被冷門取代。
+    </div>
+    <div class="footer">
+        SHTSN V4.5 / VF4.5 · 數據截至排位表 · 僅供賽馬分析參考<br>
+        生成時間: 2026-04-19 賽前
+    </div>
+</div>
+
+<script>
+(function(){
+    // ---------- 數據定義 ----------
+    const races = [
+        { // R1
+            name: 'R1 賽馬惠慈善1800米讓賽', class: '第五班 1800m 泥地', time: '12:45', fuyin: true,
+            qiMen: '陽遁4局 全盤伏吟 值符天輔巽4 空亡乾6 馬星坤2',
+            finalHorse: '10. 大利好運', finalOdds: '4.4', finalScore: '集大成3票',
+            coldFocus: '2. 光輝歲月 (28倍) 奇門63分',
+            bet: '位置:10($30)+2($25)+11($20) | 單T膽拖:10拖2,11,8,1 | 四重彩:10,2,11,8,1',
+            note: '乾六空亡，10號數據派支持，步速支持。2號冷門值博。'
+        },
+        { // R2
+            name: 'R2 普及運動和體育發展1200米讓賽', class: '第五班 1200m 泥地', time: '13:15', fuyin: true,
+            qiMen: '同上伏吟',
+            finalHorse: '9. 爆熱', finalOdds: '4.1', finalScore: '4-5票',
+            coldFocus: '3. 超風速 (5.2倍) 奇門60分',
+            bet: '位置:9($40)+3($25)+7($15) | 單T:9拖3,7,1,4 | 四重彩:9,3,7,1,4',
+            note: '9號奇門70分，多派支持，3號減10磅值博。'
+        },
+        { // R3
+            name: 'R3 促進全民健康1000米讓賽', class: '第四班 1000m 草地', time: '13:45', fuyin: true,
+            qiMen: '同上伏吟',
+            finalHorse: '10. 精彩勇將', finalOdds: '5.5', finalScore: '4票',
+            coldFocus: '2. 飛輪霸 (6.6倍) 奇門70分',
+            bet: '位置:10($30)+2($30)+4($20) | 單T:10拖2,4,11,13 | 四重彩:10,2,4,11,13',
+            note: '1號坤二排除。2號奇門最高，10號多派。'
+        },
+        { // R4
+            name: 'R4 成就多元人才1400米讓賽', class: '第四班 1400m 草地', time: '14:15', fuyin: true,
+            qiMen: '同上伏吟',
+            finalHorse: '10. 有情有義', finalOdds: '3.8', finalScore: '4票',
+            coldFocus: '2. 超拍檔 (12倍) 奇門75分',
+            bet: '位置:10($30)+2($30)+7($20) | 單T:10拖2,7,1,8 | 四重彩:10,2,7,1,8',
+            note: '2號坤二破格，奇門最高。10號熱門穩健。'
+        },
+        { // R5 (三T首關)
+            name: 'R5 香港賽馬會社群盃', class: '第四班 1600m 草地', time: '15:05', fuyin: true,
+            qiMen: '同上伏吟',
+            finalHorse: '5. 勤德天下', finalOdds: '11', finalScore: '3票 (奇門/數據/操練)',
+            coldFocus: '12. 頌星 (33倍) 奇門60分',
+            bet: '位置:5($40)+12($20)+9($20) | 單T:5拖9,12,11,3 | 四重彩:5,9,12,11,3',
+            note: '⚠️ 三T首關，反共識觸發。5號為奇門65分+數據派首選。'
+        },
+        { // R6 (三T/六環彩)
+            name: 'R6 豐富藝文生活1650米讓賽', class: '第四班 1650m 泥地', time: '15:40', fuyin: true,
+            qiMen: '同上伏吟',
+            finalHorse: '4. 加州星馳', finalOdds: '13', finalScore: '3票',
+            coldFocus: '8. 盛勢威楓 (16倍) 數據總和13',
+            bet: '位置:4($30)+8($30)+7($20) | 單T:4拖8,7,1,5 | 四重彩:4,8,7,1,5',
+            note: '三T+六環彩關鍵場。4號破格保留，8號數據極佳。'
+        },
+        { // R7 (三T尾關)
+            name: 'R7 共築可持續未來1200米讓賽', class: '第四班 1200m 泥地', time: '16:10', fuyin: true,
+            qiMen: '同上伏吟',
+            finalHorse: '3. 日馳千里', finalOdds: '5.5', finalScore: '反共識強制冷門',
+            coldFocus: '3. 日馳千里 (5.5倍) 奇門75分',
+            bet: '位置:3($40)+7($20)+10($20) | 單T:3拖7,10,1,12 | 四重彩:3,7,10,1,12',
+            note: '🔥 反共識捕冷強制轉向！原熱門10號被3號取代。'
+        },
+        { // R8
+            name: 'R8 青幼啟迪1200米讓賽', class: '第三班 1200m 泥地', time: '16:40', fuyin: true,
+            qiMen: '同上伏吟',
+            finalHorse: '3. 錶之極光', finalOdds: '7.8', finalScore: '平局勝出 (數據/操練)',
+            coldFocus: '1. 友愛心得 (6.9倍) 奇門85分',
+            bet: '位置:3($35)+1($30)+7($15) | 單T:3拖1,6,7,10 | 四重彩:3,1,6,7,10',
+            note: '3號數據總和18，奇門80，值博率壓倒6號熱門。'
+        },
+        { // R9 非伏吟
+            name: 'R9 關愛同行樂頤年1400米讓賽', class: '第三班 1400m 草地', time: '17:10', fuyin: false,
+            qiMen: '酉時 陽遁4局 非伏吟',
+            finalHorse: '4. 友瑩亮', finalOdds: '3.4', finalScore: 'VF4.5 簡化最高65分',
+            coldFocus: '12. 手到齊來 (16倍) VF58分',
+            bet: '位置:4($40)+1($30)+12($20) | 單T:4拖1,7,12,9',
+            note: '⚠️ 非伏吟 VF4.5 跑道專家支持4號。數據派傾向1號。'
+        },
+        { // R10 非伏吟
+            name: 'R10 盡展所長・創造改變1200米讓賽', class: '第三班 1200m 草地', time: '17:45', fuyin: false,
+            qiMen: '酉時 非伏吟',
+            finalHorse: '7. 千杯不醉', finalOdds: '16', finalScore: 'VF68分',
+            coldFocus: '2. 綠野飛馳 (5倍) 數據總和11',
+            bet: '位置:7($30)+2($30)+5($20) | 單T:7拖2,3,5,6',
+            note: '7號新鮮頭馬，VF最高分。2號數據極佳。'
+        },
+        { // R11 非伏吟
+            name: 'R11 促進社會公平共融1800米讓賽', class: '第二班 1800m 草地', time: '18:20', fuyin: false,
+            qiMen: '酉時 非伏吟',
+            finalHorse: '8. 春風萬里', finalOdds: '8.8', finalScore: 'VF80→65 (修正)',
+            coldFocus: '3. 天將龍駒 (5.6倍) 數據總和13',
+            bet: '位置:8($30)+3($30)+2($20) | 單T:8拖3,2,4,6',
+            note: '跑道專家支持8號。3號減磅數據強。坤二破格2/13號。'
+        }
+    ];
+
+    function renderCards() {
+        const container = document.getElementById('cards-container');
+        let html = '';
+        races.forEach((r, idx) => {
+            const fuyinBadge = r.fuyin ? '<span class="badge fuyin">伏吟 V4.5</span>' : '<span class="badge nonfuyin">非伏吟 VF4.5</span>';
+            html += `
+            <div class="card">
+                <div class="card-header">
+                    <span class="race-title">${r.name}</span>
+                    ${fuyinBadge}
+                </div>
+                <div class="race-meta">${r.class} · ${r.time} · ${r.qiMen}</div>
+                <div class="qi-men">
+                    <strong>🏁 終極膽</strong> <span class="pick-horse">${r.finalHorse}</span> <span style="font-weight:500;">${r.finalOdds}</span><br>
+                    <span class="pick-detail">支持派別／分數：${r.finalScore}</span>
+                </div>
+                <div><span class="tag">❄️ 冷門關注</span> ${r.coldFocus}</div>
+                <div style="margin-top: 14px; background: #f8fafc; padding: 10px; border-radius: 14px;">
+                    <strong>💰 投注組合</strong><br>
+                    <span style="font-size:0.85rem;">${r.bet}</span>
+                </div>
+                <div style="margin-top: 10px; font-size:0.85rem; color:#3e5a7a;">📌 ${r.note}</div>
+            </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function renderSummary() {
+        const summaryDiv = document.getElementById('summary-table');
+        let tbl = '<table class="table-mini" style="width:100%;"><thead><tr><th>場次</th><th>伏吟?</th><th>終極膽</th><th>賠率</th><th>核心冷門</th><th>備註</th></tr></thead><tbody>';
+        races.forEach(r => {
+            const fuyinMark = r.fuyin ? '✅' : '❌';
+            tbl += `<tr><td>${r.name.split(' ')[0]}</td><td>${fuyinMark}</td><td>${r.finalHorse}</td><td>${r.finalOdds}</td><td>${r.coldFocus.split(' ')[0]}</td><td>${r.note.substring(0,25)}…</td></tr>`;
+        });
+        tbl += '</tbody></table>';
+        summaryDiv.innerHTML = tbl;
+    }
+
+    renderCards();
+    renderSummary();
+})();
+</script>
+</body>
+</html>
