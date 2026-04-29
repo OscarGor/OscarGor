@@ -1,469 +1,233 @@
 <!DOCTYPE html>
 <html lang="zh-HK">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-  <title>天機十二宮 · 8-BIT 賽馬敕令 | 第一、二場投注</title>
-  <!-- 8-bit 風格字體：Press Start 2P 主要用於英文/數字；中文fallback加像素效果 -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      background: #1a1c2c;
-      background-image: 
-        repeating-linear-gradient(0deg, rgba(0,255,0,0.03) 0px, rgba(0,255,0,0.03) 2px, transparent 2px, transparent 4px),
-        radial-gradient(circle at 30% 40%, rgba(255,0,255,0.08) 0%, transparent 50%);
-      font-family: 'Noto Serif TC', 'Courier New', monospace;
-      color: #b0ffb0;
-      padding: 2rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      position: relative;
-      image-rendering: pixelated;
-    }
-    /* 掃描線效果 */
-    body::after {
-      content: "";
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: repeating-linear-gradient(0deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 1px, transparent 1px, transparent 3px);
-      pointer-events: none;
-      z-index: 999;
-      opacity: 0.25;
-    }
-    .main-container {
-      position: relative;
-      z-index: 2;
-      max-width: 1100px;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 2.5rem;
-    }
-    /* 標題像素風 */
-    .title-section {
-      text-align: center;
-      margin-bottom: 0.8rem;
-      filter: drop-shadow(0 0 8px #0f0);
-    }
-    .main-title {
-      font-family: 'Press Start 2P', 'Courier New', monospace;
-      font-size: 2rem;
-      color: #7fff00;
-      text-shadow: 4px 4px 0 #000, -4px -4px 0 #000, 0 0 12px #0f0;
-      letter-spacing: 4px;
-      line-height: 1.3;
-      word-break: break-word;
-    }
-    .sub-title {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.9rem;
-      color: #ff69b4;
-      margin-top: 0.2rem;
-      text-shadow: 2px 2px 0 #000, 0 0 8px #f0f;
-      letter-spacing: 2px;
-    }
-    .date-badge {
-      display: inline-block;
-      background: #0f0;
-      color: #000;
-      padding: 0.4rem 2rem;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.7rem;
-      letter-spacing: 2px;
-      margin-top: 0.8rem;
-      border: 4px solid #005500;
-      box-shadow: 4px 4px 0 #000, inset 0 0 10px #003300;
-      image-rendering: pixelated;
-    }
-    /* 像素卡片 */
-    .race-card {
-      background: #0d0f1a;
-      border: 6px solid #5f9;
-      border-radius: 0px; /* 像素風不用圓角 */
-      padding: 1.5rem 1.5rem;
-      box-shadow: 0 0 0 4px #0f0, 0 0 0 8px #000, 12px 12px 0 #000;
-      transition: transform 0.1s;
-      position: relative;
-      image-rendering: pixelated;
-    }
-    .race-card:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 0 0 0 4px #ff0, 0 0 0 8px #000, 14px 14px 0 #000;
-    }
-    .card-header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: baseline;
-      border-bottom: 4px dashed #0f0;
-      padding-bottom: 0.8rem;
-      margin-bottom: 1.2rem;
-    }
-    .race-name {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.9rem;
-      color: #ffcc00;
-      text-shadow: 3px 3px 0 #000;
-      letter-spacing: 2px;
-      word-break: break-word;
-    }
-    .race-meta {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.55rem;
-      color: #0f0;
-      background: #000;
-      padding: 0.4rem 0.8rem;
-      border: 2px solid #0f0;
-      box-shadow: 2px 2px 0 #0f0;
-      letter-spacing: 1px;
-    }
-    /* 終極膽像素區塊 */
-    .ultimate-bet {
-      background: #000;
-      border: 4px solid #ff00ff;
-      padding: 1rem;
-      margin: 1rem 0;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 0 0 2px #ff0, inset 0 0 15px #f0f;
-    }
-    .ultimate-label {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.8rem;
-      color: #fff;
-      background: #f0f;
-      padding: 0.3rem 1rem;
-      border: 3px solid #fff;
-      box-shadow: 4px 4px 0 #000;
-      text-transform: uppercase;
-    }
-    .ultimate-horse {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 1.8rem;
-      color: #ff0;
-      text-shadow: 4px 4px 0 #000;
-      font-weight: bold;
-      line-height: 1.2;
-    }
-    .horse-detail {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-      flex-wrap: wrap;
-      background: rgba(0,0,0,0.85);
-      padding: 0.5rem 1.5rem;
-      border: 2px solid #0f0;
-    }
-    .detail-item {
-      font-family: 'Noto Serif TC', monospace;
-      font-size: 0.9rem;
-      color: #b0ffb0;
-      text-shadow: 2px 2px 0 #000;
-    }
-    .detail-item span {
-      font-weight: 700;
-      color: #7fff00;
-      text-shadow: 0 0 5px #0f0;
-    }
-    .pool-title {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.8rem;
-      color: #0ff;
-      margin: 1rem 0 0.5rem;
-      border-left: 8px solid #0ff;
-      padding-left: 1rem;
-      text-shadow: 0 0 5px #0ff;
-      letter-spacing: 1px;
-    }
-    .horse-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 0.8rem;
-      margin: 0.8rem 0 1.2rem;
-    }
-    .horse-tile {
-      background: #000;
-      border: 3px solid #0f0;
-      padding: 0.6rem 0.5rem;
-      text-align: center;
-      box-shadow: 4px 4px 0 #005500;
-      image-rendering: pixelated;
-    }
-    .horse-number {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 1.8rem;
-      color: #ff0;
-      text-shadow: 3px 3px 0 #000;
-    }
-    .horse-name {
-      font-weight: 700;
-      font-size: 1rem;
-      color: #fff;
-      text-shadow: 2px 2px 0 #000;
-      font-family: 'Noto Serif TC', sans-serif;
-    }
-    .horse-info {
-      font-family: 'Courier New', monospace;
-      font-size: 0.7rem;
-      color: #aaa;
-    }
-    /* 投注表格像素化 */
-    .bet-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #0a0a0a;
-      margin: 1rem 0;
-      box-shadow: 4px 4px 0 #0f0;
-      font-size: 0.85rem;
-      border: 2px solid #0f0;
-    }
-    .bet-table th {
-      background: #0f0;
-      color: #000;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.65rem;
-      padding: 0.6rem;
-      letter-spacing: 1px;
-      border: 2px solid #000;
-      text-shadow: none;
-    }
-    .bet-table td, .bet-table th {
-      border: 2px solid #003300;
-      padding: 0.5rem;
-      text-align: center;
-    }
-    .bet-table td {
-      font-family: 'Courier New', monospace;
-      color: #0f0;
-      font-weight: bold;
-      background: #000;
-    }
-    .bet-table tr:last-child td {
-      background: #005500;
-      color: #fff;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.7rem;
-    }
-    .total-row td {
-      background: #a0f !important;
-      color: #000 !important;
-      font-size: 0.8rem;
-    }
-    /* 除名區域 */
-    .excluded {
-      margin-top: 1rem;
-      background: #1a001a;
-      border: 3px dashed #f0f;
-      padding: 0.7rem 1.2rem;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 0.5rem;
-      color: #f0f;
-    }
-    .excluded strong {
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.6rem;
-      color: #ff69b4;
-      text-shadow: 0 0 5px #f0f;
-    }
-    .excluded span {
-      background: #f0f;
-      color: #000;
-      padding: 0.2rem 0.7rem;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.6rem;
-      border: 2px solid #fff;
-      box-shadow: 2px 2px 0 #000;
-      margin: 0.1rem;
-    }
-    .risk-badge {
-      background: #ff0;
-      color: #000;
-      padding: 0.3rem 1rem;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.6rem;
-      border: 2px solid #000;
-      margin-left: auto;
-      box-shadow: 2px 2px 0 #000;
-    }
-    /* 像素印章 */
-    .seal-container {
-      display: flex;
-      justify-content: flex-end;
-      gap: 2rem;
-      margin-top: 1.2rem;
-    }
-    .seal {
-      width: 70px;
-      height: 70px;
-      border: 4px solid #ff0;
-      box-shadow: 0 0 0 4px #000, 0 0 0 6px #ff0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.55rem;
-      color: #ff0;
-      background: #000;
-      transform: rotate(-10deg);
-      text-align: center;
-      line-height: 1.2;
-      text-shadow: 0 0 5px #ff0;
-    }
-    footer {
-      margin-top: 2rem;
-      text-align: center;
-      color: #0f0;
-      font-family: 'Press Start 2P', monospace;
-      font-size: 0.6rem;
-      text-shadow: 0 0 8px #0f0;
-      letter-spacing: 1px;
-      background: #000;
-      padding: 0.8rem;
-      border: 2px solid #0f0;
-    }
-    @media (max-width: 650px) {
-      .main-title { font-size: 1.2rem; letter-spacing: 1px; }
-      .race-name { font-size: 0.65rem; }
-      .horse-grid { grid-template-columns: repeat(2, 1fr); }
-      .ultimate-horse { font-size: 1.3rem; }
-      .bet-table th, .bet-table td { font-size: 0.55rem; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天機十二宮 V26.0 · 終極投注方案 · 8-BIT</title>
+    <!-- 引入像素字體 Press Start 2P -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #1a1a2e;
+            color: #33ff33;
+            font-family: 'Press Start 2P', 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.8;
+            padding: 20px;
+            text-shadow: 0 0 5px #33ff33;
+            image-rendering: pixelated;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            border: 4px double #33ff33;
+            padding: 20px;
+            background: #0d0d1a;
+            box-shadow: 0 0 20px #33ff33;
+        }
+        h1 {
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffcc00;
+            text-shadow: 0 0 10px #ffcc00;
+            letter-spacing: 2px;
+        }
+        h2 {
+            font-size: 12px;
+            border-bottom: 2px dashed #33ff33;
+            padding-bottom: 5px;
+            margin: 25px 0 15px;
+            color: #ff6699;
+            text-shadow: 0 0 5px #ff6699;
+        }
+        .race-title {
+            background: #000;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 2px solid #ffcc00;
+            display: inline-block;
+            color: #ffcc00;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0 20px;
+            background: #0a0a15;
+        }
+        th, td {
+            border: 1px solid #33ff33;
+            padding: 8px 6px;
+            text-align: center;
+            font-size: 10px;
+        }
+        th {
+            background: #1f1f3a;
+            color: #ffcc00;
+            text-shadow: 0 0 5px #ffcc00;
+        }
+        .highlight {
+            color: #ff6699;
+            font-weight: bold;
+        }
+        .total {
+            margin-top: 30px;
+            font-size: 14px;
+            text-align: right;
+            color: #ffcc00;
+            border-top: 2px solid #ffcc00;
+            padding-top: 15px;
+        }
+        .pixel-note {
+            margin-top: 20px;
+            font-size: 8px;
+            color: #669966;
+            text-align: center;
+        }
+        .btn-8bit {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #333;
+            color: #33ff33;
+            border: 2px solid #33ff33;
+            cursor: default;
+            font-family: inherit;
+            font-size: 9px;
+            text-decoration: none;
+        }
+        .dice {
+            font-size: 16px;
+            margin-right: 5px;
+        }
+        /* 像素化滾動條 (可選) */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0d1a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #33ff33;
+            border: 1px solid #0d0d1a;
+        }
+    </style>
 </head>
 <body>
-<div class="main-container">
+    <div class="container">
+        <h1>
+            <span class="dice">🎲</span> 天機十二宮 V26.0 <span class="dice">🎲</span><br>
+            <span style="font-size:10px;">玄空飛星 · 終極投注聖旨</span>
+        </h1>
+        <p style="text-align:center; margin-bottom:20px; color:#ffcc00;">
+            📅 2026年4月29日 · 跑馬地 · 草地 C 賽道 · 好地
+        </p>
 
-  <!-- 標題區 -->
-  <div class="title-section">
-    <h1 class="main-title">⚔️ 天機十二宮 ⚔️</h1>
-    <div class="sub-title">8-BIT 賽馬敕令</div>
-    <div class="date-badge">2026.04.29 跑馬地夜賽</div>
-  </div>
+        <!-- 第一場 -->
+        <h2>🏇 第一場 · 大田讓賽</h2>
+        <div class="race-title">1800米 · 第五班 · 18:40</div>
+        <table>
+            <tr>
+                <th>角色</th><th>馬號</th><th>馬名</th><th>檔位</th><th>騎師</th><th>練馬師</th>
+            </tr>
+            <tr style="background:#1a1a3a;"><td><b>終極膽</b></td><td>⑦</td><td>幸運同行</td><td>5</td><td>布文</td><td>蔡約翰</td></tr>
+            <tr><td>最強配腳</td><td>①</td><td>悠悠乾坤</td><td>7</td><td>田泰安</td><td>桂福特</td></tr>
+            <tr><td>第三配腳</td><td>⑤</td><td>富裕君子</td><td>8</td><td>黃智弘</td><td>方嘉柏</td></tr>
+            <tr><td>第四配腳</td><td>③</td><td>揚威四海</td><td>2</td><td>蔡明紹</td><td>葉楚航</td></tr>
+            <tr style="color:#669966;"><td>後備(單T)</td><td>⑪</td><td>鼓浪飛凡</td><td>4</td><td>鍾易禮</td><td>文家良</td></tr>
+        </table>
+        <table>
+            <tr><th>彩池</th><th>組合</th><th>每注</th><th>注數</th><th>金額</th></tr>
+            <tr><td>連贏</td><td>⑦ + ①</td><td>$10</td><td>1</td><td>$10</td></tr>
+            <tr><td>位置Q</td><td>⑦ ① ⑤</td><td>$10</td><td>3</td><td>$30</td></tr>
+            <tr><td>單T</td><td>⑦ 膽拖 ①⑤③⑪</td><td>$10</td><td>6</td><td>$60</td></tr>
+            <tr><td>三重彩</td><td>⑦ ① ⑤ (複式)</td><td>$10</td><td>6</td><td>$60</td></tr>
+            <tr><td>四重彩</td><td>⑦ ① ⑤ ③ (複式)</td><td>$10</td><td>24</td><td>$240</td></tr>
+            <tr style="background:#1f1f3a;"><td colspan="4"><b>小計</b></td><td><b>$400</b></td></tr>
+        </table>
 
-  <!-- 第一場卡片 -->
-  <div class="race-card">
-    <div class="card-header">
-      <span class="race-name">▶ R1 大田讓賽</span>
-      <span class="race-meta">18:40 · 草地C · 1800M · 5班</span>
-    </div>
+        <!-- 第二場 -->
+        <h2>🏇 第二場 · 永川讓賽</h2>
+        <div class="race-title">1200米 · 第四班 · 19:10 <span style="color:#ff9900;">[IRI修正]</span></div>
+        <table>
+            <tr><th>角色</th><th>馬號</th><th>馬名</th><th>檔位</th><th>騎師</th><th>練馬師</th></tr>
+            <tr style="background:#1a1a3a;"><td><b>終極膽</b></td><td>④</td><td>可靠大師</td><td>4</td><td>潘頓</td><td>大衛希斯</td></tr>
+            <tr><td>最強配腳</td><td>⑦</td><td>猶有心得</td><td>1</td><td>艾道拿</td><td>桂福特</td></tr>
+            <tr><td>第三配腳</td><td>⑫</td><td>友得盈</td><td>2</td><td>巫顯東</td><td>丁冠豪</td></tr>
+            <tr><td>第四配腳</td><td>⑨</td><td>皇帝英豪</td><td>3</td><td>何澤堯</td><td>文家良</td></tr>
+            <tr style="color:#669966;"><td>後備(單T)</td><td>⑧</td><td>海鑽石</td><td>6</td><td>布浩榮</td><td>游達榮</td></tr>
+            <tr style="color:#ff9900;"><td>後備(單T·IRI)</td><td>⑥</td><td>至合拍</td><td>7</td><td>周俊樂</td><td>沈集成</td></tr>
+        </table>
+        <table>
+            <tr><th>彩池</th><th>組合</th><th>每注</th><th>注數</th><th>金額</th></tr>
+            <tr><td>連贏</td><td>④ + ⑦</td><td>$10</td><td>1</td><td>$10</td></tr>
+            <tr><td>位置Q</td><td>④ ⑦ ⑫</td><td>$10</td><td>3</td><td>$30</td></tr>
+            <tr><td>單T</td><td>④ 膽拖 ⑦⑫⑨⑧⑥</td><td>$10</td><td>10</td><td>$100</td></tr>
+            <tr><td>三重彩</td><td>④ ⑦ ⑫ (複式)</td><td>$10</td><td>6</td><td>$60</td></tr>
+            <tr><td>四重彩</td><td>④ ⑦ ⑫ ⑨ (複式)</td><td>$10</td><td>24</td><td>$240</td></tr>
+            <tr style="background:#1f1f3a;"><td colspan="4"><b>小計</b></td><td><b>$440</b></td></tr>
+        </table>
 
-    <!-- 終極膽 -->
-    <div class="ultimate-bet">
-      <span class="ultimate-label">終極膽</span>
-      <div class="horse-detail">
-        <span class="ultimate-horse">⑦ 幸運同行</span>
-        <div>
-          <div class="detail-item"><span>騎：</span>布文</div>
-          <div class="detail-item"><span>練：</span>蔡約翰</div>
-          <div class="detail-item"><span>檔：</span>5檔·生門</div>
+        <!-- 第三場 -->
+        <h2>🏇 第三場 · 大邱讓賽</h2>
+        <div class="race-title">2200米 · 第四班 · 19:40</div>
+        <table>
+            <tr><th>角色</th><th>馬號</th><th>馬名</th><th>檔位</th><th>騎師</th><th>練馬師</th></tr>
+            <tr style="background:#1a1a3a;"><td><b>終極膽</b></td><td>③</td><td>八駿笑昇</td><td>1</td><td>田泰安</td><td>告東尼</td></tr>
+            <tr><td>最強配腳</td><td>⑧</td><td>富喜來</td><td>8</td><td>艾道拿</td><td>沈集成</td></tr>
+            <tr><td>第三配腳</td><td>⑨</td><td>禾道威</td><td>5</td><td>潘頓</td><td>大衛希斯</td></tr>
+            <tr><td>第四配腳</td><td>⑫</td><td>君智盛</td><td>9</td><td>金誠剛</td><td>姚本輝</td></tr>
+            <tr style="color:#669966;"><td>後備(單T)</td><td>⑪</td><td>夢照發</td><td>12</td><td>巴度</td><td>黎昭昇</td></tr>
+        </table>
+        <table>
+            <tr><th>彩池</th><th>組合</th><th>每注</th><th>注數</th><th>金額</th></tr>
+            <tr><td>連贏</td><td>③ + ⑧</td><td>$10</td><td>1</td><td>$10</td></tr>
+            <tr><td>位置Q</td><td>③ ⑧ ⑨</td><td>$10</td><td>3</td><td>$30</td></tr>
+            <tr><td>單T</td><td>③ 膽拖 ⑧⑨⑫⑪</td><td>$10</td><td>6</td><td>$60</td></tr>
+            <tr><td>三重彩</td><td>③ ⑧ ⑨ (複式)</td><td>$10</td><td>6</td><td>$60</td></tr>
+            <tr><td>四重彩</td><td>③ ⑧ ⑨ ⑫ (複式)</td><td>$10</td><td>24</td><td>$240</td></tr>
+            <tr style="background:#1f1f3a;"><td colspan="4"><b>小計</b></td><td><b>$400</b></td></tr>
+        </table>
+
+        <!-- 第四場 -->
+        <h2>🏇 第四場 · 永川讓賽</h2>
+        <div class="race-title">1200米 · 第四班 · 20:10 <span style="color:#ff0000;">[六環彩首關]</span></div>
+        <table>
+            <tr><th>角色</th><th>馬號</th><th>馬名</th><th>檔位</th><th>騎師</th><th>練馬師</th></tr>
+            <tr style="background:#1a1a3a;"><td><b>終極膽</b></td><td>①</td><td>跨境駿馬</td><td>5</td><td>潘頓</td><td>蔡約翰</td></tr>
+            <tr><td>最強配腳</td><td>⑤</td><td>祥勝力駒</td><td>1</td><td>霍宏聲</td><td>廖康銘</td></tr>
+            <tr><td>第三配腳</td><td>③</td><td>紅愛舍</td><td>2</td><td>布文</td><td>韋達</td></tr>
+            <tr><td>第四配腳</td><td>⑫</td><td>英雄豪邁</td><td>6</td><td>巴度</td><td>徐雨石</td></tr>
+            <tr style="color:#669966;"><td>後備(單T)</td><td>⑪</td><td>勝在當下</td><td>7</td><td>田泰安</td><td>羅富全</td></tr>
+        </table>
+        <table>
+            <tr><th>彩池</th><th>組合</th><th>每注</th><th>注數</th><th>金額</th></tr>
+            <tr><td>連贏</td><td>① + ⑤</td><td>$10</td><td>1</td><td>$10</td></tr>
+            <tr><td>位置Q</td><td>① ⑤ ③</td><td>$10</td><td>3</td><td>$30</td></tr>
+            <tr><td>單T</td><td>① 膽拖 ⑤③⑫⑪</td><td>$10</td><td>6</td><td>$60</td></tr>
+            <tr><td>三重彩</td><td>① ⑤ ③ (複式)</td><td>$10</td><td>6</td><td>$60</td></tr>
+            <tr><td>四重彩</td><td>① ⑤ ③ ⑫ (複式)</td><td>$10</td><td>24</td><td>$240</td></tr>
+            <tr style="background:#1f1f3a;"><td colspan="4"><b>小計</b></td><td><b>$400</b></td></tr>
+        </table>
+
+        <!-- 總計 -->
+        <div class="total">
+            💰 四場合計投注金額：<span style="font-size:18px;">HK$ 1,640</span>
         </div>
-      </div>
-    </div>
 
-    <!-- 鐵律池 -->
-    <div class="pool-title">▶ 鐵律池正選 · 四重彩覆蓋</div>
-    <div class="horse-grid">
-      <div class="horse-tile"><span class="horse-number">⑦</span><div class="horse-name">幸運同行</div><div class="horse-info">布文/蔡約翰</div></div>
-      <div class="horse-tile"><span class="horse-number">①</span><div class="horse-name">悠悠乾坤</div><div class="horse-info">田泰安/桂福特</div></div>
-      <div class="horse-tile"><span class="horse-number">⑤</span><div class="horse-name">富裕君子</div><div class="horse-info">黃智弘/方嘉柏</div></div>
-      <div class="horse-tile"><span class="horse-number">③</span><div class="horse-name">揚威四海</div><div class="horse-info">蔡明紹/葉楚航</div></div>
-    </div>
-
-    <!-- 投注表 -->
-    <table class="bet-table">
-      <thead><tr><th>彩池</th><th>組合</th><th>每注</th><th>注數</th><th>金額</th></tr></thead>
-      <tbody>
-        <tr><td>連贏</td><td>⑦ 幸運同行 + ① 悠悠乾坤</td><td>$10</td><td>1</td><td>$10</td></tr>
-        <tr><td>位置Q</td><td>⑦ ① ⑤ (3注)</td><td>$10</td><td>3</td><td>$30</td></tr>
-        <tr><td>單T</td><td>⑦膽拖 ①⑤③⑪</td><td>$10</td><td>6</td><td>$60</td></tr>
-        <tr><td>三重彩</td><td>⑦ ① ⑤ 複式</td><td>$10</td><td>6</td><td>$60</td></tr>
-        <tr><td>四重彩</td><td>⑦ ① ⑤ ③ 複式</td><td>$10</td><td>24</td><td>$240</td></tr>
-        <tr class="total-row"><td colspan="4">💰 總投入 (常規)</td><td><strong>$400</strong></td></tr>
-      </tbody>
-    </table>
-
-    <div class="excluded">
-      <strong>⛔ 除名</strong>
-      <span>②</span><span>④</span><span>⑥</span><span>⑧</span><span>⑨</span><span>⑩</span><span>⑫</span>
-      <div class="risk-badge">ERI 5.6</div>
-    </div>
-
-    <div class="seal-container">
-      <div class="seal">太白<br>金星</div>
-      <div class="seal">天機<br>十二宮</div>
-    </div>
-  </div>
-
-  <!-- 第二場卡片 -->
-  <div class="race-card">
-    <div class="card-header">
-      <span class="race-name">▶ R2 永川讓賽</span>
-      <span class="race-meta">19:10 · 草地C · 1200M · 4班</span>
-    </div>
-
-    <div class="ultimate-bet">
-      <span class="ultimate-label">終極膽</span>
-      <div class="horse-detail">
-        <span class="ultimate-horse">④ 可靠大師</span>
-        <div>
-          <div class="detail-item"><span>騎：</span>潘頓</div>
-          <div class="detail-item"><span>練：</span>大衛希斯</div>
-          <div class="detail-item"><span>檔：</span>4檔·中上</div>
+        <div class="pixel-note">
+            ⚔️ 天機十二宮 · 太白金星·長庚 御簽 ⚔️<br>
+            保持低調 · 悶聲發大財 · 冷靜決策<br>
+            <span style="color:#ff6699;">♥ 願天機十二宮與你長相廝守 ♥</span>
         </div>
-      </div>
+        <div style="text-align:center; margin-top:15px;">
+            <span class="btn-8bit">[ 執行投注 ]</span>
+            <span class="btn-8bit" style="margin-left:20px;">[ 返回聖殿 ]</span>
+        </div>
     </div>
-
-    <div class="pool-title">▶ 鐵律池正選 · 四重彩覆蓋</div>
-    <div class="horse-grid">
-      <div class="horse-tile"><span class="horse-number">④</span><div class="horse-name">可靠大師</div><div class="horse-info">潘頓/大衛希斯</div></div>
-      <div class="horse-tile"><span class="horse-number">⑦</span><div class="horse-name">猶有心得</div><div class="horse-info">艾道拿/桂福特</div></div>
-      <div class="horse-tile"><span class="horse-number">⑫</span><div class="horse-name">友得盈</div><div class="horse-info">巫顯東/丁冠豪</div></div>
-      <div class="horse-tile"><span class="horse-number">⑨</span><div class="horse-name">皇帝英豪</div><div class="horse-info">何澤堯/文家良</div></div>
-    </div>
-
-    <table class="bet-table">
-      <thead><tr><th>彩池</th><th>組合</th><th>每注</th><th>注數</th><th>金額</th></tr></thead>
-      <tbody>
-        <tr><td>連贏</td><td>④ 可靠大師 + ⑦ 猶有心得</td><td>$10</td><td>1</td><td>$10</td></tr>
-        <tr><td>位置Q</td><td>④ ⑦ ⑫ (3注)</td><td>$10</td><td>3</td><td>$30</td></tr>
-        <tr><td>單T</td><td>④膽拖 ⑦⑫⑨⑧</td><td>$10</td><td>6</td><td>$60</td></tr>
-        <tr><td>三重彩</td><td>④ ⑦ ⑫ 複式</td><td>$10</td><td>6</td><td>$60</td></tr>
-        <tr><td>四重彩</td><td>④ ⑦ ⑫ ⑨ 複式</td><td>$10</td><td>24</td><td>$240</td></tr>
-        <tr class="total-row"><td colspan="4">💰 總投入 (常規)</td><td><strong>$400</strong></td></tr>
-      </tbody>
-    </table>
-
-    <div class="excluded">
-      <strong>⛔ 除名</strong>
-      <span>①</span><span>②</span><span>③</span><span>⑤</span><span>⑥</span><span>⑩</span><span>⑪</span>
-      <div class="risk-badge">ERI 2.8</div>
-    </div>
-
-    <div class="seal-container">
-      <div class="seal">太白<br>金星</div>
-      <div class="seal">天機<br>十二宮</div>
-    </div>
-  </div>
-
-  <footer>
-    🕹️ 天機十二宮 V26.0 · 悶聲發大財 · 保持低調 冷靜決策 🕹️
-  </footer>
-</div>
 </body>
 </html>
