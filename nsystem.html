@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>天機十二宮 · 賽馬玄機 | 第一、二場投注敕令</title>
+  <!-- 引入古風毛筆字體 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+TC:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #f3ecd9 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path d="M20 20 L80 20 L80 80 L20 80 Z" fill="none" stroke="%23dac8a5" stroke-width="0.3" opacity="0.3"/><circle cx="50" cy="50" r="30" fill="none" stroke="%23dac8a5" stroke-width="0.2" opacity="0.25"/></svg>');
+      background-size: 80px 80px;
+      font-family: 'Noto Serif TC', 'Ma Shan Zheng', 'KaiTi', '楷体', serif;
+      color: #3e2e1f;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      position: relative;
+    }
+    /* 仿古雲紋裝飾 */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 30%, rgba(220, 200, 150, 0.25) 0%, transparent 45%),
+                  radial-gradient(circle at 80% 70%, rgba(200, 180, 130, 0.2) 0%, transparent 45%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .main-container {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+    /* 標題區域 */
+    .title-section {
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+    .main-title {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 3.5rem;
+      color: #5a3e1a;
+      text-shadow: 3px 3px 0 rgba(180, 140, 80, 0.3);
+      letter-spacing: 6px;
+      line-height: 1.2;
+    }
+    .sub-title {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 1.6rem;
+      color: #8b6b42;
+      margin-top: -0.2rem;
+      letter-spacing: 2px;
+    }
+    .date-badge {
+      display: inline-block;
+      background: #c9a87c;
+      color: #2e2416;
+      padding: 0.3rem 2rem;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      margin-top: 0.6rem;
+      border: 1px solid #7a5c3a;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    /* 場次卡片 */
+    .race-card {
+      background: rgba(252, 248, 235, 0.85);
+      backdrop-filter: blur(10px);
+      border: 2px solid #b4946a;
+      border-radius: 24px;
+      padding: 1.8rem 2rem;
+      box-shadow: 0 12px 28px rgba(100, 70, 30, 0.25), inset 0 0 30px rgba(230, 210, 160, 0.6);
+      transition: transform 0.2s;
+      position: relative;
+    }
+    .race-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 35px rgba(80, 50, 20, 0.3);
+    }
+    .card-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 2px dashed #bc9a6c;
+      padding-bottom: 0.8rem;
+      margin-bottom: 1.2rem;
+    }
+    .race-name {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 2.6rem;
+      color: #4d3114;
+      letter-spacing: 3px;
+    }
+    .race-meta {
+      font-size: 1rem;
+      color: #5f4a30;
+      background: #e7d7b8;
+      padding: 0.3rem 1.2rem;
+      border-radius: 20px;
+      font-weight: 600;
+    }
+    /* 終極膽區塊 */
+    .ultimate-bet {
+      background: linear-gradient(135deg, #fef7e6 0%, #faeac9 100%);
+      border: 2px solid #c49a2c;
+      border-radius: 20px;
+      padding: 1.2rem;
+      margin: 1.2rem 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 6px 14px rgba(170, 120, 20, 0.3);
+    }
+    .ultimate-label {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 2rem;
+      color: #a7432c;
+      background: #ffe9c4;
+      padding: 0.2rem 1.4rem;
+      border-radius: 30px;
+      border: 1px solid #b3752b;
+    }
+    .ultimate-horse {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 3rem;
+      color: #5c320c;
+      font-weight: bold;
+      text-shadow: 1px 1px 0 white;
+    }
+    .horse-detail {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+      background: rgba(255,255,240,0.7);
+      padding: 0.5rem 1.5rem;
+      border-radius: 30px;
+    }
+    .detail-item {
+      font-size: 1rem;
+      color: #2e2416;
+    }
+    .detail-item span {
+      font-weight: 700;
+      color: #8b4a1b;
+    }
+    /* 鐵律池列表 */
+    .pool-title {
+      font-family: 'Ma Shan Zheng', cursive;
+      font-size: 2rem;
+      color: #3e5a2a;
+      margin: 1rem 0 0.4rem;
+      border-left: 6px solid #5c7a3e;
+      padding-left: 1rem;
+    }
+    .horse-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.8rem;
+      margin: 0.8rem 0 1.2rem;
+    }
+    .horse-tile {
+      background: #f9f3e2;
+      border: 1px solid #c4a87c;
+      border-radius: 16px;
+      padding: 0.6rem 0.8rem;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+    .horse-number {
+      font-size: 1.8rem;
+      font-weight: 700;
+      font-family: 'Ma Shan Zheng', cursive;
+      color: #a0481c;
+    }
+    .horse-name {
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+    .horse-info {
+      font-size: 0.8rem;
+      color: #5e4a30;
+    }
+    /* 投注表格 */
+    .bet-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fcf7ed;
+      border-radius: 16px;
+      overflow: hidden;
+      margin: 1rem 0;
+      box-shadow: 0 3px 10px rgba(120, 90, 40, 0.2);
+      font-size: 0.95rem;
+    }
+    .bet-table th {
+      background: #c2a375;
+      color: #2a1e0c;
+      font-weight: bold;
+      padding: 0.7rem;
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+    .bet-table td, .bet-table th {
+      border: 1px solid #dac29e;
+      padding: 0.5rem;
+      text-align: center;
+    }
+    .bet-table tr:last-child td {
+      font-weight: bold;
+      background: #f3e5cc;
+    }
+    .total-row {
+      background: #e7d2ae;
+      font-weight: bold;
+    }
+    /* 除名與風險 */
+    .excluded {
+      margin-top: 1rem;
+      background: #f5e9da;
+      border-radius: 12px;
+      padding: 0.7rem 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+    }
+    .excluded span {
+      background: #b04a3a;
+      color: white;
+      padding: 0.2rem 0.85rem;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 0.15rem;
+    }
+    .risk-badge {
+      background: #d9b382;
+      color: #2d1f0c;
+      padding: 0.3rem 1rem;
+      border-radius: 18px;
+      font-weight: bold;
+      margin-left: auto;
+    }
+    /* 印章效果 */
+    .seal-container {
+      display: flex;
+      justify-content: flex-end;
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    .seal {
+      width: 80px;
+      height: 80px;
+      border: 3px solid #b3402c;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Ma Shan Zheng', cursive;
+      color: #b3402c;
+      font-size: 1.3rem;
+      transform: rotate(-15deg);
+      box-shadow: 0 0 0 2px #f9e4c2, 0 0 0 5px #b3402c;
+      background: rgba(255, 240, 210, 0.7);
+      font-weight: bold;
+    }
+    footer {
+      margin-top: 2rem;
+      text-align: center;
+      color: #6b5a45;
+      font-style: italic;
+    }
+    @media (max-width: 600px) {
+      .main-title { font-size: 2.4rem; }
+      .horse-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+<div class="main-container">
+  
+  <!-- 標題 -->
+  <div class="title-section">
+    <h1 class="main-title">天機十二宮 · 賽馬玄機</h1>
+    <div class="sub-title">太白金星御筆敕令</div>
+    <div class="date-badge">⚔️ 2026年4月29日 · 跑馬地夜賽 ⚔️</div>
+  </div>
+
+  <!-- 第一場卡片 -->
+  <div class="race-card">
+    <div class="card-header">
+      <span class="race-name">🏇 第一場 · 大田讓賽</span>
+      <span class="race-meta">18:40 · 草地 C 賽道 · 1800米 · 第五班</span>
+    </div>
+    
+    <!-- 終極膽 -->
+    <div class="ultimate-bet">
+      <span class="ultimate-label">終極膽</span>
+      <div class="horse-detail">
+        <span class="ultimate-horse">⑦ 幸運同行</span>
+        <div>
+          <div class="detail-item"><span>騎師：</span>布文</div>
+          <div class="detail-item"><span>練馬師：</span>蔡約翰</div>
+          <div class="detail-item"><span>檔位：</span>5檔 · 生門</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 鐵律池正選 -->
+    <div class="pool-title">📜 鐵律池正選 · 四重彩覆蓋</div>
+    <div class="horse-grid">
+      <div class="horse-tile"><span class="horse-number">⑦</span><div class="horse-name">幸運同行</div><div class="horse-info">布文 · 蔡約翰</div></div>
+      <div class="horse-tile"><span class="horse-number">①</span><div class="horse-name">悠悠乾坤</div><div class="horse-info">田泰安 · 桂福特</div></div>
+      <div class="horse-tile"><span class="horse-number">⑤</span><div class="horse-name">富裕君子</div><div class="horse-info">黃智弘 · 方嘉柏</div></div>
+      <div class="horse-tile"><span class="horse-number">③</span><div class="horse-name">揚威四海</div><div class="horse-info">蔡明紹 · 葉楚航</div></div>
+    </div>
+
+    <!-- 投注指令表格 -->
+    <table class="bet-table">
+      <thead> <tr><th>彩池</th><th>組合</th><th>每注</th><th>注數</th><th>金額</th></tr> </thead>
+      <tbody>
+        <tr><td>連贏</td><td>⑦ 幸運同行 + ① 悠悠乾坤</td><td>$10</td><td>1</td><td>$10</td></tr>
+        <tr><td>位置Q</td><td>⑦ ① ⑤ (複式3注)</td><td>$10</td><td>3</td><td>$30</td></tr>
+        <tr><td>單T</td><td>⑦膽拖 ①⑤③⑪</td><td>$10</td><td>6</td><td>$60</td></tr>
+        <tr><td>三重彩</td><td>⑦ ① ⑤ (複式)</td><td>$10</td><td>6</td><td>$60</td></tr>
+        <tr><td>四重彩</td><td>⑦ ① ⑤ ③ (複式)</td><td>$10</td><td>24</td><td>$240</td></tr>
+        <tr class="total-row"><td colspan="4">⚡ 總投入 (常規場次)</td><td><strong>$400</strong></td></tr>
+      </tbody>
+    </table>
+
+    <!-- 除名馬匹 + ERI -->
+    <div class="excluded">
+      <strong>⛔ 除名馬匹：</strong>
+      <span>②</span><span>④</span><span>⑥</span><span>⑧</span><span>⑨</span><span>⑩</span><span>⑫</span>
+      <div class="risk-badge">ERI 風險 · 5.6</div>
+    </div>
+    
+    <!-- 印章 -->
+    <div class="seal-container">
+      <div class="seal">太白<br>金星</div>
+      <div class="seal">天機<br>十二宮</div>
+    </div>
+  </div>
+
+  <!-- 第二場卡片 -->
+  <div class="race-card">
+    <div class="card-header">
+      <span class="race-name">🏇 第二場 · 永川讓賽</span>
+      <span class="race-meta">19:10 · 草地 C 賽道 · 1200米 · 第四班</span>
+    </div>
+
+    <div class="ultimate-bet">
+      <span class="ultimate-label">終極膽</span>
+      <div class="horse-detail">
+        <span class="ultimate-horse">④ 可靠大師</span>
+        <div>
+          <div class="detail-item"><span>騎師：</span>潘頓</div>
+          <div class="detail-item"><span>練馬師：</span>大衛希斯</div>
+          <div class="detail-item"><span>檔位：</span>4檔 · 中上</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pool-title">📜 鐵律池正選 · 四重彩覆蓋</div>
+    <div class="horse-grid">
+      <div class="horse-tile"><span class="horse-number">④</span><div class="horse-name">可靠大師</div><div class="horse-info">潘頓 · 大衛希斯</div></div>
+      <div class="horse-tile"><span class="horse-number">⑦</span><div class="horse-name">猶有心得</div><div class="horse-info">艾道拿 · 桂福特</div></div>
+      <div class="horse-tile"><span class="horse-number">⑫</span><div class="horse-name">友得盈</div><div class="horse-info">巫顯東 · 丁冠豪</div></div>
+      <div class="horse-tile"><span class="horse-number">⑨</span><div class="horse-name">皇帝英豪</div><div class="horse-info">何澤堯 · 文家良</div></div>
+    </div>
+
+    <table class="bet-table">
+      <thead> <tr><th>彩池</th><th>組合</th><th>每注</th><th>注數</th><th>金額</th></tr> </thead>
+      <tbody>
+        <tr><td>連贏</td><td>④ 可靠大師 + ⑦ 猶有心得</td><td>$10</td><td>1</td><td>$10</td></tr>
+        <tr><td>位置Q</td><td>④ ⑦ ⑫ (複式3注)</td><td>$10</td><td>3</td><td>$30</td></tr>
+        <tr><td>單T</td><td>④膽拖 ⑦⑫⑨⑧</td><td>$10</td><td>6</td><td>$60</td></tr>
+        <tr><td>三重彩</td><td>④ ⑦ ⑫ (複式)</td><td>$10</td><td>6</td><td>$60</td></tr>
+        <tr><td>四重彩</td><td>④ ⑦ ⑫ ⑨ (複式)</td><td>$10</td><td>24</td><td>$240</td></tr>
+        <tr class="total-row"><td colspan="4">⚡ 總投入 (常規場次)</td><td><strong>$400</strong></td></tr>
+      </tbody>
+    </table>
+
+    <div class="excluded">
+      <strong>⛔ 除名馬匹：</strong>
+      <span>①</span><span>②</span><span>③</span><span>⑤</span><span>⑥</span><span>⑩</span><span>⑪</span>
+      <div class="risk-badge">ERI 風險 · 2.8</div>
+    </div>
+
+    <div class="seal-container">
+      <div class="seal">太白<br>金星</div>
+      <div class="seal">天機<br>十二宮</div>
+    </div>
+  </div>
+
+  <footer>
+    🏮 天機十二宮 V26.0 · 悶聲發大財 · 保持低調 冷靜決策 🏮
+  </footer>
+</div>
+</body>
+</html>
