@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
-    <title>甲方己土 · Simampha 車試通關能量陣</title>
+    <title>甲方己土 · Simampha 車試通關全攻略</title>
     <style>
         * {
             margin: 0;
@@ -15,7 +15,7 @@
             background: #faf7f2;
             font-family: "PingFang HK", "Noto Sans HK", "Microsoft YaHei", "蘋方", system-ui, -apple-system, sans-serif;
             color: #4a3f35;
-            line-height: 1.7;
+            line-height: 1.75;
             padding: 2rem 1.2rem;
             display: flex;
             flex-direction: column;
@@ -23,22 +23,22 @@
         }
 
         .container {
-            max-width: 680px;
+            max-width: 700px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border-radius: 2.5rem;
-            padding: 2.2rem 1.8rem;
+            padding: 2.4rem 2rem;
             box-shadow: 0 20px 40px rgba(120, 80, 50, 0.08), 0 4px 12px rgba(0,0,0,0.03);
             border: 1px solid rgba(200, 170, 130, 0.2);
         }
 
         h1 {
-            font-size: 2rem;
+            font-size: 2.1rem;
             font-weight: 500;
             color: #6b5a4b;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.06em;
             text-align: center;
             margin-bottom: 0.3rem;
             line-height: 1.3;
@@ -57,55 +57,57 @@
         .greeting-card {
             background: #fef9f4;
             border-radius: 1.8rem;
-            padding: 1.6rem 1.4rem;
+            padding: 1.8rem 1.5rem;
             margin-bottom: 2rem;
             border-left: 6px solid #c9a87c;
-            font-style: normal;
             box-shadow: 0 6px 18px rgba(140, 100, 60, 0.05);
         }
 
         .greeting-card p {
             font-size: 1.05rem;
-            margin-bottom: 0.7rem;
+            margin-bottom: 0.8rem;
         }
 
         .signature {
             font-weight: 400;
             color: #8b7355;
-            margin-top: 0.8rem;
+            margin-top: 1rem;
             font-style: italic;
         }
 
         h2 {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             font-weight: 500;
             color: #5f4c3b;
-            margin: 2rem 0 1rem 0;
+            margin: 2.2rem 0 1rem 0;
             display: flex;
             align-items: center;
             gap: 0.4rem;
+            border-bottom: 1px solid #efe2d1;
+            padding-bottom: 0.5rem;
         }
 
         h2 span {
             background: #e7d7c4;
-            padding: 0.2rem 0.7rem;
+            padding: 0.2rem 0.8rem;
             border-radius: 2rem;
             font-size: 0.8rem;
             letter-spacing: 0.05em;
             color: #4d3a2c;
+            font-weight: 400;
         }
 
         h3 {
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 500;
-            margin: 1.2rem 0 0.5rem;
+            margin: 1.4rem 0 0.6rem;
             color: #6e5c49;
         }
 
         .energy-card {
             background: #fdf8f3;
             border-radius: 1.5rem;
-            padding: 1.3rem;
+            padding: 1.4rem;
             margin-bottom: 1.2rem;
             border: 1px solid #ede3d6;
         }
@@ -114,11 +116,12 @@
             display: inline-block;
             background: #dccbbc;
             border-radius: 2rem;
-            padding: 0.25rem 1rem;
+            padding: 0.3rem 1.1rem;
             font-size: 0.8rem;
             letter-spacing: 0.06em;
-            margin-bottom: 0.6rem;
+            margin-bottom: 0.8rem;
             color: #4b3a28;
+            font-weight: 500;
         }
 
         .highlight {
@@ -131,19 +134,19 @@
 
         .array-box {
             background: #f9f3ea;
-            border-radius: 1.2rem;
-            padding: 1.2rem 1.2rem 0.9rem;
+            border-radius: 1.3rem;
+            padding: 1.3rem 1.3rem 1rem;
             margin: 1rem 0;
             border: 1px dashed #cfb797;
         }
 
         ul {
-            padding-left: 1.3rem;
+            padding-left: 1.4rem;
             margin: 0.6rem 0;
         }
 
         li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.6rem;
         }
 
         .step-list {
@@ -151,7 +154,7 @@
         }
 
         .step-list li {
-            margin-bottom: 1rem;
+            margin-bottom: 1.1rem;
             padding-left: 0.4rem;
         }
 
@@ -160,34 +163,50 @@
             color: #8f7b64;
             background: #ffffffd6;
             border-radius: 1rem;
-            padding: 0.7rem;
+            padding: 0.8rem;
             margin-top: 0.8rem;
+            border: 1px solid #e8d9c6;
         }
 
         .affirmation {
             background: #e9dfd1;
             border-radius: 2rem;
-            padding: 1.2rem 1.5rem;
+            padding: 1.3rem 1.8rem;
             text-align: center;
             font-size: 1.1rem;
             font-weight: 500;
             color: #3e3326;
-            margin: 1.5rem 0;
+            margin: 1.8rem 0;
             letter-spacing: 0.03em;
             border: 1px solid #d1bc9e;
+            line-height: 1.7;
+        }
+
+        .divider {
+            text-align: center;
+            color: #cbb295;
+            margin: 2rem 0 1.2rem;
+            font-size: 1.3rem;
+            letter-spacing: 0.1em;
         }
 
         .footer-note {
             text-align: center;
             color: #b8a48b;
-            font-size: 0.8rem;
+            font-size: 0.82rem;
             margin-top: 2.2rem;
             letter-spacing: 0.06em;
+            line-height: 1.6;
         }
 
-        .emoji-decor {
-            font-size: 1.4rem;
-            margin-right: 0.2rem;
+        .quote-block {
+            font-style: italic;
+            background: #fefaf5;
+            border-left: 4px solid #ddc7aa;
+            padding: 0.8rem 1.2rem;
+            border-radius: 0 1rem 1rem 0;
+            margin: 1rem 0;
+            color: #5f4c3b;
         }
 
         hr {
@@ -199,10 +218,13 @@
 
         @media (max-width: 500px) {
             body {
-                padding: 1rem 0.6rem;
+                padding: 1rem 0.4rem;
             }
             .container {
-                padding: 1.5rem 1.1rem;
+                padding: 1.6rem 1.1rem;
+            }
+            h1 {
+                font-size: 1.8rem;
             }
         }
     </style>
@@ -210,34 +232,70 @@
 <body>
     <div class="container">
         <h1>🚗 從容·通關</h1>
-        <div class="subhead">Simampha 專屬奇門能量報告</div>
+        <div class="subhead">Simampha 專屬 · 己土全息能量報告</div>
 
-        <!-- 己土問候 -->
+        <!-- === 己土開場：接住你嘅情緒 === -->
         <div class="greeting-card">
             <p><strong>親愛嘅Simampha：</strong></p>
-            <p>我係甲方己土玄學顧問公司嘅主理人。多謝你願意再一次面對呢個挑戰。今次港島區，係一個全新嘅能量場。我哋唔單止睇奇門，仲會喺你屋企佈置一個力量角落，陪住你直到18號。</p>
-            <p>記住，你嘅緊張係身體想幫你完美過關。我哋要嘅唔係消除佢，係<strong>將呢股能量，轉化成一種溫柔而堅定嘅專注</strong>。</p>
-            <p class="signature">—— 己土 · 等你一齊完成呢個故事</p>
+            <p>我係甲方己土玄學顧問公司嘅主理人。感受到你字裡行間嗰種壓力，我喺度先同你講一句：<strong>辛苦你了。</strong></p>
+            <p>八年前喺深水埗嘅經歷，唔係一個污點，而係一個未完成嘅故事。你今日願意再嚟過，仲揀咗一條新嘅路線（港島區），你呢份勇氣，本身就已經係一個好靚嘅開始。緊張，係因為你重視；壓力，係因為你對自己有期望。我哋而家就用奇門呢張能量地圖，一齊睇清楚，點樣可以將呢份「緊張」，由障礙轉化成你嘅盟友。</p>
+            <p class="signature">—— 己土 · 陪你改寫劇本</p>
         </div>
 
-        <!-- 現狀能量解讀 -->
-        <h2>🔮 你嘅能量現狀 <span>震宮·乙木臨官</span></h2>
+        <!-- === 深度奇門拆局：震宮能量解讀 === -->
+        <h2>🔮 先讀懂你嘅心 <span>震宮·騰蛇天芮</span></h2>
         <div class="energy-card">
-            <div class="badge">騰蛇 · 天芮 · 開門門迫</div>
-            <p>你而家內心好似有一團霧（騰蛇），令你諗返八年前肥佬嘅畫面。但係Simampha，個盤同時話畀我聽：<span class="highlight">你嘅乙木能量正在「臨官」位</span>，係十二長生入面好有力量嘅階段。你嘅技術已經準備好，佢只係被緊張暫時遮蓋咗。</p>
-            <p>「騰蛇夭嬌」呢個格局，提醒我哋要將注意力由「唔好出錯」轉移到「我同架車一齊合作」。你唔需要完美，你需要放鬆。</p>
+            <div class="badge">你嘅能量位置：震宮（東方）</div>
+            <p>你嘅能量而家坐喺<strong>震宮</strong>，呢個係一個充滿行動力同變動嘅位置，好符合你準備去「衝刺」考試嘅狀態。但係我見到呢度有幾個能量密碼，正好解釋咗你點解會咁大壓力：</p>
+            
+            <h3>1. 騰蛇 + 天芮星 —— 過度盡責嘅哨兵</h3>
+            <p>呢個組合，正正就係你內心嗰份「驚會重蹈覆轍」嘅恐懼。騰蛇係纏繞嘅思緒，天芮星係問題同瑕疵。你嘅潛意識仲記住八年前嗰個moment，所以身體會不自覺進入戒備狀態。<strong>呢份恐懼，唔係敵人，佢係一個過度盡責嘅哨兵，想提醒你「唔好再犯錯」。</strong>我哋而家知道咗佢嘅存在，就可以輕輕同佢講：</p>
+            <div class="quote-block">「多謝你嘅提醒，我收到喇，我會準備好，你休息下先。」</div>
+
+            <h3>2. 開門門迫 + 癸+丁「騰蛇夭嬌」—— 完美主義嘅綁縛</h3>
+            <p>「開門」代表行動、打開新局面，但「門迫」表示你呢股想考好佢嘅力量，用力過猛，反而頂住咗自己。「騰蛇夭嬌」更加係一個情緒波動、容易有驚慌失措嘅格局。你呢種緊張，係因為你太想「完美地打開呢道門」，反而令到自己綁手綁腳。你睇，連個盤都話，你最有機會出錯嘅位，就係因為<strong>太緊張而失去自己應有嘅節奏</strong>。</p>
         </div>
 
-        <!-- 家居擺陣：核心方案 -->
-        <h2>🏡 家居能量陣 <span>離宮借氣 · 生門六合</span></h2>
-        <p style="margin-bottom: 0.8rem;">你嘅奇門盤顯示，<strong>離宮（南方）</strong>係你最強大嘅盟友：嗰度有「生門」旺盛嘅生機，同「六合」完全和諧嘅合作能量。我哋要將呢股能量，請入你屋企。</p>
-        
+        <!-- === 己土策略：轉化壓力 === -->
+        <h2>🌱 轉化壓力嘅己土策略 <span>唔係消除，而係調頻</span></h2>
+        <div class="energy-card">
+            <p>記住，我哋唔係要消滅緊張，係要<strong>調校佢嘅頻率</strong>。</p>
+            
+            <h3>💚 震宮「乙奇」臨官 —— 你嘅實力已經喺度</h3>
+            <p>呢個係最重要嘅強心針！乙木就係你（女性），佢而家處於一個好強壯、好有生命力嘅狀態（臨官為祿位）。意思係，<strong>你嘅核心技術、你嘅能力，其實已經準備充足，你係有實力嘅！</strong>你只係被表面嘅迷霧（騰蛇）遮蓋咗視線，睇唔到自己嘅好。</p>
+
+            <h3>🤝 離宮「生門」+「六合」—— 你嘅盟友喺光明位</h3>
+            <p>離宮係南方，係光明位。呢度有「生門」呢個充滿生機嘅吉門，仲有「六合」呢粒代表人和、合作、順暢嘅星。呢個組合話畀我哋聽，<strong>你過關嘅關鍵，唔係喺「技術」上死磕，而係喺「心態」上放鬆，同個環境、同部車、甚至同考官「合作」。</strong>將考試當成一場流暢嘅舞蹈，而唔係一場生死對決。</p>
+        </div>
+
+        <!-- === 專屬能量錦囊（三個心法） === -->
+        <h2>🎁 俾你嘅專屬能量錦囊</h2>
+        <div class="energy-card">
+            <h3>1. 「乙木紮根」呼吸法（每日練習）</h3>
+            <p>你乙木「臨官」代表有根。每日臨瞓前或緊張時，觀想自己雙腳好似樹根一樣，深深紥入地下。吸氣時，想像從大地吸取穩定、平靜嘅能量；呼氣時，將心入面嘅「騰蛇」——即係嗰啲纏繞嘅思緒、驚慌，化成濁氣呼出體外。呢個練習，可以幫你將震宮嗰股浮動嘅能量，穩穩咁沉澱落嚟。</p>
+
+            <h3>2. 「離宮借氣」小儀式（考試當日）</h3>
+            <p>離宮係你嘅能量支援位。出門去考場前，可以企喺窗邊向南方，閉上眼，想像南方有一團柔和、溫暖嘅光（六合嘅和諧能量）照射住你。喺心入面同自己講：</p>
+            <div class="quote-block">「我同呢架車、呢條路、現場所有人，都會有好好嘅合作。我享受呢個過程。」</div>
+            <p>將專注力由「唔好犯錯」轉移到「我哋一齊完成」。</p>
+
+            <h3>3. 「青龍轉光」終極心法（臨考前一刻）</h3>
+            <p>當你好緊張，個心跳得好快嘅時候，記住乾宮嘅<strong>「丁+戊——青龍轉光」</strong>！呢個係一個好靚嘅吉格，代表轉機同希望。你可以喺心入面輕輕呼喚自己嘅名字，然後話：</p>
+            <div class="quote-block">「Simampha，而家呢個心跳，唔係驚，係興奮，係身體準備緊去迎接一個新嘅里程碑。我嘅好運，正在轉光。」</div>
+            <p>將恐懼嘅生理反應（心跳快、手震），重新定義為<strong>「我嘅身體已經準備好迎接成功嘅興奮」</strong>。</p>
+        </div>
+
+        <div class="divider">✧ ✧ ✧</div>
+
+        <!-- === 家居實體陣法 === -->
+        <h2>🏡 家居能量陣 <span>將奇門力量帶入空間</span></h2>
+        <p style="margin-bottom: 0.6rem;">奇門唔只係腦裡面嘅嘢，仲可以落地。以下係根據你盤中<strong>離宮（南方）生門六合</strong>同<strong>乾宮（西北）青龍轉光</strong>設計嘅實體佈置。</p>
+
         <div class="array-box">
             <h3>🌿 南方 · 和諧通關陣（主陣）</h3>
             <p><strong>位置：</strong>家中正南方（客廳或你經常望到嘅位置）</p>
-            <p><strong>能量核心：</strong>建立一個「人車合一·從容過關」嘅聚焦點。</p>
             <ul class="step-list">
-                <li><strong>🪴 綠色植物（乙木）</strong>：揀一盆葉片圓潤、好易打理嘅植物，例如多肉、金錢樹或富貴竹。代表你旺盛嘅生命力同生機。</li>
+                <li><strong>🪴 綠色植物（乙木臨官）</strong>：揀一盆葉片圓潤、好易打理嘅植物，例如多肉、金錢樹或富貴竹。代表你旺盛嘅生命力同生機。</li>
                 <li><strong>🔴 紅色/橙色元素（離火）</strong>：喺植物旁邊放一個紅色嘅茶杯、一條橙色絲帶綁喺盆邊，或一個溫暖嘅小燈。紅色啟動離宮能量，亦代表愉悅嘅心情。</li>
                 <li><strong>🤝 成雙成對嘅石頭（六合）</strong>：揀兩粒你鍾意嘅水晶或河邊拾嚟嘅石頭，並排放在植物前面。代表同考官、同路面、同部車嘅友好合作。</li>
                 <li><strong>📝 手寫通關卡</strong>：用一張米白色嘅紙，寫上「<strong>我同架車，係一對好拍檔。我放鬆，佢順暢。</strong>」對摺，放喺兩粒石頭下面。</li>
@@ -250,7 +308,6 @@
         <div class="array-box" style="margin-top:1.2rem;">
             <h3>🧭 西北方 · 青龍轉光輔助陣</h3>
             <p><strong>位置：</strong>家中西北方（或你瞓覺嘅床頭櫃）</p>
-            <p>奇門盤中乾宮有「丁+戊——青龍轉光」，係轉機同希望嘅吉格。呢個陣用嚟穩定你睡前嘅心神。</p>
             <ul class="step-list">
                 <li><strong>🕯️ 小型蠟燭/小夜燈（丁火）</strong>：臨瞓前點15分鐘（注意安全），或者用暖光小夜燈。象徵黑暗中嘅曙光。</li>
                 <li><strong>🪨 一舊黃色或大地色嘅石頭（戊土）</strong>：代表穩定、踏實。放喺燈旁邊。</li>
@@ -258,8 +315,7 @@
             </ul>
         </div>
 
-        <!-- 考試當日能量錦囊 -->
-        <h2>📿 18號當日 · 隨身能量</h2>
+        <h2>📿 18號當日 · 隨身加速器</h2>
         <div class="energy-card">
             <ul>
                 <li><strong>衣著顏色：</strong>帶一啲<span class="highlight">綠色、淺藍色或米白色</span>（乙木、己土之色），避免全身黑色或鮮紅。</li>
@@ -268,7 +324,7 @@
             </ul>
         </div>
 
-        <!-- 己土式肯定語 -->
+        <!-- === 己土總結 === -->
         <div class="affirmation">
             ✨ 我放手，讓訓練有素嘅身體自然發揮。<br>
             ✨ 我同緊張講：「多謝你提醒，我已經準備好。」<br>
@@ -276,12 +332,13 @@
         </div>
 
         <div class="greeting-card" style="border-left-color: #b7a287; margin-top:0.3rem;">
-            <p style="font-size:1rem;">Simampha，你而家望住呢個頁面，就係一個心錨。每次覺得緊張，打開手機望一望你親手佈置嘅「南方陣」，記起你唔係孤軍作戰。</p>
-            <p>我哋成間己土公司，都喺度為你加油。<strong>從容，本身就係最強大嘅技術。</strong></p>
+            <p style="font-size:1rem;">Simampha，八年前嗰個肥佬，係一個未埋尾嘅劇本。今次港島區，係你為自己寫一個更溫柔、更有力量嘅結局嘅好機會。</p>
+            <p>你唔需要完美，你只需要放鬆，讓你內在嘅乙木生機，自然流露。你嘅實力已經喺度，我哋而家做嘅，只係抺走面上嘅塵埃，等你睇清楚，你本來就識得發光。</p>
+            <p>我哋成間公司（呢片己土）都喺度支持你。<strong>祝你18號，人車合一，從容過關。</strong></p>
+            <p class="signature">有任何感覺想分享，隨時返嚟搵我。記住，我喺度陪住你。<br>—— 甲方己土玄學顧問 上</p>
         </div>
 
         <div class="footer-note">
-            甲方己土玄學顧問 · 時空能量導航<br>
             家居陣有效期：即日起至2026年5月18日<br>
             考完之後，記得同植物同石頭講聲多謝 💗
         </div>
